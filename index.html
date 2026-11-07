@@ -354,6 +354,38 @@ form.trial h3 { font-size: 1.5rem; }
   .wt p { font-size: 1rem; }
   .walk.live .walk-shade { background: linear-gradient(180deg, rgba(22,18,15,.6) 0%, rgba(22,18,15,0) 25%, rgba(22,18,15,.15) 45%, rgba(22,18,15,.9) 100%); }
 }
+
+/* Try-a-lab mini game */
+.lab { min-width: 0; }
+.lab-level { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start; }
+.lab-level > * { min-width: 0; }
+.lab-scene { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); }
+.lab-scene img { width: 100%; height: 100%; object-fit: cover; }
+.lab-bubble { position: absolute; left: 16px; right: 16px; bottom: 16px; max-width: 420px; background: rgba(22,18,15,.9); border: 1px solid var(--line); padding: 12px 16px; display: grid; gap: 4px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: border-color .3s; }
+.lab-bubble b { font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--brass); font-weight: 500; }
+.lab-say { font-size: 1.1rem; }
+.lab-bubble.waiting .lab-say { color: var(--muted); font-style: italic; }
+.lab-bubble.ok { border-color: #6fbf73; }
+.lab-gate { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(22,18,15,.85); border: 1px solid var(--line); font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; }
+.lab-gate i { width: 12px; height: 12px; border-radius: 50%; background: #e0574a; box-shadow: 0 0 10px #e0574a; transition: background .4s, box-shadow .4s; }
+.lab-gate.open i { background: #6fdc7a; box-shadow: 0 0 14px #6fdc7a; }
+.lab-side { display: grid; gap: 16px; align-content: start; }
+.lab-task { font-size: 1.25rem; }
+.lab-opts { display: grid; gap: 10px; }
+.lab-opt { text-align: left; font: 400 1rem/1.4 var(--font); color: var(--fg); background: var(--bg); border: 1px solid var(--line); padding: 14px 16px; min-height: 48px; cursor: pointer; transition: border-color .2s, background .2s; }
+.lab-opt:hover { border-color: var(--brass); }
+.lab-opt.wrong { border-color: #e0574a; color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(224,87,74,.6); }
+.lab-opt.right { border-color: #6fdc7a; background: rgba(111,220,122,.08); }
+.lab-guide { border-left: 2px solid var(--brass); background: var(--bg); padding: 12px 16px; display: grid; gap: 4px; font-size: .95rem; }
+.lab-guide b { font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--brass); font-weight: 500; }
+.lab-next { justify-self: start; }
+.lab-done { display: grid; gap: 16px; max-width: 640px; }
+.lab-done h3 { font-size: var(--fs-h2); }
+.lab-done p { color: var(--muted); font-size: var(--fs-lg); }
+@media (max-width: 860px) { .lab-level { grid-template-columns: 1fr; } }
+.teachers.t3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.teachers.t3 > div + div { padding-left: 30px; border-left: 1px solid var(--line); }
+@media (max-width: 860px) { .teachers.t3 { grid-template-columns: 1fr; } .teachers.t3 > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 28px; } }
 </style>
 </head>
 <body>
@@ -372,8 +404,8 @@ form.trial h3 { font-size: 1.5rem; }
     </a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#day"><span class="en">Walk in</span><span class="zh">走进学校</span></a></li>
-      <li><a href="#rooms"><span class="en">Rooms</span><span class="zh">主题教室</span></a></li>
-      <li><a href="#sample"><span class="en">Sample topic</span><span class="zh">主题示例</span></a></li>
+      <li><a href="#rooms"><span class="en">Lab rooms</span><span class="zh">实验室</span></a></li>
+      <li><a href="#try-lab"><span class="en">Try a lab</span><span class="zh">试玩</span></a></li>
       <li><a href="#courses"><span class="en">Courses</span><span class="zh">课程</span></a></li>
       <li><a href="#faq"><span class="en">FAQ</span><span class="zh">常见问题</span></a></li>
       <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
@@ -389,78 +421,78 @@ form.trial h3 { font-size: 1.5rem; }
 </header>
 
 <main id="main">
-  <section class="walk" id="day" aria-label="Walk through the school">
+  <section class="walk" id="day" aria-label="Walk through a day at the school">
     <div class="walk-sticky">
-      <figure class="wf" data-k="0" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-arrival.jpg" alt="Inside the warehouse school: a walkway leads past themed zones to the welcome zone" fetchpriority="high"></figure>
-      <figure class="wf" data-k="1" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-welcome.jpg" alt="Teachers greeting students in the welcome zone" decoding="async"></figure>
+      <figure class="wf" data-k="0" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-arrival.jpg" alt="Inside the warehouse school: a walkway leads past the lab rooms to the welcome zone" fetchpriority="high"></figure>
+      <figure class="wf" data-k="1" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-welcome.jpg" alt="The guide teacher greeting students in the welcome zone" decoding="async"></figure>
       <figure class="wf" data-k="2" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-live.jpg" alt="The walkway leading to the live talk stage" decoding="async"></figure>
-      <figure class="wf" data-k="3" data-type="room" style="--ox:50%;--oy:45%"><img src="images/wh-live.jpg" alt="Two hosts in a live talk on stage in front of students" decoding="async"></figure>
-      <figure class="wf" data-k="4" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-market.jpg" alt="The walkway leading to the night market zone" decoding="async"></figure>
-      <figure class="wf" data-k="5" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-market.jpg" alt="An actor stallholder talking to a student in the night market zone" decoding="async"></figure>
-      <figure class="wf" data-k="6" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-cafe.jpg" alt="The walkway leading to the café zone" decoding="async"></figure>
-      <figure class="wf" data-k="7" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-cafe.jpg" alt="A teacher playing a waiter takes students' orders in the café zone" decoding="async"></figure>
-      <figure class="wf" data-k="8" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-shop.jpg" alt="The walkway leading to the beach shop zone" decoding="async"></figure>
-      <figure class="wf" data-k="9" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-shop.jpg" alt="Students buying from a teacher playing the shopkeeper" decoding="async"></figure>
-      <figure class="wf" data-k="10" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-challenge.jpg" alt="The walkway leading to the challenge zone" decoding="async"></figure>
-      <figure class="wf" data-k="11" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-challenge.jpg" alt="A student handles a surprise from an actor while classmates cheer" decoding="async"></figure>
+      <figure class="wf" data-k="3" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-live.jpg" alt="Two hosts recording a live podcast-style talk in front of students" decoding="async"></figure>
+      <figure class="wf" data-k="4" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-prep.jpg" alt="The walkway leading to the phrase prep studio" decoding="async"></figure>
+      <figure class="wf" data-k="5" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-prep.jpg" alt="The guide coaching students as they practise phrases in pairs" decoding="async"></figure>
+      <figure class="wf" data-k="6" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-market.jpg" alt="The walkway leading to the night market lab" decoding="async"></figure>
+      <figure class="wf" data-k="7" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-market.jpg" alt="In the night market lab, the guide explains while the stallholder waits for the right phrase" decoding="async"></figure>
+      <figure class="wf" data-k="8" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-shop.jpg" alt="The walkway leading to the beach shop lab" decoding="async"></figure>
+      <figure class="wf" data-k="9" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-shop.jpg" alt="A student asks the shop assistant for another size with the guide beside her" decoding="async"></figure>
+      <figure class="wf" data-k="10" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-challenge.jpg" alt="The walkway leading to the final lab" decoding="async"></figure>
+      <figure class="wf" data-k="11" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-final.jpg" alt="The gate light turns green as a student passes the final lab and classmates cheer" decoding="async"></figure>
       <div class="walk-shade" aria-hidden="true"></div>
       <div class="wt wt-hero" data-k="0">
-        <span class="label"><span class="en">Immersive English school · Sanya</span><span class="zh">沉浸式英语学校 · 三亚</span></span>
+        <span class="label"><span class="en">Immersive English lab · Sanya</span><span class="zh">沉浸式英语实验室 · 三亚</span></span>
         <h1><span class="en">One topic a day. <em>Walk out using it.</em></span><span class="zh">每天一个主题，<em>下课就能用。</em></span></h1>
-        <p class="hero-lede"><span class="en">Our school is one big warehouse of themed zones. Scroll to follow the path from zone to zone and watch a day of immersive learning.</span><span class="zh">我们的学校是一座由多个主题区组成的大仓库。向下滑动，沿着路线一区一区走，看看沉浸式学习的一天。</span></p>
+        <p class="hero-lede"><span class="en">A live talk, phrase prep, then themed lab rooms where actors only answer correct English. Scroll to walk through a day.</span><span class="zh">现场对谈、表达准备，然后走进主题实验室：演员只回应正确的英语。向下滑动，走一遍一天的课程。</span></p>
         <div class="hero-actions">
           <a class="btn btn-solid" href="#contact"><span class="en">Try a topic day free</span><span class="zh">免费体验一天</span></a>
-          <a class="btn btn-line" href="#rooms"><span class="en">Skip the walk</span><span class="zh">跳过参观</span></a>
+          <a class="btn btn-line" href="#try-lab"><span class="en">Play a lab room</span><span class="zh">试玩实验室</span></a>
         </div>
       </div>
       <div class="wt wt-room" data-k="1">
         <div class="room-meta"><span>01 / 06</span><span>09:15</span></div>
-        <span class="label"><span class="en">Welcome zone</span><span class="zh">迎宾区</span></span>
+        <span class="label"><span class="en">Welcome</span><span class="zh">迎宾区</span></span>
         <h2><span class="en">Welcome &amp; warm-up</span><span class="zh">签到与热身</span></h2>
-        <p><span class="en">Students check in, meet today's teachers and find out the topic. New students start with a short placement chat.</span><span class="zh">学员签到、认识当天的老师、了解当天主题。新学员先进行简短的水平交流。</span></p>
+        <p><span class="en">Students check in, meet today's guide and find out the topic. New students start with a short placement chat.</span><span class="zh">学员签到、认识当天的引导老师、了解当天主题。新学员先进行简短的水平交流。</span></p>
       </div>
-      <div class="wt wt-door" data-k="2"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Live talk stage</span><span class="zh">对谈舞台</span> <span class="wt-time">09:30–10:30</span></p></div>
+      <div class="wt wt-door" data-k="2"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Live talk</span><span class="zh">现场对谈</span> <span class="wt-time">09:30–10:15</span></p></div>
       <div class="wt wt-room" data-k="3">
-        <div class="room-meta"><span>02 / 06</span><span>09:30–10:30</span></div>
-        <span class="label"><span class="en">Live talk stage</span><span class="zh">对谈舞台</span></span>
+        <div class="room-meta"><span>02 / 06</span><span>09:30–10:15</span></div>
+        <span class="label"><span class="en">Live talk</span><span class="zh">现场对谈</span></span>
         <h2><span class="en">The live talk</span><span class="zh">现场对谈</span></h2>
-        <p><span class="en">Two hosts talk the topic through live, in Chinese: the common mistakes, the phrases natives use most and the logic behind them.</span><span class="zh">两位主持人用中文现场对谈：常见错误、母语者最常用的表达，以及背后的逻辑。</span></p>
+        <p><span class="en">Like a live podcast: two hosts talk the topic through in Chinese. The common mistakes, the phrases natives use most, and the logic behind them.</span><span class="zh">像一场现场播客：两位主持人用中文聊当天的主题——常见错误、母语者最常用的表达，以及背后的逻辑。</span></p>
       </div>
-      <div class="wt wt-door" data-k="4"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Night market</span><span class="zh">夜市区</span> <span class="wt-time">10:45–12:00</span></p></div>
+      <div class="wt wt-door" data-k="4"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Phrase prep</span><span class="zh">表达准备</span> <span class="wt-time">10:15–11:15</span></p></div>
       <div class="wt wt-room" data-k="5">
-        <div class="room-meta"><span>03 / 06</span><span>10:45–12:00</span></div>
-        <span class="label"><span class="en">Night market</span><span class="zh">夜市区</span></span>
-        <h2><span class="en">The scene comes alive</span><span class="zh">情景演绎</span></h2>
-        <p><span class="en">Native-speaking actors play out the scene all around the students, ask them questions and pull them into the story.</span><span class="zh">外籍演员在学员身边演绎当天的情景，向学员提问，把他们拉进剧情。</span></p>
+        <div class="room-meta"><span>03 / 06</span><span>10:15–11:15</span></div>
+        <span class="label"><span class="en">Phrase prep</span><span class="zh">表达准备</span></span>
+        <h2><span class="en">Phrase prep</span><span class="zh">表达准备</span></h2>
+        <p><span class="en">The guide turns the talk into a toolkit: the words, phrases and sentence patterns for today's labs. Students rehearse out loud in pairs and get their phrase card.</span><span class="zh">引导老师把对谈内容变成"工具包"：当天实验室要用到的单词、短语和句型。学员两人一组大声练习，并领取短语卡。</span></p>
       </div>
-      <div class="wt wt-door" data-k="6"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Café</span><span class="zh">咖啡区</span> <span class="wt-time">12:00–13:00</span></p></div>
+      <div class="wt wt-door" data-k="6"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span> <span class="wt-time">11:15–12:15</span></p></div>
       <div class="wt wt-room" data-k="7">
-        <div class="room-meta"><span>04 / 06</span><span>12:00–13:00</span></div>
-        <span class="label"><span class="en">Café</span><span class="zh">咖啡区</span></span>
-        <h2><span class="en">Lunch in English</span><span class="zh">英语午餐</span></h2>
-        <p><span class="en">Lunch is part of the day. Students order and chat in English, using what they learned this morning.</span><span class="zh">午餐也是学习的一部分。学员用英语点餐聊天，用上午学到的表达。</span></p>
+        <div class="room-meta"><span>04 / 06</span><span>11:15–12:15</span></div>
+        <span class="label"><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span></span>
+        <h2><span class="en">The night market lab</span><span class="zh">夜市实验室</span></h2>
+        <p><span class="en">The stallholder is an actor and only answers correct English. Your guide stands beside you and breaks down everything he says. Mission: get a better price. The gate stays red until you do.</span><span class="zh">摊主由演员扮演，只回应正确的英语。引导老师站在你身边，实时拆解他说的每一句话。任务：讲到更好的价格。做不到，出口的灯就一直是红色。</span></p>
       </div>
-      <div class="wt wt-door" data-k="8"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Beach shop</span><span class="zh">海滩小店</span> <span class="wt-time">13:00–15:00</span></p></div>
+      <div class="wt wt-door" data-k="8"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span> <span class="wt-time">13:15–14:30</span></p></div>
       <div class="wt wt-room" data-k="9">
-        <div class="room-meta"><span>05 / 06</span><span>13:00–15:00</span></div>
-        <span class="label"><span class="en">Beach shop</span><span class="zh">海滩小店</span></span>
-        <h2><span class="en">Your turn</span><span class="zh">轮到你</span></h2>
-        <p><span class="en">Students take the roles. The actors stay in character and react to whatever they say.</span><span class="zh">学员扮演角色，演员始终保持角色，根据学员说的话即兴回应。</span></p>
+        <div class="room-meta"><span>05 / 06</span><span>13:15–14:30</span></div>
+        <span class="label"><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span></span>
+        <h2><span class="en">The beach shop lab</span><span class="zh">海滩小店实验室</span></h2>
+        <p><span class="en">A real shop assistant at a real counter. Mission: find sunglasses in your size and pay. Say it right and she hands them over, and the gate turns green.</span><span class="zh">真实的店员，真实的柜台。任务：找到合适尺码的太阳镜并付款。说对了，她才会把商品递给你，出口的灯随之变绿。</span></p>
       </div>
-      <div class="wt wt-door" data-k="10"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Challenge zone</span><span class="zh">挑战区</span> <span class="wt-time">15:15–16:00</span></p></div>
+      <div class="wt wt-door" data-k="10"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Final lab</span><span class="zh">终极实验室</span> <span class="wt-time">14:45–16:00</span></p></div>
       <div class="wt wt-room" data-k="11">
-        <div class="room-meta"><span>06 / 06</span><span>15:15–16:00</span></div>
-        <span class="label"><span class="en">Challenge zone</span><span class="zh">挑战区</span></span>
-        <h2><span class="en">The final challenge</span><span class="zh">终极挑战</span></h2>
-        <p><span class="en">One unscripted moment alone with an actor. Handle it in English, hear the cheers, and walk out with the day's "I can" card.</span><span class="zh">单独面对演员的一个即兴"意外"。用英语化解，在掌声中带着当天的"我能做到"卡片离开。</span></p>
+        <div class="room-meta"><span>06 / 06</span><span>14:45–16:00</span></div>
+        <span class="label"><span class="en">Final lab</span><span class="zh">终极实验室</span></span>
+        <h2><span class="en">The final lab</span><span class="zh">终极实验室</span></h2>
+        <p><span class="en">No hints this time. Something goes wrong at the till and you sort it out in English. When the light turns green, the group cheers and you leave with your "I can" card.</span><span class="zh">这一次没有提示。收银时出了问题，你要用英语解决。灯一变绿，全组欢呼，你带着"我能做到"卡片离开。</span></p>
       </div>
       <ol class="walk-rail" aria-hidden="true">
-        <li data-r="0"><span class="en">Welcome zone</span><span class="zh">迎宾区</span></li>
-        <li data-r="1"><span class="en">Live talk stage</span><span class="zh">对谈舞台</span></li>
-        <li data-r="2"><span class="en">Night market</span><span class="zh">夜市区</span></li>
-        <li data-r="3"><span class="en">Café</span><span class="zh">咖啡区</span></li>
-        <li data-r="4"><span class="en">Beach shop</span><span class="zh">海滩小店</span></li>
-        <li data-r="5"><span class="en">Challenge zone</span><span class="zh">挑战区</span></li>
+        <li data-r="0"><span class="en">Welcome</span><span class="zh">迎宾区</span></li>
+        <li data-r="1"><span class="en">Live talk</span><span class="zh">现场对谈</span></li>
+        <li data-r="2"><span class="en">Phrase prep</span><span class="zh">表达准备</span></li>
+        <li data-r="3"><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span></li>
+        <li data-r="4"><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span></li>
+        <li data-r="5"><span class="en">Final lab</span><span class="zh">终极实验室</span></li>
       </ol>
       <p class="walk-hint" aria-hidden="true"><i></i><span class="en">Scroll to walk in</span><span class="zh">向下滑动，走进去</span></p>
     </div>
@@ -469,46 +501,106 @@ form.trial h3 { font-size: 1.5rem; }
   <section class="section" id="rooms">
     <div class="wrap">
       <div class="head">
-        <span class="label"><span class="en">Themed zones</span><span class="zh">主题区</span></span>
-        <h2><span class="en">One warehouse, many worlds</span><span class="zh">一座仓库，许多个世界</span></h2>
-        <p><span class="en">Everything happens inside one big warehouse, laid out like a showroom: a path leads from one themed zone to the next, and the sets, light, sound and actors change with every topic. Students don't sit at desks and imagine; they walk into the story and live it in English.</span><span class="zh">所有课程都在一座大仓库里进行，像样板间一样布局：一条路线连接各个主题区，布景、灯光、声音和演员随主题而变。学员不用坐在课桌前想象，而是走进故事，用英语亲身经历。</span></p>
+        <span class="label"><span class="en">Lab rooms</span><span class="zh">主题实验室</span></span>
+        <h2><span class="en">Like a game, but for English</span><span class="zh">像闯关游戏，只不过练的是英语</span></h2>
+        <p><span class="en">Every themed room in the warehouse is a lab with a mission. The actors are real roles, a shop assistant, a waiter, a receptionist, and they only respond to correct English. A guide stays beside the students, breaking down what the actors say and coaching them live. Nobody passes the gate until they've said it right.</span><span class="zh">仓库里的每个主题房间都是一个带任务的实验室。演员扮演真实的角色——店员、服务员、前台——只回应正确的英语。引导老师全程陪在学员身边，实时拆解演员说的话并现场指导。说对了，才能通过出口。</span></p>
       </div>
-      <div class="gallery" tabindex="0" aria-label="Immersive rooms">
+      <div class="gallery" tabindex="0" aria-label="Lab rooms">
         <article class="tilt"><div class="tilt-inner">
-          <div class="card-img"><img src="images/wh-market.jpg" alt="Night market set with actors and students" loading="lazy"></div>
-          <div class="card-body"><span class="card-topics"><span class="en">Bargaining · Food · Numbers</span><span class="zh">讲价 · 美食 · 数字</span></span>
-            <h3><span class="en">The night market</span><span class="zh">夜市</span></h3>
-            <p><span class="en">Lanterns, stalls and loud stallholders, played by our actors.</span><span class="zh">灯笼、摊位和热情的摊主——由我们的演员扮演。</span></p></div>
+          <div class="card-img"><img src="images/wh-lab-market.jpg" alt="The guide explains while the stallholder waits" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Prices · Bargaining · Numbers</span><span class="zh">价格 · 讲价 · 数字</span></span>
+            <h3><span class="en">Night market lab</span><span class="zh">夜市实验室</span></h3>
+            <p><span class="en">Mission: get a better price from the stallholder.</span><span class="zh">任务：从摊主那里讲到更好的价格。</span></p></div>
         </div></article>
         <article class="tilt"><div class="tilt-inner">
-          <div class="card-img"><img src="images/wh-shop.jpg" alt="Students shopping in the shop room" loading="lazy"></div>
-          <div class="card-body"><span class="card-topics"><span class="en">Shopping · Returns · Bargaining</span><span class="zh">购物 · 退换 · 讲价</span></span>
-            <h3><span class="en">The shop</span><span class="zh">商店</span></h3>
-            <p><span class="en">Teachers play shopkeepers; students buy, ask and exchange.</span><span class="zh">老师扮演店员，学员购买、询问和换货。</span></p></div>
+          <div class="card-img"><img src="images/wh-lab-shop.jpg" alt="A student asks the shop assistant for another size" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Sizes · Colours · Paying</span><span class="zh">尺码 · 颜色 · 付款</span></span>
+            <h3><span class="en">Beach shop lab</span><span class="zh">海滩小店实验室</span></h3>
+            <p><span class="en">Mission: find your size and pay.</span><span class="zh">任务：找到合适的尺码并付款。</span></p></div>
         </div></article>
         <article class="tilt"><div class="tilt-inner">
-          <div class="card-img"><img src="images/wh-storm.jpg" alt="Children with umbrellas in a room projected with a tropical rainstorm" loading="lazy"></div>
-          <div class="card-body"><span class="card-topics"><span class="en">Weather · Seasons · Plans</span><span class="zh">天气 · 季节 · 计划</span></span>
-            <h3><span class="en">The storm room</span><span class="zh">暴雨教室</span></h3>
-            <p><span class="en">Projected rain and thunder on every wall for the weather topic.</span><span class="zh">四面墙投影暴雨和雷声，用于天气主题。</span></p></div>
+          <div class="card-img"><img src="images/wh-lab-storm.jpg" alt="Children with umbrellas in the storm lab while the guide explains" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Weather · Safety · Plans</span><span class="zh">天气 · 安全 · 计划</span></span>
+            <h3><span class="en">Storm lab</span><span class="zh">暴雨实验室</span></h3>
+            <p><span class="en">Mission: understand the lifeguard and get to shelter.</span><span class="zh">任务：听懂救生员的指示，找到避雨的地方。</span></p></div>
         </div></article>
         <article class="tilt"><div class="tilt-inner">
-          <div class="card-img"><img src="images/wh-cafe.jpg" alt="A teacher playing a waiter takes an order from students" loading="lazy"></div>
-          <div class="card-body"><span class="card-topics"><span class="en">Ordering · Small talk · Paying</span><span class="zh">点餐 · 闲聊 · 结账</span></span>
-            <h3><span class="en">The café</span><span class="zh">咖啡馆</span></h3>
-            <p><span class="en">Menus, a counter and a sea view for food and drink topics.</span><span class="zh">菜单、吧台和海景，用于餐饮主题。</span></p></div>
+          <div class="card-img"><img src="images/wh-lab-cafe.jpg" alt="A waiter actor waits for an order while the guide explains" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Ordering · Allergies · The bill</span><span class="zh">点餐 · 过敏 · 买单</span></span>
+            <h3><span class="en">Café lab</span><span class="zh">咖啡馆实验室</span></h3>
+            <p><span class="en">Mission: order lunch for a friend with a nut allergy.</span><span class="zh">任务：为对坚果过敏的朋友点午餐。</span></p></div>
         </div></article>
         <article class="tilt"><div class="tilt-inner">
-          <div class="card-img"><img src="images/wh-hotel.jpg" alt="A student in hotel uniform practises check-in with a teacher" loading="lazy"></div>
-          <div class="card-body"><span class="card-topics"><span class="en">Check-in · Requests · Complaints</span><span class="zh">入住 · 需求 · 投诉</span></span>
-            <h3><span class="en">The hotel lobby</span><span class="zh">酒店大堂</span></h3>
-            <p><span class="en">A resort reception for hospitality and travel topics.</span><span class="zh">度假酒店前台，用于酒店服务与旅行主题。</span></p></div>
+          <div class="card-img"><img src="images/wh-lab-hotel.jpg" alt="A student checks in with a receptionist actor" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Check-in · Requests · Problems</span><span class="zh">入住 · 需求 · 问题</span></span>
+            <h3><span class="en">Hotel lab</span><span class="zh">酒店实验室</span></h3>
+            <p><span class="en">Mission: check in and fix a problem with your room.</span><span class="zh">任务：办理入住，并解决房间的问题。</span></p></div>
         </div></article>
-              </div>
+      </div>
       <div class="features">
-        <div><strong><span class="en">Projection, light and sound</span><span class="zh">投影、灯光与声效</span></strong><span><span class="en">Wall projections, lighting, sound and real props set each scene: a rainstorm for weather, a sea view for the café, street noise for directions.</span><span class="zh">墙面投影、灯光、声音和真实道具营造场景：天气主题有暴雨，咖啡馆有海景，问路主题有街道声。</span></span></div>
-        <div><strong><span class="en">Actors in character</span><span class="zh">演员全程入戏</span></strong><span><span class="en">Shopkeepers, waiters, guests and taxi drivers who stay in role, react to students and never switch to Chinese.</span><span class="zh">店员、服务员、客人和出租车司机始终保持角色，随时回应学员，全程不说中文。</span></span></div>
-        <div><strong><span class="en">Sanya situations</span><span class="zh">三亚本地场景</span></strong><span><span class="en">Topics drawn from life here: beaches, hotels, seafood markets, taxis and typhoon season.</span><span class="zh">主题取材于三亚生活：海滩、酒店、海鲜市场、打车和台风季。</span></span></div>
+        <div><strong><span class="en">Actors who wait for real English</span><span class="zh">只等正确英语的演员</span></strong><span><span class="en">Shop assistants, waiters and receptionists stay in role and only answer when the phrase is right.</span><span class="zh">店员、服务员和前台始终保持角色，只有说对了才会回应。</span></span></div>
+        <div><strong><span class="en">A guide by your side</span><span class="zh">引导老师全程陪伴</span></strong><span><span class="en">Live teaching inside the scene: the guide breaks down what the actors say and gives hints in Chinese when students are stuck.</span><span class="zh">在场景里现场教学：引导老师拆解演员说的话，学员卡住时用中文给提示。</span></span></div>
+        <div><strong><span class="en">Projection, light and sound</span><span class="zh">投影、灯光与声效</span></strong><span><span class="en">Each lab is a full set inside the warehouse, with real props, projected backdrops and sound.</span><span class="zh">每个实验室都是仓库里的完整布景，配有真实道具、投影背景和声效。</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="try-lab">
+    <div class="wrap">
+      <div class="head">
+        <span class="label"><span class="en">Try it</span><span class="zh">试一试</span></span>
+        <h2><span class="en">Can you get through three lab rooms?</span><span class="zh">你能闯过三个实验室吗？</span></h2>
+        <p><span class="en">Choose what you would say. Get it right and the actor answers and the gate opens. Get it wrong and the actor just waits, while your guide explains why.</span><span class="zh">选出你会说的话。说对了，演员才会回应，出口打开；说错了，演员只会等着，引导老师会告诉你原因。</span></p>
+      </div>
+      <div class="lab" id="lab">
+        <div class="lab-level" data-level="0">
+          <div class="lab-scene">
+            <img src="images/wh-lab-market.jpg" alt="" loading="lazy">
+            <span class="lab-gate" aria-hidden="true"><i></i><span class="en">Gate</span><span class="zh">出口</span></span>
+            <div class="lab-bubble actor"><b><span class="en">Stallholder</span><span class="zh">摊主</span></b><span class="lab-say">Fresh mangoes! Twenty yuan each.</span></div>
+          </div>
+          <div class="lab-side">
+            <span class="label"><span class="en">Room 1 of 3</span><span class="zh">第 1 关 / 共 3 关</span></span>
+            <p class="lab-task"><span class="en">Ask for three mangoes for a better price.</span><span class="zh">请他把三个芒果算便宜一点。</span></p>
+            <div class="lab-opts"><button class="lab-opt" type="button" data-ok="0" data-hint-en="Too direct and missing the plural: &quot;mangoes&quot;. Make it a polite question." data-hint-zh="太直接了，而且复数要说 mangoes。用礼貌的问句试试。">Three mango, cheap!</button><button class="lab-opt" type="button" data-ok="0" data-hint-en="&quot;Give me&quot; sounds like an order in English. Ask with &quot;Could you…?&quot;" data-hint-zh="&quot;Give me&quot; 在英语里像命令。用 &quot;Could you…?&quot; 来问。">Give me three cheaper.</button><button class="lab-opt" type="button" data-ok="1" data-hint-en="" data-hint-zh="">Could you do three for fifty?</button></div>
+            <div class="lab-guide" aria-live="polite"><b><span class="en">Your guide</span><span class="zh">引导老师</span></b><span class="lab-guide-text"><span class="en">Pick what you would say. The actor only answers correct English.</span><span class="zh">选出你会说的话。演员只回应正确的英语。</span></span></div>
+            <button class="btn btn-solid lab-next" type="button" hidden data-reply="Fifty for three? Okay, deal!"><span class="en">Next room →</span><span class="zh">下一关 →</span></button>
+          </div>
+        </div>
+        <div class="lab-level" data-level="1" hidden>
+          <div class="lab-scene">
+            <img src="images/wh-lab-shop.jpg" alt="" loading="lazy">
+            <span class="lab-gate" aria-hidden="true"><i></i><span class="en">Gate</span><span class="zh">出口</span></span>
+            <div class="lab-bubble actor"><b><span class="en">Shop assistant</span><span class="zh">店员</span></b><span class="lab-say">Those sunglasses look great on you!</span></div>
+          </div>
+          <div class="lab-side">
+            <span class="label"><span class="en">Room 2 of 3</span><span class="zh">第 2 关 / 共 3 关</span></span>
+            <p class="lab-task"><span class="en">They are too big. Ask for a smaller pair.</span><span class="zh">太大了，请她换一副小一点的。</span></p>
+            <div class="lab-opts"><button class="lab-opt" type="button" data-ok="0" data-hint-en="She understands, but it sounds rude. Ask whether they have another size." data-hint-zh="她能听懂，但听起来不礼貌。问问有没有别的尺码。">This is big. Change.</button><button class="lab-opt" type="button" data-ok="0" data-hint-en="Close! Use the comparative: &quot;a smaller one&quot;, or ask &quot;Do you have…?&quot;" data-hint-zh="接近了！要用比较级 &quot;a smaller one&quot;，或者用 &quot;Do you have…?&quot; 来问。">I want small one.</button><button class="lab-opt" type="button" data-ok="1" data-hint-en="" data-hint-zh="">Do you have these in a smaller size?</button></div>
+            <div class="lab-guide" aria-live="polite"><b><span class="en">Your guide</span><span class="zh">引导老师</span></b><span class="lab-guide-text"><span class="en">Pick what you would say. The actor only answers correct English.</span><span class="zh">选出你会说的话。演员只回应正确的英语。</span></span></div>
+            <button class="btn btn-solid lab-next" type="button" hidden data-reply="Of course. Here, try this smaller pair."><span class="en">Next room →</span><span class="zh">下一关 →</span></button>
+          </div>
+        </div>
+        <div class="lab-level" data-level="2" hidden>
+          <div class="lab-scene">
+            <img src="images/wh-lab-final.jpg" alt="" loading="lazy">
+            <span class="lab-gate" aria-hidden="true"><i></i><span class="en">Gate</span><span class="zh">出口</span></span>
+            <div class="lab-bubble actor"><b><span class="en">Cashier</span><span class="zh">收银员</span></b><span class="lab-say">That's one hundred and eighty yuan, please.</span></div>
+          </div>
+          <div class="lab-side">
+            <span class="label"><span class="en">Room 3 of 3</span><span class="zh">第 3 关 / 共 3 关</span></span>
+            <p class="lab-task"><span class="en">The price tag said 150. Point out the mistake politely.</span><span class="zh">价签上写的是 150。礼貌地指出错误。</span></p>
+            <div class="lab-opts"><button class="lab-opt" type="button" data-ok="0" data-hint-en="Much too strong. Start softly with &quot;Sorry, I think…&quot;" data-hint-zh="语气太重了。用 &quot;Sorry, I think…&quot; 委婉地开头。">You are wrong!</button><button class="lab-opt" type="button" data-ok="1" data-hint-en="" data-hint-zh="">Sorry, I think there's a mistake. It should be 150.</button><button class="lab-opt" type="button" data-ok="0" data-hint-en="Missing a verb. English needs a full sentence: &quot;The price isn&#x27;t right.&quot;" data-hint-zh="缺少动词。英语需要完整的句子，比如 &quot;The price isn&#x27;t right.&quot;">Money not correct.</button></div>
+            <div class="lab-guide" aria-live="polite"><b><span class="en">Your guide</span><span class="zh">引导老师</span></b><span class="lab-guide-text"><span class="en">Pick what you would say. The actor only answers correct English.</span><span class="zh">选出你会说的话。演员只回应正确的英语。</span></span></div>
+            <button class="btn btn-solid lab-next" type="button" hidden data-reply="Oh, you're right. Sorry about that! It's 150."><span class="en">Finish</span><span class="zh">完成</span></button>
+          </div>
+        </div>
+        <div class="lab-done" hidden>
+          <span class="label"><span class="en">All gates open</span><span class="zh">全部通关</span></span>
+          <h3><span class="en">You passed all three rooms.</span><span class="zh">你闯过了全部三个实验室！</span></h3>
+          <p><span class="en">That's one topic, in a few minutes. A real topic day does this with live actors, a guide by your side, and phrases you'll remember because you used them.</span><span class="zh">这只是几分钟体验一个主题。真正的主题日里，有真人演员、引导老师陪伴，你会记住这些表达，因为你真的用过它们。</span></p>
+          <div class="hero-actions"><a class="btn btn-solid" href="#contact"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a><button class="btn btn-line lab-restart" type="button"><span class="en">Play again</span><span class="zh">再玩一次</span></button></div>
+        </div>
       </div>
     </div>
   </section>
@@ -529,7 +621,7 @@ form.trial h3 { font-size: 1.5rem; }
 
       <div class="day" role="tabpanel" id="day-shop" aria-labelledby="tab-shop">
         <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 对谈片段</span></h4>
+          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
           <div class="transcript">
             <div class="line"><span class="who">A</span><p class="said">买东西的时候，很多人会直接说 <mark class="phr">I want this.</mark> 语法没错，但听起来有点像命令。<span class="gloss en">When shopping, many people say "I want this." It's grammatical, but it sounds like an order.</span></p></div>
             <div class="line"><span class="who">B</span><p class="said">对。母语者更常说 <mark class="phr">Could I get this one?</mark> 或者 <mark class="phr">I'll take this one.</mark><span class="gloss en">Right. Native speakers more often say "Could I get this one?" or "I'll take this one."</span></p></div>
@@ -550,12 +642,12 @@ form.trial h3 { font-size: 1.5rem; }
           </div>
           <div class="panel-card">
             <div class="kv">
-              <div><span class="k"><span class="en">02 · The scene</span><span class="zh">02 · 情景演绎</span></span><p><span class="en">Actors play a pushy stallholder and an undecided tourist. Mid-scene, the stallholder asks the audience which colour suits the tourist.</span><span class="zh">演员扮演热情的摊主和犹豫不决的游客。演到一半，摊主转身问观众：哪个颜色更适合这位游客？</span></p></div>
-              <div><span class="k"><span class="en">03 · Your turn</span><span class="zh">03 · 轮到你</span></span><p><span class="en">Each student buys three items from an actor in character and exchanges one.</span><span class="zh">每位学员向入戏的演员购买三件商品，并换掉其中一件。</span></p></div>
+              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">Find sunglasses in your size from the shop assistant, then pay.</span><span class="zh">向店员找到合适尺码的太阳镜，然后付款。</span></p></div>
+              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Do you have these in a smaller size?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
             </div>
           </div>
           <div class="panel-card">
-            <h4><span class="en">04 · Final challenge: I can</span><span class="zh">04 · 终极挑战：我能做到</span></h4>
+            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
             <ul class="cando">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask the price of anything</span><span class="zh">询问任何商品的价格</span></span></li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for another size or colour</span><span class="zh">要求换尺码或颜色</span></span></li>
@@ -567,7 +659,7 @@ form.trial h3 { font-size: 1.5rem; }
 
       <div class="day" role="tabpanel" id="day-weather" aria-labelledby="tab-weather" hidden>
         <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 对谈片段</span></h4>
+          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
           <div class="transcript">
             <div class="line"><span class="who">A</span><p class="said">"今天很热"，很多人说 Today is very hot. 能听懂，但母语者更常说 <mark class="phr">It's really hot today.</mark><span class="gloss en">For 今天很热 many people say "Today is very hot." Natives more often say "It's really hot today."</span></p></div>
             <div class="line"><span class="who">B</span><p class="said">因为英语用 it 当天气的主语：<mark class="phr">It's sunny.</mark> <mark class="phr">It's windy.</mark><span class="gloss en">Because English uses "it" as the subject for weather: "It's sunny." "It's windy."</span></p></div>
@@ -588,12 +680,12 @@ form.trial h3 { font-size: 1.5rem; }
           </div>
           <div class="panel-card">
             <div class="kv">
-              <div><span class="k"><span class="en">02 · The scene</span><span class="zh">02 · 情景演绎</span></span><p><span class="en">As a storm rolls across the walls, two neighbours argue about their beach plans, then ask the students what the forecast says.</span><span class="zh">暴风雨在四面墙上袭来，两位邻居为海边计划争论，然后问学员：天气预报怎么说？</span></p></div>
-              <div><span class="k"><span class="en">03 · Your turn</span><span class="zh">03 · 轮到你</span></span><p><span class="en">In the storm room, rain and thunder roll in while students describe the weather, then change their weekend plans.</span><span class="zh">在暴雨教室里，雨声雷声响起，学员描述天气并调整周末计划。</span></p></div>
+              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">A storm is coming. Understand the lifeguard and change your beach plans.</span><span class="zh">暴风雨要来了。听懂救生员的话，改变海边计划。</span></p></div>
+              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Is it safe to swim this afternoon?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
             </div>
           </div>
           <div class="panel-card">
-            <h4><span class="en">04 · Final challenge: I can</span><span class="zh">04 · 终极挑战：我能做到</span></h4>
+            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
             <ul class="cando">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Describe today's weather naturally</span><span class="zh">自然地描述今天的天气</span></span></li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask about tomorrow's weather</span><span class="zh">询问明天的天气</span></span></li>
@@ -605,7 +697,7 @@ form.trial h3 { font-size: 1.5rem; }
 
       <div class="day" role="tabpanel" id="day-food" aria-labelledby="tab-food" hidden>
         <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 对谈片段</span></h4>
+          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
           <div class="transcript">
             <div class="line"><span class="who">A</span><p class="said">点餐时很多人说 Give me a coffee. 在英语里听起来不太礼貌。<span class="gloss en">When ordering, many people say "Give me a coffee." In English that sounds a little rude.</span></p></div>
             <div class="line"><span class="who">B</span><p class="said">更自然的是 <mark class="phr">Can I have a coffee, please?</mark> 或 <mark class="phr">I'd like a coffee.</mark><span class="gloss en">More natural: "Can I have a coffee, please?" or "I'd like a coffee."</span></p></div>
@@ -626,12 +718,12 @@ form.trial h3 { font-size: 1.5rem; }
           </div>
           <div class="panel-card">
             <div class="kv">
-              <div><span class="k"><span class="en">02 · The scene</span><span class="zh">02 · 情景演绎</span></span><p><span class="en">A waiter serves a very fussy customer, then turns to the students: "And what can I get for you?"</span><span class="zh">服务员应付一位挑剔的顾客，然后转向学员："那您想点些什么？"</span></p></div>
-              <div><span class="k"><span class="en">03 · Your turn</span><span class="zh">03 · 轮到你</span></span><p><span class="en">At the café, students order from the waiter, ask a question about a dish and pay.</span><span class="zh">在咖啡馆主题教室里，学员点餐、询问菜品并结账。</span></p></div>
+              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">Order lunch for a friend who is allergic to nuts.</span><span class="zh">为对坚果过敏的朋友点午餐。</span></p></div>
+              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Does this have any nuts in it?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
             </div>
           </div>
           <div class="panel-card">
-            <h4><span class="en">04 · Final challenge: I can</span><span class="zh">04 · 终极挑战：我能做到</span></h4>
+            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
             <ul class="cando">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Order food and drinks politely</span><span class="zh">礼貌地点餐和饮品</span></span></li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for a recommendation or mention an allergy</span><span class="zh">请服务员推荐或说明过敏情况</span></span></li>
@@ -664,7 +756,7 @@ form.trial h3 { font-size: 1.5rem; }
           <ul>
             <li><span class="en">Phrases learned inside one real situation</span><span class="zh">在一个真实场景里学整句表达</span></li>
             <li><span class="en">The logic explained in Chinese</span><span class="zh">用中文讲清英语为什么这样说</span></li>
-            <li><span class="en">Used straight away inside a live scene with actors</span><span class="zh">马上在与演员的现场情景中用出来</span></li>
+            <li><span class="en">Used straight away in lab rooms where actors only answer correct English</span><span class="zh">马上在实验室里用出来，演员只回应正确的英语</span></li>
             <li><span class="en">Progress measured by what students can do</span><span class="zh">以"能做到什么"衡量进步</span></li>
           </ul>
         </div>
@@ -683,7 +775,7 @@ form.trial h3 { font-size: 1.5rem; }
         <article class="course">
           <span class="age"><span class="en">Ages 7–12</span><span class="zh">7–12 岁</span></span>
           <h3><span class="en">Kids</span><span class="zh">少儿班</span></h3>
-          <p><span class="en">A shorter day with a picture-based live talk, then plenty of role-play and games in the immersive room.</span><span class="zh">一天的时长更短，讲解配有图片，更多时间在沉浸式教室里做角色扮演和游戏。</span></p>
+          <p><span class="en">A shorter day with a picture-based live talk, simpler missions and more help from the guide in each lab room.</span><span class="zh">一天的时长更短，讲解配有图片，实验室任务更简单，引导老师给予更多帮助。</span></p>
           <dl><dt><span class="en">Hours</span><span class="zh">时间</span></dt><dd>09:30–15:00</dd><dt><span class="en">When</span><span class="zh">上课</span></dt><dd><span class="en">Weekends &amp; school holidays</span><span class="zh">周末及寒暑假</span></dd></dl>
         </article>
         <article class="course">
@@ -739,19 +831,24 @@ form.trial h3 { font-size: 1.5rem; }
   <section class="section alt" id="teachers">
     <div class="wrap">
       <div class="head">
-        <span class="label"><span class="en">Teachers</span><span class="zh">师资</span></span>
-        <h2><span class="en">Two kinds of teacher in every day</span><span class="zh">每天的课程都有两类老师</span></h2>
+        <span class="label"><span class="en">The team</span><span class="zh">师资团队</span></span>
+        <h2><span class="en">Three roles in every day</span><span class="zh">每天的课程有三种角色</span></h2>
       </div>
-      <div class="teachers">
+      <div class="teachers t3">
         <div>
-          <span class="label"><span class="en">Live talk stage</span><span class="zh">对谈舞台</span></span>
-          <h3><span class="en">Chinese teachers: live talk hosts</span><span class="zh">中教：对谈主持</span></h3>
-          <p><span class="en">English-major graduates who know exactly where Chinese speakers go wrong. On stage, two of them talk it through live and explain why in plain Chinese.</span><span class="zh">英语专业出身，清楚中国学生容易在哪里出错，两人在台上现场对谈，用通俗的中文讲清原因。</span></p>
+          <span class="label"><span class="en">Live talk</span><span class="zh">现场对谈</span></span>
+          <h3><span class="en">Hosts</span><span class="zh">主持人</span></h3>
+          <p><span class="en">Chinese English-major graduates who know exactly where Chinese speakers go wrong, and talk it through live in plain Chinese.</span><span class="zh">英语专业出身的中教，清楚中国学生容易在哪里出错，用通俗的中文现场讲透。</span></p>
         </div>
         <div>
-          <span class="label"><span class="en">Market hall · Café · Shop · Challenge room</span><span class="zh">夜市大厅 · 咖啡馆 · 商店 · 挑战室</span></span>
-          <h3><span class="en">Native speakers: the actors</span><span class="zh">外教：情景演员</span></h3>
-          <p><span class="en">They perform each scene and stay in character as stallholders, waiters and hotel guests, reacting to whatever students say. All hold a degree, a CELTA or TEFL certificate and a Chinese work permit.</span><span class="zh">他们演绎每个场景，始终以摊主、服务员、酒店客人等角色回应学员说的每一句话。均持有学位、CELTA 或 TEFL 证书及中国工作许可。</span></p>
+          <span class="label"><span class="en">Phrase prep &amp; labs</span><span class="zh">表达准备与实验室</span></span>
+          <h3><span class="en">Guides</span><span class="zh">引导老师</span></h3>
+          <p><span class="en">Teachers who stay beside the students all day: preparing phrases, then breaking down what the actors say and coaching live inside each lab.</span><span class="zh">全天陪在学员身边的老师：带学员准备表达，再在每个实验室里拆解演员说的话，现场指导。</span></p>
+        </div>
+        <div>
+          <span class="label"><span class="en">Lab rooms</span><span class="zh">实验室</span></span>
+          <h3><span class="en">Actors</span><span class="zh">演员</span></h3>
+          <p><span class="en">Native speakers playing real roles: shop assistants, stallholders, waiters, receptionists. They stay in character and only respond to correct English.</span><span class="zh">外籍演员扮演真实角色：店员、摊主、服务员、前台。始终保持角色，只回应正确的英语。</span></p>
         </div>
       </div>
     </div>
@@ -780,7 +877,7 @@ form.trial h3 { font-size: 1.5rem; }
           </tbody>
         </table>
       </div>
-      <p class="note"><span class="en">Every day includes a one-hour lunch break, 12:00–13:00. Sample timetable; company groups can book their own topic days.</span><span class="zh">每天 12:00–13:00 午休一小时。示例课表；企业团体可预约专属主题日。</span></p>
+      <p class="note"><span class="en">Every day includes a one-hour lunch break, 12:15–13:15. Sample timetable; company groups can book their own topic days.</span><span class="zh">每天 12:15–13:15 午休一小时。示例课表；企业团体可预约专属主题日。</span></p>
     </div>
   </section>
 
@@ -793,12 +890,14 @@ form.trial h3 { font-size: 1.5rem; }
       <div class="faq">
         <details><summary><span class="en">Do students have to memorise vocabulary?</span><span class="zh">学员需要背单词吗？</span></summary>
           <p><span class="en">No word lists. Students learn whole phrases inside one situation, understand why they work, and use them the same day. Phrases come back naturally when topics repeat at higher levels.</span><span class="zh">不需要背单词表。学员在一个场景中学习整句表达，理解其中的逻辑，并在当天用出来。主题在更高级别循环时，这些表达会自然再次出现。</span></p></details>
+        <details><summary><span class="en">What if my child can't say the phrase?</span><span class="zh">孩子说不出来怎么办？</span></summary>
+          <p><span class="en">The guide is right there. They break the phrase down, explain it in Chinese, and practise it with your child until they can say it. The actor waits for real English, but nobody is left stuck: everyone gets through the gate with help.</span><span class="zh">引导老师就在身边：拆解句子、用中文解释，陪孩子一起练到能说出来。演员会等待正确的英语，但没有人会被困住——在帮助下，每个人都能通过出口。</span></p></details>
         <details><summary><span class="en">Do students just watch the actors?</span><span class="zh">学员只是看演员表演吗？</span></summary>
-          <p><span class="en">No, students are part of every scene. Actors perform around them, speak to them and give them roles. Nobody just sits and watches, and shy students start with small lines before taking bigger parts.</span><span class="zh">不是，学员就是场景中的一员。演员在学员身边表演、和他们对话、给他们分配角色。没有人只是坐着看；性格内向的学员可以从简单的台词开始，再慢慢承担更多戏份。</span></p></details>
+          <p><span class="en">No. In every lab room the students are the customers, guests and diners, and the actors only respond to them. Nobody just sits and watches, and shy students start with small lines before taking bigger parts.</span><span class="zh">不是。在每个实验室里，学员就是顾客、客人和食客，演员只回应他们。没有人只是坐着看；性格内向的学员可以从简单的台词开始，再慢慢承担更多戏份。</span></p></details>
         <details><summary><span class="en">Why is the live talk in Chinese?</span><span class="zh">为什么现场对谈用中文？</span></summary>
           <p><span class="en">Logic is easiest to understand in your own language, and a live conversation between two people is easier to follow than a lecture. Once students know why English says something a certain way, the rest of the day is in English.</span><span class="zh">用母语理解逻辑最快最透彻，两个人的现场对话也比单人讲课更容易听进去。明白了英语"为什么这样说"之后，当天其余环节都用英语进行。</span></p></details>
         <details><summary><span class="en">A full day is long. Do children get tired?</span><span class="zh">一整天会不会太累？</span></summary>
-          <p><span class="en">The day changes pace often: listening in the morning, moving around the set before lunch, an hour's break, then hands-on role-play and the final challenge. Children's days are shorter and finish at 15:00.</span><span class="zh">一天的节奏不断变化：上午听对谈，午饭前在布景中走动体验，午休一小时，下午动手角色扮演并迎接终极挑战。少儿班时间更短，15:00 结束。</span></p></details>
+          <p><span class="en">The day changes pace often: a live talk and phrase prep in the morning, the first lab before lunch, an hour's break, then more labs and the final lab. Children's days are shorter and finish at 15:00.</span><span class="zh">一天的节奏不断变化：上午听对谈、准备表达，午饭前闯第一个实验室，午休一小时，下午继续闯关并挑战终极实验室。少儿班时间更短，15:00 结束。</span></p></details>
         <details><summary><span class="en">What if we miss a topic day?</span><span class="zh">错过了某天的主题怎么办？</span></summary>
           <p><span class="en">Each day stands on its own, so students can join any day. Missed topics can be made up the next time they come round, or in another group at the same level.</span><span class="zh">每天的主题相对独立，任何一天都可以加入。错过的主题可在下次循环时补上，或到同级别的其他班级补课。</span></p></details>
         <details><summary><span class="en">My child has no English yet. Can they join?</span><span class="zh">孩子零基础，可以报名吗？</span></summary>
@@ -812,7 +911,7 @@ form.trial h3 { font-size: 1.5rem; }
   </section>
 
   <section class="contact bleed" id="contact">
-    <img src="images/wh-cafe.jpg" alt="" loading="lazy">
+    <img src="images/wh-lab-cafe.jpg" alt="" loading="lazy">
     <div class="wrap contact-grid">
       <div>
         <div class="head" style="margin-bottom:32px">
@@ -1065,6 +1164,47 @@ form.trial h3 { font-size: 1.5rem; }
       select(next); next.focus();
     });
   });
+
+  // Try-a-lab game
+  (function () {
+    var lab = document.getElementById('lab'); if (!lab) return;
+    var levels = Array.prototype.slice.call(lab.querySelectorAll('.lab-level'));
+    var done = lab.querySelector('.lab-done');
+    var zh = function () { return root.getAttribute('data-lang') === 'zh'; };
+    levels.forEach(function (lv, n) {
+      var bubble = lv.querySelector('.lab-bubble'), say = lv.querySelector('.lab-say'), first = say.textContent;
+      var gate = lv.querySelector('.lab-gate'), guide = lv.querySelector('.lab-guide-text'), next = lv.querySelector('.lab-next');
+      lv._reset = function () {
+        say.textContent = first; bubble.classList.remove('waiting', 'ok'); gate.classList.remove('open'); next.hidden = true;
+        lv.querySelectorAll('.lab-opt').forEach(function (b) { b.classList.remove('wrong', 'right'); b.disabled = false; });
+        guide.innerHTML = '<span class="en">Pick what you would say. The actor only answers correct English.</span><span class="zh">选出你会说的话。演员只回应正确的英语。</span>';
+      };
+      lv.querySelectorAll('.lab-opt').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (b.getAttribute('data-ok') === '1') {
+            b.classList.add('right'); say.textContent = next.getAttribute('data-reply');
+            bubble.classList.remove('waiting'); bubble.classList.add('ok'); gate.classList.add('open');
+            lv.querySelectorAll('.lab-opt').forEach(function (o) { o.disabled = true; });
+            guide.innerHTML = '<span class="en">Perfect. The actor answered and the gate is open.</span><span class="zh">完美！演员回应了，出口已经打开。</span>';
+            next.hidden = false; next.focus();
+          } else {
+            b.classList.add('wrong'); b.disabled = true;
+            say.textContent = '…'; bubble.classList.add('waiting');
+            guide.innerHTML = '<span class="en">' + b.getAttribute('data-hint-en') + '</span><span class="zh">' + b.getAttribute('data-hint-zh') + '</span>';
+          }
+        });
+      });
+      next.addEventListener('click', function () {
+        lv.hidden = true;
+        if (levels[n + 1]) { levels[n + 1].hidden = false; levels[n + 1].querySelector('.lab-opt').focus(); }
+        else { done.hidden = false; }
+      });
+    });
+    lab.querySelector('.lab-restart').addEventListener('click', function () {
+      done.hidden = true; levels.forEach(function (lv, n) { lv._reset(); lv.hidden = n !== 0; });
+      levels[0].querySelector('.lab-opt').focus();
+    });
+  })();
 
   // Copy buttons
   document.addEventListener('click', function (e) {
