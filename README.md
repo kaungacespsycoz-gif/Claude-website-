@@ -9,7 +9,8 @@ Open `index.html` in a browser, or run `python3 -m http.server` and visit http:/
 ## Things to replace before launch
 - School name (placeholder: "Coral Bay English / 珊瑚湾英语")
 - WeChat ID, phone number, street address, opening hours (Contact section)
-- Teacher names, bios and photos (Teachers section)
+- Teacher names and bios (Teachers section)
+- Photos: add them to `images/` — see `images/README.md` for file names
 - Timetable and course lengths
 - ICP number in the footer (琼ICP备…号) once your filing is approved
 
