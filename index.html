@@ -251,6 +251,106 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
 .footer-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
 .site-footer a { color: inherit; }
 .site-footer .muted { opacity: .7; }
+
+/* ===== Motion & lively bits ===== */
+.hero-grid { position: relative; z-index: 1; }
+.palm { transform-box: view-box; transform-origin: 92px 360px; animation: sway 5s ease-in-out infinite alternate; }
+@keyframes sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2deg); } }
+.sea1 { animation: drift 9s linear infinite; }
+.sea2 { animation: drift 6s linear infinite reverse; }
+.sea3 { animation: drift 4s linear infinite; }
+@keyframes drift { from { transform: translateX(0); } to { transform: translateX(200px); } }
+.sun-glow { transform-box: fill-box; transform-origin: center; animation: glow 4s ease-in-out infinite; }
+@keyframes glow { 0%,100% { transform: scale(1); opacity: .35; } 50% { transform: scale(1.12); opacity: .1; } }
+.bubble-g { transform-box: fill-box; transform-origin: 20% 100%; }
+.bubble-g.pop { animation: pop .45s cubic-bezier(.3,1.6,.5,1); }
+@keyframes pop { 0% { transform: scale(.6); } 100% { transform: scale(1); } }
+.wave path { animation: wavey 7s ease-in-out infinite alternate; }
+@keyframes wavey { from { d: path("M0 24 Q180 0 360 24 T720 24 T1080 24 T1440 24 V48 H0Z"); } to { d: path("M0 24 Q180 44 360 24 T720 24 T1080 24 T1440 24 V48 H0Z"); } }
+
+.floaters { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.floaters span {
+  position: absolute; bottom: -40px; left: var(--x); font: 700 var(--s, 1rem)/1 var(--font-display);
+  color: var(--hero-fg); opacity: 0; padding: 6px 12px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.25);
+  animation: rise var(--t, 14s) linear infinite; animation-delay: var(--d, 0s); white-space: nowrap;
+}
+@keyframes rise {
+  0% { transform: translateY(0) rotate(-4deg); opacity: 0; }
+  10% { opacity: .5; } 80% { opacity: .35; }
+  100% { transform: translateY(-560px) rotate(4deg); opacity: 0; }
+}
+@media (max-width: 860px) { .floaters span:nth-child(n+5) { display: none; } }
+
+.marquee { background: var(--mango); color: var(--mango-ink); overflow: hidden; padding-block: 14px; }
+.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-track span { font: 700 1.05rem/1 var(--font-display); white-space: nowrap; padding-right: 28px; }
+.marquee-track span::after { content: "✦"; margin-left: 28px; opacity: .55; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Scroll entrances: resting state is fully visible; the animation plays as items arrive */
+.reveal.in { animation: rise-in .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0s); }
+@keyframes rise-in { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+
+.path::after { content: ""; position: absolute; left: 0; top: 23px; height: 3px; width: 0; background: var(--mango); border-radius: 3px; transition: width 2.2s cubic-bezier(.4,0,.2,1); }
+.path.in::after { width: 100%; }
+.path.in .dot { animation: dot-pop .5s cubic-bezier(.3,1.7,.5,1) both; }
+.path.in .step:nth-child(2) .dot { animation-delay: .35s; } .path.in .step:nth-child(3) .dot { animation-delay: .7s; }
+.path.in .step:nth-child(4) .dot { animation-delay: 1.05s; } .path.in .step:nth-child(5) .dot { animation-delay: 1.4s; }
+.path.in .step:nth-child(6) .dot { animation-delay: 1.75s; }
+@keyframes dot-pop { 0% { transform: scale(.5); } 100% { transform: scale(1); } }
+.dot { transition: transform .2s; } .step:hover .dot { transform: scale(1.12) rotate(-6deg); }
+@media (max-width: 860px) {
+  .path::after { left: 23px; top: 0; width: 3px; height: 0; transition: height 2.2s cubic-bezier(.4,0,.2,1); }
+  .path.in::after { width: 3px; height: 100%; }
+}
+
+.program { transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
+.program:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: 0 18px 40px -18px rgba(14,91,99,.45); }
+.teacher, details { transition: transform .2s, border-color .2s; }
+.teacher:hover { transform: translateY(-4px); border-color: var(--lagoon); }
+details:hover { border-color: var(--lagoon); }
+.avatar { transition: transform .3s; } .teacher:hover .avatar { transform: rotate(-8deg) scale(1.06); }
+tbody tr { transition: background .2s; } tbody tr:hover { background: var(--lagoon-soft); }
+
+.btn-mango { position: relative; overflow: hidden; box-shadow: 0 6px 0 -2px rgba(0,0,0,.18); }
+.btn-mango::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%); transform: translateX(-110%); }
+.btn-mango:hover::after { transform: translateX(110%); transition: transform .7s ease; }
+.btn-mango:active { transform: translateY(2px); box-shadow: none; }
+.nav-cta { animation: nudge 6s ease-in-out infinite 3s; }
+@keyframes nudge { 0%, 88%, 100% { transform: none; } 91% { transform: rotate(-5deg) scale(1.05); } 94% { transform: rotate(5deg) scale(1.05); } 97% { transform: rotate(-2deg); } }
+
+/* Mini lesson: flip cards */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.card { perspective: 900px; min-width: 0; }
+.card-btn { all: unset; display: block; width: 100%; cursor: pointer; border-radius: var(--radius); }
+.card-btn:focus-visible { outline: 3px solid var(--mango); outline-offset: 3px; }
+.card-inner { position: relative; display: grid; transition: transform .6s cubic-bezier(.3,1.3,.5,1); transform-style: preserve-3d; }
+.card-btn[aria-pressed="true"] .card-inner { transform: rotateY(180deg); }
+.face {
+  grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius);
+  min-height: 170px; padding: 20px; display: grid; place-content: center; text-align: center; gap: 6px;
+}
+.front { background: var(--surface); border: 1.5px solid var(--line); }
+.front .big { font: 800 clamp(1.8rem, 5vw, 2.4rem)/1.1 var(--font-display); color: var(--lagoon); }
+.front .hint { font: 600 .75rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.back { transform: rotateY(180deg); background: var(--feature-bg); color: var(--feature-fg); }
+.back .word { font: 800 clamp(1.5rem, 4vw, 2rem)/1.1 var(--font-display); color: var(--feature-accent); }
+.back .ipa { font: .85rem/1 var(--font-mono); opacity: .85; }
+.back .ex { font-size: .9rem; opacity: .95; }
+.card:nth-child(odd) .card-btn:hover .front { transform: rotate(-1.5deg); }
+.card:nth-child(even) .card-btn:hover .front { transform: rotate(1.5deg); }
+.front { transition: transform .2s; }
+.say { margin-top: 10px; justify-self: center; font: 600 .8rem/1 var(--font-body); padding: 8px 14px; border-radius: 999px; border: 0; background: var(--feature-accent); color: var(--mango-ink); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.cards-note { margin-top: 14px; color: var(--muted); font-size: var(--step--1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .floaters, .marquee-track span:nth-child(n+9) { display: none; }
+  .marquee-track { flex-wrap: wrap; width: auto; }
+  .path::after { width: 100%; }
+  .card-inner { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -269,6 +369,7 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
     <ul class="nav-links" id="nav-links">
       <li><a href="#levels"><span class="en">Levels</span><span class="zh">级别</span></a></li>
       <li><a href="#programs"><span class="en">Courses</span><span class="zh">课程</span></a></li>
+      <li><a href="#mini-lesson"><span class="en">Mini lesson</span><span class="zh">体验课</span></a></li>
       <li><a href="#timetable"><span class="en">Timetable</span><span class="zh">课表</span></a></li>
       <li><a href="#teachers"><span class="en">Teachers</span><span class="zh">老师</span></a></li>
       <li><a href="#faq"><span class="en">FAQ</span><span class="zh">常见问题</span></a></li>
@@ -286,6 +387,16 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
 
 <main id="top">
   <section class="hero">
+    <div class="floaters" aria-hidden="true">
+      <span style="--x:4%;--d:0s;--t:15s">hello</span>
+      <span style="--x:38%;--d:4s;--t:17s;--s:.9rem">beach</span>
+      <span style="--x:58%;--d:8s;--t:14s">sunshine</span>
+      <span style="--x:20%;--d:10s;--t:16s;--s:1.2rem">ABC</span>
+      <span style="--x:80%;--d:2s;--t:18s;--s:.9rem">coconut</span>
+      <span style="--x:70%;--d:12s;--t:15s">friends</span>
+      <span style="--x:46%;--d:6.5s;--t:19s;--s:.85rem">How are you?</span>
+      <span style="--x:90%;--d:9s;--t:16s">wave</span>
+    </div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <span class="eyebrow"><span class="en">English school in Sanya · Est. 2026</span><span class="zh">三亚英语培训学校</span></span>
@@ -309,31 +420,39 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
       </div>
       <div class="hero-art" aria-hidden="true">
         <svg viewBox="0 0 400 360">
+          <circle class="sun-glow" cx="250" cy="150" r="110" fill="#f0a92e"/>
           <circle cx="250" cy="150" r="92" fill="#f0a92e"/>
           <circle cx="250" cy="150" r="92" fill="url(#sunfade)"/>
           <defs>
             <linearGradient id="sunfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a" stop-opacity=".9"/><stop offset="1" stop-color="#f0a92e" stop-opacity="0"/></linearGradient>
           </defs>
           <!-- palm -->
+          <g class="palm">
           <path d="M92 360 C100 290 112 220 140 150" stroke="#06343a" stroke-width="10" fill="none" stroke-linecap="round"/>
           <path d="M140 150 C110 120 70 120 40 140 C80 128 110 135 140 150Z" fill="#06343a"/>
           <path d="M140 150 C130 110 100 85 70 80 C105 100 125 120 140 150Z" fill="#06343a"/>
           <path d="M140 150 C155 110 185 95 215 98 C185 110 160 125 140 150Z" fill="#06343a"/>
           <path d="M140 150 C175 135 210 145 230 170 C200 155 170 150 140 150Z" fill="#06343a"/>
           <path d="M140 150 C140 115 150 85 165 70 C155 100 148 125 140 150Z" fill="#06343a"/>
+          <circle cx="146" cy="158" r="7" fill="#3b2a12"/><circle cx="134" cy="160" r="6" fill="#3b2a12"/>
+          </g>
           <!-- sea -->
-          <path d="M0 250 Q50 236 100 250 T200 250 T300 250 T400 250 V360 H0Z" fill="#0a4248" opacity=".9"/>
-          <path d="M0 280 Q50 266 100 280 T200 280 T300 280 T400 280 V360 H0Z" fill="#14727a"/>
-          <path d="M0 312 Q50 300 100 312 T200 312 T300 312 T400 312 V360 H0Z" fill="#5cc2c4" opacity=".55"/>
+          <path class="sea1" d="M-200 250 Q-150 236 -100 250 T0 250 T100 250 T200 250 T300 250 T400 250 T500 250 T600 250 V360 H-200Z" fill="#0a4248" opacity=".9"/>
+          <path class="sea2" d="M-200 280 Q-150 266 -100 280 T0 280 T100 280 T200 280 T300 280 T400 280 T500 280 T600 280 V360 H-200Z" fill="#14727a"/>
+          <path class="sea3" d="M-200 312 Q-150 300 -100 312 T0 312 T100 312 T200 312 T300 312 T400 312 T500 312 T600 312 V360 H-200Z" fill="#5cc2c4" opacity=".55"/>
           <!-- speech bubble -->
+          <g class="bubble-g" id="bubble">
           <rect x="268" y="40" width="112" height="46" rx="23" fill="#f3fbfa"/>
           <path d="M290 84 L282 100 L304 86Z" fill="#f3fbfa"/>
-          <text x="324" y="70" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-weight="700" font-size="18" fill="#0e5b63">Hello!</text>
+          <text x="324" y="70" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-weight="700" font-size="18" fill="#0e5b63" id="hello-text">Hello!</text>
+          </g>
         </svg>
       </div>
     </div>
     <svg class="wave" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true"><path d="M0 24 Q180 0 360 24 T720 24 T1080 24 T1440 24 V48 H0Z" fill="currentColor"/></svg>
   </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Good morning!</span><span>早上好！</span><span>How are you?</span><span>你好吗？</span><span>Let's go to the beach!</span><span>我们去海边吧！</span><span>I can speak English!</span><span>我会说英语！</span><span>Nice to meet you!</span><span>很高兴认识你！</span><span>See you tomorrow!</span><span>明天见！</span><span>Good morning!</span><span>早上好！</span><span>How are you?</span><span>你好吗？</span><span>Let's go to the beach!</span><span>我们去海边吧！</span><span>I can speak English!</span><span>我会说英语！</span><span>Nice to meet you!</span><span>很高兴认识你！</span><span>See you tomorrow!</span><span>明天见！</span></div></div>
 
   <section class="band" id="levels">
     <div class="wrap">
@@ -425,23 +544,83 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
         <h2><span class="en">More speaking time, less sitting still</span><span class="zh">更多开口时间，更少枯坐时间</span></h2>
       </div>
       <div class="why-grid">
-        <div class="why-item"><span class="why-num">8</span>
+        <div class="why-item"><span class="why-num" data-count="8">8</span>
           <h3><span class="en">Students at most</span><span class="zh">人以内小班</span></h3>
           <p><span class="en">Every child speaks many times in every lesson.</span><span class="zh">每节课每个孩子都有多次开口机会。</span></p></div>
-        <div class="why-item"><span class="why-num">2</span>
+        <div class="why-item"><span class="why-num" data-count="2">2</span>
           <h3><span class="en">Teachers per class</span><span class="zh">位老师同堂</span></h3>
           <p><span class="en">A native-speaking lead teacher and a Chinese co-teacher who keeps parents informed.</span><span class="zh">外教主讲，中教辅导并与家长保持沟通。</span></p></div>
-        <div class="why-item"><span class="why-num">4×</span>
+        <div class="why-item"><span class="why-num" data-count="4×">4×</span>
           <h3><span class="en">Beach English days a year</span><span class="zh">每年海滩英语日</span></h3>
           <p><span class="en">Outdoor lessons by the sea at Sanya Bay and Dadonghai, with English-only games.</span><span class="zh">在三亚湾、大东海开展户外英语课，全英文游戏互动。</span></p></div>
-        <div class="why-item"><span class="why-num">1</span>
+        <div class="why-item"><span class="why-num" data-count="1">1</span>
           <h3><span class="en">Progress report per term</span><span class="zh">份学期报告</span></h3>
           <p><span class="en">A written report and a parent meeting each term, in Chinese and English.</span><span class="zh">每学期一份中英双语书面报告，并安排家长面谈。</span></p></div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="timetable">
+  <section class="band" id="mini-lesson">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow"><span class="en">Try a mini lesson</span><span class="zh">迷你体验课</span></span>
+        <h2><span class="en">Six Sanya beach words. Can you guess them?</span><span class="zh">六个三亚海边单词，你认识吗？</span></h2>
+        <p><span class="en">Tap a card to see the English word, then press the speaker to hear it.</span><span class="zh">点击卡片查看英文单词，再点喇叭听发音。</span></p>
+      </div>
+      <div class="cards" id="cards">
+        <div class="card reveal" style="--delay:0.00s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="coconut">
+            <span class="card-inner">
+              <span class="face front"><span class="big">椰子</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">coconut</span><span class="ipa">/ˈkoʊ.kə.nʌt/</span><span class="ex">The coconut water is sweet.</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="card reveal" style="--delay:0.08s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="wave">
+            <span class="card-inner">
+              <span class="face front"><span class="big">海浪</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">wave</span><span class="ipa">/weɪv/</span><span class="ex">Look at the big waves!</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="card reveal" style="--delay:0.16s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="sunscreen">
+            <span class="card-inner">
+              <span class="face front"><span class="big">防晒霜</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">sunscreen</span><span class="ipa">/ˈsʌn.skriːn/</span><span class="ex">Put on your sunscreen.</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="card reveal" style="--delay:0.24s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="surfboard">
+            <span class="card-inner">
+              <span class="face front"><span class="big">冲浪板</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">surfboard</span><span class="ipa">/ˈsɜːf.bɔːd/</span><span class="ex">I can stand on my surfboard.</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="card reveal" style="--delay:0.32s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="lifeguard">
+            <span class="card-inner">
+              <span class="face front"><span class="big">救生员</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">lifeguard</span><span class="ipa">/ˈlaɪf.ɡɑːd/</span><span class="ex">The lifeguard is watching us.</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="card reveal" style="--delay:0.40s">
+          <button class="card-btn" type="button" aria-pressed="false" data-word="mango">
+            <span class="card-inner">
+              <span class="face front"><span class="big">芒果</span><span class="hint"><span class="en">Tap to flip</span><span class="zh">点一点</span></span></span>
+              <span class="face back"><span class="word">mango</span><span class="ipa">/ˈmæŋ.ɡoʊ/</span><span class="ex">Hainan mangoes are delicious!</span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="timetable" style="padding-top:0">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow"><span class="en">Weekly timetable</span><span class="zh">每周课表</span></span>
@@ -634,6 +813,77 @@ form.trial { background: var(--surface); border: 1px solid var(--line); border-r
         setTimeout(function () { btn.innerHTML = old; }, 1500);
       }, selectIt);
     } catch (err) { selectIt(); }
+  });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Speech bubble cycles greetings
+  var greetings = ['Hello!', '你好!', 'Hi there!', "Let's talk!", 'Welcome!'];
+  var gi = 0, helloText = document.getElementById('hello-text'), bubble = document.getElementById('bubble');
+  if (!reduce) setInterval(function () {
+    gi = (gi + 1) % greetings.length;
+    helloText.textContent = greetings[gi];
+    bubble.classList.remove('pop'); void bubble.getBoundingClientRect(); bubble.classList.add('pop');
+  }, 2400);
+
+  // Scroll entrances
+  var revealTargets = document.querySelectorAll('.section-head, .program, .why-item, .teacher, details, .table-scroll');
+  revealTargets.forEach(function (el) { el.classList.add('reveal'); });
+  document.querySelectorAll('.programs .program, .why-grid .why-item, .teachers .teacher, .faq details').forEach(function (el, i, all) {
+    var idx = Array.prototype.indexOf.call(el.parentNode.children, el);
+    el.style.setProperty('--delay', (idx * 0.08).toFixed(2) + 's');
+  });
+  function countUp(el) {
+    var raw = el.getAttribute('data-count'), n = parseInt(raw, 10), suffix = raw.replace(/^\d+/, '');
+    var start = performance.now(), dur = 1100;
+    (function tick(now) {
+      var t = Math.min(1, (now - start) / dur);
+      el.textContent = Math.round(n * (1 - Math.pow(1 - t, 3))) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.classList.add('in');
+        if (el.hasAttribute('data-count')) countUp(el);
+        io.unobserve(el);
+      });
+    }, { rootMargin: '0px 0px 80px 0px' });
+    document.querySelectorAll('.reveal, .path, [data-count]').forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight) { if (el.classList.contains('path')) el.classList.add('in'); return; }
+      io.observe(el);
+    });
+  } else {
+    document.querySelectorAll('.path').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  // Flip cards + pronunciation
+  var canSpeak = 'speechSynthesis' in window;
+  document.querySelectorAll('.card-btn').forEach(function (btn) {
+    if (canSpeak) {
+      var say = document.createElement('span');
+      say.className = 'say'; say.setAttribute('role', 'button'); say.tabIndex = 0;
+      say.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Listen';
+      say.setAttribute('aria-label', 'Listen to ' + btn.getAttribute('data-word'));
+      btn.querySelector('.back').appendChild(say);
+    }
+    btn.addEventListener('click', function (e) {
+      var sayBtn = e.target.closest('.say');
+      if (sayBtn) {
+        e.stopPropagation();
+        try {
+          speechSynthesis.cancel();
+          var u = new SpeechSynthesisUtterance(btn.getAttribute('data-word'));
+          u.lang = 'en-US'; u.rate = 0.85; speechSynthesis.speak(u);
+        } catch (err) {}
+        return;
+      }
+      btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    });
   });
 
   var form = document.getElementById('trial-form');
