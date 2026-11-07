@@ -416,6 +416,50 @@ form.trial h3 { font-size: 1.5rem; }
 .level-ex { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 4px; font-size: .95rem; }
 .level-ex b { font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--brass); font-weight: 500; }
 @media (max-width: 900px) { .levels { grid-template-columns: 1fr; } }
+
+/* ===== Cinematic layer ===== */
+.film { display: none; }
+.walk.live .film { display: block; position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.film .bar { position: absolute; left: 0; right: 0; height: var(--bar, clamp(26px, 7vh, 70px)); background: #000; transform: scaleY(0); animation: bar-in 1.4s cubic-bezier(.7,0,.2,1) .2s forwards; }
+.film .bar.top { top: 0; transform-origin: top; }
+.film .bar.bottom { bottom: 0; transform-origin: bottom; }
+@keyframes bar-in { to { transform: scaleY(1); } }
+.film .grain { position: absolute; inset: -50%; background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .09; mix-blend-mode: overlay; animation: grain 1s steps(6) infinite; }
+@keyframes grain { 0% { transform: translate(0,0); } 20% { transform: translate(-3%,2%); } 40% { transform: translate(2%,-3%); } 60% { transform: translate(-2%,-1%); } 80% { transform: translate(3%,3%); } 100% { transform: translate(0,0); } }
+.film .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
+
+/* chapter title card top-left, subtitles bottom-centre */
+.walk.live .wt-room { top: calc(var(--bar, clamp(26px, 7vh, 70px)) + 76px); bottom: auto; max-width: 520px; gap: 10px; }
+.walk.live .wt-room h2 { font-size: clamp(2rem, 4.2vw, 3.4rem); }
+.walk.live .wt-room > p { font-size: 1rem; color: rgba(239,230,218,.82); }
+.walk.live .wt-hero, .walk.live .wt-door { bottom: calc(var(--bar, clamp(26px, 7vh, 70px)) + 40px); }
+.subs { display: none; }
+.walk.live .subs { display: block; position: absolute; z-index: 4; left: 0; right: 0; bottom: calc(var(--bar, clamp(26px, 7vh, 70px)) + 28px); text-align: center; pointer-events: none; }
+.walk.live .wt-room { position: absolute; }
+.sub { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: min(92vw, 860px); margin: 0; display: grid; gap: 4px; opacity: 0; transition: opacity .35s; }
+.sub.on { opacity: 1; }
+.sub b { font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--brass); font-weight: 500; }
+.sub-en { font-size: clamp(1.15rem, 2.2vw, 1.6rem); color: #fff; text-shadow: 0 2px 8px #000, 0 0 2px #000; line-height: 1.35; }
+.sub-zh { font-size: clamp(.95rem, 1.6vw, 1.15rem); color: #f3e3b5; text-shadow: 0 2px 8px #000, 0 0 2px #000; }
+.walk:not(.live) .subs { display: grid; gap: 8px; margin-top: 8px; }
+.walk:not(.live) .sub { position: static; transform: none; width: auto; opacity: 1; }
+.wt-hero { animation: title-in 2.2s cubic-bezier(.2,.7,.2,1) both; }
+.wt-hero .label { animation: track-in 2.4s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes title-in { from { opacity: .15; filter: blur(6px); transform: translateY(14px); } to { opacity: 1; filter: none; transform: none; } }
+@keyframes track-in { from { letter-spacing: .6em; } }
+@media (max-width: 760px) {
+  .walk.live { --bar: 22px; }
+  .walk.live .wt-room { top: calc(22px + 70px); }
+  .walk.live .wt-room > p { display: none; }
+  .walk.live .subs { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .walk.live .wt-hero, .walk.live .wt-door { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { .film .grain { animation: none; } .film .bar { animation: none; transform: none; } .wt-hero, .wt-hero .label { animation: none; } }
+
+.walk.live .walk-shade { background:
+  linear-gradient(180deg, rgba(22,18,15,.78) 0%, rgba(22,18,15,.35) 26%, rgba(22,18,15,0) 44%, rgba(22,18,15,0) 58%, rgba(22,18,15,.8) 100%),
+  linear-gradient(90deg, rgba(22,18,15,.5) 0%, rgba(22,18,15,0) 50%); }
+@media (max-width: 760px) { .walk-rail li.on span { display: none; } }
 </style>
 </head>
 <body>
@@ -467,8 +511,9 @@ form.trial h3 { font-size: 1.5rem; }
       <figure class="wf" data-r="5" data-k="10" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-challenge.jpg" alt="The walkway leading to the final lab" decoding="async"></figure>
       <figure class="wf" data-r="5" data-k="11" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-final.jpg" alt="The gate light turns green as a student passes the final lab and classmates cheer" decoding="async"></figure>
       <div class="walk-shade" aria-hidden="true"></div>
+      <div class="film" aria-hidden="true"><i class="bar top"></i><i class="bar bottom"></i><i class="grain"></i><i class="vignette"></i></div>
       <div class="wt wt-hero" data-k="0">
-        <span class="label"><span class="en">Immersive English lab · Sanya</span><span class="zh">沉浸式英语实验室 · 三亚</span></span>
+        <span class="label"><span class="en">Coral Bay English presents</span><span class="zh">珊瑚湾英语 出品</span></span>
         <h1><span class="en">One topic a day. <em>Walk out using it.</em></span><span class="zh">每天一个主题，<em>下课就能用。</em></span></h1>
         <p class="hero-lede"><span class="en">A live talk, phrase prep, then themed lab rooms where actors only answer correct English. Scroll to walk through a day.</span><span class="zh">现场对谈、表达准备，然后走进主题实验室：演员只回应正确的英语。向下滑动，走一遍一天的课程。</span></p>
         <div class="hero-actions">
@@ -477,51 +522,58 @@ form.trial h3 { font-size: 1.5rem; }
         </div>
       </div>
       <div class="wt wt-room" data-k="1">
-        <div class="room-meta"><span>01 / 06</span><span>09:15</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 01</span><span class="zh">第 01 章</span></span><span>09:15</span></div>
         <span class="label"><span class="en">Welcome</span><span class="zh">迎宾区</span></span>
         <h2><span class="en">Welcome &amp; warm-up</span><span class="zh">签到与热身</span></h2>
         <p><span class="en">Students check in, meet today's guide and find out the topic. New students start with a short placement chat.</span><span class="zh">学员签到、认识当天的引导老师、了解当天主题。新学员先进行简短的水平交流。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Guide</span><span class="zh">引导老师</span></b><span class="sub-en">Good morning! Today's topic is shopping.</span><span class="sub-zh">早上好！今天的主题是购物。</span></p><p class="sub"><b><span class="en">Student</span><span class="zh">学员</span></b><span class="sub-en">Shopping? Great!</span><span class="sub-zh">购物？太好了！</span></p></div>
       </div>
       <div class="wt wt-door" data-k="2"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Live talk</span><span class="zh">现场对谈</span> <span class="wt-time">09:30–10:15</span></p></div>
       <div class="wt wt-room" data-k="3">
-        <div class="room-meta"><span>02 / 06</span><span>09:30–10:15</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 02</span><span class="zh">第 02 章</span></span><span>09:30–10:15</span></div>
         <span class="label"><span class="en">Live talk</span><span class="zh">现场对谈</span></span>
         <h2><span class="en">The live talk</span><span class="zh">现场对谈</span></h2>
         <p><span class="en">Like a live podcast: two hosts talk the topic through in Chinese. The common mistakes, the phrases natives use most, and the logic behind them.</span><span class="zh">像一场现场播客：两位主持人用中文聊当天的主题——常见错误、母语者最常用的表达，以及背后的逻辑。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Host</span><span class="zh">主持人</span></b><span class="sub-en">A lot of people say, "This how much money?"</span><span class="sub-zh">很多人会说 "This how much money?"</span></p><p class="sub"><b><span class="en">Host</span><span class="zh">主持人</span></b><span class="sub-en">But in English, the verb comes first: "How much is this?"</span><span class="sub-zh">但英语要把动词提前："How much is this?"</span></p></div>
       </div>
       <div class="wt wt-door" data-k="4"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Phrase prep</span><span class="zh">表达准备</span> <span class="wt-time">10:15–11:15</span></p></div>
       <div class="wt wt-room" data-k="5">
-        <div class="room-meta"><span>03 / 06</span><span>10:15–11:15</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 03</span><span class="zh">第 03 章</span></span><span>10:15–11:15</span></div>
         <span class="label"><span class="en">Phrase prep</span><span class="zh">表达准备</span></span>
         <h2><span class="en">Phrase prep</span><span class="zh">表达准备</span></h2>
         <p><span class="en">The guide turns the talk into a toolkit: the words, phrases and sentence patterns for today's labs. Students rehearse out loud in pairs and get their phrase card.</span><span class="zh">引导老师把对谈内容变成"工具包"：当天实验室要用到的单词、短语和句型。学员两人一组大声练习，并领取短语卡。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Guide</span><span class="zh">引导老师</span></b><span class="sub-en">Repeat after me: "Could you do three for fifty?"</span><span class="sub-zh">跟我读："Could you do three for fifty?"</span></p><p class="sub"><b><span class="en">Students</span><span class="zh">学员</span></b><span class="sub-en">"Could you do three for fifty?"</span><span class="sub-zh">（学员齐读）</span></p></div>
       </div>
       <div class="wt wt-door" data-k="6"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span> <span class="wt-time">11:15–12:15</span></p></div>
       <div class="wt wt-room" data-k="7">
-        <div class="room-meta"><span>04 / 06</span><span>11:15–12:15</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 04</span><span class="zh">第 04 章</span></span><span>11:15–12:15</span></div>
         <span class="label"><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span></span>
         <h2><span class="en">The night market lab</span><span class="zh">夜市实验室</span></h2>
         <p><span class="en">The stallholder is an actor and only answers correct English. Your guide stands beside you and breaks down everything he says. Mission: get a better price. The gate stays red until you do.</span><span class="zh">摊主由演员扮演，只回应正确的英语。引导老师站在你身边，实时拆解他说的每一句话。任务：讲到更好的价格。做不到，出口的灯就一直是红色。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Stallholder</span><span class="zh">摊主</span></b><span class="sub-en">Fresh mangoes! Twenty yuan each.</span><span class="sub-zh">新鲜芒果！二十块一个。</span></p><p class="sub"><b><span class="en">Student</span><span class="zh">学员</span></b><span class="sub-en">Give me three cheaper.</span><span class="sub-zh">便宜点给我三个。</span></p><p class="sub"><b><span class="en">Stallholder</span><span class="zh">摊主</span></b><span class="sub-en">…</span><span class="sub-zh">（摊主没有回应，只是等着）</span></p></div>
       </div>
       <div class="wt wt-room" data-k="7b">
-        <div class="room-meta"><span>04 / 06</span><span>11:15–12:15</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 04</span><span class="zh">第 04 章</span></span><span>11:15–12:15</span></div>
         <span class="label"><span class="en">Lab 1 · Live correction</span><span class="zh">实验室 1 · 现场纠音</span></span>
         <h2><span class="en">Say it again, like this</span><span class="zh">再说一遍，像这样</span></h2>
         <p><span class="en">Got the words but not the sound? The guide kneels beside you, shows exactly where it went wrong, the mouth shape, the stress, the rhythm, and you try again until the stallholder understands.</span><span class="zh">单词对了，发音没对？引导老师蹲在你身边，指出具体哪里不对——口型、重音、节奏——你再试一次，直到摊主听懂为止。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Guide</span><span class="zh">引导老师</span></b><span class="sub-en">Not "tree", it's "three". Tongue between your teeth.</span><span class="sub-zh">不是 tree，是 three。舌尖放在上下牙齿之间。</span></p><p class="sub"><b><span class="en">Student</span><span class="zh">学员</span></b><span class="sub-en">Could you do three for fifty?</span><span class="sub-zh">能三个五十块吗？</span></p><p class="sub"><b><span class="en">Stallholder</span><span class="zh">摊主</span></b><span class="sub-en">Three for fifty? Deal!</span><span class="sub-zh">三个五十？成交！</span></p></div>
       </div>
       <div class="wt wt-door" data-k="8"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span> <span class="wt-time">13:15–14:30</span></p></div>
       <div class="wt wt-room" data-k="9">
-        <div class="room-meta"><span>05 / 06</span><span>13:15–14:30</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 05</span><span class="zh">第 05 章</span></span><span>13:15–14:30</span></div>
         <span class="label"><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span></span>
         <h2><span class="en">The beach shop lab</span><span class="zh">海滩小店实验室</span></h2>
         <p><span class="en">A real shop assistant at a real counter. Mission: find sunglasses in your size and pay. Say it right and she hands them over, and the gate turns green.</span><span class="zh">真实的店员，真实的柜台。任务：找到合适尺码的太阳镜并付款。说对了，她才会把商品递给你，出口的灯随之变绿。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Shop assistant</span><span class="zh">店员</span></b><span class="sub-en">Those look great on you!</span><span class="sub-zh">戴着真好看！</span></p><p class="sub"><b><span class="en">Student</span><span class="zh">学员</span></b><span class="sub-en">Do you have these in a smaller size?</span><span class="sub-zh">有小一号的吗？</span></p><p class="sub"><b><span class="en">Shop assistant</span><span class="zh">店员</span></b><span class="sub-en">Of course. Here you go.</span><span class="sub-zh">当然，给你。</span></p></div>
       </div>
       <div class="wt wt-door" data-k="10"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Final lab</span><span class="zh">终极实验室</span> <span class="wt-time">14:45–16:00</span></p></div>
       <div class="wt wt-room" data-k="11">
-        <div class="room-meta"><span>06 / 06</span><span>14:45–16:00</span></div>
+        <div class="room-meta"><span><span class="en">Chapter 06</span><span class="zh">第 06 章</span></span><span>14:45–16:00</span></div>
         <span class="label"><span class="en">Final lab</span><span class="zh">终极实验室</span></span>
         <h2><span class="en">The final lab</span><span class="zh">终极实验室</span></h2>
         <p><span class="en">No hints this time. Something goes wrong at the till and you sort it out in English. When the light turns green, the group cheers and you leave with your "I can" card.</span><span class="zh">这一次没有提示。收银时出了问题，你要用英语解决。灯一变绿，全组欢呼，你带着"我能做到"卡片离开。</span></p>
+        <div class="subs" aria-label="Dialogue"><p class="sub"><b><span class="en">Cashier</span><span class="zh">收银员</span></b><span class="sub-en">That's one hundred and eighty, please.</span><span class="sub-zh">一共一百八十元。</span></p><p class="sub"><b><span class="en">Student</span><span class="zh">学员</span></b><span class="sub-en">Sorry, I think there's a mistake. It should be 150.</span><span class="sub-zh">不好意思，好像算错了，应该是 150。</span></p><p class="sub"><b><span class="en">Cashier</span><span class="zh">收银员</span></b><span class="sub-en">You're right! Sorry about that.</span><span class="sub-zh">你说得对！抱歉。</span></p></div>
       </div>
       <ol class="walk-rail" aria-hidden="true">
         <li data-r="0"><span class="en">Welcome</span><span class="zh">迎宾区</span></li>
@@ -1102,6 +1154,9 @@ form.trial h3 { font-size: 1.5rem; }
   var railItems = walk.querySelectorAll('.walk-rail li');
   var walkHint = walk.querySelector('.walk-hint');
   var NF = wf.length;
+  // move each subtitle block out of its (transformed) text card so it can sit bottom-centre of the frame
+  var sticky = walk.querySelector('.walk-sticky');
+  if (!reduce) wt.forEach(function (el) { var sb = el.querySelector('.subs'); if (sb) { el._subsBox = sb; sticky.appendChild(sb); } });
   walk.style.setProperty('--frames', NF);
   if (!reduce) walk.classList.add('live');
   var ticking = false;
@@ -1158,6 +1213,14 @@ form.trial h3 { font-size: 1.5rem; }
       el.style.opacity = o.toFixed(3);
       el.style.visibility = o > 0.01 ? 'visible' : 'hidden';
       el.style.transform = 'translateY(' + y.toFixed(1) + 'px)';
+      var box = el._subsBox;
+      if (box) { box.style.opacity = o.toFixed(3); box.style.visibility = o > 0.01 ? 'visible' : 'hidden'; }
+      var subs = box ? (box._s || (box._s = Array.prototype.slice.call(box.querySelectorAll('.sub')))) : [];
+      if (subs.length) {
+        var show = -1;
+        if (k === i) { var span = (i === NF - 1 ? 0.55 : 0.5) / subs.length; show = Math.min(subs.length - 1, Math.floor(Math.max(0, t - 0.06) / span)); if (t < 0.06) show = 0; }
+        subs.forEach(function (sb, q) { sb.classList.toggle('on', q === show); });
+      }
     });
 
     var activeFrame = Math.min(NF - 1, i + (e > 0.5 ? 1 : 0));
