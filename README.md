@@ -1,6 +1,7 @@
 # Coral Bay English — website
 
-Bilingual (English / 中文) one-page website for an English language school in Sanya, Hainan.
+Bilingual (English / 中文) one-page website for an experience-based English school in Sanya, Hainan:
+one topic a day, taught in four stages (podcast-style explanation in Chinese, native English video, practice in a themed room, review).
 Everything is in `index.html` (no build step, no external fonts or scripts, so it loads fast inside mainland China).
 
 ## Preview locally
@@ -9,8 +10,7 @@ Open `index.html` in a browser, or run `python3 -m http.server` and visit http:/
 ## Things to replace before launch
 - School name (placeholder: "Coral Bay English / 珊瑚湾英语")
 - WeChat ID, phone number, street address, opening hours (Contact section)
-- Teacher names and bios (Teachers section)
-- Photos: add them to `images/` — see `images/README.md` for file names
+- Room images: currently concept renders; swap in real photos — see `images/README.md`
 - Timetable and course lengths
 - ICP number in the footer (琼ICP备…号) once your filing is approved
 

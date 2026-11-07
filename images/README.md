@@ -1,12 +1,15 @@
-# Photos
+# Images
 
-Put your photos in this folder with these exact names. Until a file exists, the site shows a grey placeholder in its place.
+| File | Where it appears |
+|---|---|
+| room-lobby.jpg | Full-screen opening image, and stage 4 "Walk out confident" |
+| room-podcast.jpg | Stage 1 "Listen" (podcast studio) |
+| room-screening.jpg | Stage 2 "Watch" (screening room) and the rooms gallery |
+| room-shop.jpg | Stage 3 "Practise" and the rooms gallery |
+| room-cafe.jpg | Rooms gallery and the contact section background |
+| room-weather.jpg | Rooms gallery |
 
-| File | Where it appears | Suggested size |
-|---|---|---|
-| hero.jpg | Top of the page, beside the headline | 1500 × 1200 (5:4) |
-| classroom.jpg | "Our approach" section | 1600 × 1200 (4:3) |
-| teacher-1.jpg, teacher-2.jpg, teacher-3.jpg | Teachers section | 800 × 800 (square) |
-| wechat-qr.png | Contact section | 600 × 600 (square) |
-
-Use real photos of your school, teachers and students (with parents' permission). Compress JPGs to under ~300 KB so the page loads quickly on mobile.
+These are AI-generated concept renders (made in Figma), labelled as such in the site footer.
+When your real rooms are ready, replace each file with a photo of the same name
+(landscape, about 1600 × 900, compressed to under ~300 KB). Then remove the
+"concept renders" line from the footer in index.html.

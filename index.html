@@ -5,48 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coral Bay English</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Coral Bay English — English classes for children, teens and adults in Sanya, Hainan. 三亚珊瑚湾英语：少儿、青少年及成人英语课程。">
+<meta name="description" content="Coral Bay English — experience-based English in Sanya. One topic a day: a podcast-style lesson in Chinese, real native English, practice in a themed room. 三亚珊瑚湾英语：每天一个主题，下课就能用。">
 <meta property="og:title" content="Coral Bay English 珊瑚湾英语 · Sanya">
-<meta property="og:description" content="English classes for children, teens and adults in Sanya. 三亚少儿、青少年及成人英语课程。">
-<meta property="og:image" content="images/hero.jpg">
+<meta property="og:description" content="One topic a day. Walk out using it. 每天一个主题，下课就能用。">
+<meta property="og:image" content="images/room-lobby.jpg">
 <meta property="og:type" content="website">
 <style>
-/* Layout: classic school site. Utility bar, white header, split hero with photo, alternating white / tinted sections in a 1160px column, multi-column footer. */
+/* Layout: an immersive, photo-led walk through the school. Full-bleed hero, four full-screen "rooms" (one per stage of the day) with a floor plan whose route draws on scroll, a tilt gallery of themed rooms, then quiet hairline sections. Deliberately single-theme: warm espresso + sand, brass as the one accent. */
 :root {
-  --bg: #ffffff;
-  --alt: #f4f6f7;
-  --ink: #142630;
-  --muted: #56666e;
-  --line: #dfe5e8;
-  --brand: #0f4552;        /* deep teal-navy */
-  --brand-ink: #ffffff;
-  --brand-soft: #e7eff1;
-  --accent: #85590f;       /* muted gold, used sparingly */
-  --ph: #e9eef0;           /* photo placeholder */
-  --ph-ink: #5c6e75;
+  --bg: #16120f;          /* espresso */
+  --bg-2: #1f1915;
+  --bg-3: #29211b;
+  --fg: #efe6da;          /* sand ivory */
+  --muted: #b5a899;
+  --line: rgba(239, 230, 218, 0.14);
+  --brass: #c9a46a;
+  --brass-ink: #1a140f;
+  --shade: rgba(22, 18, 15, 0.86);
+  --error: #f0907f;
 
   --font: "Helvetica Neue", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
 
+  --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-base: 1rem;
   --fs-lg: 1.125rem;
-  --fs-h3: 1.2rem;
-  --fs-h2: clamp(1.6rem, 3vw, 2.1rem);
-  --fs-h1: clamp(2rem, 4.4vw, 3rem);
-  --radius: 6px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1719; --alt: #152023; --ink: #e6edef; --muted: #9fb0b6; --line: #26363b;
-    --brand: #6fb3c2; --brand-ink: #0b1416; --brand-soft: #1a2c31; --accent: #d9a650;
-    --ph: #1c2a2e; --ph-ink: #7f9399;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0f1719; --alt: #152023; --ink: #e6edef; --muted: #9fb0b6; --line: #26363b;
-  --brand: #6fb3c2; --brand-ink: #0b1416; --brand-soft: #1a2c31; --accent: #d9a650;
-  --ph: #1c2a2e; --ph-ink: #7f9399;
+  --fs-h3: 1.25rem;
+  --fs-h2: clamp(1.8rem, 3.4vw, 2.6rem);
+  --fs-room: clamp(2.2rem, 5vw, 3.8rem);
+  --fs-h1: clamp(2.6rem, 6.4vw, 5rem);
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(20px, env(safe-area-inset-right, 0px));
   color-scheme: dark;
 }
 
@@ -55,412 +44,673 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-base); line-height: 1.65; -webkit-font-smoothing: antialiased; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
-h1, h2, h3, h4 { margin: 0; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: var(--fs-base); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
+h1, h2, h3, h4 { margin: 0; font-weight: 300; line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; }
 p { margin: 0; }
-a { color: var(--brand); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--brass); }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+img { display: block; max-width: 100%; }
 
-.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
-.section { padding-block: clamp(56px, 8vw, 88px); }
-.section.alt { background: var(--alt); }
-.head { display: grid; gap: 10px; max-width: 680px; margin-bottom: 36px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter-r); }
+.section { padding-block: clamp(72px, 10vw, 128px); scroll-margin-top: 64px; }
+.section.alt { background: var(--bg-2); }
+.label { font-size: var(--fs-xs); letter-spacing: 0.22em; text-transform: uppercase; color: var(--brass); }
+:root[data-lang="zh"] .label { letter-spacing: 0.12em; }
+.head { display: grid; gap: 16px; max-width: 720px; margin-bottom: 48px; }
 .head h2 { font-size: var(--fs-h2); }
 .head p { color: var(--muted); font-size: var(--fs-lg); }
-.kicker { font-size: var(--fs-sm); font-weight: 600; color: var(--accent); }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: var(--radius); font: 600 var(--fs-base)/1.2 var(--font); text-decoration: none; cursor: pointer; border: 1.5px solid var(--brand); transition: background .15s, color .15s; }
-.btn-primary { background: var(--brand); color: var(--brand-ink); }
-.btn-primary:hover { background: color-mix(in srgb, var(--brand) 85%, #000); }
-.btn-outline { background: transparent; color: var(--brand); }
-.btn-outline:hover { background: var(--brand-soft); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 26px; border-radius: 2px; font: 500 var(--fs-sm)/1 var(--font); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; border: 1px solid var(--brass); transition: background .2s, color .2s; }
+:root[data-lang="zh"] .btn { letter-spacing: 0.04em; font-size: var(--fs-base); }
+.btn-solid { background: var(--brass); color: var(--brass-ink); }
+.btn-solid:hover { background: #d8b57d; }
+.btn-line { background: transparent; color: var(--fg); border-color: rgba(239,230,218,.5); }
+.btn-line:hover { border-color: var(--fg); background: rgba(239,230,218,.06); }
 
-/* Utility bar */
-.utility { background: var(--brand); color: var(--brand-ink); font-size: 0.8125rem; }
-.utility .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 38px; }
-.utility-info { display: flex; gap: 22px; flex-wrap: wrap; opacity: .92; min-width: 0; }
-.lang-btn { background: none; border: 0; color: inherit; font: 500 0.875rem/1 var(--font); cursor: pointer; padding: 0 4px; min-height: 40px; min-width: 44px; white-space: nowrap; }
-.lang-btn b { text-decoration: underline; text-underline-offset: 3px; }
-@media (max-width: 640px) { .utility-info .hide-sm { display: none; } }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 60; background: var(--brass); color: var(--brass-ink); padding: 10px 16px; }
+.skip:focus { top: calc(12px + env(safe-area-inset-top, 0px)); }
 
-/* Header */
-.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
-.nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 72px; position: relative; }
-.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); }
-.brand-mark { width: 38px; height: 38px; flex: none; }
-.brand-name { font-weight: 700; font-size: 1.05rem; line-height: 1.15; }
-.brand-name small { display: block; font-weight: 400; font-size: 0.78rem; color: var(--muted); }
-.nav-links { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
-.nav-links a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 0.95rem; padding-block: 6px; border-bottom: 2px solid transparent; }
-.nav-links a:hover { border-color: var(--accent); }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); padding: 8px; cursor: pointer; }
-@media (max-width: 960px) {
-  .menu-btn { display: inline-flex; }
+/* Header: transparent over the hero, solid once you scroll */
+.site-header { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 30; transition: background .3s, border-color .3s; border-bottom: 1px solid rgba(239,230,218,.22); }
+.site-header.solid { background: rgba(22,18,15,.94); border-color: var(--line); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; min-height: 68px; position: relative; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; }
+.brand svg { width: 26px; height: 26px; flex: none; }
+.brand b { font-weight: 600; }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; justify-self: center; }
+.nav-links a { color: var(--fg); text-decoration: none; font-size: var(--fs-xs); letter-spacing: 0.16em; text-transform: uppercase; opacity: .85; padding-block: 8px; }
+:root[data-lang="zh"] .nav-links a { font-size: var(--fs-sm); letter-spacing: 0.06em; }
+.nav-links a:hover { opacity: 1; color: var(--brass); }
+.nav-right { display: flex; align-items: center; gap: 14px; justify-self: end; }
+.lang-btn { background: none; border: 0; color: var(--fg); font: 500 var(--fs-xs)/1 var(--font); letter-spacing: 0.12em; cursor: pointer; min-height: 44px; min-width: 44px; padding: 0 4px; }
+.lang-btn b { color: var(--brass); font-weight: 600; }
+.nav-right .btn { min-height: 40px; padding: 0 18px; font-size: var(--fs-xs); }
+.menu-btn { display: none; background: none; border: 1px solid rgba(239,230,218,.35); color: var(--fg); width: 44px; height: 44px; cursor: pointer; place-items: center; }
+@media (max-width: 1040px) {
+  .nav { grid-template-columns: 1fr auto; }
+  .menu-btn { display: inline-grid; }
   .nav-right .btn { display: none; }
-  .nav-links { display: none; position: absolute; top: 100%; left: calc(-1 * max(20px, env(safe-area-inset-left, 0px))); right: calc(-1 * max(20px, env(safe-area-inset-right, 0px))); flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 4px max(20px, env(safe-area-inset-right, 0px)) 12px max(20px, env(safe-area-inset-left, 0px)); }
+  .nav-links { display: none; position: absolute; top: 100%; left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter-r)); flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px var(--gutter-r) 16px var(--gutter); }
   .nav-links.open { display: flex; }
-  .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-sm); }
 }
 
-/* Photo slots: show a labelled placeholder until the image file exists */
-.photo { position: relative; margin: 0; background: var(--ph); border-radius: var(--radius); overflow: hidden; display: grid; place-items: center; max-width: 100%; }
-.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.photo .ph { display: grid; justify-items: center; gap: 8px; color: var(--ph-ink); font-size: var(--fs-sm); text-align: center; padding: 16px; }
-.photo .ph svg { width: 32px; height: 32px; }
-.r-4x3 { aspect-ratio: 4 / 3; } .r-5x4 { aspect-ratio: 5 / 4; } .r-1x1 { aspect-ratio: 1; }
+/* Full-bleed photo frames */
+.bleed { position: relative; overflow: hidden; isolation: isolate; }
+.bleed > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform-origin: center; will-change: transform; }
+.bleed::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,15,.55) 0%, rgba(22,18,15,0) 30%, rgba(22,18,15,0) 45%, var(--shade) 100%); }
 
 /* Hero */
-.hero { padding-block: clamp(40px, 6vw, 72px); }
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
-.hero-copy { display: grid; gap: 20px; min-width: 0; }
-.hero h1 { font-size: var(--fs-h1); }
-.hero-lede { font-size: var(--fs-lg); color: var(--muted); max-width: 34em; }
+.hero { min-height: min(100svh, 980px); display: flex; align-items: flex-end; scroll-snap-align: start; }
+.hero::after { background:
+  linear-gradient(90deg, rgba(22,18,15,.82) 0%, rgba(22,18,15,.55) 40%, rgba(22,18,15,0) 72%),
+  linear-gradient(180deg, rgba(22,18,15,.55) 0%, rgba(22,18,15,0) 22%, rgba(22,18,15,0) 50%, rgba(22,18,15,.9) 100%); }
+@media (max-width: 760px) { .hero::after { background: linear-gradient(180deg, rgba(22,18,15,.6) 0%, rgba(22,18,15,.45) 35%, rgba(22,18,15,.9) 100%); } }
+.room .room-text { text-shadow: 0 1px 12px rgba(0,0,0,.35); }
+.hero .wrap { width: 100%; padding-block: 140px 64px; display: grid; gap: 28px; }
+.hero h1 { font-size: var(--fs-h1); max-width: 13ch; }
+.hero h1 em { font-style: normal; color: var(--brass); }
+:root[data-lang="zh"] .hero h1 { max-width: 12em; }
+.hero-lede { font-size: var(--fs-lg); color: rgba(239,230,218,.86); max-width: 38em; }
+.hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero-note { font-size: var(--fs-sm); color: var(--muted); }
-@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
+.scroll-cue { display: flex; align-items: center; gap: 12px; font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.scroll-cue i { width: 1px; height: 44px; background: linear-gradient(var(--brass), transparent); }
 
-/* Facts strip */
-.facts { border-block: 1px solid var(--line); }
-.facts-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.fact { padding: 24px 20px; border-left: 1px solid var(--line); min-width: 0; }
-.fact:first-child { border-left: 0; padding-left: 0; }
-.fact strong { display: block; font-size: 1.35rem; font-weight: 600; color: var(--brand); }
-.fact > span { color: var(--muted); font-size: var(--fs-sm); }
-@media (max-width: 760px) {
-  .facts-grid { grid-template-columns: 1fr 1fr; }
-  .fact { padding: 18px 0 18px 16px; }
-  .fact:nth-child(odd) { border-left: 0; padding-left: 0; }
-  .fact:nth-child(n+3) { border-top: 1px solid var(--line); }
-}
+/* The day: four full-screen rooms + floor plan */
+.day-intro { padding-block: clamp(72px, 10vw, 120px) clamp(40px, 5vw, 64px); scroll-margin-top: 64px; }
+.day-intro .head { margin-bottom: 0; }
+.day-track { position: relative; }
+.room { min-height: 100svh; display: flex; align-items: flex-end; scroll-snap-align: start; }
+.room .wrap { width: 100%; padding-block: 120px clamp(48px, 7vw, 88px); }
+.room-text { max-width: 560px; display: grid; gap: 16px; }
+.room-meta { display: flex; gap: 18px; align-items: baseline; font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass); font-variant-numeric: tabular-nums; }
+.room-meta span:last-child { color: var(--muted); }
+.room h3 { font-size: var(--fs-room); }
+.room p { color: rgba(239,230,218,.86); font-size: var(--fs-lg); }
+.room-example { margin-top: 6px; padding: 14px 18px; border-left: 2px solid var(--brass); background: rgba(22,18,15,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: var(--fs-base); color: var(--fg); }
+.room-example mark { background: none; color: var(--brass); font-weight: 600; }
+
+.plan-rail { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.plan { position: sticky; top: calc(50svh - 130px); margin-left: auto; margin-right: var(--gutter-r); width: 300px; padding: 18px 18px 14px; background: rgba(22,18,15,.72); border: 1px solid var(--line); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.plan-title { font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: flex; justify-content: space-between; }
+.plan svg { width: 100%; height: auto; display: block; }
+.plan .wall { fill: none; stroke: rgba(239,230,218,.55); stroke-width: 1.2; }
+.plan .zone { fill: rgba(201,164,106,0); transition: fill .4s; }
+.plan .zone.on { fill: rgba(201,164,106,.2); }
+.plan .route { fill: none; stroke: var(--brass); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.plan .dot { fill: var(--brass); }
+.plan text { fill: var(--muted); font: 9px var(--font); letter-spacing: .08em; }
+.plan text.on { fill: var(--fg); }
+@media (max-width: 900px) { .plan-rail { display: none; } }
+
+/* Themed rooms gallery: tilt cards in a snap row */
+.gallery { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(300px, 42%); gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 18px; scrollbar-width: thin; scrollbar-color: var(--bg-3) transparent; }
+.gallery > * { scroll-snap-align: start; min-width: 0; }
+@media (max-width: 700px) { .gallery { grid-auto-columns: 86%; } }
+.tilt { perspective: 1000px; }
+.tilt-inner { transition: transform .25s ease-out; transform-style: preserve-3d; }
+.card-img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-3); }
+.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.tilt:hover .card-img img { transform: scale(1.04); }
+.card-body { padding-top: 18px; display: grid; gap: 6px; }
+.card-body h3 { font-size: var(--fs-h3); font-weight: 400; }
+.card-body p { color: var(--muted); font-size: 0.95rem; }
+.card-topics { font-size: var(--fs-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass); }
+.features { margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.features > div { padding: 28px 28px 0 0; min-width: 0; }
+.features > div + div { padding-left: 28px; border-left: 1px solid var(--line); }
+.features strong { display: block; font-weight: 500; margin-bottom: 6px; }
+.features span { color: var(--muted); font-size: 0.95rem; }
+@media (max-width: 800px) { .features { grid-template-columns: 1fr; } .features > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } .features > div { padding: 22px 0; } }
+
+/* Sample day */
+.tabs { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
+.tab { font: 500 var(--fs-sm)/1 var(--font); letter-spacing: 0.12em; text-transform: uppercase; padding: 0 22px; min-height: 52px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); cursor: pointer; }
+:root[data-lang="zh"] .tab { font-size: var(--fs-base); letter-spacing: 0.04em; }
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { color: var(--fg); border-color: var(--brass); }
+.day { display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; }
+.day > * { min-width: 0; }
+.panel-card { background: var(--bg); border: 1px solid var(--line); padding: clamp(20px, 3vw, 30px); }
+.panel-card h4 { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass); margin-bottom: 18px; }
+:root[data-lang="zh"] .panel-card h4 { letter-spacing: 0.1em; font-size: var(--fs-sm); }
+.side { display: grid; gap: 24px; align-content: start; }
+.transcript { display: grid; gap: 18px; }
+.line { display: grid; grid-template-columns: 34px 1fr; gap: 14px; }
+.who { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 0.8rem; border: 1px solid var(--line); color: var(--muted); }
+.line:nth-child(even) .who { border-color: var(--brass); color: var(--brass); }
+.said { font-size: 1.02rem; line-height: 1.75; }
+.gloss { display: block; color: var(--muted); font-size: 0.85rem; line-height: 1.5; margin-top: 3px; }
+mark.phr { background: rgba(201,164,106,.16); color: var(--fg); padding: 1px 6px; font-weight: 500; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.logic { margin-top: 22px; padding: 16px 18px; border-left: 2px solid var(--brass); background: var(--bg-2); font-size: 0.95rem; }
+.logic b { color: var(--brass); font-weight: 500; }
+.phrases { list-style: none; margin: 0; padding: 0; }
+.phrases li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.phrases li:last-child { border-bottom: 0; }
+.phrases li span { color: var(--muted); text-align: right; }
+.kv { display: grid; gap: 16px; }
+.kv .k { display: block; font-size: var(--fs-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass); margin-bottom: 4px; }
+.cando { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cando li { display: grid; grid-template-columns: 18px 1fr; gap: 12px; }
+.cando svg { width: 18px; height: 18px; color: var(--brass); margin-top: 4px; }
+@media (max-width: 880px) { .day { grid-template-columns: 1fr; } }
+
+/* Compare */
+.compare { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.compare > div { padding: 28px 28px 0 0; min-width: 0; }
+.compare > div + div { padding-left: 28px; border-left: 1px solid var(--line); }
+.compare h3 { font-size: var(--fs-h3); font-weight: 400; margin-bottom: 18px; }
+.compare ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.compare .old { color: var(--muted); }
+.compare .old li { text-decoration: line-through; text-decoration-color: rgba(181,168,153,.5); }
+.compare .new li::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--brass); margin-right: 12px; vertical-align: middle; transform: rotate(45deg); }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } .compare > div + div { padding-left: 0; border-left: 0; margin-top: 28px; border-top: 1px solid var(--line); } }
 
 /* Courses */
-.courses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.course { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: grid; gap: 10px; grid-template-rows: auto auto 1fr auto; min-width: 0; transition: border-color .15s, box-shadow .15s; }
-.course:hover { border-color: color-mix(in srgb, var(--brand) 40%, var(--line)); box-shadow: 0 8px 24px -16px rgba(15,69,82,.35); }
-.course .age { font-size: var(--fs-sm); font-weight: 600; color: var(--accent); }
-.course h3 { font-size: var(--fs-h3); }
-.course p { color: var(--muted); }
-.course dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; margin: 8px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: var(--fs-sm); }
+.courses { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.course { padding: 30px 26px 4px 0; display: grid; gap: 12px; grid-template-rows: auto auto 1fr auto; min-width: 0; }
+.course + .course { padding-left: 26px; border-left: 1px solid var(--line); }
+.course .age { font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass); }
+.course h3 { font-size: 1.5rem; }
+.course p { color: var(--muted); font-size: 0.95rem; }
+.course dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; margin: 10px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: var(--fs-sm); }
 .course dt { color: var(--muted); }
-.course dd { margin: 0; font-weight: 600; text-align: right; }
-@media (max-width: 980px) { .courses { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 620px) { .courses { grid-template-columns: 1fr; } }
+.course dd { margin: 0; text-align: right; }
+@media (max-width: 1040px) { .courses { grid-template-columns: 1fr 1fr; } .course:nth-child(3) { padding-left: 0; border-left: 0; } .course:nth-child(n+3) { border-top: 1px solid var(--line); margin-top: 24px; } }
+@media (max-width: 620px) { .courses { grid-template-columns: 1fr; } .course + .course { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 24px; } }
 
 /* Tables */
-.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
-table { width: 100%; border-collapse: collapse; min-width: 660px; font-size: 0.95rem; }
-th, td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-thead th { font-size: 0.8rem; font-weight: 600; color: var(--muted); background: var(--alt); }
-tbody tr:last-child td { border-bottom: 0; }
-td.lvl { font-weight: 700; color: var(--brand); white-space: nowrap; }
-td.time { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+.table-scroll { overflow-x: auto; border-top: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 16px 18px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+td.lvl { color: var(--brass); white-space: nowrap; font-weight: 500; }
+td.time { font-variant-numeric: tabular-nums; }
 td.dim { color: var(--muted); }
-.note { margin-top: 12px; color: var(--muted); font-size: var(--fs-sm); }
-
-/* Approach */
-.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
-.split > * { min-width: 0; }
-.points { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 18px; }
-.points li { display: grid; grid-template-columns: 22px 1fr; gap: 14px; }
-.points svg { width: 22px; height: 22px; color: var(--brand); margin-top: 2px; }
-.points strong { display: block; }
-.points span { color: var(--muted); }
-@media (max-width: 860px) { .split { grid-template-columns: 1fr; } .split .photo { order: -1; } }
+.note { margin-top: 14px; color: var(--muted); font-size: var(--fs-sm); }
+.swipe-hint { display: none; margin-bottom: 10px; color: var(--muted); font-size: var(--fs-sm); }
+@media (max-width: 700px) { .swipe-hint { display: block; } }
 
 /* Teachers */
-.teachers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-.teacher { display: grid; gap: 14px; align-content: start; min-width: 0; }
-.teacher h3 { font-size: var(--fs-h3); }
-.teacher .role { color: var(--accent); font-weight: 600; font-size: var(--fs-sm); }
-.teacher p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
-@media (max-width: 860px) { .teachers { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 540px) { .teachers { grid-template-columns: 1fr; } }
+.teachers { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.teachers > div { padding: 30px 30px 0 0; min-width: 0; display: grid; gap: 10px; align-content: start; }
+.teachers > div + div { padding-left: 30px; border-left: 1px solid var(--line); }
+.teachers h3 { font-size: 1.5rem; }
+.teachers p { color: var(--muted); }
+@media (max-width: 700px) { .teachers { grid-template-columns: 1fr; } .teachers > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 28px; } }
 
 /* FAQ */
-.faq { max-width: 860px; border-top: 1px solid var(--line); }
+.faq { max-width: 880px; border-top: 1px solid var(--line); }
 details { border-bottom: 1px solid var(--line); }
-summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 1.02rem; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+summary { cursor: pointer; padding: 22px 0; font-size: 1.08rem; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
 summary::-webkit-details-marker { display: none; }
-summary::after { content: ""; flex: none; width: 10px; height: 10px; margin-top: 6px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s; }
-details[open] summary::after { transform: rotate(-135deg); margin-top: 10px; }
-details p { padding: 0 0 20px; color: var(--muted); max-width: 70ch; }
+summary::after { content: "+"; flex: none; color: var(--brass); font-size: 1.4rem; line-height: 1; font-weight: 300; }
+details[open] summary::after { content: "−"; }
+details p { padding: 0 0 22px; color: var(--muted); max-width: 70ch; }
 
-/* Contact */
-.contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px, 5vw, 56px); align-items: start; }
+/* Contact over a room photo */
+.contact { padding-block: clamp(72px, 10vw, 128px); scroll-margin-top: 64px; }
+.contact::after { background: linear-gradient(90deg, rgba(22,18,15,.94) 0%, rgba(22,18,15,.82) 50%, rgba(22,18,15,.6) 100%); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
 .contact-grid > * { min-width: 0; }
-.contact-list { display: grid; gap: 18px; }
-.contact-item { display: grid; gap: 2px; }
-.contact-item .label { font-size: var(--fs-sm); color: var(--muted); }
-.contact-item .value { font-size: var(--fs-lg); font-weight: 600; word-break: break-word; }
-.copy-line { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.copy-btn { font: 500 0.85rem/1 var(--font); padding: 0 14px; min-height: 40px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
-.copy-btn:hover { border-color: var(--brand); }
-.qr-row { display: flex; gap: 18px; align-items: center; margin-top: 6px; }
-.qr-row .photo { width: 112px; flex: none; }
-.qr-row .ph { font-size: 0.72rem; padding: 8px; }
-.qr-row p { color: var(--muted); font-size: var(--fs-sm); }
-form.trial { background: var(--alt); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(20px, 4vw, 32px); display: grid; gap: 16px; }
-form.trial h3 { font-size: var(--fs-h3); }
+.contact-list { display: grid; gap: 20px; }
+.contact-item { display: grid; gap: 4px; }
+.contact-item .k { font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.contact-item .v { font-size: 1.2rem; word-break: break-word; }
+.copy-line { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.copy-btn { font: 500 var(--fs-xs)/1 var(--font); letter-spacing: 0.12em; text-transform: uppercase; padding: 0 14px; min-height: 40px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; }
+.copy-btn:hover { border-color: var(--brass); color: var(--brass); }
+.map-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: var(--fs-sm); }
+.map-links a { display: inline-flex; align-items: center; min-height: 40px; }
+form.trial { background: rgba(22,18,15,.82); border: 1px solid var(--line); padding: clamp(22px, 4vw, 36px); display: grid; gap: 18px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+form.trial h3 { font-size: 1.5rem; }
 .field { display: grid; gap: 6px; min-width: 0; }
-.field label { font-weight: 500; font-size: var(--fs-sm); }
-.field input, .field select { font: inherit; padding: 11px 12px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
-.field input:focus, .field select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.result { border: 1px solid var(--accent); background: var(--bg); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; }
-.result pre { margin: 0; white-space: pre-wrap; font: 0.92rem/1.55 var(--font); }
+.field label { font-size: var(--fs-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+:root[data-lang="zh"] .field label { font-size: var(--fs-sm); letter-spacing: 0.04em; }
+.field input, .field select { font: inherit; padding: 12px 0; border: 0; border-bottom: 1px solid rgba(239,230,218,.3); background: transparent; color: var(--fg); width: 100%; border-radius: 0; }
+.field select option { background: var(--bg); color: var(--fg); }
+.field input::placeholder { color: rgba(181,168,153,.7); }
+.field input:focus, .field select:focus { outline: none; border-color: var(--brass); }
+.field input[aria-invalid="true"] { border-color: var(--error); }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.err { color: var(--error); font-size: var(--fs-sm); }
+.result { border: 1px solid var(--brass); padding: 16px; display: grid; gap: 10px; }
+.result pre { margin: 0; white-space: pre-wrap; font: 0.92rem/1.55 var(--font); color: var(--fg); }
 @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .row-2 { grid-template-columns: 1fr; } }
 
 /* Footer */
-.site-footer { background: var(--brand); color: var(--brand-ink); padding-block: 48px 28px; font-size: var(--fs-sm); }
+.site-footer { border-top: 1px solid var(--line); padding-block: 56px 32px; font-size: var(--fs-sm); color: var(--muted); }
 .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
 .foot-grid > * { min-width: 0; }
-.foot-grid h4 { margin-bottom: 12px; font-size: 0.95rem; }
+.foot-grid h4 { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg); margin-bottom: 14px; }
 .foot-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .foot-grid li { padding-block: 5px; }
-.foot-grid p { opacity: .85; max-width: 36ch; }
-.site-footer a { color: inherit; opacity: .85; text-decoration: none; }
-.site-footer a:hover { opacity: 1; text-decoration: underline; }
-.foot-base { margin-top: 36px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--brand-ink) 20%, transparent); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; opacity: .8; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--brass); }
+.foot-base { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: var(--fs-xs); letter-spacing: 0.06em; }
 @media (max-width: 760px) { .foot-grid { grid-template-columns: 1fr 1fr; } .foot-grid > :first-child { grid-column: 1 / -1; } }
 
-/* Skip link */
-.skip { position: absolute; left: 12px; top: -60px; z-index: 50; background: var(--brand); color: var(--brand-ink); padding: 10px 16px; border-radius: var(--radius); }
-.skip:focus { top: calc(12px + env(safe-area-inset-top, 0px)); }
-
-/* Map links */
-.map-links { display: flex; gap: 16px; flex-wrap: wrap; font-size: var(--fs-sm); }
-.map-links a { display: inline-flex; align-items: center; min-height: 40px; font-weight: 600; }
-
-/* Timetable hint on narrow screens */
-.swipe-hint { display: none; margin-bottom: 10px; color: var(--muted); font-size: var(--fs-sm); }
-@media (max-width: 700px) { .swipe-hint { display: block; } }
-
-/* Field errors */
-.field input[aria-invalid="true"] { border-color: #b3261e; }
-
-/* Mobile action bar: WeChat + booking always one tap away */
+/* Mobile action bar */
 .action-bar { display: none; }
 @media (max-width: 760px) {
-  .action-bar {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
-    background: var(--bg); border-top: 1px solid var(--line);
-    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
-    box-shadow: 0 -6px 18px -12px rgba(0,0,0,.25);
-  }
-  .action-bar .btn { width: 100%; min-height: 46px; padding-inline: 10px; }
-  body { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
+  .action-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: rgba(22,18,15,.96); border-top: 1px solid var(--line); padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter); }
+  .action-bar .btn { width: 100%; padding-inline: 8px; }
+  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; scroll-snap-type: none; }
+  * { transition: none !important; }
+  .bleed > img { transform: none !important; }
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
 
-<div class="utility">
-  <div class="wrap">
-    <div class="utility-info">
-      <span><span class="en">Tel</span><span class="zh">电话</span>: +86 000 0000 0000</span>
-      <span class="hide-sm"><span class="en">WeChat</span><span class="zh">微信</span>: CoralBayEnglish</span>
-      <span class="hide-sm"><span class="en">Jiyang District, Sanya</span><span class="zh">三亚市吉阳区</span></span>
-    </div>
-    <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言">
-      <span class="en"><b>EN</b> · 中文</span><span class="zh">EN · <b>中文</b></span>
-    </button>
-  </div>
-</div>
-
-<header class="site-header">
+<header class="site-header" id="site-header">
   <div class="wrap nav">
-    <a class="brand" href="#main">
-      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-        <rect width="40" height="40" rx="6" fill="#0f4552"/>
-        <path d="M8 24c4-3 8-3 12 0s8 3 12 0" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-        <path d="M8 30c4-3 8-3 12 0s8 3 12 0" stroke="#c99a45" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-        <circle cx="20" cy="14" r="4" fill="#ffffff"/>
+    <a class="brand" href="#main" aria-label="Coral Bay English">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" fill="none" stroke="#c9a46a" stroke-width="1.5"/>
+        <path d="M8 24c4-3 8-3 12 0s8 3 12 0" stroke="#efe6da" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M8 30c4-3 8-3 12 0s8 3 12 0" stroke="#c9a46a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <circle cx="20" cy="14" r="3.5" fill="#efe6da"/>
       </svg>
-      <span class="brand-name"><span class="en">Coral Bay English</span><span class="zh">珊瑚湾英语</span>
-        <small><span class="en">English Language School · Sanya</span><span class="zh">三亚英语培训学校</span></small></span>
+      <span><b><span class="en">Coral Bay</span><span class="zh">珊瑚湾</span></b> <span class="en">English</span><span class="zh">英语</span></span>
     </a>
     <ul class="nav-links" id="nav-links">
+      <li><a href="#day"><span class="en">A day here</span><span class="zh">一天的课程</span></a></li>
+      <li><a href="#rooms"><span class="en">Rooms</span><span class="zh">主题教室</span></a></li>
+      <li><a href="#sample"><span class="en">Sample topic</span><span class="zh">主题示例</span></a></li>
       <li><a href="#courses"><span class="en">Courses</span><span class="zh">课程</span></a></li>
-      <li><a href="#levels"><span class="en">Levels</span><span class="zh">级别</span></a></li>
-      <li><a href="#approach"><span class="en">Our approach</span><span class="zh">教学理念</span></a></li>
-      <li><a href="#teachers"><span class="en">Teachers</span><span class="zh">师资</span></a></li>
-      <li><a href="#timetable"><span class="en">Timetable</span><span class="zh">课表</span></a></li>
       <li><a href="#faq"><span class="en">FAQ</span><span class="zh">常见问题</span></a></li>
+      <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
     </ul>
     <div class="nav-right">
-      <a class="btn btn-primary" href="#contact"><span class="en">Book a trial lesson</span><span class="zh">预约试听</span></a>
+      <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言"><span class="en"><b>EN</b> / 中文</span><span class="zh">EN / <b>中文</b></span></button>
+      <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
       <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
       </button>
     </div>
   </div>
 </header>
 
 <main id="main">
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <span class="kicker"><span class="en">English Language School in Sanya, Hainan</span><span class="zh">海南三亚 · 英语培训学校</span></span>
-        <h1><span class="en">English classes for children, teens and adults in Sanya</span><span class="zh">三亚少儿、青少年及成人英语课程</span></h1>
-        <p class="hero-lede"><span class="en">Small classes taught by qualified native-speaking teachers, with a Chinese co-teacher in every children's class. Courses follow the CEFR levels used by Cambridge English and IELTS.</span><span class="zh">资深外籍教师小班授课，少儿课程均配备中教助教。课程依据剑桥英语与雅思通用的欧洲语言共同参考框架（CEFR）分级设置。</span></p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact"><span class="en">Book a free trial lesson</span><span class="zh">预约免费试听课</span></a>
-          <a class="btn btn-outline" href="#courses"><span class="en">View courses</span><span class="zh">查看课程</span></a>
+  <section class="hero bleed">
+    <img src="images/room-lobby.jpg" alt="The Coral Bay English lobby: warm oak, sand plaster and afternoon light" fetchpriority="high">
+    <div class="wrap">
+      <span class="label"><span class="en">Experience-based English · Sanya</span><span class="zh">情景体验式英语 · 三亚</span></span>
+      <h1><span class="en">One topic a day. <em>Walk out using it.</em></span><span class="zh">每天一个主题，<em>下课就能用。</em></span></h1>
+      <div class="hero-row">
+        <div style="display:grid;gap:24px">
+          <p class="hero-lede"><span class="en">No word lists to memorise. Understand how English works, see it used by native speakers, then practise it in a room built for the day's topic.</span><span class="zh">不死记硬背。先弄懂英语的逻辑，再看母语者怎么说，最后在为当天主题布置的教室里亲身练习。</span></p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="#contact"><span class="en">Try a topic day free</span><span class="zh">免费体验一天</span></a>
+            <a class="btn btn-line" href="#day"><span class="en">Walk through a day</span><span class="zh">看看一天怎么上</span></a>
+          </div>
         </div>
-        <p class="hero-note"><span class="en">Free placement test included with every trial lesson.</span><span class="zh">试听课包含免费英语水平测试。</span></p>
+        <span class="scroll-cue" aria-hidden="true"><i></i><span class="en">Scroll</span><span class="zh">向下滑动</span></span>
       </div>
-      <figure class="photo r-5x4">
-        <img src="images/hero.jpg" alt="Students in an English class at Coral Bay English">
-        <figcaption class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
-          <span><span class="en">Classroom photo</span><span class="zh">课堂照片</span><br>images/hero.jpg</span></figcaption>
-      </figure>
     </div>
   </section>
 
-  <div class="facts">
-    <div class="wrap facts-grid">
-      <div class="fact"><strong><span class="en">Max. 8</span><span class="zh">最多 8 人</span></strong><span><span class="en">students per class</span><span class="zh">每班人数</span></span></div>
-      <div class="fact"><strong><span class="en">Age 4+</span><span class="zh">4 岁起</span></strong><span><span class="en">children, teens and adults</span><span class="zh">少儿、青少年及成人</span></span></div>
-      <div class="fact"><strong>CEFR</strong><span><span class="en">Pre-A1 to C1 levels</span><span class="zh">Pre-A1 至 C1 分级</span></span></div>
-      <div class="fact"><strong>CELTA / TEFL</strong><span><span class="en">certified teachers</span><span class="zh">持证外籍教师</span></span></div>
+  <div class="day-intro" id="day">
+    <div class="wrap">
+      <div class="head">
+        <span class="label"><span class="en">A day at Coral Bay</span><span class="zh">珊瑚湾的一天</span></span>
+        <h2><span class="en">Four rooms. One topic. About ninety minutes.</span><span class="zh">四个空间，一个主题，约九十分钟。</span></h2>
+        <p><span class="en">Every day follows the same route through the school. Today's topic in the examples below is shopping.</span><span class="zh">每天都沿着同样的路线走过学校。以下示例的当天主题是"购物"。</span></p>
+      </div>
     </div>
   </div>
 
-  <section class="section" id="courses">
+  <div class="day-track" id="day-track">
+    <div class="plan-rail" aria-hidden="true">
+      <div class="plan">
+        <div class="plan-title"><span><span class="en">Today's route</span><span class="zh">今日路线</span></span><span id="plan-step">1 / 4</span></div>
+        <svg viewBox="0 0 260 180">
+          <rect class="zone" data-zone="0" x="10" y="10" width="110" height="70"/>
+          <rect class="zone" data-zone="1" x="140" y="10" width="110" height="70"/>
+          <rect class="zone" data-zone="2" x="140" y="100" width="110" height="70"/>
+          <rect class="zone" data-zone="3" x="10" y="100" width="110" height="70"/>
+          <path class="wall" d="M10 10H250V170H10Z M130 10V58 M130 72V108 M130 122V170 M10 90H58 M72 90H188 M202 90H250"/>
+          <path class="route" id="route" pathLength="1" d="M65 45H195V135H65"/>
+          <circle class="dot" id="route-dot" cx="65" cy="45" r="4"/>
+          <text data-zone="0" x="18" y="74"><tspan class="en">PODCAST STUDIO</tspan><tspan class="zh">播客间</tspan></text>
+          <text data-zone="1" x="148" y="74"><tspan class="en">SCREENING ROOM</tspan><tspan class="zh">放映室</tspan></text>
+          <text data-zone="2" x="148" y="164"><tspan class="en">THEMED ROOM</tspan><tspan class="zh">主题教室</tspan></text>
+          <text data-zone="3" x="18" y="164"><tspan class="en">LOUNGE</tspan><tspan class="zh">休息区</tspan></text>
+        </svg>
+      </div>
+    </div>
+
+    <section class="room bleed" data-room="0">
+      <img src="images/room-podcast.jpg" alt="Podcast studio: two armchairs with microphones facing a semicircle of stools" loading="lazy">
+      <div class="wrap"><div class="room-text">
+        <div class="room-meta"><span>01 / 04</span><span>20 <span class="en">min</span><span class="zh">分钟</span></span></div>
+        <h3><span class="en">Listen</span><span class="zh">听</span></h3>
+        <p><span class="en">Two teachers talk through the topic in Chinese, podcast style: the mistakes Chinese speakers often make, the phrases natives use most, and the logic behind them. English phrases are woven into the conversation.</span><span class="zh">两位老师用中文以播客形式对话：中国人在这个主题上的常见错误、母语者最常用的表达，以及背后的逻辑。英文短语自然穿插其中。</span></p>
+        <p class="room-example">"这个多少钱"别说 This how much money，要说 <mark>How much is this?</mark></p>
+      </div></div>
+    </section>
+
+    <section class="room bleed" data-room="1">
+      <img src="images/room-screening.jpg" alt="Screening room with tiered seating and a large screen" loading="lazy">
+      <div class="wrap"><div class="room-text">
+        <div class="room-meta"><span>02 / 04</span><span>15 <span class="en">min</span><span class="zh">分钟</span></span></div>
+        <h3><span class="en">Watch</span><span class="zh">看</span></h3>
+        <p><span class="en">Short films of native speakers in real situations. Students spot the phrases from the podcast and hear the real speed, tone and reactions.</span><span class="zh">观看母语者在真实场景中的短片。学员找出播客里学过的表达，感受真实的语速、语气和反应。</span></p>
+        <p class="room-example"><span class="en">Today: a tourist buys sunglasses at a beach shop and asks for another colour.</span><span class="zh">今天：一位游客在海边小店买太阳镜，并询问其他颜色。</span></p>
+      </div></div>
+    </section>
+
+    <section class="room bleed" data-room="2">
+      <img src="images/room-shop.jpg" alt="Classroom set up as a boutique beach shop with shelves and a counter" loading="lazy">
+      <div class="wrap"><div class="room-text">
+        <div class="room-meta"><span>03 / 04</span><span>45 <span class="en">min</span><span class="zh">分钟</span></span></div>
+        <h3><span class="en">Practise</span><span class="zh">练</span></h3>
+        <p><span class="en">The themed room is set up as today's scene. Teachers play the shopkeepers; students buy, ask, exchange and pay, first with support, then on their own.</span><span class="zh">主题教室布置成当天的场景。老师扮演店员，学员完成购买、询问、换货和付款——先有提示，再独立完成。</span></p>
+        <p class="room-example"><mark>Do you have this in a bigger size?</mark> · <mark>Can I pay by WeChat?</mark></p>
+      </div></div>
+    </section>
+
+    <section class="room bleed" data-room="3">
+      <img src="images/room-lobby.jpg" alt="The lounge where each day ends" loading="lazy" style="object-position: 80% 50%">
+      <div class="wrap"><div class="room-text">
+        <div class="room-meta"><span>04 / 04</span><span>10 <span class="en">min</span><span class="zh">分钟</span></span></div>
+        <h3><span class="en">Walk out confident</span><span class="zh">带着自信离开</span></h3>
+        <p><span class="en">A short review against the day's "I can" list. Students leave with a phrase card, and parents get a note on what was covered.</span><span class="zh">对照当天的"我能做到"清单快速复盘。学员带走一张短语卡，家长收到当天学习内容的反馈。</span></p>
+        <p class="room-example"><span class="en">Today I can ask the price, ask for another size and pay politely.</span><span class="zh">今天我能询问价格、要求换尺码，并礼貌地付款。</span></p>
+      </div></div>
+    </section>
+  </div>
+
+  <section class="section" id="rooms">
     <div class="wrap">
       <div class="head">
-        <span class="kicker"><span class="en">Courses</span><span class="zh">课程设置</span></span>
-        <h2><span class="en">Courses for every age and goal</span><span class="zh">满足不同年龄与学习目标的课程</span></h2>
-        <p><span class="en">Every new student starts with a placement test, so they join a class at the right level.</span><span class="zh">每位新学员均先进行水平测试，确保进入合适级别的班级。</span></p>
+        <span class="label"><span class="en">Themed rooms</span><span class="zh">主题教室</span></span>
+        <h2><span class="en">The classroom changes with the topic</span><span class="zh">教室随主题而变</span></h2>
+        <p><span class="en">Students practise inside the situation, not at a desk. Each topic has its own setting, props and sound.</span><span class="zh">学员不是坐在课桌前练习，而是置身于场景之中。每个主题都有专属的布景、道具和声音。</span></p>
+      </div>
+      <div class="gallery" tabindex="0" aria-label="Themed rooms">
+        <article class="tilt"><div class="tilt-inner">
+          <div class="card-img"><img src="images/room-shop.jpg" alt="The shop room" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Shopping · Returns · Bargaining</span><span class="zh">购物 · 退换 · 讲价</span></span>
+            <h3><span class="en">The shop</span><span class="zh">商店</span></h3>
+            <p><span class="en">Shelves, price tags and a till.</span><span class="zh">货架、价签和收银台。</span></p></div>
+        </div></article>
+        <article class="tilt"><div class="tilt-inner">
+          <div class="card-img"><img src="images/room-cafe.jpg" alt="The café room" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Ordering · Small talk · Paying</span><span class="zh">点餐 · 闲聊 · 结账</span></span>
+            <h3><span class="en">The café</span><span class="zh">咖啡馆</span></h3>
+            <p><span class="en">A counter, menus and tables by the window.</span><span class="zh">点餐台、菜单和临窗的餐桌。</span></p></div>
+        </div></article>
+        <article class="tilt"><div class="tilt-inner">
+          <div class="card-img"><img src="images/room-weather.jpg" alt="The weather studio" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Weather · Travel · Plans</span><span class="zh">天气 · 出行 · 计划</span></span>
+            <h3><span class="en">The weather studio</span><span class="zh">天气演播室</span></h3>
+            <p><span class="en">A forecast screen, a camera and a presenter's spot.</span><span class="zh">天气屏幕、摄像机和主播站位。</span></p></div>
+        </div></article>
+        <article class="tilt"><div class="tilt-inner">
+          <div class="card-img"><img src="images/room-screening.jpg" alt="The screening room" loading="lazy"></div>
+          <div class="card-body"><span class="card-topics"><span class="en">Every topic · Stage 2</span><span class="zh">所有主题 · 第 2 步</span></span>
+            <h3><span class="en">The screening room</span><span class="zh">放映室</span></h3>
+            <p><span class="en">Where students watch native English in real situations.</span><span class="zh">学员在这里观看母语者的真实场景。</span></p></div>
+        </div></article>
+      </div>
+      <div class="features">
+        <div><strong><span class="en">Screens and sound</span><span class="zh">屏幕与声效</span></strong><span><span class="en">Large screens and background sound set each scene: street noise for directions, rain for the weather topic.</span><span class="zh">大屏幕和背景音营造场景：问路主题有街道声，天气主题有雨声。</span></span></div>
+        <div><strong><span class="en">Real props</span><span class="zh">真实道具</span></strong><span><span class="en">Menus, maps, tickets and products, so students handle the same things they will in real life.</span><span class="zh">菜单、地图、票据和商品——学员接触的就是现实生活中会遇到的东西。</span></span></div>
+        <div><strong><span class="en">Sanya situations</span><span class="zh">三亚本地场景</span></strong><span><span class="en">Topics drawn from life here: beaches, hotels, seafood markets, taxis and typhoon season.</span><span class="zh">主题取材于三亚生活：海滩、酒店、海鲜市场、打车和台风季。</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="sample">
+    <div class="wrap">
+      <div class="head">
+        <span class="label"><span class="en">Sample topic</span><span class="zh">主题示例</span></span>
+        <h2><span class="en">Inside a topic day</span><span class="zh">一天主题课的内容</span></h2>
+        <p><span class="en">Choose a topic. The podcast is in Chinese so the logic is clear; English translations are in grey.</span><span class="zh">选择一个主题查看。播客用中文讲解，确保逻辑清晰易懂。</span></p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Topics">
+        <button class="tab" role="tab" id="tab-shop" aria-controls="day-shop" aria-selected="true"><span class="en">Shopping</span><span class="zh">购物</span></button>
+        <button class="tab" role="tab" id="tab-weather" aria-controls="day-weather" aria-selected="false" tabindex="-1"><span class="en">Weather</span><span class="zh">天气</span></button>
+        <button class="tab" role="tab" id="tab-food" aria-controls="day-food" aria-selected="false" tabindex="-1"><span class="en">At a café</span><span class="zh">咖啡馆点餐</span></button>
+      </div>
+
+      <div class="day" role="tabpanel" id="day-shop" aria-labelledby="tab-shop">
+        <div class="panel-card">
+          <h4><span class="en">01 · From the podcast</span><span class="zh">01 · 播客片段</span></h4>
+          <div class="transcript">
+            <div class="line"><span class="who">A</span><p class="said">买东西的时候，很多人会直接说 <mark class="phr">I want this.</mark> 语法没错，但听起来有点像命令。<span class="gloss en">When shopping, many people say "I want this." It's grammatical, but it sounds like an order.</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">对。母语者更常说 <mark class="phr">Could I get this one?</mark> 或者 <mark class="phr">I'll take this one.</mark><span class="gloss en">Right. Native speakers more often say "Could I get this one?" or "I'll take this one."</span></p></div>
+            <div class="line"><span class="who">A</span><p class="said">还有"这个多少钱"，别逐字翻成 This how much money? 要说 <mark class="phr">How much is this?</mark><span class="gloss en">And for 这个多少钱, don't translate word by word. Say "How much is this?"</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">想换尺码就问 <mark class="phr">Do you have this in a bigger size?</mark><span class="gloss en">To change size, ask "Do you have this in a bigger size?"</span></p></div>
+          </div>
+          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">English questions move the verb forward: How much + is + this? And "could" turns a demand into a polite request.</span><span class="zh">英语疑问句要把动词提前：How much + is + this？用 could 能把"要求"变成礼貌的"请求"。</span></p>
+        </div>
+        <div class="side">
+          <div class="panel-card">
+            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
+            <ul class="phrases">
+              <li>How much is this? <span>这个多少钱？</span></li>
+              <li>Could I get this one? <span>我可以要这个吗？</span></li>
+              <li>Do you have it in blue? <span>有蓝色的吗？</span></li>
+              <li>Can I pay by WeChat? <span>可以微信支付吗？</span></li>
+            </ul>
+          </div>
+          <div class="panel-card">
+            <div class="kv">
+              <div><span class="k"><span class="en">02 · Watch</span><span class="zh">02 · 看</span></span><p><span class="en">A tourist buys sunglasses at a beach shop, asks for another colour and pays.</span><span class="zh">游客在海边小店买太阳镜，询问其他颜色并付款。</span></p></div>
+              <div><span class="k"><span class="en">03 · Practise</span><span class="zh">03 · 练</span></span><p><span class="en">In the shop room, each student buys three items and exchanges one.</span><span class="zh">在商店主题教室里，每位学员购买三件商品，并换掉其中一件。</span></p></div>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h4><span class="en">04 · By the end I can</span><span class="zh">04 · 下课时我能做到</span></h4>
+            <ul class="cando">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask the price of anything</span><span class="zh">询问任何商品的价格</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for another size or colour</span><span class="zh">要求换尺码或颜色</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Pay and finish politely</span><span class="zh">付款并礼貌结束对话</span></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" role="tabpanel" id="day-weather" aria-labelledby="tab-weather" hidden>
+        <div class="panel-card">
+          <h4><span class="en">01 · From the podcast</span><span class="zh">01 · 播客片段</span></h4>
+          <div class="transcript">
+            <div class="line"><span class="who">A</span><p class="said">"今天很热"，很多人说 Today is very hot. 能听懂，但母语者更常说 <mark class="phr">It's really hot today.</mark><span class="gloss en">For 今天很热 many people say "Today is very hot." Natives more often say "It's really hot today."</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">因为英语用 it 当天气的主语：<mark class="phr">It's sunny.</mark> <mark class="phr">It's windy.</mark><span class="gloss en">Because English uses "it" as the subject for weather: "It's sunny." "It's windy."</span></p></div>
+            <div class="line"><span class="who">A</span><p class="said">还有"今天下雨"，别说 Today is rain，要说 <mark class="phr">It's raining today.</mark><span class="gloss en">And for 今天下雨, not "Today is rain" but "It's raining today."</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">在三亚一定要会这句：<mark class="phr">There's a typhoon warning.</mark><span class="gloss en">In Sanya you definitely need this one: "There's a typhoon warning."</span></p></div>
+          </div>
+          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">English sentences need a subject, so weather uses "it". "Rain" is also a verb, so rain falling now is "is raining".</span><span class="zh">英语句子必须有主语，所以天气用 it 开头。rain 也是动词，正在下雨要用 is raining。</span></p>
+        </div>
+        <div class="side">
+          <div class="panel-card">
+            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
+            <ul class="phrases">
+              <li>It's boiling today! <span>今天热死了！</span></li>
+              <li>It looks like rain. <span>看起来要下雨了。</span></li>
+              <li>What's it like tomorrow? <span>明天天气怎么样？</span></li>
+              <li>There's a typhoon warning. <span>有台风预警。</span></li>
+            </ul>
+          </div>
+          <div class="panel-card">
+            <div class="kv">
+              <div><span class="k"><span class="en">02 · Watch</span><span class="zh">02 · 看</span></span><p><span class="en">Two neighbours chat about the heat and change their weekend plans after a storm warning.</span><span class="zh">两位邻居聊天气炎热，听到暴风雨预警后改变周末计划。</span></p></div>
+              <div><span class="k"><span class="en">03 · Practise</span><span class="zh">03 · 练</span></span><p><span class="en">In the weather studio, students present a Sanya forecast on camera, then plan a weekend around it.</span><span class="zh">在天气演播室里，学员对着镜头播报三亚天气，并据此安排周末。</span></p></div>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h4><span class="en">04 · By the end I can</span><span class="zh">04 · 下课时我能做到</span></h4>
+            <ul class="cando">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Describe today's weather naturally</span><span class="zh">自然地描述今天的天气</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask about tomorrow's weather</span><span class="zh">询问明天的天气</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Make or change plans because of the weather</span><span class="zh">根据天气制定或改变计划</span></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" role="tabpanel" id="day-food" aria-labelledby="tab-food" hidden>
+        <div class="panel-card">
+          <h4><span class="en">01 · From the podcast</span><span class="zh">01 · 播客片段</span></h4>
+          <div class="transcript">
+            <div class="line"><span class="who">A</span><p class="said">点餐时很多人说 Give me a coffee. 在英语里听起来不太礼貌。<span class="gloss en">When ordering, many people say "Give me a coffee." In English that sounds a little rude.</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">更自然的是 <mark class="phr">Can I have a coffee, please?</mark> 或 <mark class="phr">I'd like a coffee.</mark><span class="gloss en">More natural: "Can I have a coffee, please?" or "I'd like a coffee."</span></p></div>
+            <div class="line"><span class="who">A</span><p class="said">不知道点什么，可以问 <mark class="phr">What do you recommend?</mark><span class="gloss en">If you don't know what to order, ask "What do you recommend?"</span></p></div>
+            <div class="line"><span class="who">B</span><p class="said">买单别说 Pay money，要说 <mark class="phr">Could we have the bill, please?</mark><span class="gloss en">To pay, not "Pay money" but "Could we have the bill, please?"</span></p></div>
+          </div>
+          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">Chinese orders with "give me"; English orders by asking. "Can I have…?" asks permission, which is what makes it polite.</span><span class="zh">中文点餐习惯说"给我……"，英语则用提问的方式："我可以要……吗？"——征求许可的语气才显得礼貌。</span></p>
+        </div>
+        <div class="side">
+          <div class="panel-card">
+            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
+            <ul class="phrases">
+              <li>Can I have…, please? <span>请给我……</span></li>
+              <li>What do you recommend? <span>你推荐什么？</span></li>
+              <li>I'm allergic to nuts. <span>我对坚果过敏。</span></li>
+              <li>Could we have the bill? <span>可以买单吗？</span></li>
+            </ul>
+          </div>
+          <div class="panel-card">
+            <div class="kv">
+              <div><span class="k"><span class="en">02 · Watch</span><span class="zh">02 · 看</span></span><p><span class="en">Friends order at a seaside café, ask about a dish and split the bill.</span><span class="zh">朋友们在海边咖啡馆点餐，询问菜品并分摊账单。</span></p></div>
+              <div><span class="k"><span class="en">03 · Practise</span><span class="zh">03 · 练</span></span><p><span class="en">In the café room, students order, ask a question about a dish and pay.</span><span class="zh">在咖啡馆主题教室里，学员点餐、询问菜品并结账。</span></p></div>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h4><span class="en">04 · By the end I can</span><span class="zh">04 · 下课时我能做到</span></h4>
+            <ul class="cando">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Order food and drinks politely</span><span class="zh">礼貌地点餐和饮品</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for a recommendation or mention an allergy</span><span class="zh">请服务员推荐或说明过敏情况</span></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for the bill and pay</span><span class="zh">要求买单并付款</span></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="different">
+    <div class="wrap">
+      <div class="head">
+        <span class="label"><span class="en">Why it works</span><span class="zh">为什么有效</span></span>
+        <h2><span class="en">Understand it, see it, use it, on the same day</span><span class="zh">同一天里：弄懂、看到、用出来</span></h2>
+      </div>
+      <div class="compare">
+        <div class="old">
+          <h3><span class="en">A typical English class</span><span class="zh">常见的英语课</span></h3>
+          <ul>
+            <li><span class="en">Memorise word lists</span><span class="zh">背单词表</span></li>
+            <li><span class="en">Grammar rules taught on their own</span><span class="zh">孤立地学语法规则</span></li>
+            <li><span class="en">Repeat after the teacher</span><span class="zh">跟着老师重复朗读</span></li>
+            <li><span class="en">Progress measured by test scores</span><span class="zh">以考试分数衡量进步</span></li>
+          </ul>
+        </div>
+        <div class="new">
+          <h3><span class="en">A Coral Bay day</span><span class="zh">珊瑚湾的一天</span></h3>
+          <ul>
+            <li><span class="en">Phrases learned inside one real situation</span><span class="zh">在一个真实场景里学整句表达</span></li>
+            <li><span class="en">The logic explained in Chinese</span><span class="zh">用中文讲清英语为什么这样说</span></li>
+            <li><span class="en">Used straight away in a role-play</span><span class="zh">马上在角色扮演中用出来</span></li>
+            <li><span class="en">Progress measured by what students can do</span><span class="zh">以"能做到什么"衡量进步</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="courses">
+    <div class="wrap">
+      <div class="head">
+        <span class="label"><span class="en">Courses</span><span class="zh">课程设置</span></span>
+        <h2><span class="en">The same method for every age</span><span class="zh">同一种方法，适合每个年龄段</span></h2>
+        <p><span class="en">Topics, podcast length and practice tasks are adjusted for each group.</span><span class="zh">主题内容、讲解时长和练习任务会根据不同人群调整。</span></p>
       </div>
       <div class="courses">
         <article class="course">
-          <span class="age"><span class="en">Ages 4–6</span><span class="zh">4–6 岁</span></span>
-          <h3><span class="en">Early Years English</span><span class="zh">幼儿英语启蒙</span></h3>
-          <p><span class="en">Phonics, songs and stories that build listening and speaking before reading and writing.</span><span class="zh">通过自然拼读、儿歌和故事，先培养听说能力，再过渡到读写。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">60 min</span><span class="zh">60 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">2 × week</span><span class="zh">每周 2 次</span></dd></dl>
-        </article>
-        <article class="course">
           <span class="age"><span class="en">Ages 7–12</span><span class="zh">7–12 岁</span></span>
-          <h3><span class="en">Young Learners</span><span class="zh">少儿英语</span></h3>
-          <p><span class="en">All four skills, following the Cambridge Starters, Movers and Flyers syllabus.</span><span class="zh">全面提升听说读写，对接剑桥少儿英语 Starters、Movers、Flyers 考试大纲。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">2 × week</span><span class="zh">每周 2 次</span></dd></dl>
+          <h3><span class="en">Kids</span><span class="zh">少儿班</span></h3>
+          <p><span class="en">A shorter podcast with pictures, then plenty of role-play and games in the themed room.</span><span class="zh">讲解更短并配有图片，更多时间在主题教室里做角色扮演和游戏。</span></p>
+          <dl><dt><span class="en">Session</span><span class="zh">每节</span></dt><dd><span class="en">75 min</span><span class="zh">75 分钟</span></dd><dt><span class="en">Days</span><span class="zh">上课</span></dt><dd><span class="en">Mon–Sat</span><span class="zh">周一至周六</span></dd></dl>
         </article>
         <article class="course">
           <span class="age"><span class="en">Ages 13–17</span><span class="zh">13–17 岁</span></span>
-          <h3><span class="en">Teens &amp; Exam Preparation</span><span class="zh">青少年及考试备考</span></h3>
-          <p><span class="en">Preparation for KET, PET and school exams (zhongkao and gaokao), with regular speaking practice.</span><span class="zh">KET、PET 及中考、高考英语备考，并加强口语训练。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">2 × week</span><span class="zh">每周 2 次</span></dd></dl>
+          <h3><span class="en">Teens</span><span class="zh">青少年班</span></h3>
+          <p><span class="en">Everyday, school and travel situations, building the speaking that exam classes leave out.</span><span class="zh">日常、校园和出行场景，补上应试课堂缺少的口语能力。</span></p>
+          <dl><dt><span class="en">Session</span><span class="zh">每节</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Days</span><span class="zh">上课</span></dt><dd><span class="en">Mon–Sat</span><span class="zh">周一至周六</span></dd></dl>
         </article>
         <article class="course">
-          <span class="age"><span class="en">Ages 16+</span><span class="zh">16 岁以上</span></span>
-          <h3><span class="en">IELTS Preparation</span><span class="zh">雅思备考</span></h3>
-          <p><span class="en">Targeted training for each band score, with weekly timed practice tests and individual speaking feedback.</span><span class="zh">针对目标分数系统训练，每周限时模考，并提供一对一口语反馈。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">120 min</span><span class="zh">120 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">3 × week</span><span class="zh">每周 3 次</span></dd></dl>
+          <span class="age"><span class="en">Adults</span><span class="zh">成人</span></span>
+          <h3><span class="en">Everyday English</span><span class="zh">生活英语</span></h3>
+          <p><span class="en">For travel, making friends and meeting visitors in Sanya. Evening and weekend sessions.</span><span class="zh">面向旅行、交友以及在三亚与外国游客打交道。晚间及周末上课。</span></p>
+          <dl><dt><span class="en">Session</span><span class="zh">每节</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Days</span><span class="zh">上课</span></dt><dd><span class="en">Mon–Sat</span><span class="zh">周一至周六</span></dd></dl>
         </article>
         <article class="course">
-          <span class="age"><span class="en">Adults · Professional</span><span class="zh">成人 · 职场</span></span>
+          <span class="age"><span class="en">Adults · Work</span><span class="zh">成人 · 职场</span></span>
           <h3><span class="en">Hospitality English</span><span class="zh">酒店旅游英语</span></h3>
-          <p><span class="en">For hotel, resort, retail and tourism staff. Company classes can be held on site.</span><span class="zh">面向酒店、度假村、零售及旅游行业员工，可上门为企业开班。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">2 × week</span><span class="zh">每周 2 次</span></dd></dl>
-        </article>
-        <article class="course">
-          <span class="age"><span class="en">Adults · General</span><span class="zh">成人 · 通用</span></span>
-          <h3><span class="en">General &amp; Conversation English</span><span class="zh">成人通用及口语英语</span></h3>
-          <p><span class="en">Practical English for travel, work and daily life, in evening and weekend classes.</span><span class="zh">面向旅行、工作与日常生活的实用英语，晚间及周末开课。</span></p>
-          <dl><dt><span class="en">Lesson</span><span class="zh">课时</span></dt><dd><span class="en">60 min</span><span class="zh">60 分钟</span></dd><dt><span class="en">Frequency</span><span class="zh">频率</span></dt><dd><span class="en">1–2 × week</span><span class="zh">每周 1–2 次</span></dd></dl>
+          <p><span class="en">Check-in, complaints, recommendations and phone calls for hotel, retail and tourism staff.</span><span class="zh">面向酒店、零售及旅游从业者：入住接待、处理投诉、推荐服务和电话英语。</span></p>
+          <dl><dt><span class="en">Session</span><span class="zh">每节</span></dt><dd><span class="en">90 min</span><span class="zh">90 分钟</span></dd><dt><span class="en">Days</span><span class="zh">上课</span></dt><dd><span class="en">Mon–Fri</span><span class="zh">周一至周五</span></dd></dl>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="section alt" id="levels">
+  <section class="section" id="levels">
     <div class="wrap">
       <div class="head">
-        <span class="kicker"><span class="en">Levels</span><span class="zh">级别体系</span></span>
-        <h2><span class="en">Internationally recognised levels</span><span class="zh">国际通用的级别标准</span></h2>
-        <p><span class="en">We use the Common European Framework of Reference (CEFR), so parents can track progress against the same standard used by Cambridge English and IELTS.</span><span class="zh">我们采用欧洲语言共同参考框架（CEFR），家长可依据剑桥英语和雅思通用的标准了解孩子的进步。</span></p>
+        <span class="label"><span class="en">Levels</span><span class="zh">级别体系</span></span>
+        <h2><span class="en">The same topics, deeper at every level</span><span class="zh">同样的主题，每个级别更深入一层</span></h2>
+        <p><span class="en">Topics come round again as students move up the CEFR levels used by Cambridge English and IELTS. This is how the shopping topic grows.</span><span class="zh">随着学员在 CEFR 级别（剑桥英语与雅思通用标准）中进阶，主题会循环出现并逐步加深。以下以"购物"为例。</span></p>
       </div>
+      <p class="swipe-hint" aria-hidden="true"><span class="en">Swipe the table sideways to see more →</span><span class="zh">左右滑动表格查看更多 →</span></p>
       <div class="table-scroll">
         <table>
           <thead><tr>
             <th><span class="en">Level</span><span class="zh">级别</span></th>
-            <th><span class="en">What students can do</span><span class="zh">能力描述</span></th>
+            <th><span class="en">Shopping at this level</span><span class="zh">该级别的"购物"主题</span></th>
             <th><span class="en">Matching exams</span><span class="zh">对应考试</span></th>
           </tr></thead>
           <tbody>
-            <tr><td class="lvl">Pre-A1</td><td><span class="en">Recognise familiar words and simple phrases</span><span class="zh">认识常见单词和简单短语</span></td><td class="dim">Cambridge YLE Starters</td></tr>
-            <tr><td class="lvl">A1</td><td><span class="en">Introduce themselves and answer simple questions</span><span class="zh">能做自我介绍并回答简单问题</span></td><td class="dim">Cambridge YLE Movers</td></tr>
-            <tr><td class="lvl">A2</td><td><span class="en">Talk about daily routines and write short messages</span><span class="zh">能谈论日常生活并书写简短信息</span></td><td class="dim">YLE Flyers · A2 Key (KET)</td></tr>
-            <tr><td class="lvl">B1</td><td><span class="en">Hold a conversation and follow lessons taught in English</span><span class="zh">能进行完整对话，跟上全英文授课</span></td><td class="dim">B1 Preliminary (PET) · IELTS 4.0–5.0</td></tr>
-            <tr><td class="lvl">B2</td><td><span class="en">Discuss opinions, give presentations and write essays</span><span class="zh">能表达观点、做演讲并撰写文章</span></td><td class="dim">B2 First (FCE) · IELTS 5.5–6.5</td></tr>
-            <tr><td class="lvl">C1</td><td><span class="en">Study at university level in English</span><span class="zh">具备大学阶段全英文学习能力</span></td><td class="dim">C1 Advanced · IELTS 7.0+</td></tr>
+            <tr><td class="lvl">Pre-A1</td><td><span class="en">Name items and colours, say "this one, please"</span><span class="zh">说出商品和颜色，会说 "this one, please"</span></td><td class="dim">Cambridge YLE Starters</td></tr>
+            <tr><td class="lvl">A1</td><td><span class="en">Ask the price and pay</span><span class="zh">询问价格并付款</span></td><td class="dim">Cambridge YLE Movers</td></tr>
+            <tr><td class="lvl">A2</td><td><span class="en">Ask for another size or colour and compare two items</span><span class="zh">要求换尺码或颜色，比较两件商品</span></td><td class="dim">YLE Flyers · A2 Key (KET)</td></tr>
+            <tr><td class="lvl">B1</td><td><span class="en">Return an item and explain what is wrong with it</span><span class="zh">退换商品并说明问题</span></td><td class="dim">B1 Preliminary (PET) · IELTS 4.0–5.0</td></tr>
+            <tr><td class="lvl">B2</td><td><span class="en">Negotiate a discount and discuss value for money</span><span class="zh">讨价还价，讨论性价比</span></td><td class="dim">B2 First (FCE) · IELTS 5.5–6.5</td></tr>
+            <tr><td class="lvl">C1</td><td><span class="en">Handle a complaint diplomatically and agree a solution</span><span class="zh">得体地处理投诉并协商解决方案</span></td><td class="dim">C1 Advanced · IELTS 7.0+</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <section class="section" id="approach">
-    <div class="wrap split">
-      <div>
-        <div class="head" style="margin-bottom:0">
-          <span class="kicker"><span class="en">Our approach</span><span class="zh">教学理念</span></span>
-          <h2><span class="en">More speaking, clear progress, close contact with parents</span><span class="zh">多开口、看得见的进步、与家长紧密沟通</span></h2>
-        </div>
-        <ul class="points">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
-            <div><strong><span class="en">Small classes</span><span class="zh">小班教学</span></strong><span><span class="en">A maximum of eight students, so everyone speaks in every lesson.</span><span class="zh">每班最多 8 人，每位学员每节课都有充分的开口机会。</span></span></div></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
-            <div><strong><span class="en">Two teachers in children's classes</span><span class="zh">少儿课程双师授课</span></strong><span><span class="en">A native-speaking teacher leads; a Chinese co-teacher supports students and keeps in touch with parents.</span><span class="zh">外教主讲，中教辅导学员并与家长保持沟通。</span></span></div></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
-            <div><strong><span class="en">Termly progress reports</span><span class="zh">学期学习报告</span></strong><span><span class="en">A written report in English and Chinese, plus a parent meeting every term.</span><span class="zh">每学期提供中英双语书面报告，并安排家长面谈。</span></span></div></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
-            <div><strong><span class="en">Learning beyond the classroom</span><span class="zh">课堂之外的学习</span></strong><span><span class="en">Seasonal outdoor English activities around Sanya for young learners.</span><span class="zh">定期组织少儿学员在三亚开展户外英语活动。</span></span></div></li>
-        </ul>
-      </div>
-      <figure class="photo r-4x3">
-        <img src="images/classroom.jpg" alt="Teacher working with a small group of students">
-        <figcaption class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
-          <span><span class="en">Small-group lesson photo</span><span class="zh">小班上课照片</span><br>images/classroom.jpg</span></figcaption>
-      </figure>
-    </div>
-  </section>
-
   <section class="section alt" id="teachers">
     <div class="wrap">
       <div class="head">
-        <span class="kicker"><span class="en">Teachers</span><span class="zh">师资团队</span></span>
-        <h2><span class="en">Qualified, experienced teachers</span><span class="zh">资质齐全、经验丰富的教师团队</span></h2>
-        <p><span class="en">All foreign teachers hold a university degree, a CELTA or TEFL certificate and a valid Chinese work permit.</span><span class="zh">所有外籍教师均持有大学学位、CELTA 或 TEFL 教学资格证书及有效的中国工作许可。</span></p>
+        <span class="label"><span class="en">Teachers</span><span class="zh">师资</span></span>
+        <h2><span class="en">Two kinds of teacher in every day</span><span class="zh">每天的课程都有两类老师</span></h2>
       </div>
       <div class="teachers">
-        <div class="teacher">
-          <figure class="photo r-1x1"><img src="images/teacher-1.jpg" alt="">
-            <figcaption class="ph"><span><span class="en">Teacher photo</span><span class="zh">教师照片</span><br>images/teacher-1.jpg</span></figcaption></figure>
-          <div><h3><span class="en">Teacher name</span><span class="zh">教师姓名</span></h3>
-            <span class="role"><span class="en">Director of Studies · CELTA</span><span class="zh">教学主管 · CELTA</span></span>
-            <p><span class="en">Nationality, years of teaching experience and specialism.</span><span class="zh">国籍、教龄及教学专长。</span></p></div>
+        <div>
+          <span class="label"><span class="en">Stage 1</span><span class="zh">第 1 步</span></span>
+          <h3><span class="en">Chinese teachers: podcast hosts</span><span class="zh">中教：播客主讲</span></h3>
+          <p><span class="en">English-major graduates who know exactly where Chinese speakers go wrong, and can explain why in plain Chinese.</span><span class="zh">英语专业出身，清楚中国学生容易在哪里出错，并能用通俗的中文讲清原因。</span></p>
         </div>
-        <div class="teacher">
-          <figure class="photo r-1x1"><img src="images/teacher-2.jpg" alt="">
-            <figcaption class="ph"><span><span class="en">Teacher photo</span><span class="zh">教师照片</span><br>images/teacher-2.jpg</span></figcaption></figure>
-          <div><h3><span class="en">Teacher name</span><span class="zh">教师姓名</span></h3>
-            <span class="role"><span class="en">Young Learners Teacher · TEFL</span><span class="zh">少儿英语教师 · TEFL</span></span>
-            <p><span class="en">Nationality, years of teaching experience and specialism.</span><span class="zh">国籍、教龄及教学专长。</span></p></div>
-        </div>
-        <div class="teacher">
-          <figure class="photo r-1x1"><img src="images/teacher-3.jpg" alt="">
-            <figcaption class="ph"><span><span class="en">Teacher photo</span><span class="zh">教师照片</span><br>images/teacher-3.jpg</span></figcaption></figure>
-          <div><h3><span class="en">Teacher name</span><span class="zh">教师姓名</span></h3>
-            <span class="role"><span class="en">Chinese Co-teacher · TEM-8</span><span class="zh">中教 · 英语专业八级</span></span>
-            <p><span class="en">Background, qualifications and the classes they support.</span><span class="zh">教育背景、资质及负责的班级。</span></p></div>
+        <div>
+          <span class="label"><span class="en">Stages 2–4</span><span class="zh">第 2–4 步</span></span>
+          <h3><span class="en">Native speakers: practice leads</span><span class="zh">外教：练习主导</span></h3>
+          <p><span class="en">They bring each scene to life as shopkeepers, waiters and forecasters. All hold a degree, a CELTA or TEFL certificate and a Chinese work permit.</span><span class="zh">他们扮演店员、服务员和天气主播，让每个场景"活"起来。均持有学位、CELTA 或 TEFL 证书及中国工作许可。</span></p>
         </div>
       </div>
     </div>
@@ -469,85 +719,80 @@ form.trial h3 { font-size: var(--fs-h3); }
   <section class="section" id="timetable">
     <div class="wrap">
       <div class="head">
-        <span class="kicker"><span class="en">Timetable</span><span class="zh">课程时间表</span></span>
-        <h2><span class="en">After school and at weekends</span><span class="zh">放学后及周末上课</span></h2>
-        <p><span class="en">Times are Beijing time. Terms follow the Hainan school calendar.</span><span class="zh">以下为北京时间，学期安排与海南中小学校历同步。</span></p>
+        <span class="label"><span class="en">Timetable</span><span class="zh">上课时间</span></span>
+        <h2><span class="en">A new topic every day</span><span class="zh">每天一个新主题</span></h2>
+        <p><span class="en">Come every day for the full cycle, or choose the days that suit you. Beijing time.</span><span class="zh">可每天上课完成完整循环，也可选择适合自己的日子。北京时间。</span></p>
       </div>
-      <p class="swipe-hint" aria-hidden="true"><span class="en">Swipe the table sideways to see every day →</span><span class="zh">左右滑动表格查看全部日期 →</span></p>
+      <p class="swipe-hint" aria-hidden="true"><span class="en">Swipe the table sideways to see more →</span><span class="zh">左右滑动表格查看更多 →</span></p>
       <div class="table-scroll">
         <table>
           <thead><tr>
-            <th><span class="en">Time</span><span class="zh">时间</span></th>
-            <th><span class="en">Mon / Wed</span><span class="zh">周一 / 周三</span></th>
-            <th><span class="en">Tue / Thu</span><span class="zh">周二 / 周四</span></th>
+            <th><span class="en">Group</span><span class="zh">班级</span></th>
+            <th><span class="en">Weekdays</span><span class="zh">工作日</span></th>
             <th><span class="en">Saturday</span><span class="zh">周六</span></th>
-            <th><span class="en">Sunday</span><span class="zh">周日</span></th>
           </tr></thead>
           <tbody>
-            <tr><td class="time">09:30–10:30</td><td class="dim">—</td><td class="dim">—</td><td><span class="en">Early Years</span><span class="zh">幼儿英语</span></td><td><span class="en">Early Years</span><span class="zh">幼儿英语</span></td></tr>
-            <tr><td class="time">10:45–12:15</td><td class="dim">—</td><td class="dim">—</td><td><span class="en">Young Learners A1</span><span class="zh">少儿英语 A1</span></td><td><span class="en">Young Learners A2</span><span class="zh">少儿英语 A2</span></td></tr>
-            <tr><td class="time">14:30–16:30</td><td class="dim">—</td><td class="dim">—</td><td><span class="en">IELTS</span><span class="zh">雅思</span></td><td><span class="en">Teens · PET</span><span class="zh">青少年 · PET</span></td></tr>
-            <tr><td class="time">17:00–18:30</td><td><span class="en">Young Learners Pre-A1</span><span class="zh">少儿英语 Pre-A1</span></td><td><span class="en">Teens · KET</span><span class="zh">青少年 · KET</span></td><td><span class="en">Adult Conversation</span><span class="zh">成人口语</span></td><td class="dim">—</td></tr>
-            <tr><td class="time">19:30–21:00</td><td><span class="en">Hospitality English</span><span class="zh">酒店旅游英语</span></td><td><span class="en">IELTS</span><span class="zh">雅思</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+            <tr><td><span class="en">Kids (7–12)</span><span class="zh">少儿班（7–12 岁）</span></td><td class="time">16:30–17:45</td><td class="time">09:30–10:45</td></tr>
+            <tr><td><span class="en">Teens (13–17)</span><span class="zh">青少年班（13–17 岁）</span></td><td class="time">18:00–19:30</td><td class="time">11:00–12:30</td></tr>
+            <tr><td><span class="en">Everyday English (adults)</span><span class="zh">生活英语（成人）</span></td><td class="time">19:45–21:15</td><td class="time">14:30–16:00</td></tr>
+            <tr><td><span class="en">Hospitality English</span><span class="zh">酒店旅游英语</span></td><td class="time"><span class="en">10:00–11:30 or 14:00–15:30</span><span class="zh">10:00–11:30 或 14:00–15:30</span></td><td class="dim">—</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note"><span class="en">Daytime classes for shift workers and company groups are available on request.</span><span class="zh">可为倒班员工及企业团体安排日间课程。</span></p>
+      <p class="note"><span class="en">Sample timetable. Company groups can book their own topic days.</span><span class="zh">示例课表。企业团体可预约专属主题日。</span></p>
     </div>
   </section>
 
   <section class="section alt" id="faq">
     <div class="wrap">
       <div class="head">
-        <span class="kicker"><span class="en">FAQ</span><span class="zh">常见问题</span></span>
-        <h2><span class="en">Frequently asked questions</span><span class="zh">常见问题解答</span></h2>
+        <span class="label"><span class="en">FAQ</span><span class="zh">常见问题</span></span>
+        <h2><span class="en">Questions from parents and students</span><span class="zh">家长和学员的常见问题</span></h2>
       </div>
       <div class="faq">
-        <details><summary><span class="en">My child has no English yet. Can they join?</span><span class="zh">孩子没有英语基础，可以报名吗？</span></summary>
-          <p><span class="en">Yes. Our Pre-A1 classes are designed for complete beginners, and the Chinese co-teacher helps new students settle in.</span><span class="zh">可以。Pre-A1 课程专为零基础学员设计，中教会帮助新学员尽快适应。</span></p></details>
-        <details><summary><span class="en">How does the free trial lesson work?</span><span class="zh">免费试听课如何安排？</span></summary>
-          <p><span class="en">Contact us by WeChat, phone or the form below. We arrange a short placement test and a trial lesson in a class at the right level.</span><span class="zh">通过微信、电话或下方表单联系我们，我们将安排简短的水平测试，并在合适级别的班级试听一节课。</span></p></details>
-        <details><summary><span class="en">What happens if we miss a lesson?</span><span class="zh">缺课怎么办？</span></summary>
-          <p><span class="en">With 24 hours' notice, students can attend a make-up lesson in another class at the same level within the same month.</span><span class="zh">提前 24 小时请假，可在当月同级别的其他班级补课。</span></p></details>
-        <details><summary><span class="en">Do you offer short courses for winter visitors?</span><span class="zh">是否有面向冬季来琼家庭的短期课程？</span></summary>
-          <p><span class="en">Yes. We run four- and eight-week winter courses from December to March.</span><span class="zh">有。每年 12 月至次年 3 月开设 4 周及 8 周冬季短期班。</span></p></details>
-        <details><summary><span class="en">Can you teach English to our staff?</span><span class="zh">可以为企业员工开设英语培训吗？</span></summary>
-          <p><span class="en">Yes. We design courses for hotels and businesses and can teach at your premises.</span><span class="zh">可以。我们为酒店及企业定制课程，并可上门授课。</span></p></details>
+        <details><summary><span class="en">Do students have to memorise vocabulary?</span><span class="zh">学员需要背单词吗？</span></summary>
+          <p><span class="en">No word lists. Students learn whole phrases inside one situation, understand why they work, and use them the same day. Phrases come back naturally when topics repeat at higher levels.</span><span class="zh">不需要背单词表。学员在一个场景中学习整句表达，理解其中的逻辑，并在当天用出来。主题在更高级别循环时，这些表达会自然再次出现。</span></p></details>
+        <details><summary><span class="en">Why is the podcast in Chinese?</span><span class="zh">为什么播客用中文讲？</span></summary>
+          <p><span class="en">Logic is easiest to understand in your own language. Once students know why English says something a certain way, the rest of the day is in English.</span><span class="zh">用母语理解逻辑最快最透彻。明白了英语"为什么这样说"之后，当天其余环节都用英语进行。</span></p></details>
+        <details><summary><span class="en">What if we miss a topic day?</span><span class="zh">错过了某天的主题怎么办？</span></summary>
+          <p><span class="en">Each day stands on its own, so students can join any day. Missed topics can be made up the next time they come round, or in another group at the same level.</span><span class="zh">每天的主题相对独立，任何一天都可以加入。错过的主题可在下次循环时补上，或到同级别的其他班级补课。</span></p></details>
+        <details><summary><span class="en">My child has no English yet. Can they join?</span><span class="zh">孩子零基础，可以报名吗？</span></summary>
+          <p><span class="en">Yes. Because the explanation is in Chinese, beginners understand from day one. Their practice tasks are simpler: pointing, single words and short phrases.</span><span class="zh">可以。因为讲解用中文，零基础的孩子从第一天起就能听懂。他们的练习任务会更简单：指认、单词和短句。</span></p></details>
+        <details><summary><span class="en">Can we try it first?</span><span class="zh">可以先体验吗？</span></summary>
+          <p><span class="en">Yes. Book a free topic day by WeChat, phone or the form below. We'll have a short chat first to place you in the right group.</span><span class="zh">可以。通过微信、电话或下方表单预约一次免费主题体验日。我们会先简单交流，安排到合适的班级。</span></p></details>
+        <details><summary><span class="en">Can you run topic days for our company?</span><span class="zh">可以为企业开设主题日吗？</span></summary>
+          <p><span class="en">Yes. We build topic days around your workplace, such as hotel check-in, handling complaints or giving recommendations, and can teach on site.</span><span class="zh">可以。我们根据贵公司的工作场景定制主题日，如酒店入住、处理投诉或推荐服务，并可上门授课。</span></p></details>
       </div>
     </div>
   </section>
 
-  <section class="section" id="contact">
+  <section class="contact bleed" id="contact">
+    <img src="images/room-cafe.jpg" alt="" loading="lazy">
     <div class="wrap contact-grid">
       <div>
-        <div class="head" style="margin-bottom:24px">
-          <span class="kicker"><span class="en">Contact</span><span class="zh">联系我们</span></span>
-          <h2><span class="en">Book a free trial lesson</span><span class="zh">预约免费试听课</span></h2>
-          <p><span class="en">Contact us by WeChat or phone, or fill in the form and send it to us.</span><span class="zh">欢迎通过微信或电话联系我们，也可填写表单后发送给我们。</span></p>
+        <div class="head" style="margin-bottom:32px">
+          <span class="label"><span class="en">Visit us</span><span class="zh">联系我们</span></span>
+          <h2><span class="en">Try a topic day for free</span><span class="zh">免费体验一天主题课</span></h2>
+          <p><span class="en">Message us on WeChat, call, or fill in the form and send it to us.</span><span class="zh">欢迎微信或电话联系我们，也可填写表单后发送给我们。</span></p>
         </div>
         <div class="contact-list">
-          <div class="contact-item"><span class="label"><span class="en">WeChat</span><span class="zh">微信号</span></span>
-            <div class="copy-line"><span class="value" id="wechat-id">CoralBayEnglish</span><button class="copy-btn" type="button" data-copy="wechat-id"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
-          <div class="contact-item"><span class="label"><span class="en">Telephone</span><span class="zh">电话</span></span>
-            <div class="copy-line"><span class="value" id="phone-num">+86 000 0000 0000</span><button class="copy-btn" type="button" data-copy="phone-num"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
-          <div class="contact-item"><span class="label"><span class="en">Address</span><span class="zh">地址</span></span>
-            <span class="value"><span class="en">Street address, Jiyang District, Sanya, Hainan</span><span class="zh">海南省三亚市吉阳区（详细地址）</span></span>
+          <div class="contact-item"><span class="k"><span class="en">WeChat</span><span class="zh">微信号</span></span>
+            <div class="copy-line"><span class="v" id="wechat-id">CoralBayEnglish</span><button class="copy-btn" type="button" data-copy="wechat-id"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
+          <div class="contact-item"><span class="k"><span class="en">Telephone</span><span class="zh">电话</span></span>
+            <div class="copy-line"><span class="v" id="phone-num">+86 000 0000 0000</span><button class="copy-btn" type="button" data-copy="phone-num"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
+          <div class="contact-item"><span class="k"><span class="en">Address</span><span class="zh">地址</span></span>
+            <span class="v"><span class="en">Street address, Jiyang District, Sanya, Hainan</span><span class="zh">海南省三亚市吉阳区（详细地址）</span></span>
             <div class="map-links">
               <a href="https://uri.amap.com/search?keyword=%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Amap</span><span class="zh">高德地图导航</span></a>
               <a href="https://map.baidu.com/search/%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Baidu Maps</span><span class="zh">百度地图导航</span></a>
             </div></div>
-          <div class="contact-item"><span class="label"><span class="en">Office hours</span><span class="zh">办公时间</span></span>
-            <span class="value"><span class="en">Mon–Fri 14:00–21:00 · Sat–Sun 09:00–18:00</span><span class="zh">周一至周五 14:00–21:00 · 周六日 09:00–18:00</span></span></div>
-          <div class="qr-row">
-            <figure class="photo r-1x1"><img src="images/wechat-qr.png" alt="WeChat QR code">
-              <figcaption class="ph"><span><span class="en">WeChat QR</span><span class="zh">微信二维码</span><br>images/wechat-qr.png</span></figcaption></figure>
-            <p><span class="en">Scan with WeChat to add us.</span><span class="zh">微信扫一扫，添加我们为好友。</span></p>
-          </div>
+          <div class="contact-item"><span class="k"><span class="en">Opening hours</span><span class="zh">营业时间</span></span>
+            <span class="v"><span class="en">Mon–Fri 09:30–21:30 · Sat 09:00–16:30</span><span class="zh">周一至周五 09:30–21:30 · 周六 09:00–16:30</span></span></div>
         </div>
       </div>
 
       <form class="trial" id="trial-form" novalidate>
-        <h3><span class="en">Trial lesson request</span><span class="zh">试听课预约</span></h3>
+        <h3><span class="en">Free topic day</span><span class="zh">免费体验预约</span></h3>
         <div class="row-2">
           <div class="field"><label for="f-name"><span class="en">Your name</span><span class="zh">您的姓名</span></label>
             <input id="f-name" name="name" required aria-describedby="form-error" autocomplete="name" data-ph-en="e.g. Ms Wang" data-ph-zh="例如：王女士"></div>
@@ -556,22 +801,20 @@ form.trial h3 { font-size: var(--fs-h3); }
         </div>
         <div class="row-2">
           <div class="field"><label for="f-age"><span class="en">Student's age</span><span class="zh">学员年龄</span></label>
-            <input id="f-age" name="age" inputmode="numeric" data-ph-en="e.g. 8" data-ph-zh="例如：8"></div>
-          <div class="field"><label for="f-course"><span class="en">Course</span><span class="zh">意向课程</span></label>
+            <input id="f-age" name="age" inputmode="numeric" data-ph-en="e.g. 9" data-ph-zh="例如：9"></div>
+          <div class="field"><label for="f-course"><span class="en">Group</span><span class="zh">意向班级</span></label>
             <select id="f-course" name="course">
               <option data-en="Not sure yet" data-zh="还不确定">Not sure yet</option>
-              <option data-en="Early Years English (4–6)" data-zh="幼儿英语启蒙（4–6 岁）">Early Years English (4–6)</option>
-              <option data-en="Young Learners (7–12)" data-zh="少儿英语（7–12 岁）">Young Learners (7–12)</option>
-              <option data-en="Teens &amp; Exam Preparation (13–17)" data-zh="青少年及考试备考（13–17 岁）">Teens &amp; Exam Preparation (13–17)</option>
-              <option data-en="IELTS Preparation" data-zh="雅思备考">IELTS Preparation</option>
+              <option data-en="Kids (7–12)" data-zh="少儿班（7–12 岁）">Kids (7–12)</option>
+              <option data-en="Teens (13–17)" data-zh="青少年班（13–17 岁）">Teens (13–17)</option>
+              <option data-en="Everyday English (adults)" data-zh="生活英语（成人）">Everyday English (adults)</option>
               <option data-en="Hospitality English" data-zh="酒店旅游英语">Hospitality English</option>
-              <option data-en="General &amp; Conversation English" data-zh="成人通用及口语英语">General &amp; Conversation English</option>
             </select></div>
         </div>
-        <div class="field"><label for="f-time"><span class="en">Preferred time</span><span class="zh">方便的时间</span></label>
-          <input id="f-time" name="time" data-ph-en="e.g. Saturday morning" data-ph-zh="例如：周六上午"></div>
-        <button class="btn btn-primary" type="submit"><span class="en">Prepare request</span><span class="zh">生成预约信息</span></button>
-        <p class="note" id="form-error" hidden role="alert"><span class="en">Please enter your name and a phone number or WeChat ID.</span><span class="zh">请填写姓名及电话或微信号。</span></p>
+        <div class="field"><label for="f-time"><span class="en">Preferred day</span><span class="zh">方便的日期</span></label>
+          <input id="f-time" name="time" data-ph-en="e.g. this Saturday" data-ph-zh="例如：本周六"></div>
+        <button class="btn btn-solid" type="submit"><span class="en">Prepare request</span><span class="zh">生成预约信息</span></button>
+        <p class="err" id="form-error" hidden role="alert"><span class="en">Please enter your name and a phone number or WeChat ID.</span><span class="zh">请填写姓名及电话或微信号。</span></p>
         <div class="result" id="result" hidden aria-live="polite">
           <strong><span class="en">Your request is ready. Copy it and send it to us on WeChat (CoralBayEnglish).</span><span class="zh">预约信息已生成，请复制后通过微信（CoralBayEnglish）发送给我们。</span></strong>
           <pre id="result-text"></pre>
@@ -583,8 +826,8 @@ form.trial h3 { font-size: var(--fs-h3); }
 </main>
 
 <div class="action-bar">
-  <button class="btn btn-outline" type="button" data-copy="wechat-id"><span class="en">Copy WeChat ID</span><span class="zh">复制微信号</span></button>
-  <a class="btn btn-primary" href="#contact"><span class="en">Book a trial</span><span class="zh">预约试听</span></a>
+  <button class="btn btn-line" type="button" data-copy="wechat-id"><span class="en">Copy WeChat</span><span class="zh">复制微信号</span></button>
+  <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
 </div>
 
 <footer class="site-footer">
@@ -592,14 +835,14 @@ form.trial h3 { font-size: var(--fs-h3); }
     <div class="foot-grid">
       <div>
         <h4><span class="en">Coral Bay English</span><span class="zh">珊瑚湾英语</span></h4>
-        <p><span class="en">English language courses for children, teens and adults in Sanya, Hainan.</span><span class="zh">面向少儿、青少年及成人的三亚英语培训学校。</span></p>
+        <p style="max-width:36ch"><span class="en">Experience-based English in Sanya. One topic a day: understand it, see it, use it.</span><span class="zh">三亚情景体验式英语。每天一个主题：听懂、看到、用出来。</span></p>
       </div>
       <div>
-        <h4><span class="en">Courses</span><span class="zh">课程</span></h4>
+        <h4><span class="en">Explore</span><span class="zh">了解</span></h4>
         <ul>
-          <li><a href="#courses"><span class="en">Children &amp; teens</span><span class="zh">少儿及青少年</span></a></li>
-          <li><a href="#courses"><span class="en">IELTS preparation</span><span class="zh">雅思备考</span></a></li>
-          <li><a href="#courses"><span class="en">Adults &amp; companies</span><span class="zh">成人及企业</span></a></li>
+          <li><a href="#day"><span class="en">A day here</span><span class="zh">一天的课程</span></a></li>
+          <li><a href="#rooms"><span class="en">Themed rooms</span><span class="zh">主题教室</span></a></li>
+          <li><a href="#courses"><span class="en">Courses</span><span class="zh">课程</span></a></li>
         </ul>
       </div>
       <div>
@@ -612,7 +855,8 @@ form.trial h3 { font-size: var(--fs-h3); }
       </div>
     </div>
     <div class="foot-base">
-      <span>© 2026 <span class="en">Coral Bay English. All rights reserved.</span><span class="zh">珊瑚湾英语 版权所有</span></span>
+      <span>© 2026 <span class="en">Coral Bay English</span><span class="zh">珊瑚湾英语</span></span>
+      <span><span class="en">Room images are concept renders.</span><span class="zh">教室图片为设计效果图。</span></span>
       <span>琼ICP备00000000号</span>
     </div>
   </div>
@@ -621,7 +865,9 @@ form.trial h3 { font-size: var(--fs-h3); }
 <script>
 (function () {
   var root = document.documentElement;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Language
   function applyLang(lang) {
     root.setAttribute('data-lang', lang);
     root.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
@@ -631,18 +877,12 @@ form.trial h3 { font-size: var(--fs-h3); }
   }
   var saved = null;
   try { saved = localStorage.getItem('cbe-lang'); } catch (e) {}
-  var browserZh = /^zh/i.test(navigator.language || '');
-  applyLang(saved === 'zh' || saved === 'en' ? saved : (browserZh ? 'zh' : 'en'));
+  applyLang(saved === 'zh' || saved === 'en' ? saved : (/^zh/i.test(navigator.language || '') ? 'zh' : 'en'));
   document.getElementById('lang-btn').addEventListener('click', function () {
     applyLang(root.getAttribute('data-lang') === 'zh' ? 'en' : 'zh');
   });
 
-  // Photo slots: remove images that fail to load so the labelled placeholder shows
-  document.querySelectorAll('.photo img').forEach(function (img) {
-    function drop() { img.remove(); }
-    if (img.complete && img.naturalWidth === 0) drop(); else img.addEventListener('error', drop);
-  });
-
+  // Menu
   var menuBtn = document.getElementById('menu-btn'), links = document.getElementById('nav-links');
   menuBtn.addEventListener('click', function () {
     var open = links.classList.toggle('open');
@@ -652,6 +892,77 @@ form.trial h3 { font-size: var(--fs-h3); }
     if (e.target.closest('a')) { links.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
   });
 
+  // Scroll-driven: solid header, gentle photo parallax, floor-plan route
+  var header = document.getElementById('site-header');
+  var frames = Array.prototype.slice.call(document.querySelectorAll('.bleed > img'));
+  var track = document.getElementById('day-track');
+  var route = document.getElementById('route'), dot = document.getElementById('route-dot');
+  var zones = document.querySelectorAll('.plan [data-zone]'), stepEl = document.getElementById('plan-step');
+  var routeLen = route.getTotalLength ? route.getTotalLength() : 0;
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight;
+    header.classList.toggle('solid', window.scrollY > 40);
+
+    if (!reduce) {
+      frames.forEach(function (img) {
+        var r = img.parentElement.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        var p = (r.top + r.height / 2 - vh / 2) / (vh + r.height); // -0.5 .. 0.5
+        img.style.transform = 'translate3d(0,' + (p * 60).toFixed(1) + 'px,0) scale(1.08)';
+      });
+    }
+
+    var t = track.getBoundingClientRect();
+    var prog = Math.min(1, Math.max(0, (vh * 0.5 - t.top) / (t.height - vh * 0.5)));
+    route.style.strokeDashoffset = (1 - prog).toFixed(4);
+    if (routeLen) { var pt = route.getPointAtLength(routeLen * prog); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
+    var idx = Math.min(3, Math.floor(prog * 4));
+    zones.forEach(function (z) { z.classList.toggle('on', +z.getAttribute('data-zone') === idx); });
+    stepEl.textContent = (idx + 1) + ' / 4';
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+
+  // Tilt cards (pointer devices only)
+  if (!reduce && matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.tilt').forEach(function (card) {
+      var inner = card.querySelector('.tilt-inner');
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        inner.style.transform = 'rotateX(' + (-y * 7).toFixed(2) + 'deg) rotateY(' + (x * 9).toFixed(2) + 'deg)';
+      });
+      card.addEventListener('pointerleave', function () { inner.style.transform = ''; });
+    });
+  }
+
+  // Topic tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      var next = tabs[(i + d + tabs.length) % tabs.length];
+      select(next); next.focus();
+    });
+  });
+
+  // Copy buttons
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-copy]');
     if (!btn) return;
@@ -665,6 +976,7 @@ form.trial h3 { font-size: var(--fs-h3); }
     } catch (err) { selectIt(); }
   });
 
+  // Request form
   var form = document.getElementById('trial-form');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -677,8 +989,8 @@ form.trial h3 { font-size: var(--fs-h3); }
     var course = f.course.options[f.course.selectedIndex].textContent;
     var v = function (x) { return x.value.trim() || '—'; };
     var lines = zh
-      ? ['您好，我想预约免费试听课。', '姓名：' + v(f.name), '联系方式：' + v(f.contact), '学员年龄：' + v(f.age), '意向课程：' + course, '方便时间：' + v(f.time)]
-      : ['Hello, I would like to book a free trial lesson.', 'Name: ' + v(f.name), 'Contact: ' + v(f.contact), "Student's age: " + v(f.age), 'Course: ' + course, 'Preferred time: ' + v(f.time)];
+      ? ['您好，我想预约一次免费主题体验课。', '姓名：' + v(f.name), '联系方式：' + v(f.contact), '学员年龄：' + v(f.age), '意向班级：' + course, '方便日期：' + v(f.time)]
+      : ['Hello, I would like to book a free topic day.', 'Name: ' + v(f.name), 'Contact: ' + v(f.contact), "Student's age: " + v(f.age), 'Group: ' + course, 'Preferred day: ' + v(f.time)];
     document.getElementById('result-text').textContent = lines.join('\n');
     document.getElementById('result').hidden = false;
   });
