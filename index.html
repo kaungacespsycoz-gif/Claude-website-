@@ -44,7 +44,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: var(--fs-base); line-height: 1.65; -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
 h1, h2, h3, h4 { margin: 0; font-weight: 300; line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; }
@@ -307,6 +307,38 @@ form.trial h3 { font-size: 1.5rem; }
   * { transition: none !important; }
   .bleed > img { transform: none !important; }
 }
+
+/* Scroll-driven journey through the day's sessions.
+   Default (no JS / reduced motion): scenes simply stack. With .live: the screen pins and
+   scrolling walks you into each scene, then through a doorway into the next. */
+.scene { position: relative; isolation: isolate; overflow: hidden; }
+.scene > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform-origin: 50% 45%; will-change: transform, filter; }
+.scene::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,15,.55) 0%, rgba(22,18,15,0) 28%, rgba(22,18,15,0) 42%, var(--shade) 100%); }
+.j-progress, .j-hint { display: none; }
+.journey.live { height: calc(var(--n, 4) * 125svh + 25svh); }
+.journey.live .j-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--bg); }
+.journey.live .scene { position: absolute; inset: 0; min-height: 0; visibility: hidden; }
+.journey.live .scene.on { visibility: visible; }
+.journey.live .room-text { will-change: opacity, transform; }
+.journey.live .j-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; position: absolute; z-index: 6; top: calc(68px + env(safe-area-inset-top, 0px) + 14px); left: var(--gutter); right: var(--gutter-r); max-width: 1200px; margin: 0 auto; }
+.j-step { display: grid; gap: 8px; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; color: rgba(239,230,218,.55); transition: color .3s; }
+:root[data-lang="zh"] .j-step { letter-spacing: .06em; }
+.j-step i { display: block; height: 2px; background: rgba(239,230,218,.22); position: relative; overflow: hidden; }
+.j-step i::after { content: ""; position: absolute; inset: 0; background: var(--brass); transform: scaleX(var(--f, 0)); transform-origin: left; }
+.j-step b { font-weight: 500; }
+.j-step.on { color: var(--fg); }
+.journey.live .j-hint { display: block; position: absolute; z-index: 6; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: rgba(239,230,218,.7); transition: opacity .4s; }
+.j-plan { display: none; }
+.journey.live .j-plan { display: block; position: absolute; z-index: 6; right: var(--gutter-r); top: 50%; transform: translateY(-50%); }
+.journey.live .j-plan .plan { position: static; margin: 0; }
+@media (max-width: 900px) { .journey.live .j-plan { display: none; } .j-step b { display: none; } }
+@media (max-width: 760px) {
+  .journey.live .j-hint { display: none; }
+  .journey.live .room .wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .journey.live .room h3 { font-size: 2.1rem; }
+  .journey.live .room p { font-size: 0.98rem; line-height: 1.6; }
+  .journey.live .room-example { display: none; }
+}
 </style>
 </head>
 <body>
@@ -370,8 +402,15 @@ form.trial h3 { font-size: 1.5rem; }
     </div>
   </div>
 
-  <div class="day-track" id="day-track">
-    <div class="plan-rail" aria-hidden="true">
+  <section class="journey" id="day-track" aria-label="A day at Coral Bay, session by session">
+   <div class="j-sticky">
+    <div class="j-progress" aria-hidden="true">
+      <span class="j-step" data-step="0"><i></i><b><span class="en">Live talk</span><span class="zh">现场对谈</span></b></span>
+      <span class="j-step" data-step="1"><i></i><b><span class="en">The scene</span><span class="zh">情景演绎</span></b></span>
+      <span class="j-step" data-step="2"><i></i><b><span class="en">Your turn</span><span class="zh">轮到你</span></b></span>
+      <span class="j-step" data-step="3"><i></i><b><span class="en">Final challenge</span><span class="zh">终极挑战</span></b></span>
+    </div>
+    <div class="j-plan" aria-hidden="true">
       <div class="plan">
         <div class="plan-title"><span><span class="en">Today's route</span><span class="zh">今日路线</span></span><span id="plan-step">1 / 4</span></div>
         <svg viewBox="0 0 260 180">
@@ -389,8 +428,9 @@ form.trial h3 { font-size: 1.5rem; }
         </svg>
       </div>
     </div>
+    <p class="j-hint" aria-hidden="true"><span class="en">Keep scrolling to walk into the next session</span><span class="zh">继续向下滑动，走进下一个环节</span></p>
 
-    <section class="room bleed" data-room="0">
+    <section class="scene room" data-room="0">
       <img src="images/scene-live-talk.jpg" alt="Live talk: two hosts on stage in front of the class" loading="lazy" style="object-position: 50% 40%">
       <div class="wrap"><div class="room-text">
         <div class="room-meta"><span>01 / 04</span><span>09:30–10:30</span></div>
@@ -400,7 +440,7 @@ form.trial h3 { font-size: 1.5rem; }
       </div></div>
     </section>
 
-    <section class="room bleed" data-room="1">
+    <section class="scene room" data-room="1">
       <img src="images/scene-show.jpg" alt="Inside an immersive classroom set as a night market, an actor turns to talk to a student" loading="lazy">
       <div class="wrap"><div class="room-text">
         <div class="room-meta"><span>02 / 04</span><span>10:45–12:00</span></div>
@@ -410,7 +450,7 @@ form.trial h3 { font-size: 1.5rem; }
       </div></div>
     </section>
 
-    <section class="room bleed" data-room="2">
+    <section class="scene room" data-room="2">
       <img src="images/scene-shop.jpg" alt="Students buying sunglasses and a hat from a teacher playing the shopkeeper" loading="lazy">
       <div class="wrap"><div class="room-text">
         <div class="room-meta"><span>03 / 04</span><span>13:00–15:00</span></div>
@@ -420,7 +460,7 @@ form.trial h3 { font-size: 1.5rem; }
       </div></div>
     </section>
 
-    <section class="room bleed" data-room="3">
+    <section class="scene room" data-room="3">
       <img src="images/scene-finale.jpg" alt="A student confidently handles a surprise from an actor while classmates cheer" loading="lazy">
       <div class="wrap"><div class="room-text">
         <div class="room-meta"><span>04 / 04</span><span>15:15–16:00</span></div>
@@ -429,7 +469,8 @@ form.trial h3 { font-size: 1.5rem; }
         <p class="room-example"><span class="en">Today I can ask the price, ask for another size and pay politely, even when something goes wrong.</span><span class="zh">今天我能询问价格、要求换尺码并礼貌付款——即使出了意外也不慌。</span></p>
       </div></div>
     </section>
-  </div>
+   </div>
+  </section>
 
   <section class="section" id="rooms">
     <div class="wrap">
@@ -905,33 +946,81 @@ form.trial h3 { font-size: 1.5rem; }
   // Scroll-driven: solid header, gentle photo parallax, floor-plan route
   var header = document.getElementById('site-header');
   var frames = Array.prototype.slice.call(document.querySelectorAll('.bleed > img'));
-  var track = document.getElementById('day-track');
+  var journey = document.getElementById('day-track');
+  var scenes = Array.prototype.slice.call(journey.querySelectorAll('.scene'));
+  var steps = journey.querySelectorAll('.j-step');
+  var hint = journey.querySelector('.j-hint');
+  var N = scenes.length;
+  journey.style.setProperty('--n', N);
+  if (!reduce) journey.classList.add('live');
   var route = document.getElementById('route'), dot = document.getElementById('route-dot');
   var zones = document.querySelectorAll('.plan [data-zone]'), stepEl = document.getElementById('plan-step');
   var routeLen = route.getTotalLength ? route.getTotalLength() : 0;
   var ticking = false;
+  var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
+  var smooth = function (v) { v = clamp(v); return v * v * (3 - 2 * v); };
+
+  function journeyFrame(vh) {
+    if (!journey.classList.contains('live')) return;
+    var r = journey.getBoundingClientRect();
+    var range = journey.offsetHeight - vh;
+    var scrolled = Math.max(0, Math.min(range, -r.top));
+    // a little dwell at the end so the last session can be read
+    var raw = scrolled / range * (N - 0.6);
+    var P = Math.min(N - 1, raw);
+    var i = Math.min(N - 1, Math.floor(P)), t = i === N - 1 ? raw - (N - 1) : P - i;
+    var u = i < N - 1 ? smooth((t - 0.58) / 0.42) : 0;   // doorway transition into the next scene
+
+    scenes.forEach(function (sc, k) {
+      var img = sc.querySelector('img'), txt = sc.querySelector('.room-text');
+      if (k === i) {
+        sc.classList.add('on'); sc.style.zIndex = 1; sc.style.clipPath = 'none';
+        img.style.transform = 'scale(' + (1.04 + 0.1 * t + 0.32 * u).toFixed(4) + ')';
+        img.style.filter = 'brightness(' + (1 - 0.45 * u).toFixed(3) + ')';
+        var tin = k === 0 ? 1 : smooth(t / (i === N - 1 ? 0.1 : 0.14)), tout = smooth((t - 0.5) / 0.14);
+        if (i === N - 1) tout = 0;
+        txt.style.opacity = (tin * (1 - tout)).toFixed(3);
+        txt.style.transform = 'translateY(' + ((1 - tin) * 28 - tout * 28).toFixed(1) + 'px)';
+      } else if (k === i + 1 && u > 0) {
+        sc.classList.add('on'); sc.style.zIndex = 2;
+        var ix = ((1 - u) * 40).toFixed(2), iy = ((1 - u) * 34).toFixed(2), rad = ((1 - u) * 18).toFixed(1);
+        sc.style.clipPath = 'inset(' + iy + '% ' + ix + '% round ' + rad + 'px)';
+        img.style.transform = 'scale(' + (1.32 - 0.28 * u).toFixed(4) + ')';
+        img.style.filter = 'none';
+        txt.style.opacity = 0;
+      } else {
+        sc.classList.remove('on');
+      }
+    });
+
+    var active = Math.min(N - 1, i + (u > 0.5 ? 1 : 0));
+    steps.forEach(function (st, k) {
+      var f = k < i ? 1 : k === i ? (i === N - 1 ? 1 : clamp(t)) : 0;
+      st.style.setProperty('--f', f.toFixed(3));
+      st.classList.toggle('on', k === active);
+    });
+    if (hint) hint.style.opacity = (P < 0.25 ? 1 : 0);
+
+    var prog = P / (N - 1);
+    route.style.strokeDashoffset = (1 - prog).toFixed(4);
+    if (routeLen) { var pt = route.getPointAtLength(routeLen * prog); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
+    zones.forEach(function (z) { z.classList.toggle('on', +z.getAttribute('data-zone') === active); });
+    stepEl.textContent = (active + 1) + ' / ' + N;
+  }
 
   function update() {
     ticking = false;
     var vh = window.innerHeight;
     header.classList.toggle('solid', window.scrollY > 40);
-
     if (!reduce) {
       frames.forEach(function (img) {
         var r = img.parentElement.getBoundingClientRect();
         if (r.bottom < 0 || r.top > vh) return;
-        var p = (r.top + r.height / 2 - vh / 2) / (vh + r.height); // -0.5 .. 0.5
+        var p = (r.top + r.height / 2 - vh / 2) / (vh + r.height);
         img.style.transform = 'translate3d(0,' + (p * 60).toFixed(1) + 'px,0) scale(1.08)';
       });
     }
-
-    var t = track.getBoundingClientRect();
-    var prog = Math.min(1, Math.max(0, (vh * 0.5 - t.top) / (t.height - vh * 0.5)));
-    route.style.strokeDashoffset = (1 - prog).toFixed(4);
-    if (routeLen) { var pt = route.getPointAtLength(routeLen * prog); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
-    var idx = Math.min(3, Math.floor(prog * 4));
-    zones.forEach(function (z) { z.classList.toggle('on', +z.getAttribute('data-zone') === idx); });
-    stepEl.textContent = (idx + 1) + ' / 4';
+    journeyFrame(vh);
   }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   window.addEventListener('scroll', onScroll, { passive: true });
