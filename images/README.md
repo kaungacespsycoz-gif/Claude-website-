@@ -13,6 +13,7 @@ Replace each with a real photo of the same name once the warehouse is fitted out
 | wh-live.jpg | Live talk (podcast-style) stage |
 | wh-prep.jpg | Phrase prep studio |
 | wh-lab-market.jpg | Lab 1: night market; lab gallery; Try-a-lab room 1 |
+| wh-pronounce.jpg | Live pronunciation correction (walk stop after Lab 1; lab rooms section) |
 | wh-lab-shop.jpg | Lab 2: beach shop; lab gallery; Try-a-lab room 2 |
 | wh-lab-final.jpg | Final lab (gate turns green); Try-a-lab room 3 |
 | wh-lab-storm.jpg, wh-lab-hotel.jpg | Lab gallery |

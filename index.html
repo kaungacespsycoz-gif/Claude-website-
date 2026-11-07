@@ -386,6 +386,36 @@ form.trial h3 { font-size: 1.5rem; }
 .teachers.t3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .teachers.t3 > div + div { padding-left: 30px; border-left: 1px solid var(--line); }
 @media (max-width: 860px) { .teachers.t3 { grid-template-columns: 1fr; } .teachers.t3 > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 28px; } }
+
+/* Live correction panel */
+.correct { margin-top: 56px; display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
+.correct > * { min-width: 0; }
+.correct-img { margin: 0; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); }
+.correct-img img { width: 100%; height: 100%; object-fit: cover; }
+.correct-text { display: grid; gap: 14px; }
+.correct-text h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.correct-text ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 14px; }
+.correct-text li { display: grid; gap: 2px; padding-left: 16px; border-left: 2px solid var(--brass); }
+.correct-text li b { font-weight: 500; }
+.correct-text li > span { color: var(--muted); }
+@media (max-width: 860px) { .correct { grid-template-columns: 1fr; } }
+
+/* Level cards */
+.levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.level { border: 1px solid var(--line); background: var(--bg-2); padding: 26px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.level-top { display: flex; justify-content: space-between; align-items: center; }
+.level-n { font-size: 2.6rem; font-weight: 200; color: var(--brass); line-height: 1; }
+.level-bars { display: flex; gap: 4px; }
+.level-bars i { width: 22px; height: 6px; background: rgba(239,230,218,.15); }
+.level-bars i.on { background: var(--brass); }
+.level h3 { font-size: 1.6rem; }
+.level-cefr { font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.level ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.level li { padding-left: 16px; position: relative; font-size: .95rem; }
+.level li::before { content: ""; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; background: var(--brass); transform: rotate(45deg); }
+.level-ex { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 4px; font-size: .95rem; }
+.level-ex b { font-size: var(--fs-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--brass); font-weight: 500; }
+@media (max-width: 900px) { .levels { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -423,18 +453,19 @@ form.trial h3 { font-size: 1.5rem; }
 <main id="main">
   <section class="walk" id="day" aria-label="Walk through a day at the school">
     <div class="walk-sticky">
-      <figure class="wf" data-k="0" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-arrival.jpg" alt="Inside the warehouse school: a walkway leads past the lab rooms to the welcome zone" fetchpriority="high"></figure>
-      <figure class="wf" data-k="1" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-welcome.jpg" alt="The guide teacher greeting students in the welcome zone" decoding="async"></figure>
-      <figure class="wf" data-k="2" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-live.jpg" alt="The walkway leading to the live talk stage" decoding="async"></figure>
-      <figure class="wf" data-k="3" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-live.jpg" alt="Two hosts recording a live podcast-style talk in front of students" decoding="async"></figure>
-      <figure class="wf" data-k="4" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-prep.jpg" alt="The walkway leading to the phrase prep studio" decoding="async"></figure>
-      <figure class="wf" data-k="5" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-prep.jpg" alt="The guide coaching students as they practise phrases in pairs" decoding="async"></figure>
-      <figure class="wf" data-k="6" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-market.jpg" alt="The walkway leading to the night market lab" decoding="async"></figure>
-      <figure class="wf" data-k="7" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-market.jpg" alt="In the night market lab, the guide explains while the stallholder waits for the right phrase" decoding="async"></figure>
-      <figure class="wf" data-k="8" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-shop.jpg" alt="The walkway leading to the beach shop lab" decoding="async"></figure>
-      <figure class="wf" data-k="9" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-shop.jpg" alt="A student asks the shop assistant for another size with the guide beside her" decoding="async"></figure>
-      <figure class="wf" data-k="10" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-challenge.jpg" alt="The walkway leading to the final lab" decoding="async"></figure>
-      <figure class="wf" data-k="11" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-final.jpg" alt="The gate light turns green as a student passes the final lab and classmates cheer" decoding="async"></figure>
+      <figure class="wf" data-r="0" data-k="0" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-arrival.jpg" alt="Inside the warehouse school: a walkway leads past the lab rooms to the welcome zone" fetchpriority="high"></figure>
+      <figure class="wf" data-r="0" data-k="1" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-welcome.jpg" alt="The guide teacher greeting students in the welcome zone" decoding="async"></figure>
+      <figure class="wf" data-r="1" data-k="2" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-live.jpg" alt="The walkway leading to the live talk stage" decoding="async"></figure>
+      <figure class="wf" data-r="1" data-k="3" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-live.jpg" alt="Two hosts recording a live podcast-style talk in front of students" decoding="async"></figure>
+      <figure class="wf" data-r="2" data-k="4" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-prep.jpg" alt="The walkway leading to the phrase prep studio" decoding="async"></figure>
+      <figure class="wf" data-r="2" data-k="5" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-prep.jpg" alt="The guide coaching students as they practise phrases in pairs" decoding="async"></figure>
+      <figure class="wf" data-r="3" data-k="6" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-market.jpg" alt="The walkway leading to the night market lab" decoding="async"></figure>
+      <figure class="wf" data-r="3" data-k="7" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-market.jpg" alt="In the night market lab, the guide explains while the stallholder waits for the right phrase" decoding="async"></figure>
+      <figure class="wf" data-r="3" data-k="7b" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-pronounce.jpg" alt="The guide shows a student the mouth shape of a sound while the stallholder waits" decoding="async"></figure>
+      <figure class="wf" data-r="4" data-k="8" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-shop.jpg" alt="The walkway leading to the beach shop lab" decoding="async"></figure>
+      <figure class="wf" data-r="4" data-k="9" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-shop.jpg" alt="A student asks the shop assistant for another size with the guide beside her" decoding="async"></figure>
+      <figure class="wf" data-r="5" data-k="10" data-type="door" style="--ox:50%;--oy:46%"><img src="images/wh-path-challenge.jpg" alt="The walkway leading to the final lab" decoding="async"></figure>
+      <figure class="wf" data-r="5" data-k="11" data-type="room" style="--ox:50%;--oy:50%"><img src="images/wh-lab-final.jpg" alt="The gate light turns green as a student passes the final lab and classmates cheer" decoding="async"></figure>
       <div class="walk-shade" aria-hidden="true"></div>
       <div class="wt wt-hero" data-k="0">
         <span class="label"><span class="en">Immersive English lab · Sanya</span><span class="zh">沉浸式英语实验室 · 三亚</span></span>
@@ -471,6 +502,12 @@ form.trial h3 { font-size: 1.5rem; }
         <span class="label"><span class="en">Lab 1 · Night market</span><span class="zh">实验室 1 · 夜市</span></span>
         <h2><span class="en">The night market lab</span><span class="zh">夜市实验室</span></h2>
         <p><span class="en">The stallholder is an actor and only answers correct English. Your guide stands beside you and breaks down everything he says. Mission: get a better price. The gate stays red until you do.</span><span class="zh">摊主由演员扮演，只回应正确的英语。引导老师站在你身边，实时拆解他说的每一句话。任务：讲到更好的价格。做不到，出口的灯就一直是红色。</span></p>
+      </div>
+      <div class="wt wt-room" data-k="7b">
+        <div class="room-meta"><span>04 / 06</span><span>11:15–12:15</span></div>
+        <span class="label"><span class="en">Lab 1 · Live correction</span><span class="zh">实验室 1 · 现场纠音</span></span>
+        <h2><span class="en">Say it again, like this</span><span class="zh">再说一遍，像这样</span></h2>
+        <p><span class="en">Got the words but not the sound? The guide kneels beside you, shows exactly where it went wrong, the mouth shape, the stress, the rhythm, and you try again until the stallholder understands.</span><span class="zh">单词对了，发音没对？引导老师蹲在你身边，指出具体哪里不对——口型、重音、节奏——你再试一次，直到摊主听懂为止。</span></p>
       </div>
       <div class="wt wt-door" data-k="8"><span class="label"><span class="en">Next stop</span><span class="zh">下一站</span></span><p><span class="en">Lab 2 · Beach shop</span><span class="zh">实验室 2 · 海滩小店</span> <span class="wt-time">13:15–14:30</span></p></div>
       <div class="wt wt-room" data-k="9">
@@ -537,9 +574,21 @@ form.trial h3 { font-size: 1.5rem; }
             <p><span class="en">Mission: check in and fix a problem with your room.</span><span class="zh">任务：办理入住，并解决房间的问题。</span></p></div>
         </div></article>
       </div>
+      <div class="correct">
+        <figure class="correct-img"><img src="images/wh-pronounce.jpg" alt="The guide shows a student the mouth shape of a sound" loading="lazy"></figure>
+        <div class="correct-text">
+          <span class="label"><span class="en">Live correction</span><span class="zh">现场纠正</span></span>
+          <h3><span class="en">Your guide fixes it in the moment</span><span class="zh">引导老师当场帮你纠正</span></h3>
+          <ul>
+            <li><b><span class="en">Where it went wrong</span><span class="zh">哪里说错了</span></b><span><span class="en">The exact word, ending or word order, not just "try again".</span><span class="zh">具体到哪个词、哪个词尾、哪个语序，而不只是"再试一次"。</span></span></li>
+            <li><b><span class="en">How to say it</span><span class="zh">怎么说才对</span></b><span><span class="en">Mouth shape, stress and rhythm, shown face to face and with a sound wave on the guide's tablet.</span><span class="zh">口型、重音和节奏——面对面示范，并用平板上的声波图展示。</span></span></li>
+            <li><b><span class="en">Until it works</span><span class="zh">直到说对为止</span></b><span><span class="en">You try again with the actor. When they understand you, the gate turns green.</span><span class="zh">再和演员试一次。对方听懂了，出口灯就变绿。</span></span></li>
+          </ul>
+        </div>
+      </div>
       <div class="features">
         <div><strong><span class="en">Actors who wait for real English</span><span class="zh">只等正确英语的演员</span></strong><span><span class="en">Shop assistants, waiters and receptionists stay in role and only answer when the phrase is right.</span><span class="zh">店员、服务员和前台始终保持角色，只有说对了才会回应。</span></span></div>
-        <div><strong><span class="en">A guide by your side</span><span class="zh">引导老师全程陪伴</span></strong><span><span class="en">Live teaching inside the scene: the guide breaks down what the actors say and gives hints in Chinese when students are stuck.</span><span class="zh">在场景里现场教学：引导老师拆解演员说的话，学员卡住时用中文给提示。</span></span></div>
+        <div><strong><span class="en">A guide by your side</span><span class="zh">引导老师全程陪伴</span></strong><span><span class="en">Live teaching inside the scene: the guide breaks down what the actors say, corrects grammar and pronunciation, and gives hints when students are stuck.</span><span class="zh">在场景里现场教学：引导老师拆解演员说的话，纠正语法和发音，学员卡住时给提示。</span></span></div>
         <div><strong><span class="en">Projection, light and sound</span><span class="zh">投影、灯光与声效</span></strong><span><span class="en">Each lab is a full set inside the warehouse, with real props, projected backdrops and sound.</span><span class="zh">每个实验室都是仓库里的完整布景，配有真实道具、投影背景和声效。</span></span></div>
       </div>
     </div>
@@ -550,7 +599,7 @@ form.trial h3 { font-size: 1.5rem; }
       <div class="head">
         <span class="label"><span class="en">Try it</span><span class="zh">试一试</span></span>
         <h2><span class="en">Can you get through three lab rooms?</span><span class="zh">你能闯过三个实验室吗？</span></h2>
-        <p><span class="en">Choose what you would say. Get it right and the actor answers and the gate opens. Get it wrong and the actor just waits, while your guide explains why.</span><span class="zh">选出你会说的话。说对了，演员才会回应，出口打开；说错了，演员只会等着，引导老师会告诉你原因。</span></p>
+        <p><span class="en">Choose what you would say. Get it right and the actor answers and the gate opens. Get it wrong and the actor just waits, while your guide explains why. This demo is Level 2, Explorer.</span><span class="zh">选出你会说的话。说对了，演员才会回应，出口打开；说错了，演员只会等着，引导老师会告诉你原因。本演示为第 2 级（进阶级）。</span></p>
       </div>
       <div class="lab" id="lab">
         <div class="lab-level" data-level="0">
@@ -803,28 +852,34 @@ form.trial h3 { font-size: 1.5rem; }
   <section class="section" id="levels">
     <div class="wrap">
       <div class="head">
-        <span class="label"><span class="en">Levels</span><span class="zh">级别体系</span></span>
-        <h2><span class="en">The same topics, deeper at every level</span><span class="zh">同样的主题，每个级别更深入一层</span></h2>
-        <p><span class="en">Topics come round again as students move up the CEFR levels used by Cambridge English and IELTS. This is how the shopping topic grows.</span><span class="zh">随着学员在 CEFR 级别（剑桥英语与雅思通用标准）中进阶，主题会循环出现并逐步加深。以下以"购物"为例。</span></p>
+        <span class="label"><span class="en">Levels</span><span class="zh">难度级别</span></span>
+        <h2><span class="en">Same rooms. Harder missions.</span><span class="zh">同样的房间，更难的任务</span></h2>
+        <p><span class="en">Students sign up for the level that fits them after a free placement chat. The lab rooms stay the same; what changes is how much help you get, how fast the actors talk, and how many surprises they throw at you.</span><span class="zh">免费水平评估后，学员选择适合自己的级别。实验室不变，变的是你能得到多少帮助、演员说话多快、以及会遇到多少"意外"。</span></p>
       </div>
-      <p class="swipe-hint" aria-hidden="true"><span class="en">Swipe the table sideways to see more →</span><span class="zh">左右滑动表格查看更多 →</span></p>
-      <div class="table-scroll">
-        <table>
-          <thead><tr>
-            <th><span class="en">Level</span><span class="zh">级别</span></th>
-            <th><span class="en">Shopping at this level</span><span class="zh">该级别的"购物"主题</span></th>
-            <th><span class="en">Matching exams</span><span class="zh">对应考试</span></th>
-          </tr></thead>
-          <tbody>
-            <tr><td class="lvl">Pre-A1</td><td><span class="en">Name items and colours, say "this one, please"</span><span class="zh">说出商品和颜色，会说 "this one, please"</span></td><td class="dim">Cambridge YLE Starters</td></tr>
-            <tr><td class="lvl">A1</td><td><span class="en">Ask the price and pay</span><span class="zh">询问价格并付款</span></td><td class="dim">Cambridge YLE Movers</td></tr>
-            <tr><td class="lvl">A2</td><td><span class="en">Ask for another size or colour and compare two items</span><span class="zh">要求换尺码或颜色，比较两件商品</span></td><td class="dim">YLE Flyers · A2 Key (KET)</td></tr>
-            <tr><td class="lvl">B1</td><td><span class="en">Return an item and explain what is wrong with it</span><span class="zh">退换商品并说明问题</span></td><td class="dim">B1 Preliminary (PET) · IELTS 4.0–5.0</td></tr>
-            <tr><td class="lvl">B2</td><td><span class="en">Negotiate a discount and discuss value for money</span><span class="zh">讨价还价，讨论性价比</span></td><td class="dim">B2 First (FCE) · IELTS 5.5–6.5</td></tr>
-            <tr><td class="lvl">C1</td><td><span class="en">Handle a complaint diplomatically and agree a solution</span><span class="zh">得体地处理投诉并协商解决方案</span></td><td class="dim">C1 Advanced · IELTS 7.0+</td></tr>
-          </tbody>
-        </table>
+      <div class="levels">
+        <article class="level">
+          <div class="level-top"><span class="level-n">1</span><span class="level-bars" aria-label="Difficulty 1 of 3"><i class="on"></i><i class=""></i><i class=""></i></span></div>
+          <h3><span class="en">Starter</span><span class="zh">入门级</span></h3>
+          <span class="level-cefr">CEFR Pre-A1 – A1</span>
+          <ul><li><span class="en">Phrase card allowed in the lab</span><span class="zh">手持短语卡进入实验室</span></li><li><span class="en">Guide hints in Chinese</span><span class="zh">引导老师用中文提示</span></li><li><span class="en">Actors speak slowly and clearly</span><span class="zh">演员语速慢、吐字清楚</span></li><li><span class="en">One-step missions</span><span class="zh">单步任务</span></li></ul>
+          <p class="level-ex"><b><span class="en">Shopping lab mission</span><span class="zh">购物实验室任务</span></b><span><span class="en">Ask the price and pay.</span><span class="zh">询问价格并付款。</span></span></p>
+        </article>
+        <article class="level">
+          <div class="level-top"><span class="level-n">2</span><span class="level-bars" aria-label="Difficulty 2 of 3"><i class="on"></i><i class="on"></i><i class=""></i></span></div>
+          <h3><span class="en">Explorer</span><span class="zh">进阶级</span></h3>
+          <span class="level-cefr">CEFR A2 – B1</span>
+          <ul><li><span class="en">No cards inside the lab</span><span class="zh">实验室内不带短语卡</span></li><li><span class="en">Hints in simple English</span><span class="zh">用简单英语提示</span></li><li><span class="en">Natural speed</span><span class="zh">正常语速</span></li><li><span class="en">Two-step missions and one surprise</span><span class="zh">两步任务加一个意外</span></li></ul>
+          <p class="level-ex"><b><span class="en">Shopping lab mission</span><span class="zh">购物实验室任务</span></b><span><span class="en">Ask for another size, compare two items and pay.</span><span class="zh">要求换尺码、比较两件商品并付款。</span></span></p>
+        </article>
+        <article class="level">
+          <div class="level-top"><span class="level-n">3</span><span class="level-bars" aria-label="Difficulty 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+          <h3><span class="en">Pro</span><span class="zh">高手级</span></h3>
+          <span class="level-cefr">CEFR B2 – C1</span>
+          <ul><li><span class="en">No hints at all</span><span class="zh">完全没有提示</span></li><li><span class="en">Fast real-life speech and slang</span><span class="zh">真实快语速与俚语</span></li><li><span class="en">Actors push back</span><span class="zh">演员会"刁难"你</span></li><li><span class="en">Several surprises per room</span><span class="zh">每个房间多个意外</span></li></ul>
+          <p class="level-ex"><b><span class="en">Shopping lab mission</span><span class="zh">购物实验室任务</span></b><span><span class="en">Return a faulty item and negotiate a refund.</span><span class="zh">退回有问题的商品并协商退款。</span></span></p>
+        </article>
       </div>
+      <p class="note"><span class="en">Levels follow the CEFR scale used by Cambridge English (KET, PET, FCE) and IELTS, so progress can be compared with international exams.</span><span class="zh">级别对应剑桥英语（KET、PET、FCE）和雅思采用的 CEFR 标准，方便与国际考试对照进步。</span></p>
     </div>
   </section>
 
@@ -843,7 +898,7 @@ form.trial h3 { font-size: 1.5rem; }
         <div>
           <span class="label"><span class="en">Phrase prep &amp; labs</span><span class="zh">表达准备与实验室</span></span>
           <h3><span class="en">Guides</span><span class="zh">引导老师</span></h3>
-          <p><span class="en">Teachers who stay beside the students all day: preparing phrases, then breaking down what the actors say and coaching live inside each lab.</span><span class="zh">全天陪在学员身边的老师：带学员准备表达，再在每个实验室里拆解演员说的话，现场指导。</span></p>
+          <p><span class="en">Teachers who stay beside the students all day: preparing phrases, then breaking down what the actors say and correcting grammar and pronunciation live inside each lab.</span><span class="zh">全天陪在学员身边的老师：带学员准备表达，再在每个实验室里拆解演员说的话，现场纠正语法和发音。</span></p>
         </div>
         <div>
           <span class="label"><span class="en">Lab rooms</span><span class="zh">实验室</span></span>
@@ -890,6 +945,8 @@ form.trial h3 { font-size: 1.5rem; }
       <div class="faq">
         <details><summary><span class="en">Do students have to memorise vocabulary?</span><span class="zh">学员需要背单词吗？</span></summary>
           <p><span class="en">No word lists. Students learn whole phrases inside one situation, understand why they work, and use them the same day. Phrases come back naturally when topics repeat at higher levels.</span><span class="zh">不需要背单词表。学员在一个场景中学习整句表达，理解其中的逻辑，并在当天用出来。主题在更高级别循环时，这些表达会自然再次出现。</span></p></details>
+        <details><summary><span class="en">Which level should I sign up for?</span><span class="zh">我该报哪个级别？</span></summary>
+          <p><span class="en">Start with a free placement chat. We'll suggest Starter, Explorer or Pro, and you can move up as soon as the missions feel easy.</span><span class="zh">先做一次免费水平评估，我们会推荐入门级、进阶级或高手级。任务变得轻松时，就可以升级。</span></p></details>
         <details><summary><span class="en">What if my child can't say the phrase?</span><span class="zh">孩子说不出来怎么办？</span></summary>
           <p><span class="en">The guide is right there. They break the phrase down, explain it in Chinese, and practise it with your child until they can say it. The actor waits for real English, but nobody is left stuck: everyone gets through the gate with help.</span><span class="zh">引导老师就在身边：拆解句子、用中文解释，陪孩子一起练到能说出来。演员会等待正确的英语，但没有人会被困住——在帮助下，每个人都能通过出口。</span></p></details>
         <details><summary><span class="en">Do students just watch the actors?</span><span class="zh">学员只是看演员表演吗？</span></summary>
@@ -1104,7 +1161,7 @@ form.trial h3 { font-size: 1.5rem; }
     });
 
     var activeFrame = Math.min(NF - 1, i + (e > 0.5 ? 1 : 0));
-    var room = Math.floor(activeFrame / 2);
+    var room = +wf[activeFrame].getAttribute('data-r');
     Array.prototype.forEach.call(railItems, function (li, k) {
       li.classList.toggle('on', k === room);
       li.classList.toggle('done', k < room);
