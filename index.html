@@ -308,36 +308,57 @@ form.trial h3 { font-size: 1.5rem; }
   .bleed > img { transform: none !important; }
 }
 
-/* Scroll-driven journey through the day's sessions.
-   Default (no JS / reduced motion): scenes simply stack. With .live: the screen pins and
-   scrolling walks you into each scene, then through a doorway into the next. */
-.scene { position: relative; isolation: isolate; overflow: hidden; }
-.scene > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform-origin: 50% 45%; will-change: transform, filter; }
-.scene::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,15,.55) 0%, rgba(22,18,15,0) 28%, rgba(22,18,15,0) 42%, var(--shade) 100%); }
-.j-progress, .j-hint { display: none; }
-.journey.live { height: calc(var(--n, 4) * 125svh + 25svh); }
-.journey.live .j-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--bg); }
-.journey.live .scene { position: absolute; inset: 0; min-height: 0; visibility: hidden; }
-.journey.live .scene.on { visibility: visible; }
-.journey.live .room-text { will-change: opacity, transform; }
-.journey.live .j-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; position: absolute; z-index: 6; top: calc(68px + env(safe-area-inset-top, 0px) + 14px); left: var(--gutter); right: var(--gutter-r); max-width: 1200px; margin: 0 auto; }
-.j-step { display: grid; gap: 8px; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; color: rgba(239,230,218,.55); transition: color .3s; }
-:root[data-lang="zh"] .j-step { letter-spacing: .06em; }
-.j-step i { display: block; height: 2px; background: rgba(239,230,218,.22); position: relative; overflow: hidden; }
-.j-step i::after { content: ""; position: absolute; inset: 0; background: var(--brass); transform: scaleX(var(--f, 0)); transform-origin: left; }
-.j-step b { font-weight: 500; }
-.j-step.on { color: var(--fg); }
-.journey.live .j-hint { display: block; position: absolute; z-index: 6; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: rgba(239,230,218,.7); transition: opacity .4s; }
-.j-plan { display: none; }
-.journey.live .j-plan { display: block; position: absolute; z-index: 6; right: var(--gutter-r); top: 50%; transform: translateY(-50%); }
-.journey.live .j-plan .plan { position: static; margin: 0; }
-@media (max-width: 900px) { .journey.live .j-plan { display: none; } .j-step b { display: none; } }
+/* Showroom-style floor plan tour.
+   Default (no JS / reduced motion): the plan and room cards simply stack.
+   With .live: the screen pins and scrolling walks the route, the camera following you through each doorway. */
+.fp { display: block; width: 100%; height: auto; }
+.fp-floor { fill: var(--bg-2); }
+.fp-room { fill: rgba(239,230,218,.03); stroke: rgba(239,230,218,.42); stroke-width: 3; transition: fill .4s, stroke .4s; }
+.fp-room.on { fill: rgba(201,164,106,.14); stroke: var(--brass); }
+.fp-furniture * { fill: none; stroke: rgba(239,230,218,.24); stroke-width: 2; }
+.fp-furniture .fp-lamp { fill: rgba(201,164,106,.5); stroke: none; }
+.fp-door { fill: var(--bg-2); }
+.fp-label { fill: rgba(239,230,218,.62); font: 600 13px var(--font); letter-spacing: .14em; transition: fill .4s; }
+.fp-label.on { fill: var(--fg); }
+.fp-num { fill: var(--brass); }
+.fp-small { font-size: 11px; fill: var(--muted); }
+.fp-route-base { fill: none; stroke: rgba(201,164,106,.35); stroke-width: 3; stroke-dasharray: 2 12; stroke-linecap: round; }
+.fp-route { fill: none; stroke: var(--brass); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.fp-you { fill: var(--brass); stroke: var(--bg); stroke-width: 3; }
+.fp-you-ring { fill: rgba(201,164,106,.25); animation: you-pulse 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes you-pulse { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+#fp-you { transform: translate(180px, 712px); }
+
+.tour { padding-bottom: clamp(56px, 8vw, 96px); }
+.tour-map { max-width: 960px; margin: 0 auto; padding-inline: var(--gutter) var(--gutter-r); }
+.tour-cards { max-width: 1240px; margin: 40px auto 0; padding-inline: var(--gutter) var(--gutter-r); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.tour-card { background: rgba(22,18,15,.9); border: 1px solid var(--line); min-width: 0; }
+.tour-card[data-stop="0"] { display: none; }
+.tc-img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-3); }
+.tc-img img { width: 100%; height: 100%; object-fit: cover; }
+.tc-body { padding: 18px 20px 20px; display: grid; gap: 8px; }
+.tc-body h3 { font-size: 1.45rem; }
+.tc-body p { color: rgba(239,230,218,.82); font-size: .95rem; }
+@media (max-width: 900px) { .tour-cards { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .tour-cards { grid-template-columns: 1fr; } }
+
+.tour.live { height: calc(7 * 85svh + 100svh); padding: 0; }
+.tour.live .tour-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--bg-2); }
+.tour.live .tour-map { position: absolute; inset: 0; max-width: none; padding: 0; }
+.tour.live .tour-cam { position: absolute; left: 0; top: 0; width: 1000px; height: 720px; transform-origin: 0 0; will-change: transform; }
+.tour.live .fp { width: 1000px; height: 720px; }
+.tour.live .fp-floor { fill: transparent; }
+.tour.live .fp-door { fill: var(--bg-2); }
+.tour.live .tour-cards { position: absolute; inset: 0; margin: 0; padding: 0; display: block; pointer-events: none; }
+.tour.live .tour-card { position: absolute; left: var(--gutter); top: 50%; transform: translateY(-46%); width: min(420px, 36vw); opacity: 0; transition: none; box-shadow: 0 20px 60px -20px rgba(0,0,0,.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.tour.live .tour-card[data-stop="0"] { display: block; }
+.tour.live .tour-card[data-stop="0"] .tc-body { padding: 26px 26px 28px; }
 @media (max-width: 760px) {
-  .journey.live .j-hint { display: none; }
-  .journey.live .room .wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
-  .journey.live .room h3 { font-size: 2.1rem; }
-  .journey.live .room p { font-size: 0.98rem; line-height: 1.6; }
-  .journey.live .room-example { display: none; }
+  .tour.live .tour-card { left: var(--gutter); right: var(--gutter-r); width: auto; top: auto; bottom: calc(82px + env(safe-area-inset-bottom, 0px)); transform: none; }
+  .tour.live .tc-img { aspect-ratio: 16 / 7; }
+  .tour.live .tc-body { padding: 14px 16px 16px; gap: 6px; }
+  .tour.live .tc-body h3 { font-size: 1.2rem; }
+  .tour.live .tc-body p { font-size: .88rem; line-height: 1.5; }
 }
 </style>
 </head>
@@ -396,80 +417,67 @@ form.trial h3 { font-size: 1.5rem; }
     <div class="wrap">
       <div class="head">
         <span class="label"><span class="en">A day at Coral Bay</span><span class="zh">珊瑚湾的一天</span></span>
-        <h2><span class="en">One topic. One full day. Fully immersive.</span><span class="zh">一个主题，一整天，全程沉浸。</span></h2>
-        <p><span class="en">Each session runs from 09:30 to 16:00, with an hour for lunch, and follows the same route through the school. Today's topic in the examples below is shopping.</span><span class="zh">每次课程从 09:30 持续到 16:00，中午休息一小时，每天都沿着同样的路线走过学校。以下示例的当天主题是"购物"。</span></p>
+        <h2><span class="en">Walk through the school, room by room</span><span class="zh">一间一间，走遍整个学校</span></h2>
+        <p><span class="en">The school is laid out as a route. Each activity happens in its own room, from 09:15 to 16:00. Today's topic is shopping.</span><span class="zh">学校按一条路线布局，每个活动都在专属的房间里进行，从 09:15 到 16:00。今天的主题是"购物"。</span></p>
       </div>
     </div>
   </div>
 
-  <section class="journey" id="day-track" aria-label="A day at Coral Bay, session by session">
-   <div class="j-sticky">
-    <div class="j-progress" aria-hidden="true">
-      <span class="j-step" data-step="0"><i></i><b><span class="en">Live talk</span><span class="zh">现场对谈</span></b></span>
-      <span class="j-step" data-step="1"><i></i><b><span class="en">The scene</span><span class="zh">情景演绎</span></b></span>
-      <span class="j-step" data-step="2"><i></i><b><span class="en">Your turn</span><span class="zh">轮到你</span></b></span>
-      <span class="j-step" data-step="3"><i></i><b><span class="en">Final challenge</span><span class="zh">终极挑战</span></b></span>
-    </div>
-    <div class="j-plan" aria-hidden="true">
-      <div class="plan">
-        <div class="plan-title"><span><span class="en">Today's route</span><span class="zh">今日路线</span></span><span id="plan-step">1 / 4</span></div>
-        <svg viewBox="0 0 260 180">
-          <rect class="zone" data-zone="0" x="10" y="10" width="110" height="70"/>
-          <rect class="zone" data-zone="1" x="140" y="10" width="110" height="70"/>
-          <rect class="zone" data-zone="2" x="140" y="100" width="110" height="70"/>
-          <rect class="zone" data-zone="3" x="10" y="100" width="110" height="70"/>
-          <path class="wall" d="M10 10H250V170H10Z M130 10V58 M130 72V108 M130 122V170 M10 90H58 M72 90H188 M202 90H250"/>
-          <path class="route" id="route" pathLength="1" d="M65 45H195V135H65"/>
-          <circle class="dot" id="route-dot" cx="65" cy="45" r="4"/>
-          <text data-zone="0" x="18" y="74"><tspan class="en">LIVE STAGE</tspan><tspan class="zh">对谈舞台</tspan></text>
-          <text data-zone="1" x="148" y="74"><tspan class="en">THE SCENE</tspan><tspan class="zh">情景演绎</tspan></text>
-          <text data-zone="2" x="148" y="164"><tspan class="en">YOUR TURN</tspan><tspan class="zh">轮到你</tspan></text>
-          <text data-zone="3" x="18" y="164"><tspan class="en">FINAL CHALLENGE</tspan><tspan class="zh">终极挑战</tspan></text>
-        </svg>
+  <section class="tour" id="tour" aria-label="Floor plan tour of the school">
+    <div class="tour-sticky">
+      <div class="tour-map"><div class="tour-cam" id="tour-cam"><svg class="fp" viewBox="0 0 1000 720" role="img" aria-label="Floor plan of the school with today's route through six rooms"><rect class="fp-floor" x="0" y="0" width="1000" height="720"/><rect class="fp-room" data-room="stage" x="40" y="40" width="280" height="280" rx="4"/><rect class="fp-room" data-room="market" x="340" y="40" width="300" height="280" rx="4"/><rect class="fp-room" data-room="cafe" x="660" y="40" width="300" height="280" rx="4"/><rect class="fp-room" data-room="entrance" x="40" y="400" width="280" height="280" rx="4"/><rect class="fp-room" data-room="challenge" x="340" y="400" width="300" height="280" rx="4"/><rect class="fp-room" data-room="shop" x="660" y="400" width="300" height="280" rx="4"/><g class="fp-furniture"><ellipse cx="180" cy="108" rx="84" ry="36"/><rect x="146" y="92" width="22" height="20" rx="4"/><rect x="192" y="92" width="22" height="20" rx="4"/><circle cx="78" cy="214" r="7"/><circle cx="108" cy="214" r="7"/><circle cx="138" cy="214" r="7"/><circle cx="228" cy="214" r="7"/><circle cx="258" cy="214" r="7"/><circle cx="288" cy="214" r="7"/><circle cx="78" cy="246" r="7"/><circle cx="108" cy="246" r="7"/><circle cx="138" cy="246" r="7"/><circle cx="228" cy="246" r="7"/><circle cx="258" cy="246" r="7"/><circle cx="288" cy="246" r="7"/><circle cx="78" cy="278" r="7"/><circle cx="108" cy="278" r="7"/><circle cx="138" cy="278" r="7"/><circle cx="228" cy="278" r="7"/><circle cx="258" cy="278" r="7"/><circle cx="288" cy="278" r="7"/><rect x="366" y="66" width="74" height="38" rx="3"/><rect x="462" y="66" width="74" height="38" rx="3"/><rect x="558" y="66" width="60" height="38" rx="3"/><rect x="366" y="256" width="74" height="38" rx="3"/><rect x="462" y="256" width="74" height="38" rx="3"/><rect x="558" y="256" width="60" height="38" rx="3"/><circle class="fp-lamp" cx="380" cy="132" r="4"/><circle class="fp-lamp" cx="380" cy="228" r="4"/><circle class="fp-lamp" cx="420" cy="132" r="4"/><circle class="fp-lamp" cx="420" cy="228" r="4"/><circle class="fp-lamp" cx="460" cy="132" r="4"/><circle class="fp-lamp" cx="460" cy="228" r="4"/><circle class="fp-lamp" cx="500" cy="132" r="4"/><circle class="fp-lamp" cx="500" cy="228" r="4"/><circle class="fp-lamp" cx="540" cy="132" r="4"/><circle class="fp-lamp" cx="540" cy="228" r="4"/><circle class="fp-lamp" cx="580" cy="132" r="4"/><circle class="fp-lamp" cx="580" cy="228" r="4"/><circle class="fp-lamp" cx="620" cy="132" r="4"/><circle class="fp-lamp" cx="620" cy="228" r="4"/><circle cx="712" cy="96" r="17"/><circle cx="792" cy="96" r="17"/><circle cx="712" cy="264" r="17"/><circle cx="792" cy="264" r="17"/><circle cx="872" cy="264" r="17"/><rect x="916" y="70" width="22" height="150" rx="3"/><path d="M66 470 Q126 438 186 470"/><rect x="62" y="610" width="70" height="26" rx="6"/><rect x="228" y="610" width="70" height="26" rx="6"/><rect x="256" y="430" width="40" height="40" rx="20"/><rect x="448" y="432" width="84" height="38" rx="3"/><circle cx="570" cy="560" r="8"/><circle cx="559" cy="595" r="8"/><circle cx="530" cy="621" r="8"/><circle cx="450" cy="621" r="8"/><circle cx="421" cy="595" r="8"/><circle cx="410" cy="560" r="8"/><circle cx="421" cy="525" r="8"/><circle cx="450" cy="499" r="8"/><circle cx="490" cy="490" r="8"/><circle cx="530" cy="499" r="8"/><circle cx="559" cy="525" r="8"/><rect x="680" y="422" width="12" height="236" rx="2"/><rect x="928" y="422" width="12" height="236" rx="2"/><rect x="712" y="422" width="196" height="12" rx="2"/><rect x="842" y="600" width="72" height="30" rx="3"/></g><rect class="fp-door" x="160" y="398" width="40" height="4"/><rect class="fp-door" x="160" y="318" width="40" height="4"/><rect class="fp-door" x="318" y="160" width="4" height="40"/><rect class="fp-door" x="638" y="160" width="4" height="40"/><rect class="fp-door" x="790" y="318" width="40" height="4"/><rect class="fp-door" x="790" y="398" width="40" height="4"/><rect class="fp-door" x="638" y="520" width="4" height="40"/><rect class="fp-door" x="470" y="678" width="40" height="4"/><rect class="fp-door" x="160" y="678" width="40" height="4"/><text class="fp-label" data-room="stage" x="56" y="70"><tspan class="fp-num">2</tspan>  <tspan class="en">LIVE TALK STAGE</tspan><tspan class="zh">对谈舞台</tspan></text><text class="fp-label" data-room="market" x="356" y="70"><tspan class="fp-num">3</tspan>  <tspan class="en">MARKET HALL</tspan><tspan class="zh">夜市大厅</tspan></text><text class="fp-label" data-room="cafe" x="676" y="70"><tspan class="fp-num">4</tspan>  <tspan class="en">CAFÉ</tspan><tspan class="zh">咖啡馆</tspan></text><text class="fp-label" data-room="entrance" x="56" y="430"><tspan class="fp-num">1</tspan>  <tspan class="en">ENTRANCE</tspan><tspan class="zh">入口大厅</tspan></text><text class="fp-label" data-room="challenge" x="356" y="430"><tspan class="fp-num">6</tspan>  <tspan class="en">CHALLENGE ROOM</tspan><tspan class="zh">挑战室</tspan></text><text class="fp-label" data-room="shop" x="676" y="430"><tspan class="fp-num">5</tspan>  <tspan class="en">SHOP</tspan><tspan class="zh">商店</tspan></text><text class="fp-label fp-small" x="200" y="712"><tspan class="en">IN</tspan><tspan class="zh">入口</tspan></text><text class="fp-label fp-small" x="510" y="712"><tspan class="en">OUT</tspan><tspan class="zh">出口</tspan></text><path class="fp-route-base" d="M180 712 L180 540 L180 180 L490 180 L810 180 L810 540 L490 540 L490 712"/><path class="fp-route" id="fp-route" pathLength="1" d="M180 712 L180 540 L180 180 L490 180 L810 180 L810 540 L490 540 L490 712"/><g id="fp-you"><circle class="fp-you-ring" r="18"/><circle class="fp-you" r="9"/></g></svg></div></div>
+      <div class="tour-cards">
+      <article class="tour-card" data-stop="0">
+        <div class="tc-body">
+          <div class="room-meta"><span class="en">Today's route · Topic: shopping</span><span class="zh">今日路线 · 主题：购物</span></div>
+          <h3><span class="en">Follow the route through the school</span><span class="zh">跟着路线走一遍学校</span></h3>
+          <p><span class="en">Like a showroom, every activity of the day has its own room. Keep scrolling to walk the route, room by room.</span><span class="zh">就像逛样板间，一天中的每个活动都有专属的房间。继续向下滑动，一间一间走过去。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="1">
+        <div class="tc-img"><img src="images/scene-school.jpg" alt="Teachers welcoming students in the entrance hall" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 1 · 09:15</span><span class="zh">第 1 间 · 09:15</span></div>
+          <h3><span class="en">Entrance: welcome &amp; warm-up</span><span class="zh">入口大厅：签到与热身</span></h3>
+          <p><span class="en">Students check in, meet today's teachers and find out the topic. New students start here with a short placement chat.</span><span class="zh">学员在这里签到、认识当天的老师、了解当天主题。新学员从这里开始一段简短的水平交流。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="2">
+        <div class="tc-img"><img src="images/scene-live-talk.jpg" alt="Two hosts on the live talk stage" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 2 · 09:30–10:30</span><span class="zh">第 2 间 · 09:30–10:30</span></div>
+          <h3><span class="en">Live talk stage</span><span class="zh">对谈舞台</span></h3>
+          <p><span class="en">Two hosts talk the topic through live, in Chinese: common mistakes, the phrases natives use most and the logic behind them, with English woven in. Students can ask questions.</span><span class="zh">两位主持人用中文现场对谈：常见错误、母语者最常用的表达及背后的逻辑，英文表达穿插其中。学员可以随时提问。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="3">
+        <div class="tc-img"><img src="images/scene-show.jpg" alt="Actors in the market hall talking to a student" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 3 · 10:45–12:00</span><span class="zh">第 3 间 · 10:45–12:00</span></div>
+          <h3><span class="en">Market hall: the scene comes alive</span><span class="zh">夜市大厅：情景演绎</span></h3>
+          <p><span class="en">Native-speaking actors play out the scene all around the students, ask them questions and pull them into the story.</span><span class="zh">外籍演员在学员身边演绎当天的情景，向学员提问，把他们拉进剧情。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="4">
+        <div class="tc-img"><img src="images/scene-cafe.jpg" alt="Students ordering from a teacher playing a waiter" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 4 · 12:00–13:00</span><span class="zh">第 4 间 · 12:00–13:00</span></div>
+          <h3><span class="en">Café: lunch in English</span><span class="zh">咖啡馆：英语午餐</span></h3>
+          <p><span class="en">Lunch is part of the day. Students order and chat in English with the teachers, using what they learned in the morning.</span><span class="zh">午餐也是学习的一部分。学员用英语点餐、和老师聊天，用上午学到的表达。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="5">
+        <div class="tc-img"><img src="images/scene-shop.jpg" alt="Students buying from a teacher playing the shopkeeper" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 5 · 13:00–15:00</span><span class="zh">第 5 间 · 13:00–15:00</span></div>
+          <h3><span class="en">Shop: your turn</span><span class="zh">商店：轮到你</span></h3>
+          <p><span class="en">Students take the roles. Actors stay in character and react to whatever they say: buy, ask, exchange and pay, first with hints, then alone.</span><span class="zh">学员扮演角色。演员始终保持角色，根据学员说的话即兴回应：购买、询问、换货、付款——先有提示，再独立完成。</span></p>
+        </div>
+      </article>
+      <article class="tour-card" data-stop="6">
+        <div class="tc-img"><img src="images/scene-finale.jpg" alt="A student handles a surprise from an actor while classmates cheer" loading="lazy"></div><div class="tc-body">
+          <div class="room-meta"><span class="en">Room 6 · 15:15–16:00</span><span class="zh">第 6 间 · 15:15–16:00</span></div>
+          <h3><span class="en">Challenge room: the final challenge</span><span class="zh">挑战室：终极挑战</span></h3>
+          <p><span class="en">Each student faces one unscripted moment alone with an actor. Handle it in English while classmates cheer, and walk out with the day's "I can" card.</span><span class="zh">每位学员单独面对演员的一个即兴"意外"。在同学的加油声中用英语化解，带着当天的"我能做到"卡片离开。</span></p>
+        </div>
+      </article>
       </div>
     </div>
-    <p class="j-hint" aria-hidden="true"><span class="en">Keep scrolling to walk into the next session</span><span class="zh">继续向下滑动，走进下一个环节</span></p>
-
-    <section class="scene room" data-room="0">
-      <img src="images/scene-live-talk.jpg" alt="Live talk: two hosts on stage in front of the class" loading="lazy" style="object-position: 50% 40%">
-      <div class="wrap"><div class="room-text">
-        <div class="room-meta"><span>01 / 04</span><span>09:30–10:30</span></div>
-        <h3><span class="en">The live talk</span><span class="zh">现场对谈</span></h3>
-        <p><span class="en">Two hosts sit down on stage and talk the topic through live, in Chinese, like a TED talk or a podcast recorded in front of an audience. They cover the mistakes Chinese speakers make, the phrases natives use most, and the logic behind them, with English woven into the conversation. Students can put their hands up and ask.</span><span class="zh">两位主持人在舞台上现场对谈，就像一场 TED 演讲或现场录制的播客。他们用中文聊当天的主题：中国人常犯的错误、母语者最常用的表达，以及背后的逻辑，英文表达自然穿插其中。学员可以随时举手提问。</span></p>
-        <p class="room-example">"这个多少钱"别说 This how much money，要说 <mark>How much is this?</mark></p>
-      </div></div>
-    </section>
-
-    <section class="scene room" data-room="1">
-      <img src="images/scene-show.jpg" alt="Inside an immersive classroom set as a night market, an actor turns to talk to a student" loading="lazy">
-      <div class="wrap"><div class="room-text">
-        <div class="room-meta"><span>02 / 04</span><span>10:45–12:00</span></div>
-        <h3><span class="en">The scene comes alive</span><span class="zh">情景演绎</span></h3>
-        <p><span class="en">The classroom becomes the scene. Native-speaking actors play it out live, all around the students. They talk to the audience, ask questions and pull students into the story, so everyone hears real English at real speed.</span><span class="zh">教室变成真实场景。外籍演员在学员身边现场演绎当天的情景。他们会和观众说话、向学员提问、把学员拉进剧情，让每个人听到真实语速的地道英语。</span></p>
-        <p class="room-example"><span class="en">Today: a tourist haggles at a Sanya night market, then the stallholder turns to a student: </span><span class="zh">今天：游客在三亚夜市讲价，摊主突然转向一位学员：</span><mark>"What do you think, is fifty a good price?"</mark></p>
-      </div></div>
-    </section>
-
-    <section class="scene room" data-room="2">
-      <img src="images/scene-shop.jpg" alt="Students buying sunglasses and a hat from a teacher playing the shopkeeper" loading="lazy">
-      <div class="wrap"><div class="room-text">
-        <div class="room-meta"><span>03 / 04</span><span>13:00–15:00</span></div>
-        <h3><span class="en">Your turn</span><span class="zh">轮到你</span></h3>
-        <p><span class="en">After lunch, the students take the roles. The actors stay in character and react to whatever students say, so every conversation is different. Students buy, ask, exchange and pay, first with hints, then on their own.</span><span class="zh">午饭后，轮到学员扮演角色。演员始终保持角色，根据学员说的话即兴回应，所以每段对话都不一样。学员完成购买、询问、换货和付款——先有提示，再独立完成。</span></p>
-        <p class="room-example"><mark>Do you have this in a bigger size?</mark> · <mark>Can I pay by WeChat?</mark></p>
-      </div></div>
-    </section>
-
-    <section class="scene room" data-room="3">
-      <img src="images/scene-finale.jpg" alt="A student confidently handles a surprise from an actor while classmates cheer" loading="lazy">
-      <div class="wrap"><div class="room-text">
-        <div class="room-meta"><span>04 / 04</span><span>15:15–16:00</span></div>
-        <h3><span class="en">The final challenge</span><span class="zh">终极挑战</span></h3>
-        <p><span class="en">Each student faces one unscripted moment alone with an actor: the size is sold out, the price is wrong, the stall is closing. Handle it in English while classmates cheer, and walk out with the day's "I can" card. Parents get a note on what was covered.</span><span class="zh">每位学员单独面对演员的一个即兴"意外"：尺码卖完了、价格算错了、摊位要收摊了。在同学的加油声中用英语化解，带着当天的"我能做到"卡片自信离开。家长会收到当天学习内容的反馈。</span></p>
-        <p class="room-example"><span class="en">Today I can ask the price, ask for another size and pay politely, even when something goes wrong.</span><span class="zh">今天我能询问价格、要求换尺码并礼貌付款——即使出了意外也不慌。</span></p>
-      </div></div>
-    </section>
-   </div>
   </section>
 
   <section class="section" id="rooms">
@@ -750,12 +758,12 @@ form.trial h3 { font-size: 1.5rem; }
       </div>
       <div class="teachers">
         <div>
-          <span class="label"><span class="en">Stage 1</span><span class="zh">第 1 步</span></span>
+          <span class="label"><span class="en">Live talk stage</span><span class="zh">对谈舞台</span></span>
           <h3><span class="en">Chinese teachers: live talk hosts</span><span class="zh">中教：对谈主持</span></h3>
           <p><span class="en">English-major graduates who know exactly where Chinese speakers go wrong. On stage, two of them talk it through live and explain why in plain Chinese.</span><span class="zh">英语专业出身，清楚中国学生容易在哪里出错，两人在台上现场对谈，用通俗的中文讲清原因。</span></p>
         </div>
         <div>
-          <span class="label"><span class="en">Stages 2–4</span><span class="zh">第 2–4 步</span></span>
+          <span class="label"><span class="en">Market hall · Café · Shop · Challenge room</span><span class="zh">夜市大厅 · 咖啡馆 · 商店 · 挑战室</span></span>
           <h3><span class="en">Native speakers: the actors</span><span class="zh">外教：情景演员</span></h3>
           <p><span class="en">They perform each scene and stay in character as stallholders, waiters and hotel guests, reacting to whatever students say. All hold a degree, a CELTA or TEFL certificate and a Chinese work permit.</span><span class="zh">他们演绎每个场景，始终以摊主、服务员、酒店客人等角色回应学员说的每一句话。均持有学位、CELTA 或 TEFL 证书及中国工作许可。</span></p>
         </div>
@@ -946,66 +954,77 @@ form.trial h3 { font-size: 1.5rem; }
   // Scroll-driven: solid header, gentle photo parallax, floor-plan route
   var header = document.getElementById('site-header');
   var frames = Array.prototype.slice.call(document.querySelectorAll('.bleed > img'));
-  var journey = document.getElementById('day-track');
-  var scenes = Array.prototype.slice.call(journey.querySelectorAll('.scene'));
-  var steps = journey.querySelectorAll('.j-step');
-  var hint = journey.querySelector('.j-hint');
-  var N = scenes.length;
-  journey.style.setProperty('--n', N);
-  if (!reduce) journey.classList.add('live');
-  var route = document.getElementById('route'), dot = document.getElementById('route-dot');
-  var zones = document.querySelectorAll('.plan [data-zone]'), stepEl = document.getElementById('plan-step');
-  var routeLen = route.getTotalLength ? route.getTotalLength() : 0;
+  var tour = document.getElementById('tour');
+  var cam = document.getElementById('tour-cam');
+  var you = document.getElementById('fp-you');
+  var routeEl = document.getElementById('fp-route');
+  var tourCards = Array.prototype.slice.call(tour.querySelectorAll('.tour-card'));
+  var roomOrder = ['entrance', 'stage', 'market', 'cafe', 'shop', 'challenge'];
+  var roomEls = {}; roomOrder.forEach(function (k) { roomEls[k] = tour.querySelectorAll('[data-room="' + k + '"]'); });
+  var ROUTE = [[180, 712], [180, 540], [180, 180], [490, 180], [810, 180], [810, 540], [490, 540], [490, 712]];
+  var STOPS = [1, 2, 3, 4, 5, 6];            // indexes into ROUTE for rooms 1-6
+  var cum = [0];
+  for (var q = 1; q < ROUTE.length; q++) cum.push(cum[q - 1] + Math.abs(ROUTE[q][0] - ROUTE[q - 1][0]) + Math.abs(ROUTE[q][1] - ROUTE[q - 1][1]));
+  var TOTAL = cum[cum.length - 1];
+  function pointAt(len) {
+    for (var q = 1; q < ROUTE.length; q++) {
+      if (len <= cum[q]) { var k = (len - cum[q - 1]) / (cum[q] - cum[q - 1] || 1);
+        return [ROUTE[q - 1][0] + (ROUTE[q][0] - ROUTE[q - 1][0]) * k, ROUTE[q - 1][1] + (ROUTE[q][1] - ROUTE[q - 1][1]) * k]; }
+    }
+    return ROUTE[ROUTE.length - 1];
+  }
+  var K = 7; // overview + 6 rooms
+  if (!reduce) tour.classList.add('live');
   var ticking = false;
   var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
   var smooth = function (v) { v = clamp(v); return v * v * (3 - 2 * v); };
 
-  function journeyFrame(vh) {
-    if (!journey.classList.contains('live')) return;
-    var r = journey.getBoundingClientRect();
-    var range = journey.offsetHeight - vh;
+  function tourFrame(W, H) {
+    if (!tour.classList.contains('live')) return;
+    var r = tour.getBoundingClientRect();
+    var range = tour.offsetHeight - H;
     var scrolled = Math.max(0, Math.min(range, -r.top));
-    // a little dwell at the end so the last session can be read
-    var raw = scrolled / range * (N - 0.6);
-    var P = Math.min(N - 1, raw);
-    var i = Math.min(N - 1, Math.floor(P)), t = i === N - 1 ? raw - (N - 1) : P - i;
-    var u = i < N - 1 ? smooth((t - 0.58) / 0.42) : 0;   // doorway transition into the next scene
+    var P = Math.min(K - 1, scrolled / range * (K - 1 + 0.35));
+    var i = Math.min(K - 1, Math.floor(P)), t = P - i;
+    var e = i < K - 1 ? smooth((t - 0.38) / 0.62) : 0;
 
-    scenes.forEach(function (sc, k) {
-      var img = sc.querySelector('img'), txt = sc.querySelector('.room-text');
-      if (k === i) {
-        sc.classList.add('on'); sc.style.zIndex = 1; sc.style.clipPath = 'none';
-        img.style.transform = 'scale(' + (1.04 + 0.1 * t + 0.32 * u).toFixed(4) + ')';
-        img.style.filter = 'brightness(' + (1 - 0.45 * u).toFixed(3) + ')';
-        var tin = k === 0 ? 1 : smooth(t / (i === N - 1 ? 0.1 : 0.14)), tout = smooth((t - 0.5) / 0.14);
-        if (i === N - 1) tout = 0;
-        txt.style.opacity = (tin * (1 - tout)).toFixed(3);
-        txt.style.transform = 'translateY(' + ((1 - tin) * 28 - tout * 28).toFixed(1) + 'px)';
-      } else if (k === i + 1 && u > 0) {
-        sc.classList.add('on'); sc.style.zIndex = 2;
-        var ix = ((1 - u) * 40).toFixed(2), iy = ((1 - u) * 34).toFixed(2), rad = ((1 - u) * 18).toFixed(1);
-        sc.style.clipPath = 'inset(' + iy + '% ' + ix + '% round ' + rad + 'px)';
-        img.style.transform = 'scale(' + (1.32 - 0.28 * u).toFixed(4) + ')';
-        img.style.filter = 'none';
-        txt.style.opacity = 0;
-      } else {
-        sc.classList.remove('on');
-      }
+    // layout: where the map is visible
+    var mobile = W < 760, headerH = 68;
+    var ax0, ax1, ay0, ay1;
+    if (mobile) { ax0 = 0; ax1 = W; ay0 = headerH; ay1 = H * 0.5; }
+    else { ax0 = Math.min(W * 0.36, 420) + 40; ax1 = W; ay0 = headerH; ay1 = H; }
+    var aw = ax1 - ax0, ah = ay1 - ay0, cxs = (ax0 + ax1) / 2, cys = (ay0 + ay1) / 2;
+    var s0 = Math.min(aw * 0.92 / 1000, ah * 0.9 / 720);
+    var sStop = Math.min(s0 * 2.3, Math.min(aw, ah) * 0.92 / 330);
+    var overview = [500, 360];
+    var lenOf = function (idx) { return idx === 0 ? cum[1] : cum[STOPS[idx - 1]]; };
+    var cx, cy, sc, len;
+    if (i === 0) {
+      var target = ROUTE[STOPS[0]];
+      cx = overview[0] + (target[0] - overview[0]) * e; cy = overview[1] + (target[1] - overview[1]) * e;
+      sc = s0 + (sStop - s0) * e; len = lenOf(0) * e;
+      if (e === 0) { cx = overview[0]; cy = overview[1]; sc = s0; }
+    } else {
+      len = lenOf(i) + (i < K - 1 ? (lenOf(i + 1) - lenOf(i)) * e : 0);
+      var pt = pointAt(len); cx = pt[0]; cy = pt[1];
+      sc = sStop * (1 - 0.24 * Math.sin(Math.PI * e));
+    }
+    cam.style.transform = 'translate(' + (cxs - cx * sc).toFixed(1) + 'px,' + (cys - cy * sc).toFixed(1) + 'px) scale(' + sc.toFixed(4) + ')';
+    var you_pt = pointAt(Math.max(len, 0.001));
+    if (i === 0 && e === 0) you_pt = ROUTE[0];
+    you.setAttribute('transform', 'translate(' + you_pt[0].toFixed(1) + ' ' + you_pt[1].toFixed(1) + ')');
+    routeEl.style.strokeDashoffset = (1 - len / TOTAL).toFixed(4);
+
+    var active = Math.min(K - 1, i + (e > 0.5 ? 1 : 0));
+    tourCards.forEach(function (c, k) {
+      var o = k === active ? (i < K - 1 ? Math.abs(1 - 2 * e) : 1) : 0;
+      c.style.opacity = o.toFixed(3);
+      c.style.visibility = o > 0.01 ? 'visible' : 'hidden';
     });
-
-    var active = Math.min(N - 1, i + (u > 0.5 ? 1 : 0));
-    steps.forEach(function (st, k) {
-      var f = k < i ? 1 : k === i ? (i === N - 1 ? 1 : clamp(t)) : 0;
-      st.style.setProperty('--f', f.toFixed(3));
-      st.classList.toggle('on', k === active);
+    roomOrder.forEach(function (k, idx) {
+      var on = active === idx + 1 && e < 0.5 || active === idx + 1 && e >= 0.5;
+      Array.prototype.forEach.call(roomEls[k], function (el) { el.classList.toggle('on', active === idx + 1); });
     });
-    if (hint) hint.style.opacity = (P < 0.25 ? 1 : 0);
-
-    var prog = P / (N - 1);
-    route.style.strokeDashoffset = (1 - prog).toFixed(4);
-    if (routeLen) { var pt = route.getPointAtLength(routeLen * prog); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
-    zones.forEach(function (z) { z.classList.toggle('on', +z.getAttribute('data-zone') === active); });
-    stepEl.textContent = (active + 1) + ' / ' + N;
   }
 
   function update() {
@@ -1020,7 +1039,7 @@ form.trial h3 { font-size: 1.5rem; }
         img.style.transform = 'translate3d(0,' + (p * 60).toFixed(1) + 'px,0) scale(1.08)';
       });
     }
-    journeyFrame(vh);
+    tourFrame(window.innerWidth, vh);
   }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   window.addEventListener('scroll', onScroll, { passive: true });
