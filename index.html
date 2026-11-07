@@ -6,6 +6,10 @@
 <title>Coral Bay English</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Coral Bay English — English classes for children, teens and adults in Sanya, Hainan. 三亚珊瑚湾英语：少儿、青少年及成人英语课程。">
+<meta property="og:title" content="Coral Bay English 珊瑚湾英语 · Sanya">
+<meta property="og:description" content="English classes for children, teens and adults in Sanya. 三亚少儿、青少年及成人英语课程。">
+<meta property="og:image" content="images/hero.jpg">
+<meta property="og:type" content="website">
 <style>
 /* Layout: classic school site. Utility bar, white header, split hero with photo, alternating white / tinted sections in a 1160px column, multi-column footer. */
 :root {
@@ -17,9 +21,9 @@
   --brand: #0f4552;        /* deep teal-navy */
   --brand-ink: #ffffff;
   --brand-soft: #e7eff1;
-  --accent: #9a6a1c;       /* muted gold, used sparingly */
+  --accent: #85590f;       /* muted gold, used sparingly */
   --ph: #e9eef0;           /* photo placeholder */
-  --ph-ink: #6f8087;
+  --ph-ink: #5c6e75;
 
   --font: "Helvetica Neue", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
 
@@ -78,7 +82,7 @@ a { color: var(--brand); }
 .utility { background: var(--brand); color: var(--brand-ink); font-size: 0.8125rem; }
 .utility .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 38px; }
 .utility-info { display: flex; gap: 22px; flex-wrap: wrap; opacity: .92; min-width: 0; }
-.lang-btn { background: none; border: 0; color: inherit; font: 500 0.8125rem/1 var(--font); cursor: pointer; padding: 6px 0; white-space: nowrap; }
+.lang-btn { background: none; border: 0; color: inherit; font: 500 0.875rem/1 var(--font); cursor: pointer; padding: 0 4px; min-height: 40px; min-width: 44px; white-space: nowrap; }
 .lang-btn b { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 640px) { .utility-info .hide-sm { display: none; } }
 
@@ -193,7 +197,7 @@ details p { padding: 0 0 20px; color: var(--muted); max-width: 70ch; }
 .contact-item .label { font-size: var(--fs-sm); color: var(--muted); }
 .contact-item .value { font-size: var(--fs-lg); font-weight: 600; word-break: break-word; }
 .copy-line { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.copy-btn { font: 500 0.8rem/1 var(--font); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+.copy-btn { font: 500 0.85rem/1 var(--font); padding: 0 14px; min-height: 40px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
 .copy-btn:hover { border-color: var(--brand); }
 .qr-row { display: flex; gap: 18px; align-items: center; margin-top: 6px; }
 .qr-row .photo { width: 112px; flex: none; }
@@ -216,15 +220,45 @@ form.trial h3 { font-size: var(--fs-h3); }
 .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
 .foot-grid > * { min-width: 0; }
 .foot-grid h4 { margin-bottom: 12px; font-size: 0.95rem; }
-.foot-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.foot-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.foot-grid li { padding-block: 5px; }
 .foot-grid p { opacity: .85; max-width: 36ch; }
 .site-footer a { color: inherit; opacity: .85; text-decoration: none; }
 .site-footer a:hover { opacity: 1; text-decoration: underline; }
 .foot-base { margin-top: 36px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--brand-ink) 20%, transparent); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; opacity: .8; }
 @media (max-width: 760px) { .foot-grid { grid-template-columns: 1fr 1fr; } .foot-grid > :first-child { grid-column: 1 / -1; } }
+
+/* Skip link */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 50; background: var(--brand); color: var(--brand-ink); padding: 10px 16px; border-radius: var(--radius); }
+.skip:focus { top: calc(12px + env(safe-area-inset-top, 0px)); }
+
+/* Map links */
+.map-links { display: flex; gap: 16px; flex-wrap: wrap; font-size: var(--fs-sm); }
+.map-links a { display: inline-flex; align-items: center; min-height: 40px; font-weight: 600; }
+
+/* Timetable hint on narrow screens */
+.swipe-hint { display: none; margin-bottom: 10px; color: var(--muted); font-size: var(--fs-sm); }
+@media (max-width: 700px) { .swipe-hint { display: block; } }
+
+/* Field errors */
+.field input[aria-invalid="true"] { border-color: #b3261e; }
+
+/* Mobile action bar: WeChat + booking always one tap away */
+.action-bar { display: none; }
+@media (max-width: 760px) {
+  .action-bar {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+    background: var(--bg); border-top: 1px solid var(--line);
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    box-shadow: 0 -6px 18px -12px rgba(0,0,0,.25);
+  }
+  .action-bar .btn { width: 100%; min-height: 46px; padding-inline: 10px; }
+  body { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
 
 <div class="utility">
   <div class="wrap">
@@ -241,7 +275,7 @@ form.trial h3 { font-size: var(--fs-h3); }
 
 <header class="site-header">
   <div class="wrap nav">
-    <a class="brand" href="#top">
+    <a class="brand" href="#main">
       <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
         <rect width="40" height="40" rx="6" fill="#0f4552"/>
         <path d="M8 24c4-3 8-3 12 0s8 3 12 0" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
@@ -268,7 +302,7 @@ form.trial h3 { font-size: var(--fs-h3); }
   </div>
 </header>
 
-<main id="top">
+<main id="main">
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
@@ -439,6 +473,7 @@ form.trial h3 { font-size: var(--fs-h3); }
         <h2><span class="en">After school and at weekends</span><span class="zh">放学后及周末上课</span></h2>
         <p><span class="en">Times are Beijing time. Terms follow the Hainan school calendar.</span><span class="zh">以下为北京时间，学期安排与海南中小学校历同步。</span></p>
       </div>
+      <p class="swipe-hint" aria-hidden="true"><span class="en">Swipe the table sideways to see every day →</span><span class="zh">左右滑动表格查看全部日期 →</span></p>
       <div class="table-scroll">
         <table>
           <thead><tr>
@@ -496,7 +531,11 @@ form.trial h3 { font-size: var(--fs-h3); }
           <div class="contact-item"><span class="label"><span class="en">Telephone</span><span class="zh">电话</span></span>
             <div class="copy-line"><span class="value" id="phone-num">+86 000 0000 0000</span><button class="copy-btn" type="button" data-copy="phone-num"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
           <div class="contact-item"><span class="label"><span class="en">Address</span><span class="zh">地址</span></span>
-            <span class="value"><span class="en">Street address, Jiyang District, Sanya, Hainan</span><span class="zh">海南省三亚市吉阳区（详细地址）</span></span></div>
+            <span class="value"><span class="en">Street address, Jiyang District, Sanya, Hainan</span><span class="zh">海南省三亚市吉阳区（详细地址）</span></span>
+            <div class="map-links">
+              <a href="https://uri.amap.com/search?keyword=%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Amap</span><span class="zh">高德地图导航</span></a>
+              <a href="https://map.baidu.com/search/%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Baidu Maps</span><span class="zh">百度地图导航</span></a>
+            </div></div>
           <div class="contact-item"><span class="label"><span class="en">Office hours</span><span class="zh">办公时间</span></span>
             <span class="value"><span class="en">Mon–Fri 14:00–21:00 · Sat–Sun 09:00–18:00</span><span class="zh">周一至周五 14:00–21:00 · 周六日 09:00–18:00</span></span></div>
           <div class="qr-row">
@@ -511,9 +550,9 @@ form.trial h3 { font-size: var(--fs-h3); }
         <h3><span class="en">Trial lesson request</span><span class="zh">试听课预约</span></h3>
         <div class="row-2">
           <div class="field"><label for="f-name"><span class="en">Your name</span><span class="zh">您的姓名</span></label>
-            <input id="f-name" name="name" required autocomplete="name" data-ph-en="e.g. Ms Wang" data-ph-zh="例如：王女士"></div>
+            <input id="f-name" name="name" required aria-describedby="form-error" autocomplete="name" data-ph-en="e.g. Ms Wang" data-ph-zh="例如：王女士"></div>
           <div class="field"><label for="f-contact"><span class="en">Phone or WeChat</span><span class="zh">电话或微信</span></label>
-            <input id="f-contact" name="contact" required data-ph-en="So we can reply" data-ph-zh="方便我们回复您"></div>
+            <input id="f-contact" name="contact" required aria-describedby="form-error" data-ph-en="So we can reply" data-ph-zh="方便我们回复您"></div>
         </div>
         <div class="row-2">
           <div class="field"><label for="f-age"><span class="en">Student's age</span><span class="zh">学员年龄</span></label>
@@ -542,6 +581,11 @@ form.trial h3 { font-size: var(--fs-h3); }
     </div>
   </section>
 </main>
+
+<div class="action-bar">
+  <button class="btn btn-outline" type="button" data-copy="wechat-id"><span class="en">Copy WeChat ID</span><span class="zh">复制微信号</span></button>
+  <a class="btn btn-primary" href="#contact"><span class="en">Book a trial</span><span class="zh">预约试听</span></a>
+</div>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -587,7 +631,8 @@ form.trial h3 { font-size: var(--fs-h3); }
   }
   var saved = null;
   try { saved = localStorage.getItem('cbe-lang'); } catch (e) {}
-  applyLang(saved === 'zh' ? 'zh' : 'en');
+  var browserZh = /^zh/i.test(navigator.language || '');
+  applyLang(saved === 'zh' || saved === 'en' ? saved : (browserZh ? 'zh' : 'en'));
   document.getElementById('lang-btn').addEventListener('click', function () {
     applyLang(root.getAttribute('data-lang') === 'zh' ? 'en' : 'zh');
   });
@@ -624,7 +669,9 @@ form.trial h3 { font-size: var(--fs-h3); }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = form.elements, err = document.getElementById('form-error');
-    if (!f.name.value.trim() || !f.contact.value.trim()) { err.hidden = false; return; }
+    var missing = [f.name, f.contact].filter(function (x) { return !x.value.trim(); });
+    [f.name, f.contact].forEach(function (x) { x.setAttribute('aria-invalid', missing.indexOf(x) > -1 ? 'true' : 'false'); });
+    if (missing.length) { err.hidden = false; missing[0].focus(); return; }
     err.hidden = true;
     var zh = root.getAttribute('data-lang') === 'zh';
     var course = f.course.options[f.course.selectedIndex].textContent;
