@@ -14,3 +14,4 @@ Replace each with a real photo of the same name once your rooms and shows exist
 | scene-finale.jpg | Stage 4 "The final challenge" |
 | scene-cafe.jpg, scene-hotel.jpg | Gallery |
 | room-cafe.jpg | Contact section background |
+| walk-entrance.jpg … walk-challenge.jpg | First-person corridor views used in the scroll walk-through: you walk towards each doorway, then step through into the room |
