@@ -1,17 +1,17 @@
 # Images
 
-All images are AI-generated concept renders (made in Figma), labelled as such in the site footer.
-Replace each with a real photo of the same name once your rooms and shows exist
-(landscape, about 1600 × 900, compressed to under ~300 KB), then remove the footer note in index.html.
+All images are AI-generated concept renders (made in Figma) of the planned warehouse school,
+labelled as such in the site footer. Replace each with a real photo of the same name once the
+warehouse is fitted out (landscape, about 1600 × 900, under ~300 KB), then remove the footer note.
 
 | File | Where it appears |
 |---|---|
-| scene-school.jpg | Full-screen opening image (the school learning commons) |
-| scene-rain.jpg | Storm room in the gallery |
-| scene-live-talk.jpg | Stage 1 "The live talk" |
-| scene-show.jpg | Stage 2 "The scene comes alive" (actors in the night-market room); gallery |
-| scene-shop.jpg | Stage 3 "Your turn"; gallery |
-| scene-finale.jpg | Stage 4 "The final challenge" |
-| scene-cafe.jpg, scene-hotel.jpg | Gallery |
-| room-cafe.jpg | Contact section background |
-| walk-entrance.jpg … walk-challenge.jpg | First-person corridor views used in the scroll walk-through: you walk towards each doorway, then step through into the room |
+| wh-arrival.jpg | Opening view: standing inside the warehouse entrance |
+| wh-welcome.jpg | Welcome zone |
+| wh-path-live.jpg … wh-path-challenge.jpg | Walkway views towards each next zone (scroll walk-through) |
+| wh-live.jpg | Live talk stage |
+| wh-market.jpg | Night market zone; gallery |
+| wh-cafe.jpg | Café zone; gallery; contact background |
+| wh-shop.jpg | Beach shop zone; gallery |
+| wh-challenge.jpg | Challenge zone |
+| wh-storm.jpg, wh-hotel.jpg | Gallery (other topics) |
