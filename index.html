@@ -3,10 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Coral Bay English</title>
+<title>Maddie English Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Coral Bay English — experience-based English in Sanya. One full-day session per topic: a live talk in Chinese, then actors bring the topic to life around you in an immersive classroom, and you step into the scene. 三亚珊瑚湾英语：每天一个主题，下课就能用。">
-<meta property="og:title" content="Coral Bay English 珊瑚湾英语 · Sanya">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2226%22%20fill%3D%22%2316120f%22/%3E%3Cg%20transform%3D%22translate%2818%2020%29%20scale%28.7%29%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23efe6da%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%20102%20V58%20A19%2019%200%200%201%2060%2058%20A19%2019%200%200%201%2098%2058%20V102%20M60%2058%20V102%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2279%22%20cy%3D%2221%22%20r%3D%229%22%20fill%3D%22%23c9a46a%22/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#16120f">
+<meta name="description" content="Maddie English Lab — experience-based English in Sanya. One full-day session per topic: a live talk in Chinese, then actors bring the topic to life around you in an immersive classroom, and you step into the scene. 三亚麦迪英语：每天一个主题，下课就能用。">
+<meta property="og:title" content="Maddie English Lab 麦迪英语 · Sanya">
 <meta property="og:description" content="One topic a day. Walk out using it. 每天一个主题，下课就能用。">
 <meta property="og:image" content="images/wh-arrival.jpg">
 <meta property="og:type" content="website">
@@ -513,6 +515,13 @@ a { text-underline-offset: 3px; }
 .tilt:hover .card-img img { transform: none; }
 @media (hover: hover) and (pointer: fine) { .tilt:hover .card-img img { transform: scale(1.03); } }
 .btn:active, .copy-btn:active, .lab-opt:active, .tab:active { transition-duration: .1s; }
+
+.brand { gap: 10px; letter-spacing: 0; text-transform: none; }
+.brand svg { width: 30px; height: 30px; }
+.brand-word { font-family: var(--display); font-size: 1.7rem; line-height: 1; color: var(--fg); }
+.brand-sub { font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); padding-top: 6px; }
+:root[data-lang="zh"] .brand-sub { letter-spacing: .12em; }
+@media (max-width: 420px) { .brand-sub { display: none; } }
 </style>
 </head>
 <body>
@@ -520,14 +529,9 @@ a { text-underline-offset: 3px; }
 
 <header class="site-header" id="site-header">
   <div class="wrap nav">
-    <a class="brand" href="#main" aria-label="Coral Bay English">
-      <svg viewBox="0 0 40 40" aria-hidden="true">
-        <rect x="1" y="1" width="38" height="38" fill="none" stroke="#c9a46a" stroke-width="1.5"/>
-        <path d="M8 24c4-3 8-3 12 0s8 3 12 0" stroke="#efe6da" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <path d="M8 30c4-3 8-3 12 0s8 3 12 0" stroke="#c9a46a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <circle cx="20" cy="14" r="3.5" fill="#efe6da"/>
-      </svg>
-      <span><b><span class="en">Coral Bay</span><span class="zh">珊瑚湾</span></b> <span class="en">English</span><span class="zh">英语</span></span>
+    <a class="brand" href="#main" aria-label="Maddie English Lab">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="#efe6da" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path d="M22 102 V58 A19 19 0 0 1 60 58 A19 19 0 0 1 98 58 V102 M60 58 V102"/></g><circle cx="79" cy="21" r="8" fill="#c9a46a"/></svg>
+      <span class="brand-word">Maddie</span><span class="brand-sub"><span class="en">English Lab</span><span class="zh">麦迪英语</span></span>
     </a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#day"><span class="en">Walk in</span><span class="zh">走进学校</span></a></li>
@@ -566,7 +570,7 @@ a { text-underline-offset: 3px; }
       <div class="walk-shade" aria-hidden="true"></div>
       <div class="film" aria-hidden="true"><i class="bar top"></i><i class="bar bottom"></i><i class="grain"></i><i class="vignette"></i></div>
       <div class="wt wt-hero" data-k="0">
-        <span class="label"><span class="en">Coral Bay English presents</span><span class="zh">珊瑚湾英语 出品</span></span>
+        <span class="label"><span class="en">Maddie English Lab presents</span><span class="zh">麦迪英语 出品</span></span>
         <h1><span class="en">One topic a day. <em>Walk out using it.</em></span><span class="zh">每天一个主题，<em>下课就能用。</em></span></h1>
         <p class="hero-lede"><span class="en">A live talk, phrase prep, then themed lab rooms where actors only answer correct English. Scroll to walk through a day.</span><span class="zh">现场对谈、表达准备，然后走进主题实验室：演员只回应正确的英语。向下滑动，走一遍一天的课程。</span></p>
         <div class="hero-actions">
@@ -902,7 +906,7 @@ a { text-underline-offset: 3px; }
           </ul>
         </div>
         <div class="new">
-          <h3><span class="en">A Coral Bay day</span><span class="zh">珊瑚湾的一天</span></h3>
+          <h3><span class="en">A Maddie day</span><span class="zh">麦迪的一天</span></h3>
           <ul>
             <li><span class="en">Phrases learned inside one real situation</span><span class="zh">在一个真实场景里学整句表达</span></li>
             <li><span class="en">The logic explained in Chinese</span><span class="zh">用中文讲清英语为什么这样说</span></li>
@@ -1073,14 +1077,14 @@ a { text-underline-offset: 3px; }
         </div>
         <div class="contact-list">
           <div class="contact-item"><span class="k"><span class="en">WeChat</span><span class="zh">微信号</span></span>
-            <div class="copy-line"><span class="v" id="wechat-id">CoralBayEnglish</span><button class="copy-btn" type="button" data-copy="wechat-id"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
+            <div class="copy-line"><span class="v" id="wechat-id">MaddieEnglish</span><button class="copy-btn" type="button" data-copy="wechat-id"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
           <div class="contact-item"><span class="k"><span class="en">Telephone</span><span class="zh">电话</span></span>
             <div class="copy-line"><span class="v" id="phone-num">+86 000 0000 0000</span><button class="copy-btn" type="button" data-copy="phone-num"><span class="en">Copy</span><span class="zh">复制</span></button></div></div>
           <div class="contact-item"><span class="k"><span class="en">Address</span><span class="zh">地址</span></span>
             <span class="v"><span class="en">Street address, Jiyang District, Sanya, Hainan</span><span class="zh">海南省三亚市吉阳区（详细地址）</span></span>
             <div class="map-links">
-              <a href="https://uri.amap.com/search?keyword=%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Amap</span><span class="zh">高德地图导航</span></a>
-              <a href="https://map.baidu.com/search/%E4%B8%89%E4%BA%9A%20%E7%8F%8A%E7%91%9A%E6%B9%BE%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Baidu Maps</span><span class="zh">百度地图导航</span></a>
+              <a href="https://uri.amap.com/search?keyword=%E4%B8%89%E4%BA%9A%20%E9%BA%A6%E8%BF%AA%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Amap</span><span class="zh">高德地图导航</span></a>
+              <a href="https://map.baidu.com/search/%E4%B8%89%E4%BA%9A%20%E9%BA%A6%E8%BF%AA%E8%8B%B1%E8%AF%AD" target="_blank" rel="noopener"><span class="en">Open in Baidu Maps</span><span class="zh">百度地图导航</span></a>
             </div></div>
           <div class="contact-item"><span class="k"><span class="en">Opening hours</span><span class="zh">营业时间</span></span>
             <span class="v"><span class="en">Every day 09:00–17:00</span><span class="zh">每天 09:00–17:00</span></span></div>
@@ -1112,7 +1116,7 @@ a { text-underline-offset: 3px; }
         <button class="btn btn-solid" type="submit"><span class="en">Prepare request</span><span class="zh">生成预约信息</span></button>
         <p class="err" id="form-error" hidden role="alert"><span class="en">Please enter your name and a phone number or WeChat ID.</span><span class="zh">请填写姓名及电话或微信号。</span></p>
         <div class="result" id="result" hidden aria-live="polite">
-          <strong><span class="en">Your request is ready. Copy it and send it to us on WeChat (CoralBayEnglish).</span><span class="zh">预约信息已生成，请复制后通过微信（CoralBayEnglish）发送给我们。</span></strong>
+          <strong><span class="en">Your request is ready. Copy it and send it to us on WeChat (MaddieEnglish).</span><span class="zh">预约信息已生成，请复制后通过微信（MaddieEnglish）发送给我们。</span></strong>
           <pre id="result-text"></pre>
           <div><button class="copy-btn" type="button" data-copy="result-text"><span class="en">Copy request</span><span class="zh">复制信息</span></button></div>
         </div>
@@ -1130,7 +1134,7 @@ a { text-underline-offset: 3px; }
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <h4><span class="en">Coral Bay English</span><span class="zh">珊瑚湾英语</span></h4>
+        <h4><span class="en">Maddie English Lab</span><span class="zh">麦迪英语</span></h4>
         <p style="max-width:36ch"><span class="en">Experience-based English in Sanya. One topic a day: understand it, see it, use it.</span><span class="zh">三亚情景体验式英语。每天一个主题：听懂、看到、用出来。</span></p>
       </div>
       <div>
@@ -1145,13 +1149,13 @@ a { text-underline-offset: 3px; }
         <h4><span class="en">Contact</span><span class="zh">联系方式</span></h4>
         <ul>
           <li><span class="en">Tel</span><span class="zh">电话</span>: +86 000 0000 0000</li>
-          <li><span class="en">WeChat</span><span class="zh">微信</span>: CoralBayEnglish</li>
+          <li><span class="en">WeChat</span><span class="zh">微信</span>: MaddieEnglish</li>
           <li><span class="en">Jiyang District, Sanya</span><span class="zh">三亚市吉阳区</span></li>
         </ul>
       </div>
     </div>
     <div class="foot-base">
-      <span>© 2026 <span class="en">Coral Bay English</span><span class="zh">珊瑚湾英语</span></span>
+      <span>© 2026 <span class="en">Maddie English Lab</span><span class="zh">麦迪英语</span></span>
       <span><span class="en">Images are AI concept renders.</span><span class="zh">图片为 AI 设计效果图。</span></span>
       <span>琼ICP备00000000号</span>
     </div>
