@@ -1,8 +1,9 @@
 # Maddie English Lab — logo
 
-The mark is a lowercase "m" drawn as two arched doorways (the rooms students walk through),
-with the gate light above the second door (it turns on when you say it right). It also reads as
-a person with open arms standing in a doorway.
+The mark is a speech bubble with an open doorway cut into it: you speak to get through the door.
+The brass dot above the door is the lab's gate light, which turns on when you say it right.
+Together the doorway and light also read as a small figure standing in the bubble.
+(A single doorway on purpose: no double arches, so it can't be mistaken for McDonald's.)
 
 | File | Use |
 |---|---|
