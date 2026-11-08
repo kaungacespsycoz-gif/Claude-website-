@@ -31,3 +31,6 @@ claude.ai, github.io, vercel.app and pages.dev are blocked or unreliable in Chin
 4. Copy the 默认域名 shown there and share it.
 
 Later, with your own domain + ICP filing, you can bind the domain in the same panel.
+
+## Fonts
+Headings use Instrument Serif (SIL Open Font License, `fonts/InstrumentSerif-OFL.txt`), embedded in `index.html` so it loads without any outside font host (works in mainland China).
