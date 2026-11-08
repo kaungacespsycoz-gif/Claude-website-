@@ -309,7 +309,7 @@ form.trial h3 { font-size: 1.5rem; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; scroll-snap-type: none; }
-  * { transition: none !important; }
+  * { transition-property: opacity, color, background-color, border-color !important; }
   .bleed > img { transform: none !important; }
 }
 
@@ -498,6 +498,21 @@ a { text-underline-offset: 3px; }
 .wt h1 em { display: block; }
 .card-body h3 { font-size: 1.6rem; }
 .level h3 { font-size: 2rem; }
+
+/* ===== Motion review fixes (Emil Kowalski standards) ===== */
+.site-header { transition: background-color .25s var(--ease-out), border-color .25s var(--ease-out); }
+.walk-rail li { transition: color .2s var(--ease-out); }
+.walk-rail li::after { width: 36px; transform: scaleX(.5); transform-origin: right; transition: transform .25s var(--ease-out), background-color .2s var(--ease-out); }
+.walk-rail li.on::after { width: 36px; transform: scaleX(1); }
+.walk-hint { transition: opacity .25s var(--ease-out); }
+.lab-gate i { transition: background-color .2s var(--ease-out), box-shadow .2s var(--ease-out); }
+.lab-bubble { transition: border-color .2s var(--ease-out); }
+.sub { transition: opacity .25s var(--ease-out); }
+.tilt-inner { transition: transform .25s var(--ease-out); }
+.card-img img { transition: transform .3s var(--ease-out); }
+.tilt:hover .card-img img { transform: none; }
+@media (hover: hover) and (pointer: fine) { .tilt:hover .card-img img { transform: scale(1.03); } }
+.btn:active, .copy-btn:active, .lab-opt:active, .tab:active { transition-duration: .1s; }
 </style>
 </head>
 <body>
@@ -1197,7 +1212,7 @@ a { text-underline-offset: 3px; }
     el.style.visibility = o > 0.002 ? 'visible' : 'hidden';
     var img = el.firstElementChild;
     img.style.transform = tf;
-    img.style.filter = (!lowPower && blur > 0.2) ? 'blur(' + blur.toFixed(1) + 'px)' : 'none';
+    blur = Math.min(blur, 3); img.style.filter = (!lowPower && blur > 0.2) ? 'blur(' + blur.toFixed(1) + 'px)' : 'none';
   }
 
   function walkFrame(H) {
