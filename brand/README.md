@@ -1,18 +1,16 @@
-# Maddie English Lab — logo
+# Aquaire · 海语英语 — English by the sea · 海边学英语
 
-The mark is a speech bubble with an open doorway cut into it: you speak to get through the door.
-The brass dot above the door is the lab's gate light, which turns on when you say it right.
-Together the doorway and light also read as a small figure standing in the bubble.
-(A single doorway on purpose: no double arches, so it can't be mistaken for McDonald's.)
+The mark is one circle split by a single wave: the sun over the sea. The warm half is also the
+lab rooms' gate light. Wordmark in lowercase Outfit (SIL OFL); Chinese in WenQuanYi Zen Hei.
+All lettering is outlined, so the SVGs look the same everywhere without the fonts.
 
 | File | Use |
 |---|---|
-| maddie-logo.svg / maddie-logo-sand.png | Main logo on light backgrounds |
-| maddie-logo-light.svg / maddie-logo-dark.png | Main logo on dark backgrounds |
-| maddie-logo-stacked.svg / .png | Square-ish spaces: posters, signage, the warehouse wall |
-| maddie-mark.svg / maddie-mark-light.svg | The mark alone |
-| maddie-icon.svg / maddie-icon-1024.png | WeChat avatar, app icon, favicon |
+| aquaire-logo.svg / aquaire-logo-sand.png | Main logo on light backgrounds |
+| aquaire-logo-light.svg / aquaire-logo-dark.png | Main logo on dark backgrounds |
+| aquaire-logo-stacked.svg | Posters, signage, the warehouse wall |
+| aquaire-mark.svg | The symbol alone |
+| aquaire-icon.svg / aquaire-icon-1024.png | WeChat avatar, app icon, favicon |
+| aquaire-logo-sheet.png | Overview of the set |
 
-Colours: espresso #16120f · sand #efe6da · brass #c9a46a.
-Wordmark: Instrument Serif (SIL OFL). Chinese: WenQuanYi Zen Hei. All lettering is converted to
-outlines, so the SVGs display the same everywhere without the fonts installed.
+Colours: sun #e3b061 · sea #2f8c8f · deep sea #0f2b30 · sand #f1e9dc.

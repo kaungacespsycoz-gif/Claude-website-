@@ -1,4 +1,4 @@
-# Maddie English Lab — website
+# Aquaire — website
 
 Bilingual (English / 中文) one-page website for an experience-based English school in Sanya, Hainan:
 one topic a day, taught in four stages (podcast-style explanation in Chinese, native English video, practice in a themed room, review).
@@ -8,7 +8,7 @@ Everything is in `index.html` (no build step, no external fonts or scripts, so i
 Open `index.html` in a browser, or run `python3 -m http.server` and visit http://localhost:8000.
 
 ## Things to replace before launch
-- School name (placeholder: "Maddie English Lab / 麦迪英语")
+- School name (placeholder: "Aquaire / 海语英语")
 - WeChat ID, phone number, street address, opening hours (Contact section)
 - Room images: currently concept renders; swap in real photos — see `images/README.md`
 - Timetable and course lengths
