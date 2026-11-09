@@ -1949,7 +1949,7 @@ a { text-underline-offset: 3px; }
   var NS = 'http://www.w3.org/2000/svg';
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function attachFollow(svg) {
-    if (!svg || reduceM || svg._follow) return; svg._follow = true;
+    if (!svg || svg._follow) return; svg._follow = true;
     var pps = svg.querySelectorAll('.pp'); if (!pps.length) return;
     var pp = pps[0], holder = pp.parentNode, ppIn = pp.querySelector('.pp-in');
     var tm = /translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(holder.getAttribute('transform') || '');
@@ -1966,15 +1966,16 @@ a { text-underline-offset: 3px; }
     }
     var eyes = [].slice.call(svg.querySelectorAll('.eyes circle'));
     var st = { x: 0, ex: 0, ey: 0, px: cx, py: cy, last: -1e9, run: false };
-    function toSvg(e) { var r = svg.getBoundingClientRect(), k = 320 / r.width; st.px = (e.clientX - r.left) * k; st.py = (e.clientY - r.top) * k; st.last = performance.now(); }
+    function toSvg(e) { var t = e.touches && e.touches[0] ? e.touches[0] : e.changedTouches && e.changedTouches[0] ? e.changedTouches[0] : e;
+      var r = svg.getBoundingClientRect(), k = 320 / r.width; st.px = (t.clientX - r.left) * k; st.py = (t.clientY - r.top) * k; st.last = performance.now(); return t; }
     function kick() { if (!st.run) { st.run = true; requestAnimationFrame(step); } }
     function step(now) {
       if (!svg.isConnected) { st.run = false; return; }
-      var active = now - st.last < 2200;
+      var active = now - st.last < 3200;
       var goal = active && wrap ? clamp(st.px - cx, Math.max(-75, 26 - cx), Math.min(75, 294 - cx)) : 0;
-      var vel = (goal - st.x) * .06; st.x += vel;
+      var vel = (goal - st.x) * .1; st.x += vel;
       var moving = Math.abs(vel) > .25;
-      if (wrap) wrap.setAttribute('transform', 'translate(' + st.x.toFixed(1) + ' ' + (moving ? -Math.abs(Math.sin(now / 85)) * 3.5 : 0).toFixed(1) + ')');
+      if (wrap) wrap.setAttribute('transform', 'translate(' + st.x.toFixed(1) + ' ' + (moving && !reduceM ? -Math.abs(Math.sin(now / 85)) * 3.5 : 0).toFixed(1) + ')');
       var hx = cx + st.x, dx = active ? clamp((st.px - hx) / 45, -1, 1) : 0, dy = active ? clamp((st.py - (cy - 25)) / 45, -1, 1) : 0;
       st.ex += (dx * 1.7 - st.ex) * .18; st.ey += (dy * 1.2 - st.ey) * .18;
       eyes.forEach(function (c) { c.setAttribute('transform', 'translate(' + st.ex.toFixed(2) + ' ' + st.ey.toFixed(2) + ')'); });
@@ -1982,15 +1983,21 @@ a { text-underline-offset: 3px; }
       if (active || Math.abs(goal - st.x) > .3 || Math.abs(st.ex) > .04 || Math.abs(st.ey) > .04) requestAnimationFrame(step);
       else { st.run = false; ppIn.removeAttribute('transform'); }
     }
-    svg.addEventListener('pointermove', function (e) { toSvg(e); kick(); });
-    svg.addEventListener('pointerdown', function (e) {
-      toSvg(e); kick();
+    function onMove(e) { toSvg(e); kick(); }
+    function onDown(e) {
+      var t = toSvg(e); kick();
+      var now = performance.now(); if (now - (st.lastPet || 0) < 350) return;
       var b = pp.getBoundingClientRect();
-      if (e.clientX >= b.left - 6 && e.clientX <= b.right + 6 && e.clientY >= b.top - 6 && e.clientY <= b.bottom + 6) {
+      if (t.clientX >= b.left - 8 && t.clientX <= b.right + 8 && t.clientY >= b.top - 8 && t.clientY <= b.bottom + 8) {
+        st.lastPet = now;
         svg.classList.remove('r-hop'); void svg.getBoundingClientRect(); svg.classList.add('r-hop'); say(svg, '♥ Woof!'); sparkle(svg);
         setTimeout(function () { svg.classList.remove('r-hop'); }, 600);
       }
-    });
+    }
+    ['pointermove', 'mousemove'].forEach(function (ev) { svg.addEventListener(ev, onMove); });
+    svg.addEventListener('touchmove', onMove, { passive: true });
+    svg.addEventListener('pointerdown', onDown);
+    svg.addEventListener('touchstart', onDown, { passive: true });
   }
   var scene = null;
   var topic, qi, score, picked, sel, answerWords, checked, gained, mistakes;
@@ -2141,6 +2148,8 @@ a { text-underline-offset: 3px; }
   });
   var lb = document.querySelector('.lang-btn');
   if (lb) lb.addEventListener('click', function () { setTimeout(function () { paintStats(); if (!player.hidden && !checked) show(); }, 0); });
+  var ava = document.querySelector('.pud-ava');
+  if (ava) { ava.style.cursor = 'pointer'; ava.addEventListener('click', function () { ava.classList.remove('r-hop'); void ava.getBoundingClientRect(); ava.classList.add('r-hop'); setTimeout(function () { ava.classList.remove('r-hop'); }, 600); }); }
   paintStats();
   function route() { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
   function routeOnLoad() { setTimeout(function () { route(); if (topic && !player.hidden) { var de = document.documentElement, sb = de.style.scrollBehavior; de.style.scrollBehavior = 'auto'; player.scrollIntoView({ block: 'start' }); de.style.scrollBehavior = sb; } }, 60); }
