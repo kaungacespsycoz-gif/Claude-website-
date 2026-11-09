@@ -863,6 +863,94 @@ a { text-underline-offset: 3px; }
 .wx-btn { width: 52px; height: 48px; display: grid; place-items: center; border-radius: 2px; border: 1px solid var(--line); background: transparent; color: #2fc76f; cursor: pointer; position: relative; }
 .wx-btn svg { width: 30px; height: 30px; }
 .wx-btn:active { transform: scale(.95); }
+/* ---- booking page ---- */
+.booking, .booking body { overflow: hidden; }
+.booking .action-bar { display: none !important; }
+.bk { position: fixed; inset: 0; z-index: 90; background: var(--bg); display: grid; grid-template-rows: auto 1fr auto; padding-top: env(safe-area-inset-top, 0px); }
+.bk[hidden] { display: none; }
+.bk-top { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: center; padding: 12px var(--gutter-r) 12px var(--gutter); border-bottom: 1px solid var(--line); }
+.bk-x { width: 44px; height: 44px; display: grid; place-items: center; background: none; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); cursor: pointer; }
+.bk-x svg { width: 18px; height: 18px; }
+.bk-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 420px; }
+.bk-steps i { height: 6px; border-radius: 3px; background: rgba(241,233,220,.14); transition: background .3s; }
+.bk-steps i.on { background: var(--brass); }
+.bk-stepn { color: var(--muted); font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.bk-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.bk-body { max-width: 1080px; margin: 0 auto; padding: 32px var(--gutter-r) 40px var(--gutter); display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: start; }
+.bk-main { min-width: 0; }
+.bk-step { display: grid; gap: 14px; }
+.bk-step h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; }
+.bk-lede { color: var(--muted); max-width: 56ch; }
+.bk-q { font-size: var(--fs-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--brass); font-weight: 500; margin-top: 14px; }
+:root[data-lang="zh"] .bk-q { letter-spacing: .08em; font-size: var(--fs-sm); }
+.bk-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.bk-levels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 560px) { .bk-levels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bk-chip { display: grid; gap: 4px; text-align: left; padding: 14px 16px; border-radius: 12px; border: 1.5px solid rgba(241,233,220,.16); background: linear-gradient(180deg, #17393e, #112d32); color: var(--fg); cursor: pointer; font: inherit; box-shadow: 0 4px 0 #071719; transition: transform .12s, box-shadow .12s, border-color .15s; }
+.bk-chip b { font-weight: 600; font-size: 1rem; }
+.bk-chip small { color: var(--muted); font-size: .8rem; }
+.bk-chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #071719; }
+.bk-chip[aria-pressed="true"] { border-color: var(--brass); background: linear-gradient(180deg, rgba(227,176,97,.2), rgba(227,176,97,.06)); box-shadow: 0 4px 0 #6d5126, 0 0 18px rgba(227,176,97,.15); }
+.bk-chip[aria-pressed="true"] small { color: var(--fg); }
+.bk-count { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.bk-count button:disabled { opacity: .35; cursor: default; }
+.bk-count button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg-2); color: var(--fg); font-size: 1.3rem; cursor: pointer; }
+.bk-count b { font-size: 1.6rem; min-width: 1.4ch; text-align: center; font-variant-numeric: tabular-nums; }
+.bk-count-note { color: var(--muted); font-size: var(--fs-sm); }
+/* calendar */
+.cal { border: 1px solid var(--line); border-radius: 16px; padding: 14px; background: var(--bg-2); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.cal-head b { font-family: var(--display); font-weight: 400; font-size: 1.5rem; }
+.cal-nav { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: none; color: var(--fg); cursor: pointer; }
+.cal-nav svg { width: 18px; height: 18px; }
+.cal-nav:disabled { opacity: .3; cursor: default; }
+.cal-dow, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal-dow span { text-align: center; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 4px 0; }
+.cal-day { position: relative; min-height: 64px; display: grid; align-content: start; justify-items: center; gap: 4px; padding: 7px 2px 6px; border-radius: 10px; border: 1px solid transparent; background: none; color: rgba(241,233,220,.25); font: inherit; cursor: default; }
+.cal-day b { font-size: .95rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cal-day small { font-size: .6rem; letter-spacing: -.01em; line-height: 1.1; text-align: center; color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-day .dot { width: 6px; height: 6px; border-radius: 50%; }
+.cal-day.open { color: var(--fg); background: rgba(241,233,220,.04); border-color: rgba(241,233,220,.1); cursor: pointer; }
+.cal-day.open:hover { border-color: rgba(227,176,97,.6); }
+.cal-day.today b { text-decoration: underline; text-underline-offset: 3px; }
+.cal-day.sel { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); box-shadow: 0 4px 0 #8a6a35; }
+.cal-day.sel small { color: var(--brass-ink); }
+.cal-day.empty { visibility: hidden; }
+@media (max-width: 420px) { .cal { padding: 10px 8px; } .cal-dow, .cal-grid { gap: 4px; } .cal-day { min-height: 58px; } .cal-day small { font-size: .56rem; } }
+/* details */
+.bk-form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; margin-top: 6px; }
+@media (max-width: 600px) { .bk-form { grid-template-columns: 1fr; } }
+.bk-err { color: var(--error); min-height: 1.4em; font-size: var(--fs-sm); }
+/* summary */
+.bk-sum { position: sticky; top: 0; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); }
+.bk-sum-img { aspect-ratio: 16 / 9; background: #173d42 center / cover no-repeat; position: relative; }
+.bk-sum-img span { position: absolute; left: 12px; bottom: 10px; padding: 6px 10px; border-radius: 99px; background: rgba(13,34,38,.8); color: var(--brass); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
+.bk-sum dl { margin: 0; padding: 16px 18px 18px; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: var(--fs-sm); }
+.bk-sum dt { color: var(--muted); }
+.bk-sum dd { margin: 0; text-align: right; }
+.bk-sum dd.miss { color: rgba(241,233,220,.3); }
+.bk-sum-free { padding: 0 18px 18px; color: var(--brass); font-size: var(--fs-sm); }
+@media (max-width: 860px) { .bk-body { grid-template-columns: 1fr; gap: 24px; padding-top: 22px; } .bk-sum { position: static; order: -1; display: grid; grid-template-columns: 110px 1fr; } .bk-sum-img { aspect-ratio: auto; min-height: 100%; } .bk-sum-img span { display: none; } .bk-sum dl { padding: 12px 14px; gap: 4px 12px; font-size: .8rem; } .bk-sum-free { display: none; } .bk-sum.blank { display: none; } }
+.bk-foot { display: flex; justify-content: space-between; gap: 12px; padding: 12px var(--gutter-r) calc(12px + env(safe-area-inset-bottom, 0px)) var(--gutter); border-top: 1px solid var(--line); background: rgba(13,34,38,.97); }
+.bk-foot .btn { border-radius: 12px; min-height: 52px; }
+.bk-foot #bk-next { flex: 1; max-width: 420px; margin-left: auto; box-shadow: 0 5px 0 #8a6a35; }
+.bk-foot #bk-next:disabled { opacity: .4; box-shadow: none; cursor: default; }
+.bk-foot #bk-back[hidden] { display: none; }
+/* confirmation ticket */
+.bk-done { justify-items: start; }
+.bk-ticket { width: min(520px, 100%); border-radius: 18px; overflow: hidden; background: var(--fg); color: var(--brass-ink); box-shadow: 0 24px 50px -24px rgba(0,0,0,.8); position: relative; }
+.bk-ticket .tk-img { height: 120px; background: center / cover no-repeat; }
+.bk-ticket .tk-body { padding: 18px 20px 20px; display: grid; gap: 6px; border-top: 2px dashed rgba(15,34,38,.25); }
+.bk-ticket .tk-ref { font: 600 .74rem/1 var(--font); letter-spacing: .16em; text-transform: uppercase; color: #8a6a35; }
+.bk-ticket .tk-date { font-family: var(--display); font-size: 2rem; line-height: 1.05; }
+.bk-ticket .tk-meta { font-size: var(--fs-sm); color: #3c5559; }
+.bk-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.bk-actions .btn { border-radius: 12px; }
+.bk-wx { color: var(--muted); }
+.bk-wx b { color: var(--fg); user-select: all; -webkit-user-select: all; }
+.bk-link { background: none; border: 0; color: var(--brass); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; font: inherit; padding: 0; }
+@media (prefers-reduced-motion: reduce) { .bk-chip, .bk-steps i { transition: none; } }
+
 .wx-head { width: 36px; height: 36px; border-radius: 50%; border-color: rgba(47,199,111,.45); }
 .wx-head svg { width: 22px; height: 22px; }
 .bar-play { width: 52px; height: 48px; display: grid; place-items: center; border-radius: 2px; border: 1px solid var(--brass); color: var(--brass); }
@@ -1089,7 +1177,7 @@ a { text-underline-offset: 3px; }
       <a class="play-pill" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Lesson</span><span class="zh">今日小课</span></span></a>
       <button class="wx-btn wx-head" type="button" data-copy="wechat-id" aria-label="Copy our WeChat ID / 复制微信号"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12.6 5C6.8 5 2.2 8.9 2.2 13.6c0 2.7 1.5 5.1 3.8 6.7l-.9 2.9 3.4-1.8c1.2.4 2.6.6 4 .6h.6a8 8 0 0 1-.3-2.2c0-4.6 4.4-8.3 9.9-8.3h.6C22.4 7.9 17.9 5 12.6 5z" fill="currentColor"/><circle cx="9" cy="11.6" r="1.3" fill="#0d2226"/><circle cx="16" cy="11.6" r="1.3" fill="#0d2226"/><path d="M29.8 19.8c0-3.9-3.9-7.1-8.6-7.1s-8.6 3.2-8.6 7.1 3.9 7.1 8.6 7.1c1 0 2-.1 2.9-.4l2.7 1.5-.7-2.4c2.2-1.3 3.7-3.4 3.7-5.8z" fill="currentColor"/><circle cx="18.3" cy="18.6" r="1.1" fill="#0d2226"/><circle cx="24.1" cy="18.6" r="1.1" fill="#0d2226"/></svg></button>
       <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言"><span class="en"><b>EN</b> / 中文</span><span class="zh">EN / <b>中文</b></span></button>
-      <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
+      <a class="btn btn-solid" href="#book"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
       <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
       </button>
@@ -1129,7 +1217,7 @@ a { text-underline-offset: 3px; }
         <h2 class="wt-title"><span class="en">One topic a day. <em>Walk out using it.</em></span><span class="zh">每天一个主题，<em>下课就能用。</em></span></h2>
         <p class="hero-lede"><span class="en">A live talk, phrase prep, then themed lab rooms where actors only answer correct English. Scroll to walk through a day.</span><span class="zh">现场对谈、表达准备，然后走进主题实验室：演员只回应正确的英语。向下滑动，走一遍一天的课程。</span></p>
         <div class="hero-actions">
-          <a class="btn btn-solid" href="#contact"><span class="en">Try a topic day free</span><span class="zh">免费体验一天</span></a>
+          <a class="btn btn-solid" href="#book"><span class="en">Try a topic day free</span><span class="zh">免费体验一天</span></a>
           <a class="btn btn-line" href="#try-lab"><span class="en">Play a lab room</span><span class="zh">试玩实验室</span></a>
         </div>
       </div>
@@ -1310,7 +1398,7 @@ a { text-underline-offset: 3px; }
           <span class="label"><span class="en">All gates open</span><span class="zh">全部通关</span></span>
           <h3><span class="en">You passed all three rooms.</span><span class="zh">你闯过了全部三个实验室！</span></h3>
           <p><span class="en">That's one topic, in a few minutes. A real topic day does this with live actors, a guide by your side, and phrases you'll remember because you used them.</span><span class="zh">这只是几分钟体验一个主题。真正的主题日里，有真人演员、引导老师陪伴，你会记住这些表达，因为你真的用过它们。</span></p>
-          <div class="hero-actions"><a class="btn btn-solid" href="#contact"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a><button class="btn btn-line lab-restart" type="button"><span class="en">Play again</span><span class="zh">再玩一次</span></button></div>
+          <div class="hero-actions"><a class="btn btn-solid" href="#book"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a><button class="btn btn-line lab-restart" type="button"><span class="en">Play again</span><span class="zh">再玩一次</span></button></div>
         </div>
       </div>
     </div>
@@ -1417,7 +1505,7 @@ a { text-underline-offset: 3px; }
           <button class="btn btn-line" type="button" id="pt-again"><span class="en">Practise again</span><span class="zh">再练一次</span></button>
           <button class="btn btn-line" type="button" id="pt-share"><span class="en">Copy to share</span><span class="zh">复制分享</span></button>
         </div>
-        <p class="pt-done-cta"><span class="en">Want to say it for real? In our lab rooms, actors only answer correct English.</span><span class="zh">想真正开口说？在我们的实验室里，演员只回应正确的英语。</span> <a href="#contact"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a></p>
+        <p class="pt-done-cta"><span class="en">Want to say it for real? In our lab rooms, actors only answer correct English.</span><span class="zh">想真正开口说？在我们的实验室里，演员只回应正确的英语。</span> <a href="#book"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a></p>
       </div>
     </div>
   </section>
@@ -1606,6 +1694,7 @@ a { text-underline-offset: 3px; }
         <div class="head" style="margin-bottom:32px">
         <h2><span class="en">Try a topic day for free</span><span class="zh">免费体验一天主题课</span></h2>
           <p><span class="en">Message us on WeChat, call, or fill in the form and send it to us.</span><span class="zh">欢迎微信或电话联系我们，也可填写表单后发送给我们。</span></p>
+          <a class="btn btn-solid" href="#book" style="margin-top:18px"><span class="en">Pick a day on the calendar</span><span class="zh">在日历上选日期</span></a>
         </div>
         <div class="contact-list">
           <div class="contact-item"><span class="k"><span class="en">WeChat</span><span class="zh">微信号</span></span>
@@ -1657,9 +1746,85 @@ a { text-underline-offset: 3px; }
   </section>
 </main>
 
+<div class="bk" id="book" hidden role="dialog" aria-modal="true" aria-labelledby="bk-title">
+  <div class="bk-top">
+    <button class="bk-x" id="bk-x" type="button" aria-label="Close booking / 关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="bk-steps" aria-hidden="true"><i></i><i></i><i></i></div>
+    <span class="bk-stepn" id="bk-stepn"></span>
+  </div>
+  <div class="bk-scroll" id="bk-scroll">
+    <div class="bk-body">
+      <div class="bk-main">
+        <section class="bk-step" data-step="1">
+          <span class="label"><span class="en">Free topic day</span><span class="zh">免费主题体验日</span></span>
+          <h2 id="bk-title"><span class="en">Book a free day by the sea</span><span class="zh">预约一天免费体验</span></h2>
+          <p class="bk-lede"><span class="en">One full day on one topic: live talk, phrase prep, then the lab rooms. Pick who it’s for and we’ll show the days that group runs.</span><span class="zh">一整天围绕一个主题：现场对谈、表达准备，再进入主题实验室。先选择学员类型，我们会显示对应的上课日期。</span></p>
+          <h3 class="bk-q"><span class="en">Who is it for?</span><span class="zh">谁来上课？</span></h3>
+          <div class="bk-chips bk-groups" id="bk-group">
+            <button type="button" class="bk-chip" data-v="kids" aria-pressed="false"><b><span class="en">Kids</span><span class="zh">少儿班</span></b><small><span class="en">Age 7–12 · weekends</span><span class="zh">7–12 岁 · 周末</span></small></button>
+            <button type="button" class="bk-chip" data-v="teens" aria-pressed="false"><b><span class="en">Teens</span><span class="zh">青少年班</span></b><small><span class="en">Age 13–17 · weekends</span><span class="zh">13–17 岁 · 周末</span></small></button>
+            <button type="button" class="bk-chip" data-v="adults" aria-pressed="false"><b><span class="en">Everyday English</span><span class="zh">生活英语</span></b><small><span class="en">Adults · Mon–Sat</span><span class="zh">成人 · 周一至周六</span></small></button>
+            <button type="button" class="bk-chip" data-v="hotel" aria-pressed="false"><b><span class="en">Hospitality English</span><span class="zh">酒店旅游英语</span></b><small><span class="en">Hotel staff · Mon–Fri</span><span class="zh">酒店从业者 · 周一至周五</span></small></button>
+          </div>
+          <h3 class="bk-q"><span class="en">English level</span><span class="zh">英语水平</span></h3>
+          <div class="bk-chips bk-levels" id="bk-level">
+            <button type="button" class="bk-chip" data-v="starter" aria-pressed="false"><b><span class="en">Starter</span><span class="zh">入门</span></b><small><span class="en">Few words</span><span class="zh">会一些单词</span></small></button>
+            <button type="button" class="bk-chip" data-v="explorer" aria-pressed="false"><b><span class="en">Explorer</span><span class="zh">进阶</span></b><small><span class="en">Simple chats</span><span class="zh">能简单对话</span></small></button>
+            <button type="button" class="bk-chip" data-v="pro" aria-pressed="false"><b><span class="en">Pro</span><span class="zh">高级</span></b><small><span class="en">Fluent-ish</span><span class="zh">比较流利</span></small></button>
+            <button type="button" class="bk-chip" data-v="unsure" aria-pressed="false"><b><span class="en">Not sure</span><span class="zh">不确定</span></b><small><span class="en">We’ll check</span><span class="zh">到店评估</span></small></button>
+          </div>
+          <h3 class="bk-q"><span class="en">How many people?</span><span class="zh">几位？</span></h3>
+          <div class="bk-count"><button type="button" id="bk-minus" aria-label="Fewer">−</button><b id="bk-n">1</b><button type="button" id="bk-plus" aria-label="More">+</button><span class="bk-count-note"><span class="en">Up to 4 per booking</span><span class="zh">每次最多 4 位</span></span></div>
+        </section>
+
+        <section class="bk-step" data-step="2" hidden>
+          <span class="label"><span class="en">Step 2</span><span class="zh">第 2 步</span></span>
+          <h2><span class="en">Pick your day</span><span class="zh">选择日期</span></h2>
+          <p class="bk-lede"><span class="en">Each day has its own topic. Bright days are open for your group.</span><span class="zh">每天一个主题，亮起的日期可以预约。</span></p>
+          <div class="cal">
+            <div class="cal-head"><button type="button" class="cal-nav" id="cal-prev" aria-label="Previous month"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><b id="cal-month"></b><button type="button" class="cal-nav" id="cal-next" aria-label="Next month"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="cal-dow" id="cal-dow"></div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+        </section>
+
+        <section class="bk-step" data-step="3" hidden>
+          <span class="label"><span class="en">Step 3</span><span class="zh">第 3 步</span></span>
+          <h2><span class="en">Your details</span><span class="zh">联系信息</span></h2>
+          <p class="bk-lede"><span class="en">So we can confirm your seat.</span><span class="zh">方便我们为您确认名额。</span></p>
+          <div class="bk-form">
+            <div class="field"><label for="bk-name"><span class="en">Your name</span><span class="zh">您的姓名</span></label><input id="bk-name" autocomplete="name" data-ph-en="e.g. Ms Wang" data-ph-zh="例如：王女士"></div>
+            <div class="field"><label for="bk-contact"><span class="en">WeChat ID or phone</span><span class="zh">微信号或电话</span></label><input id="bk-contact" data-ph-en="So we can reply" data-ph-zh="方便我们回复您"></div>
+            <div class="field" id="bk-age-f"><label for="bk-age"><span class="en">Student’s age</span><span class="zh">学员年龄</span></label><input id="bk-age" inputmode="numeric" data-ph-en="e.g. 9" data-ph-zh="例如：9"></div>
+            <div class="field"><label for="bk-note"><span class="en">Anything we should know?</span><span class="zh">备注</span></label><input id="bk-note" data-ph-en="Optional" data-ph-zh="选填"></div>
+          </div>
+          <p class="bk-err" id="bk-err" role="alert"></p>
+        </section>
+
+        <section class="bk-step bk-done" data-step="4" hidden>
+          <div class="bk-ticket" id="bk-ticket"></div>
+          <h2><span class="en">Almost done: send it to us</span><span class="zh">最后一步：发给我们</span></h2>
+          <p class="bk-lede"><span class="en">Copy your booking and paste it to us on WeChat. We’ll confirm your seat within a day.</span><span class="zh">复制预约信息，粘贴发送到我们的微信，我们会在一天内确认名额。</span></p>
+          <div class="bk-actions">
+            <button type="button" class="btn btn-solid" id="bk-copy"><span class="en">Copy booking for WeChat</span><span class="zh">复制预约信息</span></button>
+            <button type="button" class="btn btn-line" id="bk-ics"><span class="en">Add to my calendar</span><span class="zh">添加到日历</span></button>
+          </div>
+          <p class="bk-wx" id="bk-wx"></p>
+          <button type="button" class="bk-link" id="bk-edit"><span class="en">Change something</span><span class="zh">修改预约</span></button>
+        </section>
+      </div>
+      <aside class="bk-sum" id="bk-sum" aria-live="polite"></aside>
+    </div>
+  </div>
+  <div class="bk-foot">
+    <button type="button" class="btn btn-line" id="bk-back"><span class="en">Back</span><span class="zh">上一步</span></button>
+    <button type="button" class="btn btn-solid" id="bk-next"></button>
+  </div>
+</div>
+
 <div class="action-bar">
   <a class="bar-lesson" href="#practice-daily"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Today’s lesson</span><span class="zh">今日小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
-  <a class="btn btn-solid bar-book" href="#contact"><span class="en">Book a free day</span><span class="zh">预约免费体验</span></a>
+  <a class="btn btn-solid bar-book" href="#book"><span class="en">Book a free day</span><span class="zh">预约免费体验</span></a>
 </div>
 
 <footer class="site-footer">
@@ -2757,6 +2922,142 @@ a { text-underline-offset: 3px; }
   function routeOnLoad() { setTimeout(function () { route(); if (topic && !player.hidden) { var de = document.documentElement, sb = de.style.scrollBehavior; de.style.scrollBehavior = 'auto'; player.scrollIntoView({ block: 'start' }); de.style.scrollBehavior = sb; } }, 60); }
   if (document.readyState === 'complete') routeOnLoad(); else addEventListener('load', routeOnLoad);
   addEventListener('hashchange', route);
+})();
+</script>
+
+<script>
+(function () {
+  var bk = document.getElementById('book'); if (!bk) return;
+  var root = document.documentElement, $ = function (id) { return document.getElementById(id); };
+  var zh = function () { return root.getAttribute('data-lang') === 'zh'; }, L2 = function (e, z) { return zh() ? z : e; };
+  var TOPICS = [['shopping', 'Shopping', '购物', 'Shop', 'wh-lab-shop.jpg', '#e07a5f'], ['cafe', 'At the café', '点餐', 'Café', 'wh-lab-cafe.jpg', '#c9915a'],
+    ['weather', 'Weather', '天气', 'Weather', 'wh-lab-storm.jpg', '#5fc3c4'], ['directions', 'Directions', '问路', 'Map', 'wh-path-market.jpg', '#8fd4d5'],
+    ['hotel', 'Hotel', '酒店', 'Hotel', 'wh-lab-hotel.jpg', '#f08aa8'], ['smalltalk', 'Small talk', '寒暄', 'Chat', 'wh-welcome.jpg', '#ffd27a'],
+    ['ways', 'Say it another way', '换个说法', 'Ways', 'wh-prep.jpg', '#b39ddb'], ['collocations', 'Collocations', '词语搭配', 'Words', 'wh-pronounce.jpg', '#9fd48a']];
+  var GROUPS = { kids: { en: 'Kids (7–12)', zh: '少儿班（7–12 岁）', days: [0, 6], hrs: '09:30–15:00', age: true },
+    teens: { en: 'Teens (13–17)', zh: '青少年班（13–17 岁）', days: [0, 6], hrs: '09:30–16:00', age: true },
+    adults: { en: 'Everyday English', zh: '生活英语', days: [1, 2, 3, 4, 5, 6], hrs: '09:30–16:00' },
+    hotel: { en: 'Hospitality English', zh: '酒店旅游英语', days: [1, 2, 3, 4, 5], hrs: '09:30–16:00' } };
+  var LEVELS = { starter: ['Starter', '入门'], explorer: ['Explorer', '进阶'], pro: ['Pro', '高级'], unsure: ['Not sure yet', '待评估'] };
+  var st = { step: 1, group: null, level: 'unsure', n: 1, date: null, month: null, ref: '' };
+  var store = { get: function (k) { try { return JSON.parse(localStorage.getItem('aq-' + k)); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem('aq-' + k, JSON.stringify(v)); } catch (e) {} } };
+  function dkey(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function topicOf(d) { var n = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); return TOPICS[((n % 8) + 8) % 8]; }
+  function fmt(d, long) { return d.toLocaleDateString(zh() ? 'zh-CN' : 'en-GB', long ? { weekday: 'long', day: 'numeric', month: 'long' } : { weekday: 'short', day: 'numeric', month: 'short' }); }
+  function today0() { var t = new Date(); t.setHours(0, 0, 0, 0); return t; }
+  function first() { var t = today0(); t.setDate(t.getDate() + 1); return t; }
+  function last() { var t = today0(); t.setDate(t.getDate() + 60); return t; }
+  function isOpen(d) { var g = GROUPS[st.group || 'adults']; return d >= first() && d <= last() && g.days.indexOf(d.getDay()) > -1; }
+
+  function pressed(box, v) { box.querySelectorAll('.bk-chip').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); }); }
+  $('bk-group').addEventListener('click', function (e) { var b = e.target.closest('.bk-chip'); if (!b) return; st.group = b.dataset.v; pressed(this, st.group);
+    if (st.date && !isOpen(st.date)) st.date = null; paint(); });
+  $('bk-level').addEventListener('click', function (e) { var b = e.target.closest('.bk-chip'); if (!b) return; st.level = b.dataset.v; pressed(this, st.level); paint(); });
+  $('bk-minus').addEventListener('click', function () { st.n = Math.max(1, st.n - 1); paint(); });
+  $('bk-plus').addEventListener('click', function () { st.n = Math.min(4, st.n + 1); paint(); });
+  $('cal-prev').addEventListener('click', function () { st.month.setMonth(st.month.getMonth() - 1); cal(); });
+  $('cal-next').addEventListener('click', function () { st.month.setMonth(st.month.getMonth() + 1); cal(); });
+  $('cal-grid').addEventListener('click', function (e) { var b = e.target.closest('.cal-day.open'); if (!b) return; var p = b.dataset.d.split('-'); st.date = new Date(+p[0], p[1] - 1, +p[2]); cal(); paint(); });
+
+  function cal() {
+    var m = st.month, y = m.getFullYear(), mo = m.getMonth();
+    $('cal-month').textContent = m.toLocaleDateString(zh() ? 'zh-CN' : 'en-GB', { month: 'long', year: 'numeric' });
+    var f = first(), l = last();
+    $('cal-prev').disabled = y < f.getFullYear() || (y === f.getFullYear() && mo <= f.getMonth());
+    $('cal-next').disabled = y > l.getFullYear() || (y === l.getFullYear() && mo >= l.getMonth());
+    var dow = zh() ? ['一', '二', '三', '四', '五', '六', '日'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    $('cal-dow').innerHTML = dow.map(function (d) { return '<span>' + d + '</span>'; }).join('');
+    var start = (new Date(y, mo, 1).getDay() + 6) % 7, days = new Date(y, mo + 1, 0).getDate(), h = '', tk = dkey(today0()), sk = st.date ? dkey(st.date) : '';
+    for (var i = 0; i < start; i++) h += '<span class="cal-day empty"></span>';
+    for (var d = 1; d <= days; d++) {
+      var dt = new Date(y, mo, d), k = dkey(dt), open = isOpen(dt), t = topicOf(dt);
+      var cls = 'cal-day' + (open ? ' open' : '') + (k === tk ? ' today' : '') + (k === sk ? ' sel' : '');
+      var lab = open ? L2(t[3], t[2]) : '';
+      h += open ? '<button type="button" class="' + cls + '" data-d="' + k + '" aria-label="' + fmt(dt, true) + ', ' + L2(t[1], t[2]) + '" aria-pressed="' + (k === sk) + '"><b>' + d + '</b><i class="dot" style="background:' + t[5] + '"></i><small>' + lab + '</small></button>'
+                : '<span class="' + cls + '" aria-hidden="true"><b>' + d + '</b></span>';
+    }
+    $('cal-grid').innerHTML = h;
+  }
+  function sum() {
+    var g = st.group && GROUPS[st.group], t = st.date && topicOf(st.date), box = $('bk-sum');
+    box.classList.toggle('blank', !st.group && !st.date);
+    function row(k, v) { return '<dt>' + k + '</dt><dd' + (v ? '' : ' class="miss"') + '>' + (v || '—') + '</dd>'; }
+    var esc = function (x) { var e = document.createElement('i'); e.textContent = x; return e.innerHTML; };
+    box.innerHTML = '<div class="bk-sum-img" style="background-image:url(images/' + (t ? t[4] : 'wh-welcome.jpg') + ')"><span>' + (t ? esc(L2(t[1] + ' day', t[2] + '主题日')) : L2('Topic day', '主题日')) + '</span></div>' +
+      '<dl>' + row(L2('Day', '日期'), st.date ? esc(fmt(st.date)) : '') + row(L2('Topic', '主题'), t ? esc(L2(t[1], t[2])) : '') + row(L2('Time', '时间'), g ? g.hrs : '') +
+      row(L2('Group', '班级'), g ? esc(L2(g.en, g.zh)) : '') + row(L2('Level', '水平'), esc(L2(LEVELS[st.level][0], LEVELS[st.level][1]))) + row(L2('People', '人数'), String(st.n)) + '</dl>' +
+      '<p class="bk-sum-free">' + L2('Free · no payment needed', '免费 · 无需付款') + '</p>';
+  }
+  function text() {
+    var g = GROUPS[st.group], t = topicOf(st.date), v = function (id) { return $(id).value.trim(); };
+    var lines = zh()
+      ? ['你好，海语英语！我想预约免费主题体验日。', '日期：' + fmt(st.date, true) + '（' + t[2] + '主题日）' + g.hrs, '班级：' + g.zh + '，水平：' + LEVELS[st.level][1], '人数：' + st.n, '姓名：' + v('bk-name'), '联系方式：' + v('bk-contact')]
+      : ['Hi Aquaire! I’d like to book a free topic day.', 'Date: ' + fmt(st.date, true) + ' (' + t[1] + ' day), ' + g.hrs, 'Group: ' + g.en + ', level: ' + LEVELS[st.level][0], 'People: ' + st.n, 'Name: ' + v('bk-name'), 'Contact: ' + v('bk-contact')];
+    if (g.age && v('bk-age')) lines.push(L2('Age: ', '年龄：') + v('bk-age'));
+    if (v('bk-note')) lines.push(L2('Note: ', '备注：') + v('bk-note'));
+    lines.push(L2('Booking ref: ', '预约编号：') + st.ref);
+    return lines.join('\n');
+  }
+  function ticket() {
+    var g = GROUPS[st.group], t = topicOf(st.date), e = function (x) { var i = document.createElement('i'); i.textContent = x; return i.innerHTML; };
+    $('bk-ticket').innerHTML = '<div class="tk-img" style="background-image:url(images/' + t[4] + ')"></div><div class="tk-body"><span class="tk-ref">' + e(L2('Booking ref ', '预约编号 ') + st.ref) + '</span><span class="tk-date">' + e(fmt(st.date, true)) + '</span>' +
+      '<span class="tk-meta">' + e(L2(t[1] + ' day · ' + g.hrs + ' · ' + g.en + ' · ' + st.n + (st.n > 1 ? ' people' : ' person'), t[2] + '主题日 · ' + g.hrs + ' · ' + g.zh + ' · ' + st.n + ' 位')) + '</span></div>';
+    var wx = ($('wechat-id') || {}).textContent || '';
+    $('bk-wx').innerHTML = ''; var a = document.createElement('span'); a.textContent = L2('Our WeChat ID: ', '我们的微信号：'); var b = document.createElement('b'); b.textContent = wx; $('bk-wx').appendChild(a); $('bk-wx').appendChild(b);
+  }
+  var NEXT = { 1: ['Choose a day', '选择日期'], 2: ['Next: your details', '下一步：填写信息'], 3: ['Confirm booking', '确认预约'], 4: ['Done', '完成'] };
+  function paint() {
+    [1, 2, 3, 4].forEach(function (n) { bk.querySelector('[data-step="' + n + '"]').hidden = n !== st.step; });
+    bk.querySelectorAll('.bk-steps i').forEach(function (i, n) { i.classList.toggle('on', n < Math.min(st.step, 3)); });
+    $('bk-stepn').textContent = st.step < 4 ? L2('Step ' + st.step + ' of 3', '第 ' + st.step + ' / 3 步') : L2('Booked', '已预约');
+    $('bk-back').hidden = st.step === 1 || st.step === 4;
+    var nx = $('bk-next'); nx.textContent = L2(NEXT[st.step][0], NEXT[st.step][1]);
+    nx.disabled = (st.step === 1 && !st.group) || (st.step === 2 && !st.date);
+    $('bk-age-f').hidden = !(st.group && GROUPS[st.group].age); $('bk-n').textContent = st.n;
+    $('bk-minus').disabled = st.n <= 1; $('bk-plus').disabled = st.n >= 4;
+    sum();
+  }
+  function go(n) { st.step = n; if (n === 2) { if (!st.month) { st.month = new Date(first().getFullYear(), first().getMonth(), 1); } cal(); } if (n === 4) ticket(); paint(); $('bk-scroll').scrollTop = 0; }
+  $('bk-next').addEventListener('click', function () {
+    if (st.step === 3) {
+      var nm = $('bk-name'), ct = $('bk-contact'), bad = [nm, ct].filter(function (x) { return !x.value.trim(); });
+      [nm, ct].forEach(function (x) { x.setAttribute('aria-invalid', bad.indexOf(x) > -1 ? 'true' : 'false'); });
+      if (bad.length) { $('bk-err').textContent = L2('Please add your name and a WeChat ID or phone number.', '请填写姓名和微信号或电话。'); bad[0].focus(); return; }
+      $('bk-err').textContent = '';
+      st.ref = 'AQ-' + dkey(st.date).slice(5).replace('-', '') + '-' + Math.floor(100 + Math.random() * 900);
+      store.set('booking', { date: dkey(st.date), group: st.group, ref: st.ref });
+      return go(4);
+    }
+    if (st.step === 4) return close();
+    go(st.step + 1);
+  });
+  $('bk-back').addEventListener('click', function () { go(Math.max(1, st.step - 1)); });
+  $('bk-edit').addEventListener('click', function () { go(1); });
+  $('bk-copy').addEventListener('click', function () {
+    var b = this, old = b.innerHTML, t = text();
+    function ok() { b.textContent = L2('Copied: now paste it in WeChat', '已复制，请粘贴到微信'); setTimeout(function () { b.innerHTML = old; }, 2600); }
+    function manual() { var ta = $('bk-manual'); if (!ta) { ta = document.createElement('textarea'); ta.id = 'bk-manual'; ta.className = 'pt-sharebox'; ta.rows = 7; ta.readOnly = true; $('bk-wx').after(ta); } ta.value = t; ta.focus(); ta.select(); b.textContent = L2('Press and hold the text to copy', '长按文字复制'); setTimeout(function () { b.innerHTML = old; }, 3000); }
+    try { navigator.clipboard.writeText(t).then(ok, manual); } catch (e) { manual(); }
+  });
+  $('bk-ics').addEventListener('click', function () {
+    var g = GROUPS[st.group], t = topicOf(st.date), d = dkey(st.date).replace(/-/g, ''), hh = g.hrs.split('–');
+    var tm = function (x) { return x.replace(':', '') + '00'; };
+    var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Aquaire//Booking//EN', 'BEGIN:VEVENT', 'UID:' + st.ref + '@aquaire', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z',
+      'DTSTART;TZID=Asia/Shanghai:' + d + 'T' + tm(hh[0]), 'DTEND;TZID=Asia/Shanghai:' + d + 'T' + tm(hh[1]), 'SUMMARY:Aquaire free topic day: ' + t[1], 'LOCATION:Aquaire, Jiyang District, Sanya', 'DESCRIPTION:Booking ref ' + st.ref + '. Please confirm with us on WeChat.', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    try { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'aquaire-topic-day.ics'; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000); } catch (e) {}
+  });
+
+  var openedByNav = false;
+  function open(nav) { openedByNav = !!nav; bk.hidden = false; root.classList.add('booking'); if (st.step === 4) st.step = 1; go(st.step);
+    bk.querySelectorAll('[data-ph-en]').forEach(function (i) { i.placeholder = L2(i.dataset.phEn, i.dataset.phZh); }); setTimeout(function () { $('bk-x').focus({ preventScroll: true }); }, 30); }
+  function close() { bk.hidden = true; root.classList.remove('booking');
+    if (location.hash === '#book') { if (openedByNav && history.length > 1) history.back(); else try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} } }
+  $('bk-x').addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !bk.hidden) close(); });
+  function route(nav) { if (location.hash === '#book') { if (bk.hidden) open(nav); } else if (!bk.hidden) { bk.hidden = true; root.classList.remove('booking'); } }
+  addEventListener('hashchange', function () { route(true); });
+  if (location.hash === '#book') setTimeout(function () { route(false); }, 80);
+  var lb = document.querySelector('.lang-btn'); if (lb) lb.addEventListener('click', function () { setTimeout(function () { if (!bk.hidden) { if (st.step === 2) cal(); if (st.step === 4) ticket(); paint(); bk.querySelectorAll('[data-ph-en]').forEach(function (i) { i.placeholder = L2(i.dataset.phEn, i.dataset.phZh); }); } }, 0); });
 })();
 </script>
 </body>
