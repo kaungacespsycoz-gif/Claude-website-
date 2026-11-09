@@ -1530,6 +1530,27 @@ a { text-underline-offset: 3px; }
       fragmentShader: 'varying float vA; void main(){ float d = length(gl_PointCoord-.5); if (d > .5) discard; gl_FragColor = vec4(1., .95, .85, vA*(1.-d*2.)); }' }));
     scene.add(stars);
 
+    // ---------- shooting stars (rare, faint) ----------
+    var stc = document.createElement('canvas'); stc.width = 256; stc.height = 8; var sx = stc.getContext('2d');
+    var lg = sx.createLinearGradient(0, 0, 256, 0); lg.addColorStop(0, 'rgba(255,240,210,0)'); lg.addColorStop(.85, 'rgba(255,240,210,.55)'); lg.addColorStop(1, 'rgba(255,250,235,1)');
+    sx.fillStyle = lg; sx.fillRect(0, 2, 256, 4);
+    var streakMat = new T.MeshBasicMaterial({ map: new T.CanvasTexture(stc), transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0, fog: false });
+    var streak = new T.Mesh(new T.PlaneGeometry(26, .5), streakMat); streak.position.z = -232; scene.add(streak);
+    var shoot = null, nextShoot = 6 + Math.random() * 6;
+    function launch(t) {
+      var dir = Math.random() < .5 ? -1 : 1, ang = (18 + Math.random() * 16) * Math.PI / 180;
+      shoot = { t: t, dur: .75 + Math.random() * .45, x: (Math.random() - .5) * 260, y: 70 + Math.random() * 60, dx: dir * Math.cos(ang), dy: -Math.sin(ang), len: 70 + Math.random() * 50 };
+      streak.rotation.z = Math.atan2(shoot.dy, shoot.dx);
+    }
+    function updateShoot(t) {
+      if (!shoot) { if (t > nextShoot) launch(t); return; }
+      var k = (t - shoot.t) / shoot.dur;
+      if (k >= 1) { shoot = null; streakMat.opacity = 0; nextShoot = t + 8 + Math.random() * 12; return; }
+      var e = 1 - Math.pow(1 - k, 2);
+      streak.position.x = shoot.x + shoot.dx * shoot.len * e; streak.position.y = shoot.y + shoot.dy * shoot.len * e;
+      streakMat.opacity = .5 * Math.sin(Math.PI * k);
+    }
+
     // ---------- interaction ----------
     var px = 0, py = 0, tx = 0, ty = 0, lastMove = -1e9, interacted = false, hint = intro.querySelector('.intro-hint');
     var ray = new T.Raycaster(), ndc = new T.Vector2(), plane = new T.Plane(new T.Vector3(0, 1, 0), 0), hit = new T.Vector3();
@@ -1558,6 +1579,7 @@ a { text-underline-offset: 3px; }
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible && !reduce) requestAnimationFrame(loop); }).observe(intro);
     function frame(now) {
       var t = (now - t0) / 1000; sea.uniforms.uTime.value = t; stars.material.uniforms.uTime.value = t;
+      if (!reduce) updateShoot(t);
       var idle = now - lastMove > 3500;
       var goal = idle ? Math.sin(t * .12) * .32 : tx;
       px += (goal - px) * .035; py += ((idle ? 0 : ty) - py) * .04;
