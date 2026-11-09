@@ -1531,24 +1531,27 @@ a { text-underline-offset: 3px; }
     scene.add(stars);
 
     // ---------- shooting stars (rare, faint) ----------
-    var stc = document.createElement('canvas'); stc.width = 256; stc.height = 8; var sx = stc.getContext('2d');
-    var lg = sx.createLinearGradient(0, 0, 256, 0); lg.addColorStop(0, 'rgba(255,240,210,0)'); lg.addColorStop(.85, 'rgba(255,240,210,.55)'); lg.addColorStop(1, 'rgba(255,250,235,1)');
-    sx.fillStyle = lg; sx.fillRect(0, 2, 256, 4);
+    var stc = document.createElement('canvas'); stc.width = 512; stc.height = 32; var sx = stc.getContext('2d');
+    var lg = sx.createLinearGradient(0, 0, 512, 0); lg.addColorStop(0, 'rgba(255,240,210,0)'); lg.addColorStop(.75, 'rgba(255,236,200,.5)'); lg.addColorStop(.97, 'rgba(255,250,235,1)'); lg.addColorStop(1, 'rgba(255,250,235,0)');
+    sx.fillStyle = lg; sx.fillRect(0, 13, 512, 6);
+    var hg = sx.createRadialGradient(496, 16, 0, 496, 16, 16); hg.addColorStop(0, 'rgba(255,255,245,1)'); hg.addColorStop(1, 'rgba(255,240,200,0)'); sx.fillStyle = hg; sx.fillRect(470, 0, 42, 32);
     var streakMat = new T.MeshBasicMaterial({ map: new T.CanvasTexture(stc), transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0, fog: false });
-    var streak = new T.Mesh(new T.PlaneGeometry(26, .5), streakMat); streak.position.z = -232; scene.add(streak);
-    var shoot = null, nextShoot = 6 + Math.random() * 6;
+    var streak = new T.Mesh(new T.PlaneGeometry(38, 2.2), streakMat); streak.position.z = -232; scene.add(streak);
+    var shoot = null, nextShoot = 2.5 + Math.random() * 1.5;
     function launch(t) {
       var dir = Math.random() < .5 ? -1 : 1, ang = (18 + Math.random() * 16) * Math.PI / 180;
-      shoot = { t: t, dur: .75 + Math.random() * .45, x: (Math.random() - .5) * 260, y: 70 + Math.random() * 60, dx: dir * Math.cos(ang), dy: -Math.sin(ang), len: 70 + Math.random() * 50 };
+      shoot = mobile
+        ? { t: t, dur: 1.1 + Math.random() * .3, x: dir * (6 + Math.random() * 20), y: 42 + Math.random() * 16, dx: dir * Math.cos(ang), dy: -Math.sin(ang), len: 34 + Math.random() * 10 }
+        : { t: t, dur: 1.05 + Math.random() * .35, x: dir * (40 + Math.random() * 60), y: 58 + Math.random() * 30, dx: dir * Math.cos(ang), dy: -Math.sin(ang), len: 70 + Math.random() * 40 };
       streak.rotation.z = Math.atan2(shoot.dy, shoot.dx);
     }
     function updateShoot(t) {
       if (!shoot) { if (t > nextShoot) launch(t); return; }
       var k = (t - shoot.t) / shoot.dur;
-      if (k >= 1) { shoot = null; streakMat.opacity = 0; nextShoot = t + 8 + Math.random() * 12; return; }
+      if (k >= 1) { shoot = null; streakMat.opacity = 0; nextShoot = t + 5 + Math.random() * 5; return; }
       var e = 1 - Math.pow(1 - k, 2);
       streak.position.x = shoot.x + shoot.dx * shoot.len * e; streak.position.y = shoot.y + shoot.dy * shoot.len * e;
-      streakMat.opacity = .5 * Math.sin(Math.PI * k);
+      streakMat.opacity = .9 * Math.sin(Math.PI * Math.min(1, k * 1.15));
     }
 
     // ---------- interaction ----------
