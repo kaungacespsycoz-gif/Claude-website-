@@ -947,6 +947,11 @@ a { text-underline-offset: 3px; }
 .pt-fb.ok b { color: #9be3a4; }
 .pt-fb-head b::before { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; margin-right: 10px; font-size: .9rem; vertical-align: 2px; }
 .pt-fb.ok .pt-fb-head b::before { content: "✓"; background: #7fd88a; color: #0d2a14; }
+.pt-foot.is-try { background: rgba(255,210,122,.08); border-top-color: rgba(255,210,122,.5); }
+.pt-fb.try { animation: pt-up .35s var(--ease-out); }
+.pt-fb.try b { color: #ffd27a; }
+.pt-fb.try .pt-fb-head b::before { content: "↻"; background: #ffd27a; color: #2a1d05; }
+.pt-opt.bad[disabled] { cursor: default; }
 .pt-fb.bad .pt-fb-head b::before { content: "!"; background: #f6b3a6; color: #3a120c; }
 .pt-close { border-radius: 12px; }
 .pt-daily, .pt-sprint { border-radius: 16px; }
@@ -2461,7 +2466,7 @@ a { text-underline-offset: 3px; }
   function btn(text, cls) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-opt' + (cls ? ' ' + cls : ''); b.textContent = text; return b; }
 
   function show() {
-    clearTimeout(advanceT); var item = queue[qi], q = item.q; checked = false; picked = null; sel = []; answerWords = []; mistakes = 0;
+    clearTimeout(advanceT); var item = queue[qi], q = item.q; checked = false; tries = 0; picked = null; sel = []; answerWords = []; mistakes = 0;
     if (!topic.sprint) { $('pt-prog').style.width = (qi / queue.length * 100) + '%'; $('pt-count').textContent = (qi + 1) + ' / ' + queue.length; }
     $('pt-kind').innerHTML = (item.retry ? '<span class="pt-retry">' + L2('Second chance', '再试一次') + '</span> · ' : '') + KIND[q.k][zh() ? 1 : 0];
     $('pt-foot').className = 'pt-foot';
@@ -2551,24 +2556,43 @@ a { text-underline-offset: 3px; }
     if (q.k === 'multi') return q.o[q.a[0]];
     return '';
   }
+  var tries = 0;
+  // first wrong try: no reveal. Keep the answer editable, give a nudge, let them fix it.
+  function softMiss(item, q) {
+    if (topic.sprint || tries > 0) return false;
+    tries = 1; attempts++; combo = 0; paintCombo(false); sfx('bad'); buzz([30, 40, 30]); react(scene, false);
+    var check = $('pt-check'), fb = $('pt-fb'), tip;
+    if (q.k === 'order') tip = L2('Not quite. The green words are right. Tap a word in your answer to take it out, then fix the rest.', '还差一点。绿色的词是对的，点一下答案里的词可以拿掉，再改后面的部分。');
+    else if (q.k === 'multi') tip = L2('Not quite. Some choices are missing or wrong. Change your picks and check again.', '还差一点。有的选项多选或漏选了，改一改再检查。');
+    else { tip = L2('Not quite. That one is crossed out. Try another answer!', '还差一点。这个答案已划掉，再选一个试试！');
+      $('pt-opts').querySelectorAll('.pt-opt.sel').forEach(function (b) { b.classList.remove('sel'); b.classList.add('bad'); b.disabled = true; b.removeAttribute('data-key'); });
+      picked = null; check.disabled = true; }
+    fb.className = 'pt-fb try'; fb.innerHTML = '<div class="pt-fb-head"><b></b></div><span class="pt-why"></span>';
+    fb.querySelector('b').textContent = L2('Almost! One more try', '差一点！再试一次'); fb.querySelector('.pt-why').textContent = tip;
+    $('pt-foot').className = 'pt-foot is-try';
+    return true;
+  }
   function doCheck() {
     if (checked) return;
     var item = queue[qi], q = item.q, ok, right;
     var mine = '';
-    if (q.k === 'order') { mine = norm(answerWords.map(function (o) { return o.w; }).join(' ')); ok = answers(q).some(function (t) { return norm(t) === mine; }); right = q.w.join(' '); $('pt-track').textContent = ''; }
+    if (q.k === 'order') { mine = norm(answerWords.map(function (o) { return o.w; }).join(' ')); ok = answers(q).some(function (t) { return norm(t) === mine; }); right = q.w.join(' ');
+      if (!ok && softMiss(item, q)) return; $('pt-track').textContent = ''; }
     else if (q.k === 'match') { ok = mistakes === 0; }
     else if (q.k === 'multi') {
       ok = sel.length === q.a.length && q.a.every(function (a) { return sel.indexOf(a) > -1; });
       right = q.a.map(function (a) { return q.o[a]; }).join(' · ');
+      if (!ok && softMiss(item, q)) return;
       $('pt-opts').querySelectorAll('.pt-opt').forEach(function (b) { var i = +b.dataset.i, want = q.a.indexOf(i) > -1, got = b.getAttribute('aria-pressed') === 'true';
         b.setAttribute('aria-pressed', 'false'); if (want) b.classList.add('ok'); else if (got) b.classList.add('bad'); });
     } else { ok = picked === q.a; right = q.o[q.a];
+      if (!ok && softMiss(item, q)) return;
       $('pt-opts').querySelectorAll('.pt-opt').forEach(function (b) { if (+b.dataset.i === q.a) b.classList.add('ok'); else if (b.classList.contains('sel')) b.classList.add('bad'); }); }
     checked = true; attempts++;
     var pts = 0, again = false;
     if (ok) {
-      combo++; bestCombo = Math.max(bestCombo, combo); if (!item.retry) score++;
-      pts = topic.sprint ? (combo >= 3 ? 7 : 5) : item.retry ? 5 : (combo >= 3 ? 15 : 10); gained += pts;
+      combo++; bestCombo = Math.max(bestCombo, combo); if (!item.retry && !tries) score++;
+      pts = topic.sprint ? (combo >= 3 ? 7 : 5) : item.retry || tries ? 5 : (combo >= 3 ? 15 : 10); gained += pts;
       sfx('ok', combo); buzz(15);
       if (combo === 5) award('combo5'); if (combo === 10) award('combo10');
     } else {
@@ -2581,7 +2605,7 @@ a { text-underline-offset: 3px; }
       $('pt-count').textContent = (qi + 1) + ' / ' + queue.length; }
     setScene(scene, topic.sprint ? Math.min(1, score / 15) : score / scored(topic), true); react(scene, ok); if (ok) cheer(scene);
     if (ok && (combo === 3 || combo === 5 || combo === 10) && scene) setTimeout(function () { if (scene) say(scene, L2(combo + ' in a row!', '连对 ' + combo + '！')); }, 750);
-    var head = ok ? (item.retry ? L2('Got it this time!', '这次答对了！') : combo >= 3 ? L2('Correct! ' + combo + ' in a row', '正确！连对 ' + combo + ' 题') : L2('Correct!', '正确！'))
+    var head = ok ? (item.retry || tries ? L2('Fixed it! Well done.', '改对了！真棒。') : combo >= 3 ? L2('Correct! ' + combo + ' in a row', '正确！连对 ' + combo + ' 题') : L2('Correct!', '正确！'))
       : q.k === 'match' ? L2('All matched, with ' + mistakes + ' wrong ' + (mistakes > 1 ? 'tries' : 'try'), '全部配对完成，错了 ' + mistakes + ' 次') : L2('Correct answer: ', '正确答案：') + right;
     var fb = $('pt-fb'), txt = spoken(q); fb.className = 'pt-fb ' + (ok ? 'ok' : 'bad'); fb.innerHTML = '<div class="pt-fb-head"><b></b></div><span class="pt-why"></span>';
     fb.querySelector('b').textContent = head; if (txt) fb.querySelector('.pt-fb-head').appendChild(sayBtn(txt));
