@@ -866,6 +866,23 @@ a { text-underline-offset: 3px; }
 /* ---- booking page ---- */
 .booking, .booking body { overflow: hidden; }
 .booking .action-bar { display: none !important; }
+/* bottom bar, redesigned: a floating moonlit capsule that matches the opening screen */
+@media (max-width: 760px) {
+  .action-bar { display: flex; align-items: center; gap: 4px; left: 50%; right: auto; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: max-content; max-width: calc(100vw - 28px); padding: 5px; border-radius: 999px; border: 1px solid rgba(241,233,220,.16); border-top-color: rgba(241,233,220,.16); background: rgba(10,28,32,.55); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); box-shadow: 0 14px 40px -12px rgba(0,0,0,.6), inset 0 1px 0 rgba(241,233,220,.06); }
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .action-bar .bar-lesson { border: 0; min-height: 44px; padding: 0 16px 0 5px; gap: 10px; border-radius: 999px; background: transparent; }
+  .action-bar .bar-lesson:active { background: rgba(241,233,220,.06); }
+  .action-bar .bar-pud { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px rgba(241,233,220,.22); }
+  .action-bar .bar-pud .pud-ava { width: 34px; height: 46px; margin-top: -1px; border-radius: 0; background: radial-gradient(circle at 50% 35%, #24585d, #143a3f 75%); box-shadow: none; }
+  .action-bar .bar-txt b { font: 500 .7rem/1 var(--font); letter-spacing: .16em; text-transform: uppercase; color: var(--fg); }
+  :root[data-lang="zh"] .action-bar .bar-txt b { letter-spacing: .1em; font-size: .8rem; }
+  .action-bar .bar-txt small { display: none; }
+  .action-bar .bar-txt b { overflow: visible; }
+  .action-bar .bar-lesson.done .bar-txt b::after { content: " ✓"; color: var(--brass); }
+  .action-bar .bar-book { width: auto; min-height: 44px; padding: 0 20px; border-radius: 999px; border: 0; font-size: .7rem; letter-spacing: .16em; background: linear-gradient(180deg, #f0c47c, var(--brass)); color: var(--brass-ink); box-shadow: 0 6px 18px -6px rgba(227,176,97,.6), inset 0 1px 0 rgba(255,255,255,.35); white-space: nowrap; }
+  :root[data-lang="zh"] .action-bar .bar-book { letter-spacing: .08em; font-size: .82rem; }
+  .action-bar .bar-book:active { transform: scale(.97); }
+}
 .bk { position: fixed; inset: 0; z-index: 90; background: var(--bg); display: grid; grid-template-rows: auto 1fr auto; padding-top: env(safe-area-inset-top, 0px); }
 .bk[hidden] { display: none; }
 .bk-top { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: center; padding: 12px var(--gutter-r) 12px var(--gutter); border-bottom: 1px solid var(--line); }
@@ -1823,7 +1840,7 @@ a { text-underline-offset: 3px; }
 </div>
 
 <div class="action-bar">
-  <a class="bar-lesson" href="#practice-daily"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Today’s lesson</span><span class="zh">今日小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
+  <a class="bar-lesson" href="#practice-daily"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Daily lesson</span><span class="zh">今日小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
   <a class="btn btn-solid bar-book" href="#book"><span class="en">Book a free day</span><span class="zh">预约免费体验</span></a>
 </div>
 
