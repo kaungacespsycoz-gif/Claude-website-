@@ -881,6 +881,48 @@ a { text-underline-offset: 3px; }
 .pt-toast { position: fixed; left: 50%; bottom: 24px; z-index: 80; transform: translate(-50%, 140%); display: flex; gap: 12px; align-items: center; padding: 12px 18px 12px 12px; background: var(--fg); color: var(--brass-ink); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.4); transition: transform .45s cubic-bezier(.34,1.56,.64,1); max-width: calc(100vw - 32px); }
 .pt-toast.show { transform: translate(-50%, 0); }
 .pt-toast svg { width: 38px; height: 38px; color: #b98a3f; flex: none; }
+
+/* ---- art pass: shaded fluffy Pudding, lit scenes, tactile game UI ---- */
+.pf-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sc .pp [fill="#f7f4ef"] { fill: url(#pf-curl); }
+.sc .pp [fill="#7c8286"] { fill: url(#pf-grey); }
+.sc .pp [fill="#666b6f"], .sc .pp [fill="#474c50"], .sc .pp [fill="#5d6266"] { fill: url(#pf-patch); }
+.sc .pp .eyes circle[fill="#141414"] { fill: url(#pf-eye); }
+.sc .pp .torso > ellipse[fill="#e6e1d8"] { fill: #efe9df; opacity: .9; }
+.sc .pp-in { filter: drop-shadow(0 1.2px 0 rgba(10, 30, 34, .35)); }
+.sc .pp-shadow { transform-box: fill-box; transform-origin: center; }
+.sc.r-hop .pp-shadow, .sc.r-jump .pp-shadow { animation: pf-shadow .55s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pf-shadow { 40% { transform: scale(.6); opacity: .5; } }
+.pt-scene .sc, .pt-end .sc { border-radius: 18px; box-shadow: 0 0 0 1px rgba(241,233,220,.07), 0 24px 50px -28px rgba(0,0,0,.8); }
+.pud-ava { background: radial-gradient(circle at 50% 30%, #24585d, #143a3f 70%); box-shadow: inset 0 0 0 1px rgba(241,233,220,.12); }
+/* question panel */
+.pt-kind { justify-self: start; padding: 6px 10px; border-radius: 99px; background: rgba(227,176,97,.12); }
+.pt-prompt { font-family: var(--display); font-size: clamp(1.7rem, 4.4vw, 2.3rem); line-height: 1.2; }
+/* chunky, tactile answer buttons */
+.pt-opt { border-radius: 12px; border: 1.5px solid rgba(241,233,220,.16); border-bottom-width: 1.5px; background: linear-gradient(180deg, #17393e, #112d32); box-shadow: 0 4px 0 #071719, 0 8px 18px -12px rgba(0,0,0,.7); transition: transform .12s var(--ease-out), box-shadow .12s var(--ease-out), border-color .15s, background .15s; }
+@media (hover: hover) and (pointer: fine) { .pt-opt:hover { border-color: rgba(227,176,97,.55); } }
+.pt-opt:active { transform: translateY(3px); box-shadow: 0 1px 0 #071719; }
+.pt-opt.sel, .pt-opt[aria-pressed="true"] { border-color: var(--brass); background: linear-gradient(180deg, rgba(227,176,97,.2), rgba(227,176,97,.08)); box-shadow: 0 4px 0 #6d5126, 0 0 18px rgba(227,176,97,.18); }
+.pt-opt.ok, .pt-opt.done { border-color: #7fd88a; color: var(--fg); background: linear-gradient(180deg, rgba(127,216,138,.2), rgba(127,216,138,.07)); box-shadow: 0 4px 0 #2c6a37, 0 0 20px rgba(127,216,138,.25); text-decoration: none; }
+.pt-opt.bad { box-shadow: 0 2px 0 #071719; opacity: .75; }
+.pt-opts.tiles .pt-opt, .pt-answer .pt-opt { border-radius: 10px; }
+.pt-opt.used { background: rgba(241,233,220,.03); box-shadow: none; }
+.pt-answer { background: rgba(7,23,25,.35); }
+.pt-check { border-radius: 14px; min-height: 54px; box-shadow: 0 5px 0 #8a6a35; transition: transform .12s, box-shadow .12s; }
+.pt-check:not([disabled]):active { transform: translateY(4px); box-shadow: 0 1px 0 #8a6a35; }
+.pt-check[disabled] { box-shadow: 0 5px 0 rgba(138,106,53,.4); }
+.pt-foot.is-ok .pt-check { background: #7fd88a; border-color: #7fd88a; color: #0d2a14; box-shadow: 0 5px 0 #2c6a37; }
+.pt-fb.ok b { color: #9be3a4; }
+.pt-fb-head b::before { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; margin-right: 10px; font-size: .9rem; vertical-align: 2px; }
+.pt-fb.ok .pt-fb-head b::before { content: "✓"; background: #7fd88a; color: #0d2a14; }
+.pt-fb.bad .pt-fb-head b::before { content: "!"; background: #f6b3a6; color: #3a120c; }
+.pt-close { border-radius: 12px; }
+.pt-daily, .pt-sprint { border-radius: 16px; }
+.pt-daily-go { border-radius: 12px; box-shadow: 0 4px 0 rgba(0,0,0,.28); }
+.pt-ds { border-radius: 14px; }
+.pt-done .btn { border-radius: 12px; }
+.pt-done .btn-solid { box-shadow: 0 4px 0 #8a6a35; }
+@media (prefers-reduced-motion: reduce) { .sc.r-hop .pp-shadow, .sc.r-jump .pp-shadow { animation: none; } .pt-opt, .pt-check { transition: none; } }
 .pt-toast small { display: block; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
 @media (prefers-reduced-motion: reduce) { .pt-node.next .pt-pin, .pt-combo.pop, .pt-starrow svg.on, .pt-opt.ok, .pt-float, .pt-fb.ok, .pt-fb.bad, .pt-badge.fresh { animation: none; } .pt-toast { transition: none; } }
 @media (prefers-reduced-motion: reduce) { .sc.mood-smile .tail { animation: none; } .sc .acc.pop { animation: none; } }
@@ -1215,6 +1257,16 @@ a { text-underline-offset: 3px; }
         <h2><span class="en">A new lesson by the sea, every day</span><span class="zh">海边英语，每天一课</span></h2>
         <p><span class="en">A free five-minute lesson every day: a phrase of the day said three ways, then quick games on real phrases, common mistakes and natural word partners. Keep your streak going.</span><span class="zh">每天一节免费五分钟小课：今日表达的三种说法，再加上常用表达、常见错误和词语搭配小游戏。坚持每天打卡！</span></p>
       </div>
+      <svg class="pf-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+        <radialGradient id="pf-curl" cx=".4" cy=".34" r=".72"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#f8f5f0"/><stop offset="1" stop-color="#e9e3d9"/></radialGradient>
+        <radialGradient id="pf-grey" cx=".4" cy=".34" r=".75"><stop offset="0" stop-color="#959ba0"/><stop offset=".6" stop-color="#7f858a"/><stop offset="1" stop-color="#6c7276"/></radialGradient>
+        <radialGradient id="pf-patch" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#70767a"/><stop offset=".65" stop-color="#5a6064"/><stop offset="1" stop-color="#4a4f53"/></radialGradient>
+        <radialGradient id="pf-eye" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#4a3a33"/><stop offset=".55" stop-color="#1c1615"/><stop offset="1" stop-color="#0b0909"/></radialGradient>
+        <radialGradient id="pf-shadow"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+        <linearGradient id="sc-light" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".13"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <radialGradient id="sc-vig" cx=".5" cy=".42" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient>
+        <radialGradient id="sc-glow" cx=".5" cy="0" r=".7"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".22"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient>
+      </defs></svg>
       <div class="pt-stats" aria-live="polite">
         <span class="pt-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4-.2 2 .8 3 1.5 3C11 8 12 5 12 2z" fill="currentColor"/></svg><b id="pt-streak">0</b> <span class="en">day streak</span><span class="zh">天连续打卡</span></span>
         <span class="pt-pud" id="pt-pud"><svg class="sc pud-ava mood-hap" viewBox="-36 -96 72 100" aria-hidden="true"><g class="pp"><g class="pp-in"><g class="pp-move"><g class="tail"><g class="tail-in"><ellipse cx="19" cy="-24" rx="6" ry="6" fill="#f7f4ef"/><circle cx="24.3" cy="-24.0" r="3.0" fill="#f7f4ef"/><circle cx="22.7" cy="-20.3" r="3.0" fill="#f7f4ef"/><circle cx="19.0" cy="-18.7" r="3.0" fill="#f7f4ef"/><circle cx="15.3" cy="-20.3" r="3.0" fill="#f7f4ef"/><circle cx="13.7" cy="-24.0" r="3.0" fill="#f7f4ef"/><circle cx="15.3" cy="-27.7" r="3.0" fill="#f7f4ef"/><circle cx="19.0" cy="-29.3" r="3.0" fill="#f7f4ef"/><circle cx="22.7" cy="-27.7" r="3.0" fill="#f7f4ef"/></g></g><g class="acc a4"><path d="M-10 -40 L-24 -24" stroke="#7a4a2a" stroke-width="2"/><rect x="-34" y="-28" width="15" height="13" rx="3" fill="#e3b061"/><rect x="-34" y="-28" width="15" height="5" rx="2" fill="#c98a3c"/><circle cx="-26.5" cy="-21" r="1.4" fill="#7a4a2a"/></g><g class="torso"><ellipse cx="0" cy="-21" rx="17" ry="20" fill="#f7f4ef"/><circle cx="15.0" cy="-21.0" r="5.5" fill="#f7f4ef"/><circle cx="13.5" cy="-13.4" r="5.5" fill="#f7f4ef"/><circle cx="9.3" cy="-7.2" r="5.5" fill="#f7f4ef"/><circle cx="3.3" cy="-3.8" r="5.5" fill="#f7f4ef"/><circle cx="-3.3" cy="-3.8" r="5.5" fill="#f7f4ef"/><circle cx="-9.3" cy="-7.2" r="5.5" fill="#f7f4ef"/><circle cx="-13.5" cy="-13.4" r="5.5" fill="#f7f4ef"/><circle cx="-15.0" cy="-21.0" r="5.5" fill="#f7f4ef"/><circle cx="-13.5" cy="-28.6" r="5.5" fill="#f7f4ef"/><circle cx="-9.3" cy="-34.8" r="5.5" fill="#f7f4ef"/><circle cx="-3.3" cy="-38.2" r="5.5" fill="#f7f4ef"/><circle cx="3.3" cy="-38.2" r="5.5" fill="#f7f4ef"/><circle cx="9.3" cy="-34.8" r="5.5" fill="#f7f4ef"/><circle cx="13.5" cy="-28.6" r="5.5" fill="#f7f4ef"/><ellipse cx="0" cy="-14" rx="9" ry="10" fill="#e6e1d8" opacity=".6"/></g><g class="paw-l"><ellipse cx="-8" cy="-4" rx="6.5" ry="5" fill="#f7f4ef"/><circle cx="-2.3" cy="-4.0" r="3.0" fill="#f7f4ef"/><circle cx="-4.4" cy="-0.6" r="3.0" fill="#f7f4ef"/><circle cx="-9.3" cy="0.3" r="3.0" fill="#f7f4ef"/><circle cx="-13.2" cy="-2.1" r="3.0" fill="#f7f4ef"/><circle cx="-13.2" cy="-5.9" r="3.0" fill="#f7f4ef"/><circle cx="-9.3" cy="-8.3" r="3.0" fill="#f7f4ef"/><circle cx="-4.4" cy="-7.4" r="3.0" fill="#f7f4ef"/><ellipse cx="-8" cy="-2" rx="3" ry="2" fill="#8a8f92"/></g><g class="paw-r"><ellipse cx="8" cy="-4" rx="6.5" ry="5" fill="#f7f4ef"/><circle cx="13.7" cy="-4.0" r="3.0" fill="#f7f4ef"/><circle cx="11.6" cy="-0.6" r="3.0" fill="#f7f4ef"/><circle cx="6.7" cy="0.3" r="3.0" fill="#f7f4ef"/><circle cx="2.8" cy="-2.1" r="3.0" fill="#f7f4ef"/><circle cx="2.8" cy="-5.9" r="3.0" fill="#f7f4ef"/><circle cx="6.7" cy="-8.3" r="3.0" fill="#f7f4ef"/><circle cx="11.6" cy="-7.4" r="3.0" fill="#f7f4ef"/></g><g class="acc a3"><path d="M-12 -43 L12 -43 L0 -29Z" fill="#2f8c8f"/><circle cx="-3" cy="-38" r="1.2" fill="#f1e9dc"/><circle cx="3" cy="-37" r="1.2" fill="#f1e9dc"/><circle cx="0" cy="-33" r="1.2" fill="#f1e9dc"/></g><g class="acc a1"><path d="M-13 -44.5 q13 6 26 0" stroke="#e07a5f" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="0" cy="-40" r="2.8" fill="#ffd27a" stroke="#c98a3c" stroke-width=".8"/></g><g class="acc a5"><path d="M7 -41 l1.4 3 3.2 .3 -2.4 2.1 .8 3.1 -3 -1.7 -3 1.7 .8 -3.1 -2.4 -2.1 3.2 -.3Z" fill="#ffd27a" stroke="#c98a3c" stroke-width=".6"/></g><g class="paw-up"><g class="paw-wave"><ellipse cx="19" cy="-40" rx="5" ry="6" fill="#f7f4ef"/><circle cx="23.4" cy="-40.0" r="2.6" fill="#f7f4ef"/><circle cx="21.7" cy="-35.9" r="2.6" fill="#f7f4ef"/><circle cx="18.0" cy="-34.9" r="2.6" fill="#f7f4ef"/><circle cx="15.0" cy="-37.7" r="2.6" fill="#f7f4ef"/><circle cx="15.0" cy="-42.3" r="2.6" fill="#f7f4ef"/><circle cx="18.0" cy="-45.1" r="2.6" fill="#f7f4ef"/><circle cx="21.7" cy="-44.1" r="2.6" fill="#f7f4ef"/></g></g><g class="head"><g class="ear ear-l"><g class="twitch"><ellipse cx="-19" cy="-57" rx="7" ry="13" fill="#7c8286"/><circle cx="-12.8" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="-14.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="-17.1" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="-20.9" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="-24.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="-25.2" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="-24.0" cy="-63.7" r="3.4" fill="#7c8286"/><circle cx="-20.9" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="-17.1" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="-14.0" cy="-63.7" r="3.4" fill="#7c8286"/></g></g><g class="ear ear-r"><g class="twitch"><ellipse cx="19" cy="-57" rx="7" ry="13" fill="#7c8286"/><circle cx="25.2" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="24.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="20.9" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="17.1" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="14.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="12.8" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="14.0" cy="-63.7" r="3.4" fill="#7c8286"/><circle cx="17.1" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="20.9" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="24.0" cy="-63.7" r="3.4" fill="#7c8286"/></g></g><ellipse cx="0" cy="-61" rx="18" ry="17" fill="#f7f4ef"/><circle cx="15.8" cy="-61.0" r="5.0" fill="#f7f4ef"/><circle cx="14.3" cy="-54.5" r="5.0" fill="#f7f4ef"/><circle cx="9.9" cy="-49.3" r="5.0" fill="#f7f4ef"/><circle cx="3.5" cy="-46.4" r="5.0" fill="#f7f4ef"/><circle cx="-3.5" cy="-46.4" r="5.0" fill="#f7f4ef"/><circle cx="-9.9" cy="-49.3" r="5.0" fill="#f7f4ef"/><circle cx="-14.3" cy="-54.5" r="5.0" fill="#f7f4ef"/><circle cx="-15.8" cy="-61.0" r="5.0" fill="#f7f4ef"/><circle cx="-14.3" cy="-67.5" r="5.0" fill="#f7f4ef"/><circle cx="-9.9" cy="-72.7" r="5.0" fill="#f7f4ef"/><circle cx="-3.5" cy="-75.6" r="5.0" fill="#f7f4ef"/><circle cx="3.5" cy="-75.6" r="5.0" fill="#f7f4ef"/><circle cx="9.9" cy="-72.7" r="5.0" fill="#f7f4ef"/><circle cx="14.3" cy="-67.5" r="5.0" fill="#f7f4ef"/><ellipse cx="-7" cy="-64" rx="7" ry="6" fill="#474c50"/><ellipse cx="7.5" cy="-64" rx="6" ry="5.2" fill="#5d6266"/><ellipse cx="-9" cy="-73" rx="8" ry="5" fill="#666b6f"/><circle cx="-2.0" cy="-73.0" r="3.0" fill="#666b6f"/><circle cx="-4.6" cy="-69.6" r="3.0" fill="#666b6f"/><circle cx="-10.6" cy="-68.7" r="3.0" fill="#666b6f"/><circle cx="-15.3" cy="-71.1" r="3.0" fill="#666b6f"/><circle cx="-15.3" cy="-74.9" r="3.0" fill="#666b6f"/><circle cx="-10.6" cy="-77.3" r="3.0" fill="#666b6f"/><circle cx="-4.6" cy="-76.4" r="3.0" fill="#666b6f"/><ellipse cx="0" cy="-52" rx="9" ry="7" fill="#f7f4ef"/><circle cx="7.9" cy="-52.0" r="3.0" fill="#f7f4ef"/><circle cx="6.1" cy="-48.0" r="3.0" fill="#f7f4ef"/><circle cx="1.4" cy="-45.9" r="3.0" fill="#f7f4ef"/><circle cx="-4.0" cy="-46.7" r="3.0" fill="#f7f4ef"/><circle cx="-7.4" cy="-49.9" r="3.0" fill="#f7f4ef"/><circle cx="-7.4" cy="-54.1" r="3.0" fill="#f7f4ef"/><circle cx="-4.0" cy="-57.3" r="3.0" fill="#f7f4ef"/><circle cx="1.4" cy="-58.1" r="3.0" fill="#f7f4ef"/><circle cx="6.1" cy="-56.0" r="3.0" fill="#f7f4ef"/><ellipse cx="0" cy="-56.5" rx="3.6" ry="2.8" fill="#1d1d1f"/><circle cx="-1" cy="-57.5" r=".8" fill="#fff" opacity=".7"/><g class="eyes-big"><g class="eyes"><circle cx="-6.5" cy="-64" r="2.6" fill="#141414"/><circle cx="6.5" cy="-64" r="2.6" fill="#141414"/><circle cx="-5.6" cy="-65" r=".85" fill="#fff"/><circle cx="7.4" cy="-65" r=".85" fill="#fff"/><circle class="glint" cx="-7.4" cy="-62.9" r=".5" fill="#fff"/><circle class="glint" cx="5.6" cy="-62.9" r=".5" fill="#fff"/></g></g><path class="mo mo-sad" d="M-5 -47.5 Q0 -52 5 -47.5" stroke="#2a2a2c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path class="mo mo-sad" d="M-11.5 -69.5 l5.5 -2.8 M11.5 -69.5 l-5.5 -2.8" stroke="#2a2a2c" stroke-width="1.3" stroke-linecap="round"/><path class="mo mo-down" d="M-4 -48.5 Q0 -50.5 4 -48.5" stroke="#2a2a2c" stroke-width="1.4" fill="none" stroke-linecap="round"/><path class="mo mo-mid" d="M0 -53.5 v2.5 M-4 -49.5 q4 1.2 8 0" stroke="#2a2a2c" stroke-width="1.4" fill="none" stroke-linecap="round"/><path class="mo mo-smile" d="M0 -53.5 v2.5 M-5 -50.5 q5 4.5 10 0" stroke="#2a2a2c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path class="mo mo-hap" d="M-5.5 -51 q5.5 6 11 0Z" fill="#2a2a2c"/><g class="tongue mo mo-hap"><path d="M-3.4 -48.5 v4 q3.4 5 6.8 0 v-4Z" fill="#ef6f8f"/><path d="M0 -48 v4" stroke="#d24f72" stroke-width=".8"/></g><circle class="mo mo-smile mo-hap" cx="-12" cy="-55" r="2.4" fill="#f4a2b0" opacity=".7"/><circle class="mo mo-smile mo-hap" cx="12" cy="-55" r="2.4" fill="#f4a2b0" opacity=".7"/><g class="acc a2"><path d="M15 -76 l-7 -5 v10Z M15 -76 l7 -5 v10Z" fill="#f08aa8"/><circle cx="15" cy="-76" r="2.4" fill="#e0607f"/></g><g class="acc a6"><g transform="translate(-9 -80) rotate(-16)"><path d="M-8 0 L-7 -9 L-3 -4 L0 -11 L3 -4 L7 -9 L8 0Z" fill="#ffd27a" stroke="#c98a3c" stroke-width=".8"/><circle cx="0" cy="-3" r="1.3" fill="#e07a5f"/></g></g><path class="sweat" d="M19 -80 q3 5 0 7 q-3 -2 0 -7Z" fill="#8fd4d5"/></g></g></g></g></svg><span class="pt-pud-txt"><b><span class="en">Pudding</span><span class="zh">布丁</span> · Lv <span id="pt-lvl">0</span></b><span class="pt-lvbar"><i id="pt-lvfill"></i></span><span class="pt-unlock" id="pt-unlock"></span></span></span>
@@ -2205,6 +2257,21 @@ a { text-underline-offset: 3px; }
     ['l', 'Little linking words', '冠词 · 介词', /^(a|an|the|in|on|at|to|for|by|with|of|from|near|and|or|but|up|out|about|into)$/],
     ['o', 'Verbs, nouns & describing words', '动词 · 名词 · 形容词等', /./]];
   function groupOf(w) { var n = norm(w); for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][3].test(n)) return GROUPS[i][0]; return 'o'; }
+  // art pass: ground shadow under Pudding, soft light and vignette in each scene
+  function polish(svg) {
+    if (!svg || svg._pol) return; svg._pol = true;
+    svg.querySelectorAll('.pp').forEach(function (pp) {
+      var sh = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+      sh.setAttribute('class', 'pp-shadow'); sh.setAttribute('cx', '0'); sh.setAttribute('cy', '1.5'); sh.setAttribute('rx', '21'); sh.setAttribute('ry', '4'); sh.setAttribute('fill', 'url(#pf-shadow)');
+      pp.insertBefore(sh, pp.firstChild); });
+    if (svg.classList.contains('pud-ava')) return;
+    var bgr = svg.querySelector(':scope > rect'); if (!bgr) return;
+    var w = bgr.getAttribute('width') || 320, h = bgr.getAttribute('height') || 150, frag = '';
+    ['sc-glow', 'sc-light'].forEach(function (id) { frag += '<rect class="sc-fx" width="' + w + '" height="' + h + '" rx="10" fill="url(#' + id + ')" pointer-events="none"/>'; });
+    bgr.insertAdjacentHTML('afterend', frag);
+    var vig = '<rect class="sc-fx" width="' + w + '" height="' + h + '" rx="10" fill="url(#sc-vig)" pointer-events="none"/>', sp = svg.querySelector('.sparks');
+    if (sp) sp.insertAdjacentHTML('beforebegin', vig); else svg.insertAdjacentHTML('beforeend', vig);
+  }
   var NS = 'http://www.w3.org/2000/svg';
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function attachFollow(svg) {
@@ -2280,7 +2347,7 @@ a { text-underline-offset: 3px; }
     topic = id === 'daily' ? dailyTopic() : id === 'sprint' ? sprintTopic() : DATA.filter(function (t) { return t.id === id; })[0]; if (!topic) return;
     queue = topic.q.map(function (q) { return { q: q, retry: false }; });
     qi = 0; score = 0; gained = 0; combo = 0; bestCombo = 0; attempts = 0; t0 = Date.now(); freshB = []; paintCombo(false);
-    $('pt-scene').innerHTML = SCENES[topic.sprint ? 'daily' : topic.id] || ''; scene = $('pt-scene').querySelector('svg'); setScene(scene, 0, false);
+    $('pt-scene').innerHTML = SCENES[topic.sprint ? 'daily' : topic.id] || ''; scene = $('pt-scene').querySelector('svg'); polish(scene); setScene(scene, 0, false);
     grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false; root.classList.add('playing'); player.classList.toggle('is-sprint', !!topic.sprint);
     try { history.replaceState(null, '', topic.sprint ? '#practice' : '#practice-' + id); } catch (e) {}
     if (topic.sprint) { $('pt-prog').parentNode.classList.add('timer'); sprintEnd = Date.now() + 60000; lastSec = 60; sprintT = setInterval(tickSprint, 100); tickSprint(); }
@@ -2455,7 +2522,7 @@ a { text-underline-offset: 3px; }
     if (DATA.every(function (t) { return starsOf(t.id) === 3; })) award('allstars');
     player.hidden = true; done.hidden = false;
     var win = sp ? score >= 10 : score / n >= .75, end = $('pt-end'); end.innerHTML = SCENES[sp ? 'daily' : topic.id] || '';
-    var es = end.querySelector('svg'); setScene(es, 0, false); dress(es, lvBefore); end.querySelectorAll('.cf').forEach(function (x) { x.remove(); });
+    var es = end.querySelector('svg'); polish(es); setScene(es, 0, false); dress(es, lvBefore); end.querySelectorAll('.cf').forEach(function (x) { x.remove(); });
     setTimeout(function () { setScene(es, win ? 1 : sp ? Math.min(1, score / 15) : score / n, true); dress(es, lvBefore); if (win) { react(es, true); confetti(end); setTimeout(function () { es.classList.add('party'); }, 1200); } attachFollow(es); }, 250);
     sfx(win ? 'win' : 'soft');
     var row = $('pt-starrow'); row.innerHTML = starRow(0);
@@ -2506,7 +2573,7 @@ a { text-underline-offset: 3px; }
   });
   var lb = document.querySelector('.lang-btn');
   if (lb) lb.addEventListener('click', function () { setTimeout(function () { paintStats(); if (!player.hidden && !checked && !topic.sprint) show(); if (!player.hidden && topic) paintCombo(false); }, 0); });
-  var ava = document.querySelector('.pud-ava');
+  var ava = document.querySelector('.pud-ava'); polish(ava);
   if (ava) { ava.style.cursor = 'pointer'; ava.addEventListener('click', function () { ava.classList.remove('r-hop'); void ava.getBoundingClientRect(); ava.classList.add('r-hop'); setTimeout(function () { ava.classList.remove('r-hop'); }, 600); }); }
   paintStats();
   function route() { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && m[1] !== 'sprint' && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
