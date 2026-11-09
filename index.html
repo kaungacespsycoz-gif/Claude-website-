@@ -1086,6 +1086,10 @@ a { text-underline-offset: 3px; }
 .pt-opt.bad[disabled] { cursor: default; }
 .pt-fb.bad .pt-fb-head b::before { content: "!"; background: #f6b3a6; color: #3a120c; }
 .pt-close { border-radius: 12px; }
+.pt-top { grid-template-columns: auto 1fr auto 38px; }
+.pt-close { width: auto; padding: 0 14px 0 8px; gap: 4px; display: inline-flex; align-items: center; color: var(--fg); font: 500 .72rem/1 var(--font); letter-spacing: .14em; text-transform: uppercase; }
+.pt-close::after { content: "Lessons"; }
+:root[data-lang="zh"] .pt-close::after { content: "全部课程"; letter-spacing: .06em; font-size: .8rem; }
 .pt-daily, .pt-sprint { border-radius: 16px; }
 .pt-daily-go { border-radius: 12px; box-shadow: 0 4px 0 rgba(0,0,0,.28); }
 .pt-ds { border-radius: 14px; }
@@ -1191,7 +1195,7 @@ a { text-underline-offset: 3px; }
       <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
     </ul>
     <div class="nav-right">
-      <a class="play-pill" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Lesson</span><span class="zh">今日小课</span></span></a>
+      <a class="play-pill" href="#practice" aria-label="Lessons / 英语小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Lessons</span><span class="zh">英语小课</span></span></a>
       <button class="wx-btn wx-head" type="button" data-copy="wechat-id" aria-label="Copy our WeChat ID / 复制微信号"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12.6 5C6.8 5 2.2 8.9 2.2 13.6c0 2.7 1.5 5.1 3.8 6.7l-.9 2.9 3.4-1.8c1.2.4 2.6.6 4 .6h.6a8 8 0 0 1-.3-2.2c0-4.6 4.4-8.3 9.9-8.3h.6C22.4 7.9 17.9 5 12.6 5z" fill="currentColor"/><circle cx="9" cy="11.6" r="1.3" fill="#0d2226"/><circle cx="16" cy="11.6" r="1.3" fill="#0d2226"/><path d="M29.8 19.8c0-3.9-3.9-7.1-8.6-7.1s-8.6 3.2-8.6 7.1 3.9 7.1 8.6 7.1c1 0 2-.1 2.9-.4l2.7 1.5-.7-2.4c2.2-1.3 3.7-3.4 3.7-5.8z" fill="currentColor"/><circle cx="18.3" cy="18.6" r="1.1" fill="#0d2226"/><circle cx="24.1" cy="18.6" r="1.1" fill="#0d2226"/></svg></button>
       <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言"><span class="en"><b>EN</b> / 中文</span><span class="zh">EN / <b>中文</b></span></button>
       <a class="btn btn-solid" href="#book"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
@@ -1487,7 +1491,7 @@ a { text-underline-offset: 3px; }
 
       <div class="pt-player" id="pt-player" hidden>
         <div class="pt-top">
-          <button class="pt-close" type="button" id="pt-close" aria-label="Close practice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <button class="pt-close" type="button" id="pt-close" aria-label="All lessons / 全部课程"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="pt-progress"><i id="pt-prog"></i></div>
           <span class="pt-combo" id="pt-combo" aria-live="polite"></span>
           <span class="pt-count" id="pt-count"></span>
@@ -1840,7 +1844,7 @@ a { text-underline-offset: 3px; }
 </div>
 
 <div class="action-bar">
-  <a class="bar-lesson" href="#practice-daily"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Daily lesson</span><span class="zh">今日小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
+  <a class="bar-lesson" href="#practice"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Lessons</span><span class="zh">英语小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
   <a class="btn btn-solid bar-book" href="#book"><span class="en">Book a free day</span><span class="zh">预约免费体验</span></a>
 </div>
 
@@ -2601,6 +2605,10 @@ a { text-underline-offset: 3px; }
     var vig = '<rect class="sc-fx fx-vig" width="' + w + '" height="' + h + '" rx="10" fill="url(#sc-vig)" pointer-events="none"/>', sp = svg.querySelector('.sparks');
     if (sp) sp.insertAdjacentHTML('beforebegin', vig); else svg.insertAdjacentHTML('beforeend', vig);
     if (id) room(svg, id);
+    var cid = 'vbc' + (++roomN), NSs = 'http://www.w3.org/2000/svg', defs = document.createElementNS(NSs, 'defs');
+    defs.innerHTML = '<clipPath id="' + cid + '"><rect width="320" height="150" rx="10"/></clipPath>'; svg.insertBefore(defs, svg.firstChild);
+    svg.querySelectorAll('[data-move]').forEach(function (g) { if (g.querySelector('.pp')) return;
+      var w = document.createElementNS(NSs, 'g'); w.setAttribute('clip-path', 'url(#' + cid + ')'); g.parentNode.insertBefore(w, g); w.appendChild(g); });
   }
   var NS = 'http://www.w3.org/2000/svg';
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -2935,7 +2943,7 @@ a { text-underline-offset: 3px; }
   var ava = document.querySelector('.pud-ava'); polish(ava);
   if (ava) { ava.style.cursor = 'pointer'; ava.addEventListener('click', function () { ava.classList.remove('r-hop'); void ava.getBoundingClientRect(); ava.classList.add('r-hop'); setTimeout(function () { ava.classList.remove('r-hop'); }, 600); }); }
   paintStats();
-  function route() { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && m[1] !== 'sprint' && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
+  function route() { if (location.hash === '#practice' && topic && (!player.hidden || !done.hidden)) { close(); return; } var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && m[1] !== 'sprint' && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
   function routeOnLoad() { setTimeout(function () { route(); if (topic && !player.hidden) { var de = document.documentElement, sb = de.style.scrollBehavior; de.style.scrollBehavior = 'auto'; player.scrollIntoView({ block: 'start' }); de.style.scrollBehavior = sb; } }, 60); }
   if (document.readyState === 'complete') routeOnLoad(); else addEventListener('load', routeOnLoad);
   addEventListener('hashchange', route);
