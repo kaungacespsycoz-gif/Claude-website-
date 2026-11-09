@@ -731,6 +731,142 @@ a { text-underline-offset: 3px; }
 .pt-unlock { font-size: .8rem; }
 .pt-stats { align-items: center; }
 .pt-newitem { color: var(--brass); font-size: 1.1rem; font-weight: 600; }
+
+/* ---- game layer: HUD, modes, trail map, badges, combo, sprint ---- */
+.pt-grid { display: block; }
+.pt-stats { gap: 14px 22px; }
+.pt-goal { gap: 10px; }
+.pt-ring { width: 34px; height: 34px; transform: rotate(-90deg); }
+.pt-ring circle { fill: none; stroke-width: 4; }
+.pt-ring .ring-bg { stroke: rgba(241,233,220,.14); }
+.pt-ring .ring-fg { stroke: var(--brass); stroke-linecap: round; stroke-dasharray: 0 100; transition: stroke-dasharray .8s var(--ease-out); }
+.pt-goal.met .pt-ring .ring-fg { stroke: #ffd27a; }
+.pt-week { display: inline-flex; gap: 6px; align-items: center; }
+.pt-week i { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 600 .66rem/1 var(--font); font-style: normal; color: var(--muted); border: 1px solid var(--line); }
+.pt-week i.on { background: var(--brass); color: var(--brass-ink); border-color: var(--brass); }
+.pt-week i.now { border-color: var(--brass); }
+.pt-snd { margin-left: auto; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: none; border: 1px solid var(--line); color: var(--muted); cursor: pointer; }
+.pt-snd svg { width: 20px; height: 20px; }
+.pt-snd .snd-off, .pt-snd[aria-pressed="false"] .snd-on { display: none; }
+.pt-snd[aria-pressed="false"] .snd-off { display: inline; }
+.pt-snd-sm { margin: 0; width: 38px; height: 38px; }
+.pt-modes { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; margin-bottom: 56px; }
+.pt-modes .pt-daily { grid-column: auto; }
+.pt-sprint { border-color: rgba(143,212,213,.55); background: linear-gradient(120deg, rgba(95,195,196,.14), rgba(13,34,38,0) 70%); gap: 18px; justify-content: flex-start; }
+.pt-sprint .pt-daily-text { flex: 1; }
+.pt-sprint .pt-daily-kicker { color: #8fd4d5; }
+.pt-sprint .pt-daily-go { background: #8fd4d5; }
+.pt-sprint-clock { flex: none; position: relative; width: 64px; height: 64px; color: #8fd4d5; }
+.pt-sprint-clock svg { width: 100%; height: 100%; }
+.pt-sprint-clock b { position: absolute; inset: 14px 0 0; display: grid; place-items: center; font: 600 1rem/1 var(--font) !important; color: var(--fg); }
+@media (max-width: 900px) { .pt-modes { grid-template-columns: 1fr; } }
+.pt-map, .pt-shelf { position: relative; }
+.pt-map-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+.pt-map-total { color: var(--muted); font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.pt-route { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.pt-route path { fill: none; stroke-linecap: round; }
+.pt-route .rt-bg { stroke: rgba(241,233,220,.22); stroke-width: 3; stroke-dasharray: 2 10; }
+.pt-route .rt-on { stroke: var(--brass); stroke-width: 3.5; }
+.pt-path { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 46px 18px; position: relative; }
+.pt-path li { display: grid; justify-items: center; }
+.pt-path li:nth-child(even) { margin-top: 40px; }
+.pt-path li:nth-child(5) { grid-area: 2 / 4; } .pt-path li:nth-child(6) { grid-area: 2 / 3; } .pt-path li:nth-child(7) { grid-area: 2 / 2; } .pt-path li:nth-child(8) { grid-area: 2 / 1; }
+.pt-node { all: unset; box-sizing: border-box; cursor: pointer; display: grid; justify-items: center; gap: 8px; text-align: center; padding: 6px; max-width: 200px; -webkit-tap-highlight-color: transparent; }
+.pt-node:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; }
+.pt-medal { position: relative; width: 112px; height: 112px; border-radius: 50%; padding: 5px; background: var(--bg-3); box-shadow: 0 0 0 1px var(--line), 0 6px 0 #081619; transition: transform .2s var(--ease-out), box-shadow .2s var(--ease-out); }
+.pt-medal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; filter: saturate(.75) brightness(.8); transition: filter .3s; }
+.pt-node:active .pt-medal { transform: translateY(4px); box-shadow: 0 0 0 1px var(--line), 0 2px 0 #081619; }
+@media (hover: hover) and (pointer: fine) { .pt-node:hover .pt-medal { transform: translateY(-3px); } .pt-node:hover .pt-medal img { filter: none; } }
+.pt-num { position: absolute; left: -2px; top: -2px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); border: 1px solid var(--line); font: 600 .8rem/1 var(--font); color: var(--muted); }
+.pt-node.done .pt-medal { background: var(--brass); box-shadow: 0 0 0 1px var(--brass), 0 6px 0 #8a6a35; }
+.pt-node.done .pt-medal img { filter: none; }
+.pt-node.done .pt-num { background: var(--brass); color: var(--brass-ink); border-color: var(--brass); }
+.pt-node.gold .pt-medal { background: linear-gradient(140deg, #ffe4a3, #e3b061 45%, #b98a3f); box-shadow: 0 0 0 1px #ffe4a3, 0 6px 0 #8a6a35, 0 0 28px rgba(255,210,122,.35); }
+.pt-pin { position: absolute; left: 50%; top: -36px; transform: translateX(-50%); white-space: nowrap; background: var(--fg); color: var(--brass-ink); font: 600 .72rem/1 var(--font); letter-spacing: .12em; text-transform: uppercase; padding: 7px 10px; border-radius: 6px; display: none; }
+.pt-pin::after { content: ""; position: absolute; left: 50%; bottom: -5px; margin-left: -5px; border: 5px solid transparent; border-bottom: 0; border-top-color: var(--fg); }
+.pt-node.next .pt-pin { display: block; animation: pt-bob 1.6s ease-in-out infinite; }
+.pt-node.next .pt-medal { box-shadow: 0 0 0 2px var(--fg), 0 6px 0 #081619; }
+.pt-node.next .pt-medal img { filter: none; }
+@keyframes pt-bob { 50% { transform: translate(-50%, -5px); } }
+.pt-stars { display: flex; gap: 2px; margin-top: 4px; }
+.pt-stars svg { width: 18px; height: 18px; color: rgba(241,233,220,.2); }
+.pt-stars svg.on { color: #ffd27a; }
+.pt-node b { font-family: var(--display); font-weight: 400; font-size: 1.3rem; line-height: 1.1; }
+.pt-node .pt-best { font-size: var(--fs-xs); color: var(--muted); letter-spacing: .04em; }
+.pt-node b, .pt-node .pt-best, .pt-stars { background: var(--bg-2); padding: 1px 8px; border-radius: 6px; }
+@media (max-width: 760px) {
+  .pt-path { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 12px; }
+  .pt-path li:nth-child(n) { grid-area: auto; margin-top: 0; }
+  .pt-path li:nth-child(3) { grid-area: 2 / 2; } .pt-path li:nth-child(4) { grid-area: 2 / 1; }
+  .pt-path li:nth-child(5) { grid-area: 3 / 1; } .pt-path li:nth-child(6) { grid-area: 3 / 2; }
+  .pt-path li:nth-child(7) { grid-area: 4 / 2; } .pt-path li:nth-child(8) { grid-area: 4 / 1; }
+  .pt-path li:nth-child(4n+2), .pt-path li:nth-child(4n+3) { margin-top: 30px; }
+  .pt-medal { width: 96px; height: 96px; }
+  .pt-node b { font-size: 1.15rem; }
+}
+.pt-shelf { margin-top: 64px; }
+.pt-badges { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.pt-badge { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); font-size: var(--fs-xs); line-height: 1.35; }
+.pt-badge b { display: block; color: var(--fg); font-size: var(--fs-sm); font-weight: 600; opacity: .55; }
+.pt-badge svg { width: 40px; height: 40px; color: rgba(241,233,220,.2); }
+.pt-badge.got { border-color: rgba(227,176,97,.55); }
+.pt-badge.got b { opacity: 1; }
+.pt-badge.got svg { color: var(--brass); }
+.pt-badge.fresh { animation: pt-glow 1.6s var(--ease-out) 2; }
+@keyframes pt-glow { 40% { box-shadow: 0 0 0 3px rgba(255,210,122,.5); } }
+/* player */
+.pt-player { position: relative; }
+.pt-top { position: relative; grid-template-columns: 44px 1fr auto 38px; gap: 12px; }
+.pt-combo { position: absolute; left: 0; right: 0; top: -34px; margin: 0 auto; width: max-content; font: 600 .8rem/1 var(--font); letter-spacing: .06em; color: var(--brass-ink); background: var(--brass); padding: 7px 10px; border-radius: 99px; white-space: nowrap; visibility: hidden; }
+.pt-combo.on { visibility: visible; }
+.pt-combo.hot { background: linear-gradient(90deg, #ffd27a, #f0907f); }
+.pt-combo.pop { animation: pt-pop .45s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pt-pop { 0% { transform: scale(.4); } 100% { transform: scale(1); } }
+.pt-progress { position: relative; height: 14px; border-radius: 7px; }
+.pt-progress i { border-radius: 7px; background: linear-gradient(180deg, #f0c47c, var(--brass)); box-shadow: inset 0 -4px 0 rgba(0,0,0,.12); }
+.pt-progress i::after { content: ""; position: absolute; left: 8px; right: 8px; top: 3px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.35); }
+.pt-progress i { position: relative; }
+.pt-progress.timer i { transition: width .12s linear; background: linear-gradient(180deg, #a6e0e0, #8fd4d5); }
+.pt-progress.timer.hurry i { background: linear-gradient(180deg, #f6ab9d, #f0907f); }
+.pt-progress.surge i { animation: pt-surge .5s var(--ease-out); }
+@keyframes pt-surge { 40% { filter: brightness(1.4); } }
+.pt-foot { position: relative; transition: background .25s, border-color .25s; margin-left: -18px; margin-right: -18px; padding: 20px 18px 18px; border-radius: 0 0 10px 10px; }
+.pt-foot.is-ok { background: rgba(227,176,97,.1); border-top-color: var(--brass); }
+.pt-foot.is-bad { background: rgba(240,144,127,.08); border-top-color: rgba(240,144,127,.5); }
+.pt-fb.ok, .pt-fb.bad { animation: pt-up .35s var(--ease-out); }
+.pt-fb.bad b { color: #f6b3a6; }
+@keyframes pt-up { from { opacity: 0; transform: translateY(10px); } }
+.pt-fb-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pt-say { flex: none; width: 34px; height: 34px; border-radius: 50%; display: inline-grid; place-items: center; background: none; border: 1px solid var(--line); color: var(--brass); cursor: pointer; padding: 0; }
+.pt-say svg { width: 18px; height: 18px; }
+.pt-say.talking { border-color: var(--brass); background: rgba(227,176,97,.14); }
+.no-tts .pt-say { display: none !important; }
+.pt-way { grid-template-columns: 92px 1fr auto; }
+.pt-float { position: absolute; right: 18px; top: -14px; font: 700 1.05rem/1 var(--font); color: #ffd27a; pointer-events: none; animation: pt-float 1s var(--ease-out) forwards; text-shadow: 0 2px 0 rgba(0,0,0,.35); }
+@keyframes pt-float { from { opacity: 0; transform: translateY(8px) scale(.8); } 25% { opacity: 1; transform: translateY(-6px) scale(1.1); } to { opacity: 0; transform: translateY(-34px); } }
+.pt-retry { color: #f6b3a6; }
+@media (hover: hover) and (pointer: fine) {
+  .pt-opt[data-key]::before { content: attr(data-key); display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 12px; border: 1px solid var(--line); border-radius: 4px; font-size: .72rem; color: var(--muted); vertical-align: 1px; }
+}
+.pt-opt { border-radius: 10px; }
+.pt-opt.ok { animation: pt-pop .35s cubic-bezier(.34,1.56,.64,1); }
+/* end screen */
+.pt-starrow { display: flex; gap: 10px; justify-content: center; margin-top: 4px; }
+.pt-starrow svg { width: 54px; height: 54px; color: rgba(241,233,220,.16); }
+.pt-starrow svg:nth-child(2) { width: 68px; height: 68px; margin-top: -10px; }
+.pt-starrow svg.on { color: #ffd27a; animation: pt-star .6s cubic-bezier(.34,1.56,.64,1); filter: drop-shadow(0 0 12px rgba(255,210,122,.5)); }
+@keyframes pt-star { 0% { transform: scale(0) rotate(-40deg); } 100% { transform: scale(1) rotate(0); } }
+.pt-done-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; width: min(560px, 100%); }
+.pt-ds { display: grid; gap: 4px; padding: 12px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.pt-ds b { font-size: 1.4rem; color: var(--brass); font-variant-numeric: tabular-nums; }
+.pt-ds small { color: var(--muted); font-size: var(--fs-xs); }
+@media (max-width: 520px) { .pt-done-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pt-done-streak { color: var(--brass); }
+.pt-toast { position: fixed; left: 50%; bottom: 24px; z-index: 80; transform: translate(-50%, 140%); display: flex; gap: 12px; align-items: center; padding: 12px 18px 12px 12px; background: var(--fg); color: var(--brass-ink); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.4); transition: transform .45s cubic-bezier(.34,1.56,.64,1); max-width: calc(100vw - 32px); }
+.pt-toast.show { transform: translate(-50%, 0); }
+.pt-toast svg { width: 38px; height: 38px; color: #b98a3f; flex: none; }
+.pt-toast small { display: block; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+@media (prefers-reduced-motion: reduce) { .pt-node.next .pt-pin, .pt-combo.pop, .pt-starrow svg.on, .pt-opt.ok, .pt-float, .pt-fb.ok, .pt-fb.bad, .pt-badge.fresh { animation: none; } .pt-toast { transition: none; } }
 @media (prefers-reduced-motion: reduce) { .sc.mood-smile .tail { animation: none; } .sc .acc.pop { animation: none; } }
 
 /* ===== Pudding body animation ===== */
@@ -1067,8 +1203,12 @@ a { text-underline-offset: 3px; }
         <span class="pt-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4-.2 2 .8 3 1.5 3C11 8 12 5 12 2z" fill="currentColor"/></svg><b id="pt-streak">0</b> <span class="en">day streak</span><span class="zh">天连续打卡</span></span>
         <span class="pt-pud" id="pt-pud"><svg class="sc pud-ava mood-hap" viewBox="-36 -96 72 100" aria-hidden="true"><g class="pp"><g class="pp-in"><g class="pp-move"><g class="tail"><g class="tail-in"><ellipse cx="19" cy="-24" rx="6" ry="6" fill="#f7f4ef"/><circle cx="24.3" cy="-24.0" r="3.0" fill="#f7f4ef"/><circle cx="22.7" cy="-20.3" r="3.0" fill="#f7f4ef"/><circle cx="19.0" cy="-18.7" r="3.0" fill="#f7f4ef"/><circle cx="15.3" cy="-20.3" r="3.0" fill="#f7f4ef"/><circle cx="13.7" cy="-24.0" r="3.0" fill="#f7f4ef"/><circle cx="15.3" cy="-27.7" r="3.0" fill="#f7f4ef"/><circle cx="19.0" cy="-29.3" r="3.0" fill="#f7f4ef"/><circle cx="22.7" cy="-27.7" r="3.0" fill="#f7f4ef"/></g></g><g class="acc a4"><path d="M-10 -40 L-24 -24" stroke="#7a4a2a" stroke-width="2"/><rect x="-34" y="-28" width="15" height="13" rx="3" fill="#e3b061"/><rect x="-34" y="-28" width="15" height="5" rx="2" fill="#c98a3c"/><circle cx="-26.5" cy="-21" r="1.4" fill="#7a4a2a"/></g><g class="torso"><ellipse cx="0" cy="-21" rx="17" ry="20" fill="#f7f4ef"/><circle cx="15.0" cy="-21.0" r="5.5" fill="#f7f4ef"/><circle cx="13.5" cy="-13.4" r="5.5" fill="#f7f4ef"/><circle cx="9.3" cy="-7.2" r="5.5" fill="#f7f4ef"/><circle cx="3.3" cy="-3.8" r="5.5" fill="#f7f4ef"/><circle cx="-3.3" cy="-3.8" r="5.5" fill="#f7f4ef"/><circle cx="-9.3" cy="-7.2" r="5.5" fill="#f7f4ef"/><circle cx="-13.5" cy="-13.4" r="5.5" fill="#f7f4ef"/><circle cx="-15.0" cy="-21.0" r="5.5" fill="#f7f4ef"/><circle cx="-13.5" cy="-28.6" r="5.5" fill="#f7f4ef"/><circle cx="-9.3" cy="-34.8" r="5.5" fill="#f7f4ef"/><circle cx="-3.3" cy="-38.2" r="5.5" fill="#f7f4ef"/><circle cx="3.3" cy="-38.2" r="5.5" fill="#f7f4ef"/><circle cx="9.3" cy="-34.8" r="5.5" fill="#f7f4ef"/><circle cx="13.5" cy="-28.6" r="5.5" fill="#f7f4ef"/><ellipse cx="0" cy="-14" rx="9" ry="10" fill="#e6e1d8" opacity=".6"/></g><g class="paw-l"><ellipse cx="-8" cy="-4" rx="6.5" ry="5" fill="#f7f4ef"/><circle cx="-2.3" cy="-4.0" r="3.0" fill="#f7f4ef"/><circle cx="-4.4" cy="-0.6" r="3.0" fill="#f7f4ef"/><circle cx="-9.3" cy="0.3" r="3.0" fill="#f7f4ef"/><circle cx="-13.2" cy="-2.1" r="3.0" fill="#f7f4ef"/><circle cx="-13.2" cy="-5.9" r="3.0" fill="#f7f4ef"/><circle cx="-9.3" cy="-8.3" r="3.0" fill="#f7f4ef"/><circle cx="-4.4" cy="-7.4" r="3.0" fill="#f7f4ef"/><ellipse cx="-8" cy="-2" rx="3" ry="2" fill="#8a8f92"/></g><g class="paw-r"><ellipse cx="8" cy="-4" rx="6.5" ry="5" fill="#f7f4ef"/><circle cx="13.7" cy="-4.0" r="3.0" fill="#f7f4ef"/><circle cx="11.6" cy="-0.6" r="3.0" fill="#f7f4ef"/><circle cx="6.7" cy="0.3" r="3.0" fill="#f7f4ef"/><circle cx="2.8" cy="-2.1" r="3.0" fill="#f7f4ef"/><circle cx="2.8" cy="-5.9" r="3.0" fill="#f7f4ef"/><circle cx="6.7" cy="-8.3" r="3.0" fill="#f7f4ef"/><circle cx="11.6" cy="-7.4" r="3.0" fill="#f7f4ef"/></g><g class="acc a3"><path d="M-12 -43 L12 -43 L0 -29Z" fill="#2f8c8f"/><circle cx="-3" cy="-38" r="1.2" fill="#f1e9dc"/><circle cx="3" cy="-37" r="1.2" fill="#f1e9dc"/><circle cx="0" cy="-33" r="1.2" fill="#f1e9dc"/></g><g class="acc a1"><path d="M-13 -44.5 q13 6 26 0" stroke="#e07a5f" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="0" cy="-40" r="2.8" fill="#ffd27a" stroke="#c98a3c" stroke-width=".8"/></g><g class="acc a5"><path d="M7 -41 l1.4 3 3.2 .3 -2.4 2.1 .8 3.1 -3 -1.7 -3 1.7 .8 -3.1 -2.4 -2.1 3.2 -.3Z" fill="#ffd27a" stroke="#c98a3c" stroke-width=".6"/></g><g class="paw-up"><g class="paw-wave"><ellipse cx="19" cy="-40" rx="5" ry="6" fill="#f7f4ef"/><circle cx="23.4" cy="-40.0" r="2.6" fill="#f7f4ef"/><circle cx="21.7" cy="-35.9" r="2.6" fill="#f7f4ef"/><circle cx="18.0" cy="-34.9" r="2.6" fill="#f7f4ef"/><circle cx="15.0" cy="-37.7" r="2.6" fill="#f7f4ef"/><circle cx="15.0" cy="-42.3" r="2.6" fill="#f7f4ef"/><circle cx="18.0" cy="-45.1" r="2.6" fill="#f7f4ef"/><circle cx="21.7" cy="-44.1" r="2.6" fill="#f7f4ef"/></g></g><g class="head"><g class="ear ear-l"><g class="twitch"><ellipse cx="-19" cy="-57" rx="7" ry="13" fill="#7c8286"/><circle cx="-12.8" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="-14.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="-17.1" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="-20.9" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="-24.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="-25.2" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="-24.0" cy="-63.7" r="3.4" fill="#7c8286"/><circle cx="-20.9" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="-17.1" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="-14.0" cy="-63.7" r="3.4" fill="#7c8286"/></g></g><g class="ear ear-r"><g class="twitch"><ellipse cx="19" cy="-57" rx="7" ry="13" fill="#7c8286"/><circle cx="25.2" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="24.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="20.9" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="17.1" cy="-46.1" r="3.4" fill="#7c8286"/><circle cx="14.0" cy="-50.3" r="3.4" fill="#7c8286"/><circle cx="12.8" cy="-57.0" r="3.4" fill="#7c8286"/><circle cx="14.0" cy="-63.7" r="3.4" fill="#7c8286"/><circle cx="17.1" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="20.9" cy="-67.9" r="3.4" fill="#7c8286"/><circle cx="24.0" cy="-63.7" r="3.4" fill="#7c8286"/></g></g><ellipse cx="0" cy="-61" rx="18" ry="17" fill="#f7f4ef"/><circle cx="15.8" cy="-61.0" r="5.0" fill="#f7f4ef"/><circle cx="14.3" cy="-54.5" r="5.0" fill="#f7f4ef"/><circle cx="9.9" cy="-49.3" r="5.0" fill="#f7f4ef"/><circle cx="3.5" cy="-46.4" r="5.0" fill="#f7f4ef"/><circle cx="-3.5" cy="-46.4" r="5.0" fill="#f7f4ef"/><circle cx="-9.9" cy="-49.3" r="5.0" fill="#f7f4ef"/><circle cx="-14.3" cy="-54.5" r="5.0" fill="#f7f4ef"/><circle cx="-15.8" cy="-61.0" r="5.0" fill="#f7f4ef"/><circle cx="-14.3" cy="-67.5" r="5.0" fill="#f7f4ef"/><circle cx="-9.9" cy="-72.7" r="5.0" fill="#f7f4ef"/><circle cx="-3.5" cy="-75.6" r="5.0" fill="#f7f4ef"/><circle cx="3.5" cy="-75.6" r="5.0" fill="#f7f4ef"/><circle cx="9.9" cy="-72.7" r="5.0" fill="#f7f4ef"/><circle cx="14.3" cy="-67.5" r="5.0" fill="#f7f4ef"/><ellipse cx="-7" cy="-64" rx="7" ry="6" fill="#474c50"/><ellipse cx="7.5" cy="-64" rx="6" ry="5.2" fill="#5d6266"/><ellipse cx="-9" cy="-73" rx="8" ry="5" fill="#666b6f"/><circle cx="-2.0" cy="-73.0" r="3.0" fill="#666b6f"/><circle cx="-4.6" cy="-69.6" r="3.0" fill="#666b6f"/><circle cx="-10.6" cy="-68.7" r="3.0" fill="#666b6f"/><circle cx="-15.3" cy="-71.1" r="3.0" fill="#666b6f"/><circle cx="-15.3" cy="-74.9" r="3.0" fill="#666b6f"/><circle cx="-10.6" cy="-77.3" r="3.0" fill="#666b6f"/><circle cx="-4.6" cy="-76.4" r="3.0" fill="#666b6f"/><ellipse cx="0" cy="-52" rx="9" ry="7" fill="#f7f4ef"/><circle cx="7.9" cy="-52.0" r="3.0" fill="#f7f4ef"/><circle cx="6.1" cy="-48.0" r="3.0" fill="#f7f4ef"/><circle cx="1.4" cy="-45.9" r="3.0" fill="#f7f4ef"/><circle cx="-4.0" cy="-46.7" r="3.0" fill="#f7f4ef"/><circle cx="-7.4" cy="-49.9" r="3.0" fill="#f7f4ef"/><circle cx="-7.4" cy="-54.1" r="3.0" fill="#f7f4ef"/><circle cx="-4.0" cy="-57.3" r="3.0" fill="#f7f4ef"/><circle cx="1.4" cy="-58.1" r="3.0" fill="#f7f4ef"/><circle cx="6.1" cy="-56.0" r="3.0" fill="#f7f4ef"/><ellipse cx="0" cy="-56.5" rx="3.6" ry="2.8" fill="#1d1d1f"/><circle cx="-1" cy="-57.5" r=".8" fill="#fff" opacity=".7"/><g class="eyes-big"><g class="eyes"><circle cx="-6.5" cy="-64" r="2.6" fill="#141414"/><circle cx="6.5" cy="-64" r="2.6" fill="#141414"/><circle cx="-5.6" cy="-65" r=".85" fill="#fff"/><circle cx="7.4" cy="-65" r=".85" fill="#fff"/><circle class="glint" cx="-7.4" cy="-62.9" r=".5" fill="#fff"/><circle class="glint" cx="5.6" cy="-62.9" r=".5" fill="#fff"/></g></g><path class="mo mo-sad" d="M-5 -47.5 Q0 -52 5 -47.5" stroke="#2a2a2c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path class="mo mo-sad" d="M-11.5 -69.5 l5.5 -2.8 M11.5 -69.5 l-5.5 -2.8" stroke="#2a2a2c" stroke-width="1.3" stroke-linecap="round"/><path class="mo mo-down" d="M-4 -48.5 Q0 -50.5 4 -48.5" stroke="#2a2a2c" stroke-width="1.4" fill="none" stroke-linecap="round"/><path class="mo mo-mid" d="M0 -53.5 v2.5 M-4 -49.5 q4 1.2 8 0" stroke="#2a2a2c" stroke-width="1.4" fill="none" stroke-linecap="round"/><path class="mo mo-smile" d="M0 -53.5 v2.5 M-5 -50.5 q5 4.5 10 0" stroke="#2a2a2c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path class="mo mo-hap" d="M-5.5 -51 q5.5 6 11 0Z" fill="#2a2a2c"/><g class="tongue mo mo-hap"><path d="M-3.4 -48.5 v4 q3.4 5 6.8 0 v-4Z" fill="#ef6f8f"/><path d="M0 -48 v4" stroke="#d24f72" stroke-width=".8"/></g><circle class="mo mo-smile mo-hap" cx="-12" cy="-55" r="2.4" fill="#f4a2b0" opacity=".7"/><circle class="mo mo-smile mo-hap" cx="12" cy="-55" r="2.4" fill="#f4a2b0" opacity=".7"/><g class="acc a2"><path d="M15 -76 l-7 -5 v10Z M15 -76 l7 -5 v10Z" fill="#f08aa8"/><circle cx="15" cy="-76" r="2.4" fill="#e0607f"/></g><g class="acc a6"><g transform="translate(-9 -80) rotate(-16)"><path d="M-8 0 L-7 -9 L-3 -4 L0 -11 L3 -4 L7 -9 L8 0Z" fill="#ffd27a" stroke="#c98a3c" stroke-width=".8"/><circle cx="0" cy="-3" r="1.3" fill="#e07a5f"/></g></g><path class="sweat" d="M19 -80 q3 5 0 7 q-3 -2 0 -7Z" fill="#8fd4d5"/></g></g></g></g></svg><span class="pt-pud-txt"><b><span class="en">Pudding</span><span class="zh">布丁</span> · Lv <span id="pt-lvl">0</span></b><span class="pt-lvbar"><i id="pt-lvfill"></i></span><span class="pt-unlock" id="pt-unlock"></span></span></span>
         <span class="pt-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6L22 9.3l-5.4 4.8 1.6 7.1L12 17.6 5.8 21.2l1.6-7.1L2 9.3l7.1-.7z" fill="currentColor"/></svg><b id="pt-xp">0</b> XP</span>
+        <span class="pt-stat pt-goal"><svg class="pt-ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" class="ring-bg"/><circle cx="18" cy="18" r="15" class="ring-fg" id="pt-ring" pathLength="100"/></svg><span><b id="pt-today">0</b>/30 XP <span class="en">daily goal</span><span class="zh">今日目标</span></span></span>
+        <span class="pt-week" id="pt-week" aria-label="This week"></span>
+        <button class="pt-snd" type="button" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="snd-on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="snd-off" d="M16.5 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
       </div>
       <div class="pt-grid" id="pt-grid">
+      <div class="pt-modes">
         <button class="pt-daily" type="button" data-topic="daily">
           <span class="pt-daily-text">
             <span class="pt-daily-kicker"><span class="en">Today's lesson</span><span class="zh">今日课程</span> · <span id="pt-daily-date"></span></span>
@@ -1077,61 +1217,43 @@ a { text-underline-offset: 3px; }
           </span>
           <span class="pt-daily-go" id="pt-daily-go"><span class="en">Start</span><span class="zh">开始</span></span>
         </button>
-        <button class="pt-card" type="button" data-topic="shopping">
-          <span class="pt-img"><img src="images/wh-lab-shop.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Shopping</span><span class="zh">购物</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="shopping"></span></span>
-            <span class="pt-bar"><i data-bar="shopping"></i></span></span>
+        <button class="pt-daily pt-sprint" type="button" data-topic="sprint">
+          <span class="pt-sprint-clock" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M24 26V15M19 5h10M24 5v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><b>60</b></span>
+          <span class="pt-daily-text">
+            <span class="pt-daily-kicker"><span class="en">Sea Sprint · arcade</span><span class="zh">海边冲刺 · 挑战赛</span></span>
+            <b><span class="en">How many in 60 seconds?</span><span class="zh">60 秒能答对几题？</span></b>
+            <span class="pt-daily-status" id="pt-sprint-best"></span>
+          </span>
+          <span class="pt-daily-go"><span class="en">Play</span><span class="zh">开始</span></span>
         </button>
-        <button class="pt-card" type="button" data-topic="cafe">
-          <span class="pt-img"><img src="images/wh-lab-cafe.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">At the café</span><span class="zh">点餐</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="cafe"></span></span>
-            <span class="pt-bar"><i data-bar="cafe"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="weather">
-          <span class="pt-img"><img src="images/wh-lab-storm.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Weather</span><span class="zh">天气</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="weather"></span></span>
-            <span class="pt-bar"><i data-bar="weather"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="directions">
-          <span class="pt-img"><img src="images/wh-path-market.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Directions</span><span class="zh">问路</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="directions"></span></span>
-            <span class="pt-bar"><i data-bar="directions"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="hotel">
-          <span class="pt-img"><img src="images/wh-lab-hotel.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Hotel</span><span class="zh">酒店</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="hotel"></span></span>
-            <span class="pt-bar"><i data-bar="hotel"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="smalltalk">
-          <span class="pt-img"><img src="images/wh-welcome.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Small talk</span><span class="zh">寒暄</span></b>
-            <span class="pt-meta"><span class="en">10 questions</span><span class="zh">10 道题</span> · <span class="pt-best" data-best="smalltalk"></span></span>
-            <span class="pt-bar"><i data-bar="smalltalk"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="ways">
-          <span class="pt-img"><img src="images/wh-prep.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Say it another way</span><span class="zh">换个说法</span></b>
-            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="ways"></span></span>
-            <span class="pt-bar"><i data-bar="ways"></i></span></span>
-        </button>
-        <button class="pt-card" type="button" data-topic="collocations">
-          <span class="pt-img"><img src="images/wh-pronounce.jpg" alt="" loading="lazy"></span>
-          <span class="pt-body"><b><span class="en">Collocations</span><span class="zh">词语搭配</span></b>
-            <span class="pt-meta"><span class="en">9 questions</span><span class="zh">9 道题</span> · <span class="pt-best" data-best="collocations"></span></span>
-            <span class="pt-bar"><i data-bar="collocations"></i></span></span>
-        </button>
+      </div>
+      <div class="pt-map">
+        <div class="pt-map-head"><span class="label"><span class="en">The topic trail</span><span class="zh">主题路线</span></span><span class="pt-map-total" id="pt-map-total"></span></div>
+        <svg class="pt-route" id="pt-route" aria-hidden="true"></svg>
+        <ol class="pt-path">
+          <li><button class="pt-node" type="button" data-topic="shopping"><span class="pt-medal"><img src="images/wh-lab-shop.jpg" alt="" loading="lazy"><span class="pt-num">1</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="shopping"></span><b><span class="en">Shopping</span><span class="zh">购物</span></b><span class="pt-best" data-best="shopping"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="cafe"><span class="pt-medal"><img src="images/wh-lab-cafe.jpg" alt="" loading="lazy"><span class="pt-num">2</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="cafe"></span><b><span class="en">At the café</span><span class="zh">点餐</span></b><span class="pt-best" data-best="cafe"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="weather"><span class="pt-medal"><img src="images/wh-lab-storm.jpg" alt="" loading="lazy"><span class="pt-num">3</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="weather"></span><b><span class="en">Weather</span><span class="zh">天气</span></b><span class="pt-best" data-best="weather"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="directions"><span class="pt-medal"><img src="images/wh-path-market.jpg" alt="" loading="lazy"><span class="pt-num">4</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="directions"></span><b><span class="en">Directions</span><span class="zh">问路</span></b><span class="pt-best" data-best="directions"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="hotel"><span class="pt-medal"><img src="images/wh-lab-hotel.jpg" alt="" loading="lazy"><span class="pt-num">5</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="hotel"></span><b><span class="en">Hotel</span><span class="zh">酒店</span></b><span class="pt-best" data-best="hotel"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="smalltalk"><span class="pt-medal"><img src="images/wh-welcome.jpg" alt="" loading="lazy"><span class="pt-num">6</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="smalltalk"></span><b><span class="en">Small talk</span><span class="zh">寒暄</span></b><span class="pt-best" data-best="smalltalk"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="ways"><span class="pt-medal"><img src="images/wh-prep.jpg" alt="" loading="lazy"><span class="pt-num">7</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="ways"></span><b><span class="en">Say it another way</span><span class="zh">换个说法</span></b><span class="pt-best" data-best="ways"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="collocations"><span class="pt-medal"><img src="images/wh-pronounce.jpg" alt="" loading="lazy"><span class="pt-num">8</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="collocations"></span><b><span class="en">Collocations</span><span class="zh">词语搭配</span></b><span class="pt-best" data-best="collocations"></span></button></li>
+        </ol>
+      </div>
+      <div class="pt-shelf">
+        <div class="pt-map-head"><span class="label"><span class="en">Badges</span><span class="zh">徽章</span></span><span class="pt-map-total" id="pt-badge-total"></span></div>
+        <ul class="pt-badges" id="pt-badges"></ul>
+      </div>
       </div>
 
       <div class="pt-player" id="pt-player" hidden>
         <div class="pt-top">
           <button class="pt-close" type="button" id="pt-close" aria-label="Close practice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
           <div class="pt-progress"><i id="pt-prog"></i></div>
+          <span class="pt-combo" id="pt-combo" aria-live="polite"></span>
           <span class="pt-count" id="pt-count"></span>
+          <button class="pt-snd pt-snd-sm" type="button" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="snd-on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="snd-off" d="M16.5 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
         </div>
         <div class="pt-scene" id="pt-scene"></div>
         <p class="pt-scene-hint" aria-hidden="true"><span class="en"><span class="h-mouse">Move your cursor and Pudding follows · click her to pet</span><span class="h-touch">Drag to lead Pudding · tap her to pet</span></span><span class="zh"><span class="h-mouse">移动光标，布丁会跟着你 · 点击她摸摸头</span><span class="h-touch">滑动带着布丁走 · 轻点她摸摸头</span></span></p>
@@ -1150,11 +1272,13 @@ a { text-underline-offset: 3px; }
 
       <div class="pt-done" id="pt-done" hidden>
         <div class="pt-end" id="pt-end"></div>
+        <div class="pt-starrow" id="pt-starrow" aria-hidden="true"></div>
         <h3 id="pt-done-title"></h3>
         <p class="pt-end-cap" id="pt-end-cap"></p>
         <p class="pt-newitem" id="pt-newitem" hidden></p>
         <p class="pt-done-score" id="pt-done-score"></p>
-        <div class="pt-done-stats"><span id="pt-done-xp"></span><span id="pt-done-streak"></span></div>
+        <div class="pt-done-stats"><span class="pt-ds"><b id="pt-done-xp"></b><small><span class="en">XP earned</span><span class="zh">获得经验</span></small></span><span class="pt-ds"><b id="pt-done-acc"></b><small><span class="en">first-try accuracy</span><span class="zh">一次答对率</span></small></span><span class="pt-ds"><b id="pt-done-combo"></b><small><span class="en">best combo</span><span class="zh">最高连对</span></small></span><span class="pt-ds"><b id="pt-done-time"></b><small><span class="en">time</span><span class="zh">用时</span></small></span></div>
+        <p class="pt-done-streak" id="pt-done-streak"></p>
         <div class="hero-actions">
           <button class="btn btn-solid" type="button" id="pt-next"><span class="en">Next topic</span><span class="zh">下一个主题</span></button>
           <button class="btn btn-line" type="button" id="pt-again"><span class="en">Practise again</span><span class="zh">再练一次</span></button>
@@ -1853,13 +1977,114 @@ a { text-underline-offset: 3px; }
   }
   var scored = function (t) { return t.q.filter(function (q) { return q.k !== 'learn'; }).length; };
 
+  // ---- game layer: sound, voice, stars, daily goal, week, badges ----
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 17.6l-6 3.3 1.3-6.7-5-4.7 6.8-.8z" fill="currentColor"/></svg>';
+  var MEDAL = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="13" fill="currentColor" opacity=".18"/><path d="M20 10.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6L20 24l-5.4 3 1.2-6-4.5-4.2 6.1-.7z" fill="currentColor"/></svg>';
+  var SPEAK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var GOAL = 30;
+  var BADGES = [['first', 'First splash', '第一课', 'Finish any lesson', '完成任意一课'], ['perfect', 'Perfect lesson', '满分课程', 'Everything right first try', '全部一次答对'],
+    ['combo5', 'On a roll', '手感火热', '5 right in a row', '连续答对 5 题'], ['combo10', 'Unstoppable', '势不可挡', '10 right in a row', '连续答对 10 题'],
+    ['streak3', 'Three days', '连续 3 天', 'A 3-day streak', '连续打卡 3 天'], ['streak7', 'Week by the sea', '海边一周', 'A 7-day streak', '连续打卡 7 天'],
+    ['explorer', 'Explorer', '探索者', 'Play all 8 topics', '玩遍 8 个主题'], ['sprint15', 'Speedster', '速度之星', '15+ in Sea Sprint', '冲刺赛答对 15 题'],
+    ['allstars', 'All stars', '全部三星', '3 stars on every topic', '所有主题三星']];
+  var soundOn = store.get('sound', true), AC = null;
+  function paintSnd() { document.querySelectorAll('.pt-snd').forEach(function (b) { b.setAttribute('aria-pressed', soundOn ? 'true' : 'false'); b.setAttribute('aria-label', soundOn ? L2('Sound on', '声音：开') : L2('Sound off', '声音：关')); }); }
+  function tone(f, at, dur, type, vol) {
+    if (!AC) { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; AC = new C(); }
+    if (AC.state === 'suspended') AC.resume();
+    var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + at;
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || .15, t + .012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + .03);
+  }
+  function sfx(k, n) {
+    if (!soundOn) return;
+    try {
+      if (k === 'tap') tone(700, 0, .05, 'triangle', .05);
+      else if (k === 'ok') { var b = 523.25 * Math.pow(2, Math.min(n || 0, 7) * 2 / 12); tone(b, 0, .12, 'triangle', .14); tone(b * 1.5, .07, .25, 'triangle', .13); }
+      else if (k === 'bad') { tone(233, 0, .16, 'sine', .12); tone(196, .1, .26, 'sine', .11); }
+      else if (k === 'win') [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { tone(f, i * .1, .34, 'triangle', .13); });
+      else if (k === 'soft') [392, 523.25].forEach(function (f, i) { tone(f, i * .12, .3, 'triangle', .1); });
+      else if (k === 'star') tone(880 * Math.pow(2, (n || 0) * 4 / 12), 0, .3, 'sine', .14);
+      else if (k === 'badge') [783.99, 987.77, 1174.66, 1567.98].forEach(function (f, i) { tone(f, i * .07, .3, 'sine', .1); });
+      else if (k === 'tick') tone(1300, 0, .035, 'square', .03);
+    } catch (e) {}
+  }
+  function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
+  document.querySelectorAll('.pt-snd').forEach(function (b) { b.addEventListener('click', function () {
+    soundOn = !soundOn; store.set('sound', soundOn); paintSnd(); if (soundOn) sfx('ok', 0); else if (tts) speechSynthesis.cancel(); }); });
+  var tts = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined', voice = null;
+  if (!tts) root.classList.add('no-tts');
+  function pickVoice() { try { var vs = speechSynthesis.getVoices(), by = function (re) { return vs.filter(function (v) { return re.test(v.lang); })[0]; };
+    voice = by(/^en[-_]GB/i) || by(/^en[-_]US/i) || by(/^en/i) || null; } catch (e) {} }
+  if (tts) { pickVoice(); try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {} }
+  function speak(text, btn) {
+    if (!tts || !text) return;
+    try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.lang = voice ? voice.lang : 'en-GB'; if (voice) u.voice = voice; u.rate = .92;
+      if (btn) { btn.classList.add('talking'); u.onend = u.onerror = function () { btn.classList.remove('talking'); }; }
+      speechSynthesis.speak(u); } catch (e) {}
+  }
+  function sayBtn(text) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-say'; b.innerHTML = SPEAK; b.setAttribute('aria-label', L2('Listen', '听发音'));
+    b.addEventListener('click', function (e) { e.stopPropagation(); speak(text, b); }); return b; }
+  function starsFor(sc, n) { return sc >= n ? 3 : sc >= n * .7 ? 2 : 1; }
+  function starsOf(id) { var st = store.get('stars', {}); if (st[id] != null) return st[id]; var b = store.get('best', {})[id]; if (b == null) return 0;
+    var t = DATA.filter(function (x) { return x.id === id; })[0]; return t ? starsFor(b, scored(t)) : 0; }
+  function starRow(n) { var h = ''; for (var i = 0; i < 3; i++) h += STAR.replace('<svg', '<svg class="' + (i < n ? 'on' : '') + '"'); return h; }
+  function xpToday() { var d = store.get('xpday', null); return d && d.d === today() ? d.x : 0; }
+  function addXp(n) { store.set('xp', store.get('xp', 0) + n); store.set('xpday', { d: today(), x: xpToday() + n }); }
+  function markDay() { var days = store.get('days', []); if (days.indexOf(today()) < 0) { days.push(today()); store.set('days', days.slice(-60)); } }
+  (function () { var last = store.get('last', null), days = store.get('days', null); if (last && !days) store.set('days', [last]); })();
+  function paintWeek() { var w = $('pt-week'); if (!w) return; var days = store.get('days', []), d = new Date(), dow = (d.getDay() + 6) % 7, h = '', EN = 'MTWTFSS', ZH = '一二三四五六日';
+    for (var i = 0; i < 7; i++) { var x = new Date(d); x.setDate(d.getDate() - dow + i);
+      h += '<i class="' + (days.indexOf(today(x)) > -1 ? 'on' : '') + (i === dow ? ' now' : '') + '">' + (zh() ? ZH[i] : EN[i]) + '</i>'; }
+    w.innerHTML = h; w.setAttribute('aria-label', L2('Days practised this week', '本周练习天数')); }
+  function paintBadges(fresh) { var got = store.get('badges', {}), ul = $('pt-badges'); if (!ul) return; ul.innerHTML = ''; var c = 0;
+    BADGES.forEach(function (b) { var li = document.createElement('li'), has = !!got[b[0]]; if (has) c++;
+      li.className = 'pt-badge' + (has ? ' got' : '') + (fresh && fresh.indexOf(b[0]) > -1 ? ' fresh' : '');
+      li.innerHTML = MEDAL + '<span><b></b><span></span></span>'; li.querySelector('b').textContent = L2(b[1], b[2]); li.querySelector('span span').textContent = L2(b[3], b[4]); ul.appendChild(li); });
+    $('pt-badge-total').textContent = c + ' / ' + BADGES.length; }
+  var toastQ = [], toasting = false, freshB = [];
+  function award(id) { var got = store.get('badges', {}); if (got[id]) return; got[id] = today(); store.set('badges', got); freshB.push(id);
+    toastQ.push(BADGES.filter(function (x) { return x[0] === id; })[0]); if (!toasting) nextToast(); }
+  function nextToast() { var b = toastQ.shift(); if (!b) { toasting = false; return; } toasting = true; var t = $('pt-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'pt-toast'; t.className = 'pt-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.innerHTML = MEDAL + '<span><small></small><b></b></span>'; t.querySelector('small').textContent = L2('Badge unlocked', '解锁新徽章'); t.querySelector('b').textContent = L2(b[1], b[2]);
+    sfx('badge'); buzz([20, 40, 20]); requestAnimationFrame(function () { requestAnimationFrame(function () { t.classList.add('show'); }); });
+    setTimeout(function () { t.classList.remove('show'); setTimeout(nextToast, 500); }, 2600); }
+  function drawRoute() {
+    var map = grid.querySelector('.pt-map'), svg = $('pt-route'); if (!map || !svg || grid.hidden) return;
+    var mr = map.getBoundingClientRect(); if (!mr.width) return;
+    var pts = [].slice.call(grid.querySelectorAll('.pt-medal')).map(function (m) { var r = m.getBoundingClientRect(); return [r.left + r.width / 2 - mr.left, r.top + r.height / 2 - mr.top]; });
+    function path(p) { if (p.length < 2) return ''; var f = function (v) { return v.toFixed(1); }, d = 'M' + f(p[0][0]) + ' ' + f(p[0][1]);
+      for (var i = 0; i < p.length - 1; i++) { var p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
+        d += ' C' + f(p1[0] + (p2[0] - p0[0]) / 6) + ' ' + f(p1[1] + (p2[1] - p0[1]) / 6) + ' ' + f(p2[0] - (p3[0] - p1[0]) / 6) + ' ' + f(p2[1] - (p3[1] - p1[1]) / 6) + ' ' + f(p2[0]) + ' ' + f(p2[1]); }
+      return d; }
+    var doneN = 0; DATA.forEach(function (t, i) { if (starsOf(t.id) > 0) doneN = i + 1; });
+    svg.setAttribute('viewBox', '0 0 ' + Math.round(mr.width) + ' ' + Math.round(mr.height));
+    svg.innerHTML = '<path class="rt-bg" d="' + path(pts) + '"/>' + (doneN > 1 ? '<path class="rt-on" d="' + path(pts.slice(0, doneN)) + '"/>' : '');
+  }
+  var routeT; addEventListener('resize', function () { clearTimeout(routeT); routeT = setTimeout(drawRoute, 120); });
+
   function paintStats() {
     paintPud();
     $('pt-streak').textContent = streakNow(); $('pt-xp').textContent = store.get('xp', 0);
     var best = store.get('best', {});
-    DATA.forEach(function (t) { var b = best[t.id], n = scored(t);
-      document.querySelector('[data-best="' + t.id + '"]').textContent = b == null ? L2('New', '未开始') : L2('Best ', '最佳 ') + b + '/' + n;
-      document.querySelector('[data-bar="' + t.id + '"]').style.width = (b ? b / n * 100 : 0) + '%'; });
+    var next = null, total = 0;
+    DATA.forEach(function (t) { var b = best[t.id], n = scored(t), st = starsOf(t.id); total += st;
+      document.querySelector('[data-best="' + t.id + '"]').textContent = b == null ? L2(n + ' questions', n + ' 道题') : L2('Best ', '最佳 ') + b + '/' + n;
+      document.querySelector('[data-stars="' + t.id + '"]').innerHTML = starRow(st);
+      var node = grid.querySelector('.pt-node[data-topic="' + t.id + '"]');
+      node.classList.toggle('done', st > 0); node.classList.toggle('gold', st === 3); node.classList.remove('next');
+      node.setAttribute('aria-label', L2(t.en + ': ' + st + ' of 3 stars', t.zh + '：' + st + '/3 星'));
+      if (!next && st === 0) next = node; });
+    if (!next) { var lo = 3; DATA.forEach(function (t) { var st = starsOf(t.id); if (st < lo) { lo = st; next = grid.querySelector('.pt-node[data-topic="' + t.id + '"]'); } }); }
+    if (next) next.classList.add('next');
+    $('pt-map-total').textContent = '★ ' + total + ' / ' + DATA.length * 3;
+    var tx = xpToday(); $('pt-today').textContent = tx; $('pt-ring').style.strokeDasharray = Math.min(100, tx / GOAL * 100).toFixed(1) + ' 100';
+    document.querySelector('.pt-goal').classList.toggle('met', tx >= GOAL);
+    var sb = store.get('sprintBest', 0);
+    $('pt-sprint-best').textContent = sb ? L2('Your best: ' + sb + ' correct', '最佳成绩：答对 ' + sb + ' 题') : L2('Quick-fire questions from every topic', '各个主题的快问快答');
+    paintWeek(); paintBadges(freshB); paintSnd(); requestAnimationFrame(drawRoute);
     var ph = phraseToday(), doneToday = store.get('dailyDone', null) === today();
     $('pt-daily-date').textContent = new Date().toLocaleDateString(zh() ? 'zh-CN' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
     $('pt-daily-title').textContent = L2('Three ways to say "' + ph.en + '" + 6 quick games', '「' + ph.zh + '」的三种说法 + 6 个小游戏');
@@ -2000,24 +2225,42 @@ a { text-underline-offset: 3px; }
     svg.addEventListener('touchstart', onDown, { passive: true });
   }
   var scene = null;
-  var topic, qi, score, picked, sel, answerWords, checked, gained, mistakes;
+  var topic, qi, score, picked, sel, answerWords, checked, gained, mistakes, queue, combo = 0, bestCombo, t0, attempts, sprintT = null, sprintEnd = 0, advanceT = null, lastSec = 60;
+  function sprintTopic() {
+    var pool = []; DATA.forEach(function (t) { t.q.forEach(function (q) { if (q.k === 'choose' || q.k === 'fix' || q.k === 'fill') pool.push(q); }); });
+    return { id: 'sprint', en: 'Sea Sprint', zh: '海边冲刺', sprint: true, q: shuffle(pool) };
+  }
+  function stopSprint() { clearInterval(sprintT); sprintT = null; clearTimeout(advanceT); var bar = $('pt-prog').parentNode; bar.classList.remove('timer', 'hurry'); }
+  function tickSprint() {
+    var left = Math.max(0, sprintEnd - Date.now()), sec = Math.ceil(left / 1000);
+    $('pt-prog').style.width = (left / 600) + '%'; $('pt-prog').parentNode.classList.toggle('hurry', left < 10000);
+    $('pt-count').textContent = sec + 's · ' + L2(score + ' right', '对 ' + score);
+    if (sec !== lastSec && sec <= 5 && sec > 0) sfx('tick'); lastSec = sec;
+    if (left <= 0) { stopSprint(); finish(); }
+  }
+  function paintCombo(pop) { var c = $('pt-combo'); c.classList.toggle('on', combo >= 2); c.classList.toggle('hot', combo >= 5);
+    c.textContent = L2(combo + ' in a row', '连对 ' + combo); if (pop && combo >= 2) { c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); } }
+  function floatXp(t) { if (reduceM) return; var f = document.createElement('span'); f.className = 'pt-float'; f.textContent = t; $('pt-foot').appendChild(f); setTimeout(function () { f.remove(); }, 1000); }
   function open(id) {
-    topic = id === 'daily' ? dailyTopic() : DATA.filter(function (t) { return t.id === id; })[0]; if (!topic) return;
-    qi = 0; score = 0; gained = 0;
-    $('pt-scene').innerHTML = SCENES[topic.id] || ''; scene = $('pt-scene').querySelector('svg'); setScene(scene, 0, false);
-    grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false;
-    try { history.replaceState(null, '', '#practice-' + id); } catch (e) {}
+    stopSprint(); if (tts) speechSynthesis.cancel();
+    topic = id === 'daily' ? dailyTopic() : id === 'sprint' ? sprintTopic() : DATA.filter(function (t) { return t.id === id; })[0]; if (!topic) return;
+    queue = topic.q.map(function (q) { return { q: q, retry: false }; });
+    qi = 0; score = 0; gained = 0; combo = 0; bestCombo = 0; attempts = 0; t0 = Date.now(); freshB = []; paintCombo(false);
+    $('pt-scene').innerHTML = SCENES[topic.sprint ? 'daily' : topic.id] || ''; scene = $('pt-scene').querySelector('svg'); setScene(scene, 0, false);
+    grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false; player.classList.toggle('is-sprint', !!topic.sprint);
+    try { history.replaceState(null, '', topic.sprint ? '#practice' : '#practice-' + id); } catch (e) {}
+    if (topic.sprint) { $('pt-prog').parentNode.classList.add('timer'); sprintEnd = Date.now() + 60000; lastSec = 60; sprintT = setInterval(tickSprint, 100); tickSprint(); }
     show(); attachFollow(scene); player.scrollIntoView({ block: 'start' });
   }
-  function close() { player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; paintStats();
+  function close() { stopSprint(); if (tts) speechSynthesis.cancel(); player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; paintStats();
     try { history.replaceState(null, '', '#practice'); } catch (e) {} }
   function btn(text, cls) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-opt' + (cls ? ' ' + cls : ''); b.textContent = text; return b; }
 
   function show() {
-    var q = topic.q[qi]; checked = false; picked = null; sel = []; answerWords = []; mistakes = 0;
-    $('pt-prog').style.width = (qi / topic.q.length * 100) + '%';
-    $('pt-count').textContent = (qi + 1) + ' / ' + topic.q.length;
-    $('pt-kind').textContent = KIND[q.k][zh() ? 1 : 0];
+    clearTimeout(advanceT); var item = queue[qi], q = item.q; checked = false; picked = null; sel = []; answerWords = []; mistakes = 0;
+    if (!topic.sprint) { $('pt-prog').style.width = (qi / queue.length * 100) + '%'; $('pt-count').textContent = (qi + 1) + ' / ' + queue.length; }
+    $('pt-kind').innerHTML = (item.retry ? '<span class="pt-retry">' + L2('Second chance', '再试一次') + '</span> · ' : '') + KIND[q.k][zh() ? 1 : 0];
+    $('pt-foot').className = 'pt-foot';
     var fb = $('pt-fb'); fb.className = 'pt-fb'; fb.innerHTML = '';
     var check = $('pt-check'); check.hidden = false; check.disabled = true; check.innerHTML = '<span class="en">Check</span><span class="zh">检查</span>';
     var opts = $('pt-opts'), ans = $('pt-answer'); opts.innerHTML = ''; ans.innerHTML = ''; ans.hidden = true; opts.className = 'pt-opts';
@@ -2028,7 +2271,7 @@ a { text-underline-offset: 3px; }
       var list = document.createElement('div'); list.className = 'pt-ways';
       l.w.forEach(function (w) { var row = document.createElement('div'); row.className = 'pt-way';
         row.innerHTML = '<span class="pt-tag ' + w[1] + '">' + TAG[w[1]][zh() ? 1 : 0] + '</span><span class="pt-way-en"></span>';
-        row.querySelector('.pt-way-en').textContent = w[0]; list.appendChild(row); });
+        row.querySelector('.pt-way-en').textContent = w[0]; row.appendChild(sayBtn(w[0])); list.appendChild(row); });
       opts.appendChild(list);
       fb.className = 'pt-fb tip'; fb.textContent = L2(l.ne, l.nz);
       check.disabled = false; check.innerHTML = '<span class="en">Got it</span><span class="zh">学会了</span>';
@@ -2040,9 +2283,9 @@ a { text-underline-offset: 3px; }
       ans.hidden = false; opts.className = 'pt-opts tiles';
       shuffle(q.w.map(function (w, i) { return { w: w, i: i }; }).concat(decoys(q).map(function (w) { return { w: w, i: -1 }; }))).forEach(function (o) {
         var b = btn(o.w);
-        b.addEventListener('click', function () { if (checked || b.classList.contains('used')) return; b.classList.add('used');
+        b.addEventListener('click', function () { if (checked || b.classList.contains('used')) return; b.classList.add('used'); sfx('tap');
           var a = btn(o.w);
-          a.addEventListener('click', function () { if (checked) return; a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); check.disabled = !answerWords.length; });
+          a.addEventListener('click', function () { if (checked) return; sfx('tap'); a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); check.disabled = !answerWords.length; });
           ans.appendChild(a); answerWords.push(o); check.disabled = false; });
         opts.appendChild(b); });
     } else if (q.k === 'match') {
@@ -2052,8 +2295,8 @@ a { text-underline-offset: 3px; }
       function tryPair() {
         if (pickL === null || pickR === null) return;
         var bl = colL.querySelector('[data-i="' + pickL + '"]'), br = colR.querySelector('[data-i="' + pickR + '"]');
-        if (pickL === pickR) { [bl, br].forEach(function (b) { b.classList.remove('shake'); b.classList.add('done'); b.disabled = true; b.setAttribute('aria-pressed', 'false'); }); matched++; }
-        else { mistakes++; [bl, br].forEach(function (b) { b.setAttribute('aria-pressed', 'false'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); setTimeout(function () { b.classList.remove('shake'); }, 450); }); }
+        if (pickL === pickR) { sfx('ok', matched); buzz(10); [bl, br].forEach(function (b) { b.classList.remove('shake'); b.classList.add('done'); b.disabled = true; b.setAttribute('aria-pressed', 'false'); }); matched++; }
+        else { mistakes++; sfx('bad'); buzz(30); [bl, br].forEach(function (b) { b.setAttribute('aria-pressed', 'false'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); setTimeout(function () { b.classList.remove('shake'); }, 450); }); }
         pickL = pickR = null;
         if (matched === q.p.length) doCheck();
       }
@@ -2067,21 +2310,30 @@ a { text-underline-offset: 3px; }
         colR.appendChild(b); });
       opts.appendChild(colL); opts.appendChild(colR);
     } else {
-      shuffle(q.o.map(function (t, i) { return { t: t, i: i }; })).forEach(function (o) {
-        var b = btn(o.t); b.dataset.i = o.i;
+      shuffle(q.o.map(function (t, i) { return { t: t, i: i }; })).forEach(function (o, n) {
+        var b = btn(o.t); b.dataset.i = o.i; if (n < 9) b.dataset.key = n + 1;
         if (q.k === 'multi') { b.setAttribute('aria-pressed', 'false');
           b.addEventListener('click', function () { if (checked) return; var on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on ? 'true' : 'false');
-            if (on) sel.push(o.i); else sel.splice(sel.indexOf(o.i), 1); check.disabled = !sel.length; });
+            sfx('tap'); if (on) sel.push(o.i); else sel.splice(sel.indexOf(o.i), 1); check.disabled = !sel.length; });
         } else {
           b.addEventListener('click', function () { if (checked) return; opts.querySelectorAll('.pt-opt').forEach(function (x) { x.classList.remove('sel'); });
-            b.classList.add('sel'); picked = o.i; check.disabled = false; });
+            b.classList.add('sel'); picked = o.i; check.disabled = false; sfx('tap'); if (topic.sprint) doCheck(); });
         }
         opts.appendChild(b); });
     }
+      if (topic.sprint) check.hidden = true;
   }
 
+  function spoken(q) {
+    if (q.k === 'order') return q.w.join(' ');
+    if (q.k === 'fill') return q.zh.replace(/_{2,}/, q.o[q.a]);
+    if (q.k === 'choose' || q.k === 'fix') return q.o[q.a];
+    if (q.k === 'multi') return q.o[q.a[0]];
+    return '';
+  }
   function doCheck() {
-    var q = topic.q[qi], ok, right;
+    if (checked) return;
+    var item = queue[qi], q = item.q, ok, right;
     if (q.k === 'order') { ok = answerWords.map(function (o) { return o.w; }).join(' ') === q.w.join(' '); right = q.w.join(' '); }
     else if (q.k === 'match') { ok = mistakes === 0; }
     else if (q.k === 'multi') {
@@ -2091,52 +2343,105 @@ a { text-underline-offset: 3px; }
         b.setAttribute('aria-pressed', 'false'); if (want) b.classList.add('ok'); else if (got) b.classList.add('bad'); });
     } else { ok = picked === q.a; right = q.o[q.a];
       $('pt-opts').querySelectorAll('.pt-opt').forEach(function (b) { if (+b.dataset.i === q.a) b.classList.add('ok'); else if (b.classList.contains('sel')) b.classList.add('bad'); }); }
-    if (ok) { score++; gained += 10; }
-    checked = true;
-    setScene(scene, score / scored(topic), true); react(scene, ok);
-    var head = ok ? L2('Correct!', '正确！') : q.k === 'match' ? L2('All matched, with ' + mistakes + ' wrong ' + (mistakes > 1 ? 'tries' : 'try'), '全部配对完成，错了 ' + mistakes + ' 次') : L2('Correct answer: ', '正确答案：') + right;
-    var fb = $('pt-fb'); fb.className = 'pt-fb ' + (ok ? 'ok' : 'bad'); fb.innerHTML = '<b></b><span class="pt-why"></span>';
-    fb.querySelector('b').textContent = head; fb.querySelector('.pt-why').textContent = L2(q.xe, q.xz);
-    var c = $('pt-check'); c.hidden = false; c.innerHTML = '<span class="en">Continue</span><span class="zh">继续</span>'; c.disabled = false; c.focus();
+    checked = true; attempts++;
+    var pts = 0, again = false;
+    if (ok) {
+      combo++; bestCombo = Math.max(bestCombo, combo); if (!item.retry) score++;
+      pts = topic.sprint ? (combo >= 3 ? 7 : 5) : item.retry ? 5 : (combo >= 3 ? 15 : 10); gained += pts;
+      sfx('ok', combo); buzz(15);
+      if (combo === 5) award('combo5'); if (combo === 10) award('combo10');
+    } else {
+      combo = 0; sfx('bad'); buzz([30, 40, 30]);
+      if (!item.retry && !topic.sprint) { queue.push({ q: q, retry: true }); again = true; }
+    }
+    paintCombo(ok);
+    if (pts) floatXp('+' + pts + ' XP');
+    if (!topic.sprint) { var bar = $('pt-prog'); bar.style.width = ((qi + 1) / queue.length * 100) + '%'; if (ok) { bar.parentNode.classList.remove('surge'); void bar.offsetWidth; bar.parentNode.classList.add('surge'); }
+      $('pt-count').textContent = (qi + 1) + ' / ' + queue.length; }
+    setScene(scene, topic.sprint ? Math.min(1, score / 15) : score / scored(topic), true); react(scene, ok);
+    if (ok && (combo === 3 || combo === 5 || combo === 10) && scene) setTimeout(function () { if (scene) say(scene, L2(combo + ' in a row!', '连对 ' + combo + '！')); }, 750);
+    var head = ok ? (item.retry ? L2('Got it this time!', '这次答对了！') : combo >= 3 ? L2('Correct! ' + combo + ' in a row', '正确！连对 ' + combo + ' 题') : L2('Correct!', '正确！'))
+      : q.k === 'match' ? L2('All matched, with ' + mistakes + ' wrong ' + (mistakes > 1 ? 'tries' : 'try'), '全部配对完成，错了 ' + mistakes + ' 次') : L2('Correct answer: ', '正确答案：') + right;
+    var fb = $('pt-fb'), txt = spoken(q); fb.className = 'pt-fb ' + (ok ? 'ok' : 'bad'); fb.innerHTML = '<div class="pt-fb-head"><b></b></div><span class="pt-why"></span>';
+    fb.querySelector('b').textContent = head; if (txt) fb.querySelector('.pt-fb-head').appendChild(sayBtn(txt));
+    fb.querySelector('.pt-why').textContent = L2(q.xe, q.xz) + (again ? L2(' We\'ll come back to this one at the end.', ' 这题会在最后再出现一次。') : '');
+    $('pt-foot').className = 'pt-foot ' + (ok ? 'is-ok' : 'is-bad');
+    if (topic.sprint) { advanceT = setTimeout(next, ok ? 650 : 1700); return; }
+    if (ok && txt && soundOn) setTimeout(function () { if (checked && queue[qi] === item) speak(txt); }, 380);
+    var c = $('pt-check'); c.hidden = false; c.innerHTML = '<span class="en">Continue</span><span class="zh">继续</span>'; c.disabled = false; c.focus({ preventScroll: true });
   }
-  function next() { qi++; if (qi < topic.q.length) show(); else finish(); }
+  function next() {
+    clearTimeout(advanceT); if (tts) speechSynthesis.cancel();
+    if (topic.sprint && !sprintT) return;
+    qi++;
+    if (topic.sprint && qi >= queue.length) queue = queue.concat(shuffle(topic.q).map(function (q) { return { q: q, retry: false }; }));
+    if (qi < queue.length) show(); else finish();
+  }
+  function mmss(ms) { var t = Math.round(ms / 1000); return Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2); }
+  function countUp(el, to, pre) { if (reduceM) { el.textContent = pre + to; return; } var s0 = performance.now();
+    (function f(now) { var k = Math.min(1, (now - s0) / 900); el.textContent = pre + Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(s0); }
   function finish() {
+    stopSprint(); if (tts) speechSynthesis.cancel();
     $('pt-prog').style.width = '100%';
-    var n = scored(topic), perfect = score === n;
+    var sp = !!topic.sprint, n = sp ? score : scored(topic), perfect = !sp && score === n, stars;
+    if (sp) stars = score >= 15 ? 3 : score >= 10 ? 2 : score >= 5 ? 1 : 0; else stars = starsFor(score, n);
     if (perfect) gained += 20;
     if (topic.daily) gained += 20;
-    var xpBefore = store.get('xp', 0); store.set('xp', xpBefore + gained); var lvBefore = level(xpBefore), lvAfter = level(xpBefore + gained);
+    var xpBefore = store.get('xp', 0), goalBefore = xpToday(); addXp(gained); var lvBefore = level(xpBefore), lvAfter = level(xpBefore + gained);
+    var prevSprint = store.get('sprintBest', 0);
     if (topic.daily) { store.set('dailyDone', today()); store.set('dailyScore', score); }
-    else { var best = store.get('best', {}); best[topic.id] = Math.max(best[topic.id] || 0, score); store.set('best', best); }
+    else if (sp) { if (score > prevSprint) store.set('sprintBest', score); }
+    else { var best = store.get('best', {}); best[topic.id] = Math.max(best[topic.id] || 0, score); store.set('best', best);
+      var sm = store.get('stars', {}); sm[topic.id] = Math.max(starsOf(topic.id), stars); store.set('stars', sm); }
     var last = store.get('last', null), y = new Date(); y.setDate(y.getDate() - 1);
     var st = last === today() ? store.get('streak', 1) : last === today(y) ? store.get('streak', 0) + 1 : 1;
-    store.set('streak', st); store.set('last', today());
+    store.set('streak', st); store.set('last', today()); markDay();
+    award('first'); if (perfect) award('perfect'); if (st >= 3) award('streak3'); if (st >= 7) award('streak7');
+    if (sp && score >= 15) award('sprint15');
+    var bm = store.get('best', {}); if (DATA.every(function (t) { return bm[t.id] != null; })) award('explorer');
+    if (DATA.every(function (t) { return starsOf(t.id) === 3; })) award('allstars');
     player.hidden = true; done.hidden = false;
-    var win = score / n >= .75, end = $('pt-end'); end.innerHTML = SCENES[topic.id] || '';
+    var win = sp ? score >= 10 : score / n >= .75, end = $('pt-end'); end.innerHTML = SCENES[sp ? 'daily' : topic.id] || '';
     var es = end.querySelector('svg'); setScene(es, 0, false); dress(es, lvBefore); end.querySelectorAll('.cf').forEach(function (x) { x.remove(); });
-    setTimeout(function () { setScene(es, win ? 1 : score / n, true); dress(es, lvBefore); if (win) { react(es, true); confetti(end); setTimeout(function () { es.classList.add('party'); }, 1200); } attachFollow(es); }, 250);
+    setTimeout(function () { setScene(es, win ? 1 : sp ? Math.min(1, score / 15) : score / n, true); dress(es, lvBefore); if (win) { react(es, true); confetti(end); setTimeout(function () { es.classList.add('party'); }, 1200); } attachFollow(es); }, 250);
+    sfx(win ? 'win' : 'soft');
+    var row = $('pt-starrow'); row.innerHTML = starRow(0);
+    [0, 1, 2].forEach(function (i) { if (i < stars) setTimeout(function () { var s = row.children[i]; if (s) { s.classList.add('on'); sfx('star', i); buzz(12); } }, 700 + i * 380); });
     var ni = $('pt-newitem'); ni.hidden = lvAfter <= lvBefore;
     if (lvAfter > lvBefore) { setTimeout(function () { dress(es, lvAfter); var a = es.querySelector('.a' + lvAfter); if (a) { a.classList.add('pop'); } if (!win) react(es, true); }, 1300);
       var got = ITEMS.slice(lvBefore, lvAfter); ni.textContent = L2('New for Pudding: ' + got.map(function (g) { return g[0]; }).join(' and ') + '!', '布丁获得新装扮：' + got.map(function (g) { return g[1]; }).join('、') + '！'); }
-    var cap = CAP[topic.id] || ['', '', '', '']; $('pt-end-cap').textContent = win ? L2(cap[0], cap[1]) : L2(cap[2] + ' Try again!', cap[3] + '再试一次吧！');
-    $('pt-done-title').textContent = perfect ? L2('Perfect!', '满分！') : score >= n * .75 ? L2('Great work!', '真棒！') : L2('Keep going!', '继续加油！');
-    $('pt-done-score').textContent = L2(topic.en + ': ' + score + ' / ' + n + ' correct', topic.zh + '：答对 ' + score + ' / ' + n);
-    $('pt-done-xp').textContent = '+' + gained + ' XP';
-    $('pt-done-streak').textContent = L2(st + ' day streak', '连续打卡 ' + st + ' 天');
+    var cap = CAP[sp ? 'daily' : topic.id] || ['', '', '', ''];
+    if (sp) $('pt-end-cap').textContent = score > prevSprint && score > 0 ? L2('New personal best! Pudding is impressed.', '刷新个人最佳！布丁都惊呆了。') : L2('Your best is ' + Math.max(prevSprint, score) + '. Can you beat it?', '你的最佳成绩是 ' + Math.max(prevSprint, score) + ' 题，再来挑战吧！');
+    else $('pt-end-cap').textContent = win ? L2(cap[0], cap[1]) : L2(cap[2] + ' Try again!', cap[3] + '再试一次吧！');
+    $('pt-done-title').textContent = sp ? L2('Time\'s up!', '时间到！') : perfect ? L2('Perfect!', '满分！') : win ? L2('Great work!', '真棒！') : L2('Keep going!', '继续加油！');
+    $('pt-done-score').textContent = sp ? L2(score + ' correct in 60 seconds', '60 秒内答对 ' + score + ' 题') : L2(topic.en + ': ' + score + ' / ' + n + ' right first time', topic.zh + '：一次答对 ' + score + ' / ' + n);
+    countUp($('pt-done-xp'), gained, '+');
+    $('pt-done-acc').textContent = (attempts ? Math.round((sp ? score / attempts : score / n) * 100) : 0) + '%';
+    $('pt-done-combo').textContent = bestCombo; $('pt-done-time').textContent = mmss(Date.now() - t0);
+    var goalNow = xpToday();
+    $('pt-done-streak').textContent = L2(st + ' day streak', '连续打卡 ' + st + ' 天') + ' · ' + (goalBefore < GOAL && goalNow >= GOAL ? L2('Daily goal reached!', '完成今日目标！') : L2(Math.min(goalNow, GOAL) + '/' + GOAL + ' XP today', '今日 ' + Math.min(goalNow, GOAL) + '/' + GOAL + ' XP'));
     var note = $('pt-done-note');
-    if (!note) { note = document.createElement('p'); note.id = 'pt-done-note'; note.className = 'pt-done-note'; $('pt-done-streak').parentNode.after(note); }
+    if (!note) { note = document.createElement('p'); note.id = 'pt-done-note'; note.className = 'pt-done-note'; $('pt-done-streak').after(note); }
     note.textContent = topic.daily ? L2('A new lesson unlocks at midnight. Come back tomorrow to keep your streak!', '新课程将在午夜更新，明天再来保持连续打卡！') : '';
-    $('pt-next').innerHTML = topic.daily ? '<span class="en">Practise a topic</span><span class="zh">练习一个主题</span>' : '<span class="en">Next topic</span><span class="zh">下一个主题</span>';
+    $('pt-next').innerHTML = topic.daily || sp ? '<span class="en">Back to the trail</span><span class="zh">返回主题路线</span>' : '<span class="en">Next topic</span><span class="zh">下一个主题</span>';
+    $('pt-again').innerHTML = sp ? '<span class="en">Play again</span><span class="zh">再玩一次</span>' : '<span class="en">Practise again</span><span class="zh">再练一次</span>';
     done.scrollIntoView({ block: 'start' });
   }
   grid.addEventListener('click', function (e) { var c = e.target.closest('[data-topic]'); if (c) open(c.dataset.topic); });
   $('pt-close').addEventListener('click', close);
-  $('pt-check').addEventListener('click', function () { if (topic.q[qi].k === 'learn' || checked) next(); else doCheck(); });
+  $('pt-check').addEventListener('click', function () { if (queue[qi].q.k === 'learn' || checked) next(); else doCheck(); });
+  document.addEventListener('keydown', function (e) {
+    if (player.hidden || e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test((e.target || {}).tagName || '')) return;
+    if (e.key === 'Enter') { var c = $('pt-check'); if (!c.hidden && !c.disabled && e.target !== c) { e.preventDefault(); c.click(); } return; }
+    if (/^[1-9]$/.test(e.key) && !checked) { var o = $('pt-opts').querySelector('.pt-opt[data-key="' + e.key + '"]'); if (o) { e.preventDefault(); o.click(); } }
+  });
   $('pt-again').addEventListener('click', function () { open(topic.id); });
-  $('pt-next').addEventListener('click', function () { if (topic.daily) { close(); grid.scrollIntoView({ block: 'center' }); return; } var i = DATA.indexOf(topic); open(DATA[(i + 1) % DATA.length].id); });
+  $('pt-next').addEventListener('click', function () { if (topic.daily || topic.sprint) { close(); grid.scrollIntoView({ block: 'center' }); return; } var i = DATA.indexOf(topic); open(DATA[(i + 1) % DATA.length].id); });
   $('pt-share').addEventListener('click', function () {
-    var url = location.href.split('#')[0] + '#practice-' + topic.id, n = scored(topic);
-    var text = topic.daily
+    var url = location.href.split('#')[0] + (topic.sprint ? '#practice' : '#practice-' + topic.id), n = scored(topic);
+    var text = topic.sprint
+      ? L2('I got ' + score + ' right in 60 seconds in Sea Sprint at Aquaire, English by the sea. Can you beat me? ' + url, '我在「海语英语 Aquaire」海边冲刺赛 60 秒答对了 ' + score + ' 题，你能超过我吗？' + url)
+      : topic.daily
       ? L2('I did today\'s English lesson at Aquaire, English by the sea: ' + score + '/' + n + ', ' + streakNow() + ' day streak! Try today\'s lesson: ' + url, '我完成了「海语英语 Aquaire」的今日英语课，答对 ' + score + '/' + n + '，已连续打卡 ' + streakNow() + ' 天！一起来学：' + url)
       : L2('I scored ' + score + '/' + n + ' on "' + topic.en + '" at Aquaire, English by the sea. Try it: ' + url, '我在「海语英语 Aquaire」完成了「' + topic.zh + '」英语练习，答对 ' + score + '/' + n + '，已连续打卡 ' + streakNow() + ' 天！你也来试试：' + url);
     var b = this, old = b.innerHTML;
@@ -2147,11 +2452,11 @@ a { text-underline-offset: 3px; }
     try { navigator.clipboard.writeText(text).then(okMsg, manual); } catch (err) { manual(); }
   });
   var lb = document.querySelector('.lang-btn');
-  if (lb) lb.addEventListener('click', function () { setTimeout(function () { paintStats(); if (!player.hidden && !checked) show(); }, 0); });
+  if (lb) lb.addEventListener('click', function () { setTimeout(function () { paintStats(); if (!player.hidden && !checked && !topic.sprint) show(); if (!player.hidden && topic) paintCombo(false); }, 0); });
   var ava = document.querySelector('.pud-ava');
   if (ava) { ava.style.cursor = 'pointer'; ava.addEventListener('click', function () { ava.classList.remove('r-hop'); void ava.getBoundingClientRect(); ava.classList.add('r-hop'); setTimeout(function () { ava.classList.remove('r-hop'); }, 600); }); }
   paintStats();
-  function route() { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
+  function route() { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && m[1] !== 'sprint' && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); }
   function routeOnLoad() { setTimeout(function () { route(); if (topic && !player.hidden) { var de = document.documentElement, sb = de.style.scrollBehavior; de.style.scrollBehavior = 'auto'; player.scrollIntoView({ block: 'start' }); de.style.scrollBehavior = sb; } }, 60); }
   if (document.readyState === 'complete') routeOnLoad(); else addEventListener('load', routeOnLoad);
   addEventListener('hashchange', route);
