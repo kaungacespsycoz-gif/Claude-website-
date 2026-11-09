@@ -845,6 +845,22 @@ a { text-underline-offset: 3px; }
 .pt-float { position: absolute; right: 18px; top: -14px; font: 700 1.05rem/1 var(--font); color: #ffd27a; pointer-events: none; animation: pt-float 1s var(--ease-out) forwards; text-shadow: 0 2px 0 rgba(0,0,0,.35); }
 @keyframes pt-float { from { opacity: 0; transform: translateY(8px) scale(.8); } 25% { opacity: 1; transform: translateY(-6px) scale(1.1); } to { opacity: 0; transform: translateY(-34px); } }
 .pt-retry { color: #f6b3a6; }
+.playing .action-bar { display: none !important; }
+.pt-opts.tiles { display: grid; gap: 14px; }
+.pt-tg { display: grid; gap: 8px; }
+.pt-tg-l { font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+:root[data-lang="zh"] .pt-tg-l { letter-spacing: .06em; font-size: var(--fs-sm); }
+.pt-tg-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pt-opt.used { visibility: visible; color: transparent; background: rgba(241,233,220,.03); border-style: dashed; border-bottom-width: 1px; pointer-events: none; box-shadow: none; }
+.pt-answer { transition: box-shadow .3s, border-color .3s; border-radius: 10px; padding: 10px; border: 1px solid var(--line); }
+.pt-answer .pt-opt { transition: border-color .2s, box-shadow .2s, background .2s; }
+.pt-answer .pt-opt.good { border-color: #7fd88a; background: rgba(127,216,138,.12); box-shadow: 0 0 12px rgba(127,216,138,.28); }
+.pt-answer.on-track { border-color: rgba(127,216,138,.55); box-shadow: 0 0 0 1px rgba(127,216,138,.25), 0 0 22px rgba(127,216,138,.14); }
+.pt-answer.complete { border-color: #7fd88a; box-shadow: 0 0 0 2px rgba(127,216,138,.45), 0 0 30px rgba(127,216,138,.25); }
+.pt-track { min-height: 1.4em; margin: -4px 0 0; font-size: var(--fs-sm); color: var(--muted); }
+.pt-track.good { color: #9be3a4; }
+.pt-also { display: block; margin-top: 6px; color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { .pt-answer, .pt-answer .pt-opt { transition: none; } }
 @media (hover: hover) and (pointer: fine) {
   .pt-opt[data-key]::before { content: attr(data-key); display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 12px; border: 1px solid var(--line); border-radius: 4px; font-size: .72rem; color: var(--muted); vertical-align: 1px; }
 }
@@ -1262,6 +1278,7 @@ a { text-underline-offset: 3px; }
           <p class="pt-prompt" id="pt-prompt"></p>
           <p class="pt-sub" id="pt-sub"></p>
           <div class="pt-answer" id="pt-answer" hidden></div>
+          <p class="pt-track" id="pt-track" aria-live="polite"></p>
           <div class="pt-opts" id="pt-opts"></div>
         </div>
         <div class="pt-foot" id="pt-foot">
@@ -2171,6 +2188,23 @@ a { text-underline-offset: 3px; }
     ['have', 'did', 'can', 'is', 'the', 'to'].forEach(function (w) { if (out.length < 4) add(w); });
     return out;
   }
+  // other natural word orders we also accept, keyed by the main answer
+  var ALT = {
+    'Can we sit by the window?': ['Can we sit near the window?'],
+    'Can I have an iced Americano, please?': ['Please can I have an iced Americano?'],
+    'Could we have the bill, please?': ['Please could we have the bill?'],
+    "It's hot and humid today.": ["Today it's hot and humid.", "It's humid and hot today.", "Today it's humid and hot."],
+    'Could you clean my room, please?': ['Please could you clean my room?'],
+    'I had a dream last night.': ['Last night I had a dream.']
+  };
+  function norm(t) { return t.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9'\- ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function answers(q) { var main = q.w.join(' '); return [main].concat(ALT[main] || []); }
+  var GROUPS = [
+    ['q', 'Question & helper words', '疑问词 · 助动词', /^(what|what's|where|where's|when|who|why|how|which|do|does|did|can|could|will|would|is|are|am|was|were|have|has|had|may|might|should|shall|must)$/],
+    ['p', 'People & pointing words', '人称 · 指代词', /^(i|i'm|i'd|i've|you|you're|we|they|he|she|it|it's|me|my|your|our|their|his|her|this|that|these|those|there|there's|let's)$/],
+    ['l', 'Little linking words', '冠词 · 介词', /^(a|an|the|in|on|at|to|for|by|with|of|from|near|and|or|but|up|out|about|into)$/],
+    ['o', 'Verbs, nouns & describing words', '动词 · 名词 · 形容词等', /./]];
+  function groupOf(w) { var n = norm(w); for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][3].test(n)) return GROUPS[i][0]; return 'o'; }
   var NS = 'http://www.w3.org/2000/svg';
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function attachFollow(svg) {
@@ -2247,12 +2281,12 @@ a { text-underline-offset: 3px; }
     queue = topic.q.map(function (q) { return { q: q, retry: false }; });
     qi = 0; score = 0; gained = 0; combo = 0; bestCombo = 0; attempts = 0; t0 = Date.now(); freshB = []; paintCombo(false);
     $('pt-scene').innerHTML = SCENES[topic.sprint ? 'daily' : topic.id] || ''; scene = $('pt-scene').querySelector('svg'); setScene(scene, 0, false);
-    grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false; player.classList.toggle('is-sprint', !!topic.sprint);
+    grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false; root.classList.add('playing'); player.classList.toggle('is-sprint', !!topic.sprint);
     try { history.replaceState(null, '', topic.sprint ? '#practice' : '#practice-' + id); } catch (e) {}
     if (topic.sprint) { $('pt-prog').parentNode.classList.add('timer'); sprintEnd = Date.now() + 60000; lastSec = 60; sprintT = setInterval(tickSprint, 100); tickSprint(); }
     show(); attachFollow(scene); player.scrollIntoView({ block: 'start' });
   }
-  function close() { stopSprint(); if (tts) speechSynthesis.cancel(); player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; paintStats();
+  function close() { stopSprint(); if (tts) speechSynthesis.cancel(); player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; root.classList.remove('playing'); paintStats();
     try { history.replaceState(null, '', '#practice'); } catch (e) {} }
   function btn(text, cls) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-opt' + (cls ? ' ' + cls : ''); b.textContent = text; return b; }
 
@@ -2263,7 +2297,7 @@ a { text-underline-offset: 3px; }
     $('pt-foot').className = 'pt-foot';
     var fb = $('pt-fb'); fb.className = 'pt-fb'; fb.innerHTML = '';
     var check = $('pt-check'); check.hidden = false; check.disabled = true; check.innerHTML = '<span class="en">Check</span><span class="zh">检查</span>';
-    var opts = $('pt-opts'), ans = $('pt-answer'); opts.innerHTML = ''; ans.innerHTML = ''; ans.hidden = true; opts.className = 'pt-opts';
+    var opts = $('pt-opts'), ans = $('pt-answer'); opts.innerHTML = ''; ans.innerHTML = ''; ans.hidden = true; ans.className = 'pt-answer'; opts.className = 'pt-opts'; $('pt-track').textContent = ''; $('pt-track').className = 'pt-track';
 
     if (q.k === 'learn') {
       var l = q.l;
@@ -2281,13 +2315,29 @@ a { text-underline-offset: 3px; }
 
     if (q.k === 'order') {
       ans.hidden = false; opts.className = 'pt-opts tiles';
-      shuffle(q.w.map(function (w, i) { return { w: w, i: i }; }).concat(decoys(q).map(function (w) { return { w: w, i: -1 }; }))).forEach(function (o) {
+      var acc = answers(q).map(function (t) { return norm(t).split(' '); }), track = $('pt-track');
+      function live() {
+        var words = norm(answerWords.map(function (o) { return o.w; }).join(' ')).split(' ').filter(Boolean), k = 0;
+        acc.forEach(function (a) { var j = 0; while (j < words.length && j < a.length && a[j] === words[j]) j++; if (j > k) k = j; });
+        // map matched word count back to tiles (a tile can hold one word)
+        var cnt = 0, allGood = words.length > 0;
+        answerWords.forEach(function (o) { var n = norm(o.w).split(' ').filter(Boolean).length; var good = cnt + n <= k; o.a.classList.toggle('good', good); if (!good) allGood = false; cnt += n; });
+        var complete = allGood && acc.some(function (a) { return a.length === words.length; });
+        ans.classList.toggle('on-track', allGood && !complete); ans.classList.toggle('complete', complete);
+        track.className = 'pt-track' + (allGood ? ' good' : '');
+        track.textContent = !words.length ? '' : complete ? L2('✓ That looks right. Press Check!', '✓ 看起来对了，点“检查”！') : allGood ? L2('✓ So far so good…', '✓ 目前都对，继续…') : L2('Hmm, the green part is right. Look again at the rest.', '嗯…绿色部分是对的，再看看后面。');
+      }
+      var bank = {}, tiles = shuffle(q.w.map(function (w, i) { return { w: w, i: i }; }).concat(decoys(q).map(function (w) { return { w: w, i: -1 }; })));
+      GROUPS.forEach(function (g) { var box = document.createElement('div'); box.className = 'pt-tg'; box.innerHTML = '<span class="pt-tg-l"></span><div class="pt-tg-row"></div>';
+        box.querySelector('.pt-tg-l').textContent = L2(g[1], g[2]); bank[g[0]] = box; });
+      tiles.forEach(function (o) {
         var b = btn(o.w);
         b.addEventListener('click', function () { if (checked || b.classList.contains('used')) return; b.classList.add('used'); sfx('tap');
-          var a = btn(o.w);
-          a.addEventListener('click', function () { if (checked) return; sfx('tap'); a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); check.disabled = !answerWords.length; });
-          ans.appendChild(a); answerWords.push(o); check.disabled = false; });
-        opts.appendChild(b); });
+          var a = btn(o.w); o.a = a;
+          a.addEventListener('click', function () { if (checked) return; sfx('tap'); a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); check.disabled = !answerWords.length; live(); });
+          ans.appendChild(a); answerWords.push(o); check.disabled = false; live(); });
+        bank[groupOf(o.w)].querySelector('.pt-tg-row').appendChild(b); });
+      GROUPS.forEach(function (g) { if (bank[g[0]].querySelector('.pt-opt')) opts.appendChild(bank[g[0]]); });
     } else if (q.k === 'match') {
       opts.className = 'pt-opts pt-match'; check.hidden = true;
       var colL = document.createElement('div'), colR = document.createElement('div'); colL.className = colR.className = 'pt-match-col';
@@ -2334,7 +2384,8 @@ a { text-underline-offset: 3px; }
   function doCheck() {
     if (checked) return;
     var item = queue[qi], q = item.q, ok, right;
-    if (q.k === 'order') { ok = answerWords.map(function (o) { return o.w; }).join(' ') === q.w.join(' '); right = q.w.join(' '); }
+    var mine = '';
+    if (q.k === 'order') { mine = norm(answerWords.map(function (o) { return o.w; }).join(' ')); ok = answers(q).some(function (t) { return norm(t) === mine; }); right = q.w.join(' '); $('pt-track').textContent = ''; }
     else if (q.k === 'match') { ok = mistakes === 0; }
     else if (q.k === 'multi') {
       ok = sel.length === q.a.length && q.a.every(function (a) { return sel.indexOf(a) > -1; });
@@ -2364,7 +2415,9 @@ a { text-underline-offset: 3px; }
       : q.k === 'match' ? L2('All matched, with ' + mistakes + ' wrong ' + (mistakes > 1 ? 'tries' : 'try'), '全部配对完成，错了 ' + mistakes + ' 次') : L2('Correct answer: ', '正确答案：') + right;
     var fb = $('pt-fb'), txt = spoken(q); fb.className = 'pt-fb ' + (ok ? 'ok' : 'bad'); fb.innerHTML = '<div class="pt-fb-head"><b></b></div><span class="pt-why"></span>';
     fb.querySelector('b').textContent = head; if (txt) fb.querySelector('.pt-fb-head').appendChild(sayBtn(txt));
+    var others = q.k === 'order' && ok ? answers(q).filter(function (t) { return norm(t) !== mine; }) : [];
     fb.querySelector('.pt-why').textContent = L2(q.xe, q.xz) + (again ? L2(' We\'ll come back to this one at the end.', ' 这题会在最后再出现一次。') : '');
+    if (others.length) { var al = document.createElement('span'); al.className = 'pt-also'; al.textContent = L2('Also correct: ', '也可以说：') + others.join(' / '); fb.appendChild(al); }
     $('pt-foot').className = 'pt-foot ' + (ok ? 'is-ok' : 'is-bad');
     if (topic.sprint) { advanceT = setTimeout(next, ok ? 650 : 1700); return; }
     if (ok && txt && soundOn) setTimeout(function () { if (checked && queue[qi] === item) speak(txt); }, 380);
