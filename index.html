@@ -1830,6 +1830,26 @@ a { text-underline-offset: 3px; }
   function confetti(host) { if (reduceM) return; var cols = ['#e3b061', '#5fc3c4', '#e07a5f', '#f1e9dc'];
     for (var i = 0; i < 40; i++) { var d = document.createElement('i'); d.className = 'cf'; d.style.left = Math.random() * 100 + '%'; d.style.background = cols[i % 4];
       d.style.animationDelay = Math.random() * .6 + 's'; d.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg'); host.appendChild(d); setTimeout(function (d) { return function () { d.remove(); }; }(d), 3200); } }
+  // look-alike decoy tiles: grammatical siblings of the answer's words, plus the question's own common mistakes
+  var FAMILIES = [['do', 'does', 'did'], ['have', 'has', 'had'], ['can', 'could', 'will', 'would'], ['is', 'are', 'am', 'was'],
+                  ['a', 'an', 'the'], ['in', 'on', 'at', 'by', 'with', 'to', 'for'], ['this', 'these', 'that'], ['i', 'me', 'my'], ['you', 'your'], ['it', 'its']];
+  function decoys(q) {
+    var answer = q.w, have = {}, out = [];
+    answer.forEach(function (w) { have[w] = 1; });
+    function add(w) { if (!have[w] && out.indexOf(w) < 0) out.push(w); }
+    (q.x || []).forEach(add);
+    var sib = [];
+    answer.forEach(function (w, idx) {
+      var bare = w.toLowerCase(); if (!/^[a-z]+$/i.test(w)) return;
+      FAMILIES.forEach(function (f) { if (f.indexOf(bare) < 0) return;
+        f.forEach(function (o) { if (o === bare) return; var t = o === 'i' ? 'I' : o; if (w[0] !== w[0].toLowerCase() && o !== 'i') t = o[0].toUpperCase() + o.slice(1); sib.push(t); }); });
+    });
+    var VERBS = ['do', 'does', 'did', 'have', 'has', 'had', 'can', 'could', 'will', 'would', 'is', 'are', 'am', 'was'];
+    var isV = function (w) { return VERBS.indexOf(w.toLowerCase()) > -1; };
+    shuffle(sib.filter(isV)).concat(shuffle(sib.filter(function (w) { return !isV(w); }))).forEach(function (w) { if (out.length < 6) add(w); });
+    ['have', 'did', 'can', 'is', 'the', 'to'].forEach(function (w) { if (out.length < 4) add(w); });
+    return out;
+  }
   var scene = null;
   var topic, qi, score, picked, sel, answerWords, checked, gained, mistakes;
   function open(id) {
@@ -1869,7 +1889,7 @@ a { text-underline-offset: 3px; }
 
     if (q.k === 'order') {
       ans.hidden = false; opts.className = 'pt-opts tiles';
-      shuffle(q.w.map(function (w, i) { return { w: w, i: i }; }).concat((q.x || []).map(function (w) { return { w: w, i: -1 }; }))).forEach(function (o) {
+      shuffle(q.w.map(function (w, i) { return { w: w, i: i }; }).concat(decoys(q).map(function (w) { return { w: w, i: -1 }; }))).forEach(function (o) {
         var b = btn(o.w);
         b.addEventListener('click', function () { if (checked || b.classList.contains('used')) return; b.classList.add('used');
           var a = btn(o.w);
