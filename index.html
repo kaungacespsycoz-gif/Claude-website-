@@ -765,6 +765,7 @@ a { text-underline-offset: 3px; }
 .pt-sprint-clock b { position: absolute; inset: 14px 0 0; display: grid; place-items: center; font: 600 1rem/1 var(--font) !important; color: var(--fg); }
 @media (max-width: 900px) { .pt-modes { grid-template-columns: 1fr; } }
 .pt-map, .pt-shelf { position: relative; }
+.pt-map > .pt-path { margin-top: 44px; }
 .pt-map-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 18px; }
 .pt-map-total { color: var(--muted); font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
 .pt-route { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
@@ -809,6 +810,34 @@ a { text-underline-offset: 3px; }
   .pt-node b { font-size: 1.15rem; }
 }
 .pt-shelf { margin-top: 64px; }
+.pt-map + .pt-modes, .pt-sheet + .pt-modes { margin: 56px 0 0; }
+.pt-sheet { position: fixed; inset: 0; z-index: 85; display: grid; align-items: end; justify-items: center; }
+.pt-sheet[hidden] { display: none; }
+.pt-sheet-bg { position: absolute; inset: 0; background: rgba(5,15,17,.6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: pt-fade .25s ease; }
+.pt-sheet-card { position: relative; width: min(520px, 100%); max-height: 92vh; overflow-y: auto; background: var(--bg-2); border: 1px solid var(--line); border-radius: 22px 22px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); animation: pt-rise .35s var(--ease-out); box-shadow: 0 -20px 60px rgba(0,0,0,.5); }
+@media (min-width: 700px) { .pt-sheet { align-items: center; } .pt-sheet-card { border-radius: 22px; } }
+@keyframes pt-fade { from { opacity: 0; } } @keyframes pt-rise { from { transform: translateY(40px); opacity: 0; } }
+.pt-sheet-img { position: relative; height: 150px; background: #173d42 center / cover no-repeat; }
+.pt-sheet-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, var(--bg-2)); }
+.pt-sheet-x { position: absolute; z-index: 2; right: 12px; top: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(13,34,38,.7); color: var(--fg); display: grid; place-items: center; cursor: pointer; }
+.pt-sheet-x svg { width: 18px; height: 18px; }
+.pt-sheet-body { padding: 0 20px 22px; display: grid; gap: 10px; margin-top: -18px; position: relative; }
+.pt-sheet-body h3 { font-family: var(--display); font-weight: 400; font-size: 2rem; line-height: 1.05; margin-bottom: 6px; }
+.pt-levels { display: grid; gap: 10px; }
+.pt-lv { display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center; text-align: left; padding: 14px; border-radius: 14px; border: 1.5px solid rgba(241,233,220,.14); background: linear-gradient(180deg, #17393e, #112d32); color: var(--fg); font: inherit; cursor: pointer; box-shadow: 0 4px 0 #071719; transition: transform .12s, box-shadow .12s, border-color .15s; }
+.pt-lv:active { transform: translateY(3px); box-shadow: 0 1px 0 #071719; }
+@media (hover: hover) and (pointer: fine) { .pt-lv:not(.locked):hover { border-color: rgba(227,176,97,.6); } }
+.pt-lv-n { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font: 600 1.1rem/1 var(--font); background: rgba(227,176,97,.14); color: var(--brass); border: 1px solid rgba(227,176,97,.4); }
+.pt-lv b { display: block; font-size: 1.05rem; font-weight: 600; }
+.pt-lv small { display: block; color: var(--muted); font-size: .82rem; margin-top: 2px; }
+.pt-lv .pt-stars { margin: 0; background: none; padding: 0; }
+.pt-lv .pt-stars svg { width: 16px; height: 16px; }
+.pt-lv.cur { border-color: var(--brass); box-shadow: 0 4px 0 #6d5126, 0 0 18px rgba(227,176,97,.15); }
+.pt-lv.locked { cursor: default; opacity: .55; box-shadow: none; background: rgba(241,233,220,.03); }
+.pt-lv.locked .pt-lv-n { background: none; color: var(--muted); border-color: var(--line); }
+.pt-lv-lock { font-size: .74rem; color: var(--muted); text-align: right; max-width: 110px; }
+.pt-lvl-chip { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
+.pt-tg.flat .pt-tg-l { display: none; }
 .pt-badges { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .pt-badge { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); font-size: var(--fs-xs); line-height: 1.35; }
 .pt-badge b { display: block; color: var(--fg); font-size: var(--fs-sm); font-weight: 600; opacity: .55; }
@@ -1428,8 +1457,8 @@ a { text-underline-offset: 3px; }
   <section class="section alt" id="practice">
     <div class="wrap">
       <div class="head">
-        <h2><span class="en">A new lesson by the sea, every day</span><span class="zh">海边英语，每天一课</span></h2>
-        <p><span class="en">A free five-minute lesson every day: a phrase of the day said three ways, then quick games on real phrases, common mistakes and natural word partners. Keep your streak going.</span><span class="zh">每天一节免费五分钟小课：今日表达的三种说法，再加上常用表达、常见错误和词语搭配小游戏。坚持每天打卡！</span></p>
+        <h2><span class="en">Learn by topic, level by level</span><span class="zh">按主题学，一级一级往上走</span></h2>
+        <p><span class="en">Pick a topic and start at Starter. Earn stars to unlock Explorer, then Pro. There’s also a fresh daily lesson and a 60-second Sea Sprint below. All free.</span><span class="zh">选一个主题，从入门开始，拿到星星解锁进阶和高级。下方还有每日更新的小课和 60 秒冲刺赛，全部免费。</span></p>
       </div>
       <svg class="pf-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
         <radialGradient id="pf-curl" cx=".4" cy=".34" r=".72"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#f8f5f0"/><stop offset="1" stop-color="#e9e3d9"/></radialGradient>
@@ -1450,6 +1479,20 @@ a { text-underline-offset: 3px; }
         <button class="pt-snd" type="button" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="snd-on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="snd-off" d="M16.5 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
       </div>
       <div class="pt-grid" id="pt-grid">
+      <div class="pt-map">
+        <div class="pt-map-head"><span class="label"><span class="en">The topic trail</span><span class="zh">主题路线</span></span><span class="pt-map-total" id="pt-map-total"></span></div>
+        <svg class="pt-route" id="pt-route" aria-hidden="true"></svg>
+        <ol class="pt-path">
+          <li><button class="pt-node" type="button" data-topic="shopping"><span class="pt-medal"><img src="images/wh-lab-shop.jpg" alt="" loading="lazy"><span class="pt-num">1</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="shopping"></span><b><span class="en">Shopping</span><span class="zh">购物</span></b><span class="pt-best" data-best="shopping"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="cafe"><span class="pt-medal"><img src="images/wh-lab-cafe.jpg" alt="" loading="lazy"><span class="pt-num">2</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="cafe"></span><b><span class="en">At the café</span><span class="zh">点餐</span></b><span class="pt-best" data-best="cafe"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="weather"><span class="pt-medal"><img src="images/wh-lab-storm.jpg" alt="" loading="lazy"><span class="pt-num">3</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="weather"></span><b><span class="en">Weather</span><span class="zh">天气</span></b><span class="pt-best" data-best="weather"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="directions"><span class="pt-medal"><img src="images/wh-path-market.jpg" alt="" loading="lazy"><span class="pt-num">4</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="directions"></span><b><span class="en">Directions</span><span class="zh">问路</span></b><span class="pt-best" data-best="directions"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="hotel"><span class="pt-medal"><img src="images/wh-lab-hotel.jpg" alt="" loading="lazy"><span class="pt-num">5</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="hotel"></span><b><span class="en">Hotel</span><span class="zh">酒店</span></b><span class="pt-best" data-best="hotel"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="smalltalk"><span class="pt-medal"><img src="images/wh-welcome.jpg" alt="" loading="lazy"><span class="pt-num">6</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="smalltalk"></span><b><span class="en">Small talk</span><span class="zh">寒暄</span></b><span class="pt-best" data-best="smalltalk"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="ways"><span class="pt-medal"><img src="images/wh-prep.jpg" alt="" loading="lazy"><span class="pt-num">7</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="ways"></span><b><span class="en">Say it another way</span><span class="zh">换个说法</span></b><span class="pt-best" data-best="ways"></span></button></li>
+          <li><button class="pt-node" type="button" data-topic="collocations"><span class="pt-medal"><img src="images/wh-pronounce.jpg" alt="" loading="lazy"><span class="pt-num">8</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="collocations"></span><b><span class="en">Collocations</span><span class="zh">词语搭配</span></b><span class="pt-best" data-best="collocations"></span></button></li>
+        </ol>
+      </div>
       <div class="pt-modes">
         <button class="pt-daily" type="button" data-topic="daily">
           <span class="pt-daily-text">
@@ -1469,19 +1512,12 @@ a { text-underline-offset: 3px; }
           <span class="pt-daily-go"><span class="en">Play</span><span class="zh">开始</span></span>
         </button>
       </div>
-      <div class="pt-map">
-        <div class="pt-map-head"><span class="label"><span class="en">The topic trail</span><span class="zh">主题路线</span></span><span class="pt-map-total" id="pt-map-total"></span></div>
-        <svg class="pt-route" id="pt-route" aria-hidden="true"></svg>
-        <ol class="pt-path">
-          <li><button class="pt-node" type="button" data-topic="shopping"><span class="pt-medal"><img src="images/wh-lab-shop.jpg" alt="" loading="lazy"><span class="pt-num">1</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="shopping"></span><b><span class="en">Shopping</span><span class="zh">购物</span></b><span class="pt-best" data-best="shopping"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="cafe"><span class="pt-medal"><img src="images/wh-lab-cafe.jpg" alt="" loading="lazy"><span class="pt-num">2</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="cafe"></span><b><span class="en">At the café</span><span class="zh">点餐</span></b><span class="pt-best" data-best="cafe"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="weather"><span class="pt-medal"><img src="images/wh-lab-storm.jpg" alt="" loading="lazy"><span class="pt-num">3</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="weather"></span><b><span class="en">Weather</span><span class="zh">天气</span></b><span class="pt-best" data-best="weather"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="directions"><span class="pt-medal"><img src="images/wh-path-market.jpg" alt="" loading="lazy"><span class="pt-num">4</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="directions"></span><b><span class="en">Directions</span><span class="zh">问路</span></b><span class="pt-best" data-best="directions"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="hotel"><span class="pt-medal"><img src="images/wh-lab-hotel.jpg" alt="" loading="lazy"><span class="pt-num">5</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="hotel"></span><b><span class="en">Hotel</span><span class="zh">酒店</span></b><span class="pt-best" data-best="hotel"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="smalltalk"><span class="pt-medal"><img src="images/wh-welcome.jpg" alt="" loading="lazy"><span class="pt-num">6</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="smalltalk"></span><b><span class="en">Small talk</span><span class="zh">寒暄</span></b><span class="pt-best" data-best="smalltalk"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="ways"><span class="pt-medal"><img src="images/wh-prep.jpg" alt="" loading="lazy"><span class="pt-num">7</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="ways"></span><b><span class="en">Say it another way</span><span class="zh">换个说法</span></b><span class="pt-best" data-best="ways"></span></button></li>
-          <li><button class="pt-node" type="button" data-topic="collocations"><span class="pt-medal"><img src="images/wh-pronounce.jpg" alt="" loading="lazy"><span class="pt-num">8</span><span class="pt-pin"><span class="en">Next</span><span class="zh">下一站</span></span></span><span class="pt-stars" data-stars="collocations"></span><b><span class="en">Collocations</span><span class="zh">词语搭配</span></b><span class="pt-best" data-best="collocations"></span></button></li>
-        </ol>
+      <div class="pt-sheet" id="pt-sheet" hidden>
+        <div class="pt-sheet-bg" data-close="1"></div>
+        <div class="pt-sheet-card" role="dialog" aria-modal="true" aria-labelledby="pt-sheet-title">
+          <div class="pt-sheet-img" id="pt-sheet-img"><button type="button" class="pt-sheet-x" data-close="1" aria-label="Close / 关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="pt-sheet-body"><span class="label"><span class="en">Choose your level</span><span class="zh">选择难度</span></span><h3 id="pt-sheet-title"></h3><div class="pt-levels" id="pt-levels"></div></div>
+        </div>
       </div>
       <div class="pt-shelf">
         <div class="pt-map-head"><span class="label"><span class="en">Badges</span><span class="zh">徽章</span></span><span class="pt-map-total" id="pt-badge-total"></span></div>
@@ -2356,7 +2392,13 @@ a { text-underline-offset: 3px; }
   function sayBtn(text) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-say'; b.innerHTML = SPEAK; b.setAttribute('aria-label', L2('Listen', '听发音'));
     b.addEventListener('click', function (e) { e.stopPropagation(); speak(text, b); }); return b; }
   function starsFor(sc, n) { return sc >= n ? 3 : sc >= n * .7 ? 2 : 1; }
-  function starsOf(id) { var st = store.get('stars', {}); if (st[id] != null) return st[id]; var b = store.get('best', {})[id]; if (b == null) return 0;
+  var LVLS = [['starter', 'Starter', '入门', 'Pick and match, with hints', '选择和配对，有提示'], ['explorer', 'Explorer', '进阶', 'Build sentences, second chances', '拼句子，可以再试一次'], ['pro', 'Pro', '高级', 'No hints, no second chance', '无提示，只有一次机会']];
+  function lvStars(id) { var m = store.get('lvstars', {}), r = m[id] || {}; if (r.explorer == null) { var o = store.get('stars', {})[id]; if (o != null) r.explorer = o; } return r; }
+  function unlocked(id, lv) { var r = lvStars(id); return lv === 'starter' || (lv === 'explorer' && ((r.starter || 0) >= 1 || r.explorer != null)) || (lv === 'pro' && (r.explorer || 0) >= 2); }
+  function topLevel(id) { return unlocked(id, 'pro') ? 'pro' : unlocked(id, 'explorer') ? 'explorer' : 'starter'; }
+  function lvName(lv) { var l = LVLS.filter(function (x) { return x[0] === lv; })[0]; return L2(l[1], l[2]); }
+  function starsOf(id) { var r = lvStars(id), mx = Math.max(r.starter || 0, r.explorer || 0, r.pro || 0); if (mx) return mx; return starsOld(id); }
+  function starsOld(id) { var st = store.get('stars', {}); if (st[id] != null) return st[id]; var b = store.get('best', {})[id]; if (b == null) return 0;
     var t = DATA.filter(function (x) { return x.id === id; })[0]; return t ? starsFor(b, scored(t)) : 0; }
   function starRow(n) { var h = ''; for (var i = 0; i < 3; i++) h += STAR.replace('<svg', '<svg class="' + (i < n ? 'on' : '') + '"'); return h; }
   function xpToday() { var d = store.get('xpday', null); return d && d.d === today() ? d.x : 0; }
@@ -2400,7 +2442,7 @@ a { text-underline-offset: 3px; }
     var best = store.get('best', {});
     var next = null, total = 0;
     DATA.forEach(function (t) { var b = best[t.id], n = scored(t), st = starsOf(t.id); total += st;
-      document.querySelector('[data-best="' + t.id + '"]').textContent = b == null ? L2(n + ' questions', n + ' 道题') : L2('Best ', '最佳 ') + b + '/' + n;
+      document.querySelector('[data-best="' + t.id + '"]').textContent = (b == null && !lvStars(t.id).starter) ? L2('3 levels', '3 个难度') : L2('Level: ', '难度：') + lvName(topLevel(t.id));
       document.querySelector('[data-stars="' + t.id + '"]').innerHTML = starRow(st);
       var node = grid.querySelector('.pt-node[data-topic="' + t.id + '"]');
       node.classList.toggle('done', st > 0); node.classList.toggle('gold', st === 3); node.classList.remove('next');
@@ -2524,6 +2566,7 @@ a { text-underline-offset: 3px; }
     var isV = function (w) { return VERBS.indexOf(w.toLowerCase()) > -1; };
     shuffle(sib.filter(isV)).concat(shuffle(sib.filter(function (w) { return !isV(w); }))).forEach(function (w) { if (out.length < 6) add(w); });
     ['have', 'did', 'can', 'is', 'the', 'to'].forEach(function (w) { if (out.length < 4) add(w); });
+    if (topic && topic.lv === 'starter') out = out.slice(0, 3);
     return out;
   }
   // other natural word orders we also accept, keyed by the main answer
@@ -2680,9 +2723,16 @@ a { text-underline-offset: 3px; }
   function paintCombo(pop) { var c = $('pt-combo'); c.classList.toggle('on', combo >= 2); c.classList.toggle('hot', combo >= 5);
     c.textContent = L2(combo + ' in a row', '连对 ' + combo); if (pop && combo >= 2) { c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); } }
   function floatXp(t) { if (reduceM) return; var f = document.createElement('span'); f.className = 'pt-float'; f.textContent = t; $('pt-foot').appendChild(f); setTimeout(function () { f.remove(); }, 1000); }
-  function open(id) {
+  function levelTopic(t, lv) {
+    var q = t.q;
+    if (lv === 'starter') { var ord = 0; q = t.q.filter(function (x) { return x.k !== 'order' || ord++ < 2; }).slice(0, 8); }
+    return { id: t.id, en: t.en, zh: t.zh, img: t.img, lv: lv, q: q };
+  }
+  function open(id, lv) {
     stopSprint(); if (tts) speechSynthesis.cancel();
-    topic = id === 'daily' ? dailyTopic() : id === 'sprint' ? sprintTopic() : DATA.filter(function (t) { return t.id === id; })[0]; if (!topic) return;
+    var base = DATA.filter(function (t) { return t.id === id; })[0];
+    topic = id === 'daily' ? dailyTopic() : id === 'sprint' ? sprintTopic() : base ? levelTopic(base, lv && unlocked(id, lv) ? lv : topLevel(id)) : null; if (!topic) return;
+    store.set('lastLv', topic.lv || null);
     queue = topic.q.map(function (q) { return { q: q, retry: false }; });
     qi = 0; score = 0; gained = 0; combo = 0; bestCombo = 0; attempts = 0; t0 = Date.now(); freshB = []; paintCombo(false);
     $('pt-scene').innerHTML = SCENES[topic.sprint ? 'daily' : topic.id] || ''; scene = $('pt-scene').querySelector('svg'); polish(scene, topic.sprint ? 'daily' : topic.id); setScene(scene, 0, false);
@@ -2698,7 +2748,7 @@ a { text-underline-offset: 3px; }
   function show() {
     clearTimeout(advanceT); var item = queue[qi], q = item.q; checked = false; tries = 0; picked = null; sel = []; answerWords = []; mistakes = 0;
     if (!topic.sprint) { $('pt-prog').style.width = (qi / queue.length * 100) + '%'; $('pt-count').textContent = (qi + 1) + ' / ' + queue.length; }
-    $('pt-kind').innerHTML = (item.retry ? '<span class="pt-retry">' + L2('Second chance', '再试一次') + '</span> · ' : '') + KIND[q.k][zh() ? 1 : 0];
+    $('pt-kind').innerHTML = (topic.lv ? lvName(topic.lv) + ' · ' : '') + (item.retry ? '<span class="pt-retry">' + L2('Second chance', '再试一次') + '</span> · ' : '') + KIND[q.k][zh() ? 1 : 0];
     $('pt-foot').className = 'pt-foot';
     var fb = $('pt-fb'); fb.className = 'pt-fb'; fb.innerHTML = '';
     var check = $('pt-check'); check.hidden = false; check.disabled = true; check.innerHTML = '<span class="en">Check</span><span class="zh">检查</span>';
@@ -2716,12 +2766,13 @@ a { text-underline-offset: 3px; }
       check.disabled = false; check.innerHTML = '<span class="en">Got it</span><span class="zh">学会了</span>';
       return;
     }
-    $('pt-prompt').textContent = q.zh; $('pt-sub').textContent = q.en;
+    $('pt-prompt').textContent = q.zh; $('pt-sub').textContent = topic.lv === 'pro' && q.k !== 'fill' ? '' : q.en;
 
     if (q.k === 'order') {
       ans.hidden = false; opts.className = 'pt-opts tiles';
       var acc = answers(q).map(function (t) { return norm(t).split(' '); }), track = $('pt-track');
       function live() {
+        if (topic.lv === 'pro') { track.textContent = ''; return; }
         var words = norm(answerWords.map(function (o) { return o.w; }).join(' ')).split(' ').filter(Boolean), k = 0;
         acc.forEach(function (a) { var j = 0; while (j < words.length && j < a.length && a[j] === words[j]) j++; if (j > k) k = j; });
         // map matched word count back to tiles (a tile can hold one word)
@@ -2742,7 +2793,8 @@ a { text-underline-offset: 3px; }
           a.addEventListener('click', function () { if (checked) return; sfx('tap'); a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); check.disabled = !answerWords.length; live(); });
           ans.appendChild(a); answerWords.push(o); check.disabled = false; live(); });
         bank[groupOf(o.w)].querySelector('.pt-tg-row').appendChild(b); });
-      GROUPS.forEach(function (g) { if (bank[g[0]].querySelector('.pt-opt')) opts.appendChild(bank[g[0]]); });
+      if (topic.lv === 'pro') { var flat = bank.o; flat.classList.add('flat'); var row = flat.querySelector('.pt-tg-row'); shuffle([].slice.call(opts.ownerDocument.querySelectorAll('#pt-x-none')).concat(GROUPS.reduce(function (acc, g) { return acc.concat([].slice.call(bank[g[0]].querySelectorAll('.pt-opt'))); }, []))).forEach(function (b) { row.appendChild(b); }); opts.appendChild(flat); }
+      else GROUPS.forEach(function (g) { if (bank[g[0]].querySelector('.pt-opt')) opts.appendChild(bank[g[0]]); });
     } else if (q.k === 'match') {
       opts.className = 'pt-opts pt-match'; check.hidden = true;
       var colL = document.createElement('div'), colR = document.createElement('div'); colL.className = colR.className = 'pt-match-col';
@@ -2789,7 +2841,7 @@ a { text-underline-offset: 3px; }
   var tries = 0;
   // first wrong try: no reveal. Keep the answer editable, give a nudge, let them fix it.
   function softMiss(item, q) {
-    if (topic.sprint || tries > 0) return false;
+    if (topic.sprint || tries > 0 || topic.lv === 'pro') return false;
     tries = 1; attempts++; combo = 0; paintCombo(false); sfx('bad'); buzz([30, 40, 30]); react(scene, false);
     var check = $('pt-check'), fb = $('pt-fb'), tip;
     if (q.k === 'order') tip = L2('Not quite. The green words are right. Tap a word in your answer to take it out, then fix the rest.', '还差一点。绿色的词是对的，点一下答案里的词可以拿掉，再改后面的部分。');
@@ -2869,7 +2921,9 @@ a { text-underline-offset: 3px; }
     if (topic.daily) { store.set('dailyDone', today()); store.set('dailyScore', score); }
     else if (sp) { if (score > prevSprint) store.set('sprintBest', score); }
     else { var best = store.get('best', {}); best[topic.id] = Math.max(best[topic.id] || 0, score); store.set('best', best);
-      var sm = store.get('stars', {}); sm[topic.id] = Math.max(starsOf(topic.id), stars); store.set('stars', sm); }
+      var proBefore = unlocked(topic.id, 'pro'), expBefore = unlocked(topic.id, 'explorer');
+      var lm = store.get('lvstars', {}), lr = lvStars(topic.id); lr[topic.lv] = Math.max(lr[topic.lv] || 0, stars); lm[topic.id] = lr; store.set('lvstars', lm);
+      var unlockMsg = !expBefore && unlocked(topic.id, 'explorer') ? 'explorer' : !proBefore && unlocked(topic.id, 'pro') ? 'pro' : null; }
     var last = store.get('last', null), y = new Date(); y.setDate(y.getDate() - 1);
     var st = last === today() ? store.get('streak', 1) : last === today(y) ? store.get('streak', 0) + 1 : 1;
     store.set('streak', st); store.set('last', today()); markDay();
@@ -2899,12 +2953,27 @@ a { text-underline-offset: 3px; }
     $('pt-done-streak').textContent = L2(st + ' day streak', '连续打卡 ' + st + ' 天') + ' · ' + (goalBefore < GOAL && goalNow >= GOAL ? L2('Daily goal reached!', '完成今日目标！') : L2(Math.min(goalNow, GOAL) + '/' + GOAL + ' XP today', '今日 ' + Math.min(goalNow, GOAL) + '/' + GOAL + ' XP'));
     var note = $('pt-done-note');
     if (!note) { note = document.createElement('p'); note.id = 'pt-done-note'; note.className = 'pt-done-note'; $('pt-done-streak').after(note); }
-    note.textContent = topic.daily ? L2('A new lesson unlocks at midnight. Come back tomorrow to keep your streak!', '新课程将在午夜更新，明天再来保持连续打卡！') : '';
+    if (!sp && !topic.daily && typeof unlockMsg !== 'undefined' && unlockMsg) { note.textContent = L2('New level unlocked: ' + lvName(unlockMsg) + '! Try ' + topic.en + ' again at the next level.', '解锁新难度：' + lvName(unlockMsg) + '！用更高难度再挑战一次「' + topic.zh + '」。'); $('pt-again').innerHTML = '<span class="en">Play ' + LVLS.filter(function (x) { return x[0] === unlockMsg; })[0][1] + '</span><span class="zh">挑战' + LVLS.filter(function (x) { return x[0] === unlockMsg; })[0][2] + '</span>'; topic._next = unlockMsg; }
+    else note.textContent = topic.daily ? L2('A new lesson unlocks at midnight. Come back tomorrow to keep your streak!', '新课程将在午夜更新，明天再来保持连续打卡！') : '';
     $('pt-next').innerHTML = topic.daily || sp ? '<span class="en">Back to the trail</span><span class="zh">返回主题路线</span>' : '<span class="en">Next topic</span><span class="zh">下一个主题</span>';
-    $('pt-again').innerHTML = sp ? '<span class="en">Play again</span><span class="zh">再玩一次</span>' : '<span class="en">Practise again</span><span class="zh">再练一次</span>';
+    if (!topic._next) $('pt-again').innerHTML = sp ? '<span class="en">Play again</span><span class="zh">再玩一次</span>' : '<span class="en">Practise again</span><span class="zh">再练一次</span>';
     done.scrollIntoView({ block: 'start' });
   }
-  grid.addEventListener('click', function (e) { var c = e.target.closest('[data-topic]'); if (c) open(c.dataset.topic); });
+  function sheet(id) {
+    var t = DATA.filter(function (x) { return x.id === id; })[0], sh = $('pt-sheet'), box = $('pt-levels'), r = lvStars(id), cur = topLevel(id);
+    $('pt-sheet-img').style.backgroundImage = 'url(images/' + t.img + ')'; $('pt-sheet-title').textContent = L2(t.en, t.zh); box.innerHTML = '';
+    LVLS.forEach(function (l, n) { var ok = unlocked(id, l[0]), b = document.createElement('button'); b.type = 'button';
+      b.className = 'pt-lv' + (ok ? '' : ' locked') + (l[0] === cur ? ' cur' : ''); if (!ok) b.setAttribute('aria-disabled', 'true');
+      b.innerHTML = '<span class="pt-lv-n">' + (ok ? n + 1 : '🔒') + '</span><span><b></b><small></small></span>' + (ok ? '<span class="pt-stars">' + starRow(r[l[0]] || 0) + '</span>' : '<span class="pt-lv-lock"></span>');
+      b.querySelector('b').textContent = L2(l[1], l[2]); b.querySelector('small').textContent = L2(l[3], l[4]);
+      if (!ok) b.querySelector('.pt-lv-lock').textContent = n === 1 ? L2('Finish Starter to unlock', '完成入门后解锁') : L2('Get 2★ in Explorer', '进阶拿到 2 星解锁');
+      b.addEventListener('click', function () { if (!ok) { b.classList.remove('shake'); void b.offsetWidth; sfx('bad'); return; } sfx('tap'); sh.hidden = true; open(id, l[0]); });
+      box.appendChild(b); });
+    sh.hidden = false; sfx('tap'); setTimeout(function () { var c = box.querySelector('.cur'); if (c) c.focus({ preventScroll: true }); }, 30);
+  }
+  $('pt-sheet').addEventListener('click', function (e) { if (e.target.closest('[data-close]')) this.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('pt-sheet').hidden) $('pt-sheet').hidden = true; });
+  grid.addEventListener('click', function (e) { var c = e.target.closest('[data-topic]'); if (!c) return; var id = c.dataset.topic; if (id === 'daily' || id === 'sprint') open(id); else sheet(id); });
   $('pt-close').addEventListener('click', close);
   $('pt-check').addEventListener('click', function () { if (queue[qi].q.k === 'learn' || checked) next(); else doCheck(); });
   document.addEventListener('keydown', function (e) {
@@ -2912,7 +2981,7 @@ a { text-underline-offset: 3px; }
     if (e.key === 'Enter') { var c = $('pt-check'); if (!c.hidden && !c.disabled && e.target !== c) { e.preventDefault(); c.click(); } return; }
     if (/^[1-9]$/.test(e.key) && !checked) { var o = $('pt-opts').querySelector('.pt-opt[data-key="' + e.key + '"]'); if (o) { e.preventDefault(); o.click(); } }
   });
-  $('pt-again').addEventListener('click', function () { open(topic.id); });
+  $('pt-again').addEventListener('click', function () { var nx = topic._next; open(topic.id, nx || topic.lv); });
   $('pt-next').addEventListener('click', function () { if (topic.daily || topic.sprint) { close(); grid.scrollIntoView({ block: 'center' }); return; } var i = DATA.indexOf(topic); open(DATA[(i + 1) % DATA.length].id); });
   $('pt-share').addEventListener('click', function () {
     var url = location.href.split('#')[0] + (topic.sprint ? '#practice' : '#practice-' + topic.id), n = scored(topic);
