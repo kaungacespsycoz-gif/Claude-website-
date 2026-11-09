@@ -804,6 +804,11 @@ a { text-underline-offset: 3px; }
 .sc.r-hop .pp-move { animation: r-hop .55s cubic-bezier(.34,1.56,.64,1); }
 @keyframes r-hop { 0%, 100% { transform: none; } 45% { transform: translateY(-10px); } 75% { transform: scale(1.05, .95); } }
 .sc.r-hop .head, .sc.r-wave .head { transform: rotate(6deg); }
+
+.pt-scene .sc, .pt-end .sc { touch-action: pan-y; cursor: pointer; -webkit-user-select: none; user-select: none; }
+.pt-scene-hint { margin: -14px 0 18px; text-align: center; font-size: var(--fs-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+:root[data-lang="zh"] .pt-scene-hint { letter-spacing: .06em; }
+@media (prefers-reduced-motion: reduce) { .pt-scene-hint { display: none; } }
 </style>
 </head>
 <body>
@@ -1129,6 +1134,7 @@ a { text-underline-offset: 3px; }
           <span class="pt-count" id="pt-count"></span>
         </div>
         <div class="pt-scene" id="pt-scene"></div>
+        <p class="pt-scene-hint" aria-hidden="true"><span class="en"><span class="h-mouse">Move your cursor and Pudding follows · click her to pet</span><span class="h-touch">Drag to lead Pudding · tap her to pet</span></span><span class="zh"><span class="h-mouse">移动光标，布丁会跟着你 · 点击她摸摸头</span><span class="h-touch">滑动带着布丁走 · 轻点她摸摸头</span></span></p>
         <div class="pt-q" id="pt-q">
           <span class="pt-kind" id="pt-kind"></span>
           <p class="pt-prompt" id="pt-prompt"></p>
@@ -1940,6 +1946,52 @@ a { text-underline-offset: 3px; }
     ['have', 'did', 'can', 'is', 'the', 'to'].forEach(function (w) { if (out.length < 4) add(w); });
     return out;
   }
+  var NS = 'http://www.w3.org/2000/svg';
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function attachFollow(svg) {
+    if (!svg || reduceM || svg._follow) return; svg._follow = true;
+    var pps = svg.querySelectorAll('.pp'); if (!pps.length) return;
+    var pp = pps[0], holder = pp.parentNode, ppIn = pp.querySelector('.pp-in');
+    var tm = /translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(holder.getAttribute('transform') || '');
+    var walks = !!tm && !holder.hasAttribute('data-move') && pps.length === 1;
+    var pb = pp.getBBox(), cx = (tm ? +tm[1] : 160) + pb.x + pb.width / 2, cy = (tm ? +tm[2] : 100) + pb.y + pb.height / 2;
+    var wrap = null;
+    if (walks) {
+      wrap = document.createElementNS(NS, 'g'); wrap.setAttribute('class', 'follow');
+      var picked = [holder];
+      [].slice.call(svg.children).forEach(function (g) { if (!g.hasAttribute || !g.hasAttribute('data-at')) return;
+        var b = g.getBBox(); if (b.width && b.width < 95 && Math.abs(b.x + b.width / 2 - cx) < 48) picked.push(g); });
+      holder.parentNode.insertBefore(wrap, holder);
+      [].slice.call(svg.children).filter(function (k) { return picked.indexOf(k) > -1; }).forEach(function (k) { wrap.appendChild(k); });
+    }
+    var eyes = [].slice.call(svg.querySelectorAll('.eyes circle'));
+    var st = { x: 0, ex: 0, ey: 0, px: cx, py: cy, last: -1e9, run: false };
+    function toSvg(e) { var r = svg.getBoundingClientRect(), k = 320 / r.width; st.px = (e.clientX - r.left) * k; st.py = (e.clientY - r.top) * k; st.last = performance.now(); }
+    function kick() { if (!st.run) { st.run = true; requestAnimationFrame(step); } }
+    function step(now) {
+      if (!svg.isConnected) { st.run = false; return; }
+      var active = now - st.last < 2200;
+      var goal = active && wrap ? clamp(st.px - cx, Math.max(-75, 26 - cx), Math.min(75, 294 - cx)) : 0;
+      var vel = (goal - st.x) * .06; st.x += vel;
+      var moving = Math.abs(vel) > .25;
+      if (wrap) wrap.setAttribute('transform', 'translate(' + st.x.toFixed(1) + ' ' + (moving ? -Math.abs(Math.sin(now / 85)) * 3.5 : 0).toFixed(1) + ')');
+      var hx = cx + st.x, dx = active ? clamp((st.px - hx) / 45, -1, 1) : 0, dy = active ? clamp((st.py - (cy - 25)) / 45, -1, 1) : 0;
+      st.ex += (dx * 1.7 - st.ex) * .18; st.ey += (dy * 1.2 - st.ey) * .18;
+      eyes.forEach(function (c) { c.setAttribute('transform', 'translate(' + st.ex.toFixed(2) + ' ' + st.ey.toFixed(2) + ')'); });
+      ppIn.setAttribute('transform', 'rotate(' + clamp(vel * 2.4 + st.ex * 2.5, -12, 12).toFixed(2) + ')');
+      if (active || Math.abs(goal - st.x) > .3 || Math.abs(st.ex) > .04 || Math.abs(st.ey) > .04) requestAnimationFrame(step);
+      else { st.run = false; ppIn.removeAttribute('transform'); }
+    }
+    svg.addEventListener('pointermove', function (e) { toSvg(e); kick(); });
+    svg.addEventListener('pointerdown', function (e) {
+      toSvg(e); kick();
+      var b = pp.getBoundingClientRect();
+      if (e.clientX >= b.left - 6 && e.clientX <= b.right + 6 && e.clientY >= b.top - 6 && e.clientY <= b.bottom + 6) {
+        svg.classList.remove('r-hop'); void svg.getBoundingClientRect(); svg.classList.add('r-hop'); say(svg, '♥ Woof!'); sparkle(svg);
+        setTimeout(function () { svg.classList.remove('r-hop'); }, 600);
+      }
+    });
+  }
   var scene = null;
   var topic, qi, score, picked, sel, answerWords, checked, gained, mistakes;
   function open(id) {
@@ -1948,7 +2000,7 @@ a { text-underline-offset: 3px; }
     $('pt-scene').innerHTML = SCENES[topic.id] || ''; scene = $('pt-scene').querySelector('svg'); setScene(scene, 0, false);
     grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false;
     try { history.replaceState(null, '', '#practice-' + id); } catch (e) {}
-    show(); player.scrollIntoView({ block: 'start' });
+    show(); attachFollow(scene); player.scrollIntoView({ block: 'start' });
   }
   function close() { player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; paintStats();
     try { history.replaceState(null, '', '#practice'); } catch (e) {} }
@@ -2055,7 +2107,7 @@ a { text-underline-offset: 3px; }
     player.hidden = true; done.hidden = false;
     var win = score / n >= .75, end = $('pt-end'); end.innerHTML = SCENES[topic.id] || '';
     var es = end.querySelector('svg'); setScene(es, 0, false); dress(es, lvBefore); end.querySelectorAll('.cf').forEach(function (x) { x.remove(); });
-    setTimeout(function () { setScene(es, win ? 1 : score / n, true); dress(es, lvBefore); if (win) { react(es, true); confetti(end); setTimeout(function () { es.classList.add('party'); }, 1200); } }, 250);
+    setTimeout(function () { setScene(es, win ? 1 : score / n, true); dress(es, lvBefore); if (win) { react(es, true); confetti(end); setTimeout(function () { es.classList.add('party'); }, 1200); } attachFollow(es); }, 250);
     var ni = $('pt-newitem'); ni.hidden = lvAfter <= lvBefore;
     if (lvAfter > lvBefore) { setTimeout(function () { dress(es, lvAfter); var a = es.querySelector('.a' + lvAfter); if (a) { a.classList.add('pop'); } if (!win) react(es, true); }, 1300);
       var got = ITEMS.slice(lvBefore, lvAfter); ni.textContent = L2('New for Pudding: ' + got.map(function (g) { return g[0]; }).join(' and ') + '!', '布丁获得新装扮：' + got.map(function (g) { return g[1]; }).join('、') + '！'); }
