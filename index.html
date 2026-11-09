@@ -854,6 +854,13 @@ a { text-underline-offset: 3px; }
 .wx-btn { width: 52px; height: 48px; display: grid; place-items: center; border-radius: 2px; border: 1px solid var(--line); background: transparent; color: #2fc76f; cursor: pointer; position: relative; }
 .wx-btn svg { width: 30px; height: 30px; }
 .wx-btn:active { transform: scale(.95); }
+.wx-head { width: 36px; height: 36px; border-radius: 50%; border-color: rgba(47,199,111,.45); }
+.wx-head svg { width: 22px; height: 22px; }
+.bar-play { width: 52px; height: 48px; display: grid; place-items: center; border-radius: 2px; border: 1px solid var(--brass); color: var(--brass); }
+.bar-play svg { width: 24px; height: 24px; margin-left: 3px; }
+.bar-play:active { transform: scale(.95); }
+@media (max-width: 760px) { .play-pill { display: none; } }
+.wx-tip.at-top { bottom: auto; top: calc(74px + env(safe-area-inset-top, 0px)); left: auto; right: max(16px, env(safe-area-inset-right, 0px)); }
 .wx-tip { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--fg); color: var(--brass-ink); padding: 10px 14px; border-radius: 10px; font-size: var(--fs-sm); box-shadow: 0 10px 30px rgba(0,0,0,.4); user-select: all; -webkit-user-select: all; transition: opacity .25s, transform .25s; }
 .wx-tip b { font-weight: 600; }
 .wx-tip.hide { opacity: 0; transform: translateY(6px); pointer-events: none; }
@@ -1071,6 +1078,7 @@ a { text-underline-offset: 3px; }
     </ul>
     <div class="nav-right">
       <a class="play-pill" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Play</span><span class="zh">玩一课</span></span></a>
+      <button class="wx-btn wx-head" type="button" data-copy="wechat-id" aria-label="Copy our WeChat ID / 复制微信号"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12.6 5C6.8 5 2.2 8.9 2.2 13.6c0 2.7 1.5 5.1 3.8 6.7l-.9 2.9 3.4-1.8c1.2.4 2.6.6 4 .6h.6a8 8 0 0 1-.3-2.2c0-4.6 4.4-8.3 9.9-8.3h.6C22.4 7.9 17.9 5 12.6 5z" fill="currentColor"/><circle cx="9" cy="11.6" r="1.3" fill="#0d2226"/><circle cx="16" cy="11.6" r="1.3" fill="#0d2226"/><path d="M29.8 19.8c0-3.9-3.9-7.1-8.6-7.1s-8.6 3.2-8.6 7.1 3.9 7.1 8.6 7.1c1 0 2-.1 2.9-.4l2.7 1.5-.7-2.4c2.2-1.3 3.7-3.4 3.7-5.8z" fill="currentColor"/><circle cx="18.3" cy="18.6" r="1.1" fill="#0d2226"/><circle cx="24.1" cy="18.6" r="1.1" fill="#0d2226"/></svg></button>
       <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言"><span class="en"><b>EN</b> / 中文</span><span class="zh">EN / <b>中文</b></span></button>
       <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
       <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
@@ -1641,7 +1649,7 @@ a { text-underline-offset: 3px; }
 </main>
 
 <div class="action-bar">
-  <button class="wx-btn" type="button" data-copy="wechat-id" aria-label="Copy our WeChat ID / 复制微信号"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12.6 5C6.8 5 2.2 8.9 2.2 13.6c0 2.7 1.5 5.1 3.8 6.7l-.9 2.9 3.4-1.8c1.2.4 2.6.6 4 .6h.6a8 8 0 0 1-.3-2.2c0-4.6 4.4-8.3 9.9-8.3h.6C22.4 7.9 17.9 5 12.6 5z" fill="currentColor"/><circle cx="9" cy="11.6" r="1.3" fill="#0d2226"/><circle cx="16" cy="11.6" r="1.3" fill="#0d2226"/><path d="M29.8 19.8c0-3.9-3.9-7.1-8.6-7.1s-8.6 3.2-8.6 7.1 3.9 7.1 8.6 7.1c1 0 2-.1 2.9-.4l2.7 1.5-.7-2.4c2.2-1.3 3.7-3.4 3.7-5.8z" fill="currentColor"/><circle cx="18.3" cy="18.6" r="1.1" fill="#0d2226"/><circle cx="24.1" cy="18.6" r="1.1" fill="#0d2226"/></svg></button>
+  <a class="bar-play" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z" fill="currentColor"/></svg></a>
   <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
 </div>
 
@@ -1898,6 +1906,7 @@ a { text-underline-offset: 3px; }
     if (btn.classList.contains('wx-btn')) {
       var zhL = root.getAttribute('data-lang') === 'zh', tip = document.getElementById('wx-tip');
       if (!tip) { tip = document.createElement('div'); tip.id = 'wx-tip'; tip.className = 'wx-tip hide'; tip.setAttribute('role', 'status'); document.body.appendChild(tip); }
+      tip.classList.toggle('at-top', btn.classList.contains('wx-head'));
       function showTip(copied) { tip.innerHTML = ''; var t = document.createElement('span'); t.textContent = copied ? (zhL ? '已复制微信号：' : 'WeChat ID copied: ') : (zhL ? '微信号：' : 'Our WeChat ID: ');
         var b = document.createElement('b'); b.textContent = target.textContent; tip.appendChild(t); tip.appendChild(b);
         tip.classList.remove('hide'); clearTimeout(tip._t); tip._t = setTimeout(function () { tip.classList.add('hide'); }, 2800); }
