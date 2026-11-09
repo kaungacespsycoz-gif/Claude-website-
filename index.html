@@ -567,6 +567,65 @@ a { text-underline-offset: 3px; }
 .moon-cursor::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff3d6; box-shadow: 0 0 10px #ffd890; }
 .h-touch { display: none; }
 @media (hover: none) { .h-mouse { display: none; } .h-touch { display: inline; } }
+
+/* ===== Practice (Duolingo-style) ===== */
+.pt-stats { display: flex; gap: 22px; margin: -16px 0 28px; flex-wrap: wrap; }
+.pt-stat { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: var(--fs-sm); }
+.pt-stat svg { width: 18px; height: 18px; color: var(--brass); }
+.pt-stat b { color: var(--fg); font-size: 1.1rem; font-weight: 600; }
+.pt-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 900px) { .pt-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .pt-grid { grid-template-columns: 1fr; } }
+.pt-card { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; padding: 12px; border: 1px solid var(--line); background: var(--bg); min-height: 120px; transition: border-color .2s var(--ease-out), transform .16s var(--ease-out); }
+.pt-card:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .pt-card:hover { border-color: var(--brass); } }
+.pt-card:active { transform: scale(.98); }
+.pt-img { width: 96px; height: 96px; overflow: hidden; display: block; }
+.pt-img img { width: 100%; height: 100%; object-fit: cover; }
+.pt-body { display: grid; gap: 6px; min-width: 0; }
+.pt-body b { font-family: var(--display); font-weight: 400; font-size: 1.5rem; line-height: 1.1; }
+.pt-meta { color: var(--muted); font-size: var(--fs-sm); }
+.pt-best { color: var(--brass); }
+.pt-bar { display: block; height: 4px; background: rgba(241,233,220,.12); border-radius: 2px; overflow: hidden; }
+.pt-bar i { display: block; height: 100%; width: 0; background: var(--brass); transform-origin: left; transition: width .4s var(--ease-out); }
+
+.pt-player, .pt-done { max-width: 760px; margin: 0 auto; scroll-margin-top: 96px; }
+.pt-top { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: center; margin-bottom: 30px; }
+.pt-close { width: 44px; height: 44px; display: grid; place-items: center; background: none; border: 1px solid var(--line); color: var(--muted); cursor: pointer; }
+.pt-close svg { width: 18px; height: 18px; }
+.pt-progress { height: 10px; background: rgba(241,233,220,.12); border-radius: 5px; overflow: hidden; }
+.pt-progress i { display: block; height: 100%; width: 0; background: var(--brass); border-radius: 5px; transition: width .35s var(--ease-out); }
+.pt-count { color: var(--muted); font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.pt-q { display: grid; gap: 12px; min-height: 300px; align-content: start; }
+.pt-kind { font-size: var(--fs-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--brass); }
+:root[data-lang="zh"] .pt-kind { letter-spacing: .08em; font-size: var(--fs-sm); }
+.pt-prompt { font-size: clamp(1.4rem, 3.4vw, 1.9rem); line-height: 1.35; }
+.pt-sub { color: var(--muted); }
+.pt-opts { display: grid; gap: 10px; margin-top: 10px; }
+.pt-opts.tiles { display: flex; flex-wrap: wrap; gap: 10px; }
+.pt-opt { font: 400 1.08rem/1.4 var(--font); text-align: left; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-bottom-width: 3px; padding: 14px 18px; min-height: 52px; cursor: pointer; transition: border-color .15s var(--ease-out), background-color .15s var(--ease-out), transform .1s var(--ease-out); }
+.pt-opt:active { transform: translateY(1px); }
+.pt-opt.sel { border-color: var(--brass); background: rgba(227,176,97,.1); }
+.pt-opt.ok { border-color: #6fdc7a; background: rgba(111,220,122,.1); }
+.pt-opt.bad { border-color: #e0574a; background: rgba(224,87,74,.1); }
+.pt-opts.tiles .pt-opt { padding: 10px 14px; min-height: 46px; }
+.pt-opt.used { visibility: hidden; }
+.pt-answer { display: flex; flex-wrap: wrap; gap: 10px; min-height: 64px; padding: 10px 0; border-bottom: 1px solid var(--line); margin-top: 6px; }
+.pt-foot { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+.pt-fb { display: grid; gap: 4px; min-height: 44px; font-size: .98rem; }
+.pt-fb b { font-size: 1.1rem; }
+.pt-fb.ok b { color: #6fdc7a; } .pt-fb.bad b { color: #f0907f; }
+.pt-fb .pt-why { color: var(--muted); }
+.pt-check[disabled] { opacity: .4; cursor: default; }
+@media (max-width: 600px) { .pt-foot { grid-template-columns: 1fr; } .pt-check { width: 100%; } }
+.pt-done { text-align: center; display: grid; gap: 16px; justify-items: center; padding: 20px 0; }
+.pt-done h3 { font-size: clamp(2rem, 5vw, 3rem); }
+.pt-done-score { font-size: 1.2rem; color: var(--muted); }
+.pt-done-stats { display: flex; gap: 24px; color: var(--brass); font-size: 1.05rem; flex-wrap: wrap; justify-content: center; }
+.pt-done .hero-actions { justify-content: center; }
+.pt-done-cta { color: var(--muted); max-width: 46ch; }
+.pt-sharebox { width: min(560px, 100%); font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); padding: 12px; }
+@media (prefers-reduced-motion: reduce) { .pt-progress i, .pt-bar i { transition: none; } }
 </style>
 </head>
 <body>
@@ -580,7 +639,7 @@ a { text-underline-offset: 3px; }
     <ul class="nav-links" id="nav-links">
       <li><a href="#day"><span class="en">Walk in</span><span class="zh">走进学校</span></a></li>
       <li><a href="#rooms"><span class="en">Lab rooms</span><span class="zh">实验室</span></a></li>
-      <li><a href="#try-lab"><span class="en">Try a lab</span><span class="zh">试玩</span></a></li>
+      <li><a href="#practice"><span class="en">Practice</span><span class="zh">练习</span></a></li>
       <li><a href="#courses"><span class="en">Courses</span><span class="zh">课程</span></a></li>
       <li><a href="#faq"><span class="en">FAQ</span><span class="zh">常见问题</span></a></li>
       <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
@@ -815,131 +874,84 @@ a { text-underline-offset: 3px; }
     </div>
   </section>
 
-  <section class="section alt" id="sample">
+  <section class="section alt" id="practice">
     <div class="wrap">
       <div class="head">
-        <h2><span class="en">Inside a topic day</span><span class="zh">一天主题课的内容</span></h2>
-        <p><span class="en">Choose a topic. The live talk is in Chinese so the logic is clear; English translations are in grey.</span><span class="zh">选择一个主题查看。现场对谈用中文进行，确保逻辑清晰易懂。</span></p>
+        <h2><span class="en">Practise English by the sea, five minutes a day</span><span class="zh">每天五分钟，海边练英语</span></h2>
+        <p><span class="en">Free practice by topic: the phrases people really use, the mistakes Chinese speakers often make, and why. Keep your streak going.</span><span class="zh">按主题免费练习：真正常用的表达、中国人常犯的错误，以及背后的原因。坚持每天打卡！</span></p>
+      </div>
+      <div class="pt-stats" aria-live="polite">
+        <span class="pt-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4-.2 2 .8 3 1.5 3C11 8 12 5 12 2z" fill="currentColor"/></svg><b id="pt-streak">0</b> <span class="en">day streak</span><span class="zh">天连续打卡</span></span>
+        <span class="pt-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6L22 9.3l-5.4 4.8 1.6 7.1L12 17.6 5.8 21.2l1.6-7.1L2 9.3l7.1-.7z" fill="currentColor"/></svg><b id="pt-xp">0</b> XP</span>
+      </div>
+      <div class="pt-grid" id="pt-grid">
+        <button class="pt-card" type="button" data-topic="shopping">
+          <span class="pt-img"><img src="images/wh-lab-shop.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">Shopping</span><span class="zh">购物</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="shopping"></span></span>
+            <span class="pt-bar"><i data-bar="shopping"></i></span></span>
+        </button>
+        <button class="pt-card" type="button" data-topic="cafe">
+          <span class="pt-img"><img src="images/wh-lab-cafe.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">At the café</span><span class="zh">点餐</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="cafe"></span></span>
+            <span class="pt-bar"><i data-bar="cafe"></i></span></span>
+        </button>
+        <button class="pt-card" type="button" data-topic="weather">
+          <span class="pt-img"><img src="images/wh-lab-storm.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">Weather</span><span class="zh">天气</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="weather"></span></span>
+            <span class="pt-bar"><i data-bar="weather"></i></span></span>
+        </button>
+        <button class="pt-card" type="button" data-topic="directions">
+          <span class="pt-img"><img src="images/wh-path-market.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">Directions</span><span class="zh">问路</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="directions"></span></span>
+            <span class="pt-bar"><i data-bar="directions"></i></span></span>
+        </button>
+        <button class="pt-card" type="button" data-topic="hotel">
+          <span class="pt-img"><img src="images/wh-lab-hotel.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">Hotel</span><span class="zh">酒店</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="hotel"></span></span>
+            <span class="pt-bar"><i data-bar="hotel"></i></span></span>
+        </button>
+        <button class="pt-card" type="button" data-topic="smalltalk">
+          <span class="pt-img"><img src="images/wh-welcome.jpg" alt="" loading="lazy"></span>
+          <span class="pt-body"><b><span class="en">Small talk</span><span class="zh">寒暄</span></b>
+            <span class="pt-meta"><span class="en">8 questions</span><span class="zh">8 道题</span> · <span class="pt-best" data-best="smalltalk"></span></span>
+            <span class="pt-bar"><i data-bar="smalltalk"></i></span></span>
+        </button>
       </div>
 
-      <div class="tabs" role="tablist" aria-label="Topics">
-        <button class="tab" role="tab" id="tab-shop" aria-controls="day-shop" aria-selected="true"><span class="en">Shopping</span><span class="zh">购物</span></button>
-        <button class="tab" role="tab" id="tab-weather" aria-controls="day-weather" aria-selected="false" tabindex="-1"><span class="en">Weather</span><span class="zh">天气</span></button>
-        <button class="tab" role="tab" id="tab-food" aria-controls="day-food" aria-selected="false" tabindex="-1"><span class="en">At a café</span><span class="zh">咖啡馆点餐</span></button>
-      </div>
-
-      <div class="day" role="tabpanel" id="day-shop" aria-labelledby="tab-shop">
-        <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
-          <div class="transcript">
-            <div class="line"><span class="who">A</span><p class="said">买东西的时候，很多人会直接说 <mark class="phr">I want this.</mark> 语法没错，但听起来有点像命令。<span class="gloss en">When shopping, many people say "I want this." It's grammatical, but it sounds like an order.</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">对。母语者更常说 <mark class="phr">Could I get this one?</mark> 或者 <mark class="phr">I'll take this one.</mark><span class="gloss en">Right. Native speakers more often say "Could I get this one?" or "I'll take this one."</span></p></div>
-            <div class="line"><span class="who">A</span><p class="said">还有"这个多少钱"，别逐字翻成 This how much money? 要说 <mark class="phr">How much is this?</mark><span class="gloss en">And for 这个多少钱, don't translate word by word. Say "How much is this?"</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">想换尺码就问 <mark class="phr">Do you have this in a bigger size?</mark><span class="gloss en">To change size, ask "Do you have this in a bigger size?"</span></p></div>
-          </div>
-          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">English questions move the verb forward: How much + is + this? And "could" turns a demand into a polite request.</span><span class="zh">英语疑问句要把动词提前：How much + is + this？用 could 能把"要求"变成礼貌的"请求"。</span></p>
+      <div class="pt-player" id="pt-player" hidden>
+        <div class="pt-top">
+          <button class="pt-close" type="button" id="pt-close" aria-label="Close practice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <div class="pt-progress"><i id="pt-prog"></i></div>
+          <span class="pt-count" id="pt-count"></span>
         </div>
-        <div class="side">
-          <div class="panel-card">
-            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
-            <ul class="phrases">
-              <li>How much is this? <span>这个多少钱？</span></li>
-              <li>Could I get this one? <span>我可以要这个吗？</span></li>
-              <li>Do you have it in blue? <span>有蓝色的吗？</span></li>
-              <li>Can I pay by WeChat? <span>可以微信支付吗？</span></li>
-            </ul>
-          </div>
-          <div class="panel-card">
-            <div class="kv">
-              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">Find sunglasses in your size from the shop assistant, then pay.</span><span class="zh">向店员找到合适尺码的太阳镜，然后付款。</span></p></div>
-              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Do you have these in a smaller size?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
-            </div>
-          </div>
-          <div class="panel-card">
-            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
-            <ul class="cando">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask the price of anything</span><span class="zh">询问任何商品的价格</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for another size or colour</span><span class="zh">要求换尺码或颜色</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Pay and finish politely</span><span class="zh">付款并礼貌结束对话</span></span></li>
-            </ul>
-          </div>
+        <div class="pt-q" id="pt-q">
+          <span class="pt-kind" id="pt-kind"></span>
+          <p class="pt-prompt" id="pt-prompt"></p>
+          <p class="pt-sub" id="pt-sub"></p>
+          <div class="pt-answer" id="pt-answer" hidden></div>
+          <div class="pt-opts" id="pt-opts"></div>
         </div>
-      </div>
-
-      <div class="day" role="tabpanel" id="day-weather" aria-labelledby="tab-weather" hidden>
-        <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
-          <div class="transcript">
-            <div class="line"><span class="who">A</span><p class="said">"今天很热"，很多人说 Today is very hot. 能听懂，但母语者更常说 <mark class="phr">It's really hot today.</mark><span class="gloss en">For 今天很热 many people say "Today is very hot." Natives more often say "It's really hot today."</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">因为英语用 it 当天气的主语：<mark class="phr">It's sunny.</mark> <mark class="phr">It's windy.</mark><span class="gloss en">Because English uses "it" as the subject for weather: "It's sunny." "It's windy."</span></p></div>
-            <div class="line"><span class="who">A</span><p class="said">还有"今天下雨"，别说 Today is rain，要说 <mark class="phr">It's raining today.</mark><span class="gloss en">And for 今天下雨, not "Today is rain" but "It's raining today."</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">在三亚一定要会这句：<mark class="phr">There's a typhoon warning.</mark><span class="gloss en">In Sanya you definitely need this one: "There's a typhoon warning."</span></p></div>
-          </div>
-          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">English sentences need a subject, so weather uses "it". "Rain" is also a verb, so rain falling now is "is raining".</span><span class="zh">英语句子必须有主语，所以天气用 it 开头。rain 也是动词，正在下雨要用 is raining。</span></p>
-        </div>
-        <div class="side">
-          <div class="panel-card">
-            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
-            <ul class="phrases">
-              <li>It's boiling today! <span>今天热死了！</span></li>
-              <li>It looks like rain. <span>看起来要下雨了。</span></li>
-              <li>What's it like tomorrow? <span>明天天气怎么样？</span></li>
-              <li>There's a typhoon warning. <span>有台风预警。</span></li>
-            </ul>
-          </div>
-          <div class="panel-card">
-            <div class="kv">
-              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">A storm is coming. Understand the lifeguard and change your beach plans.</span><span class="zh">暴风雨要来了。听懂救生员的话，改变海边计划。</span></p></div>
-              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Is it safe to swim this afternoon?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
-            </div>
-          </div>
-          <div class="panel-card">
-            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
-            <ul class="cando">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Describe today's weather naturally</span><span class="zh">自然地描述今天的天气</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask about tomorrow's weather</span><span class="zh">询问明天的天气</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Make or change plans because of the weather</span><span class="zh">根据天气制定或改变计划</span></span></li>
-            </ul>
-          </div>
+        <div class="pt-foot" id="pt-foot">
+          <div class="pt-fb" id="pt-fb" aria-live="assertive"></div>
+          <button class="btn btn-solid pt-check" type="button" id="pt-check" disabled><span class="en">Check</span><span class="zh">检查</span></button>
         </div>
       </div>
 
-      <div class="day" role="tabpanel" id="day-food" aria-labelledby="tab-food" hidden>
-        <div class="panel-card">
-          <h4><span class="en">01 · From the live talk</span><span class="zh">01 · 现场对谈片段</span></h4>
-          <div class="transcript">
-            <div class="line"><span class="who">A</span><p class="said">点餐时很多人说 Give me a coffee. 在英语里听起来不太礼貌。<span class="gloss en">When ordering, many people say "Give me a coffee." In English that sounds a little rude.</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">更自然的是 <mark class="phr">Can I have a coffee, please?</mark> 或 <mark class="phr">I'd like a coffee.</mark><span class="gloss en">More natural: "Can I have a coffee, please?" or "I'd like a coffee."</span></p></div>
-            <div class="line"><span class="who">A</span><p class="said">不知道点什么，可以问 <mark class="phr">What do you recommend?</mark><span class="gloss en">If you don't know what to order, ask "What do you recommend?"</span></p></div>
-            <div class="line"><span class="who">B</span><p class="said">买单别说 Pay money，要说 <mark class="phr">Could we have the bill, please?</mark><span class="gloss en">To pay, not "Pay money" but "Could we have the bill, please?"</span></p></div>
-          </div>
-          <p class="logic"><b><span class="en">The logic</span><span class="zh">背后的逻辑</span></b> · <span class="en">Chinese orders with "give me"; English orders by asking. "Can I have…?" asks permission, which is what makes it polite.</span><span class="zh">中文点餐习惯说"给我……"，英语则用提问的方式："我可以要……吗？"——征求许可的语气才显得礼貌。</span></p>
+      <div class="pt-done" id="pt-done" hidden>
+        <h3 id="pt-done-title"></h3>
+        <p class="pt-done-score" id="pt-done-score"></p>
+        <div class="pt-done-stats"><span id="pt-done-xp"></span><span id="pt-done-streak"></span></div>
+        <div class="hero-actions">
+          <button class="btn btn-solid" type="button" id="pt-next"><span class="en">Next topic</span><span class="zh">下一个主题</span></button>
+          <button class="btn btn-line" type="button" id="pt-again"><span class="en">Practise again</span><span class="zh">再练一次</span></button>
+          <button class="btn btn-line" type="button" id="pt-share"><span class="en">Copy to share</span><span class="zh">复制分享</span></button>
         </div>
-        <div class="side">
-          <div class="panel-card">
-            <h4><span class="en">Key phrases</span><span class="zh">核心表达</span></h4>
-            <ul class="phrases">
-              <li>Can I have…, please? <span>请给我……</span></li>
-              <li>What do you recommend? <span>你推荐什么？</span></li>
-              <li>I'm allergic to nuts. <span>我对坚果过敏。</span></li>
-              <li>Could we have the bill? <span>可以买单吗？</span></li>
-            </ul>
-          </div>
-          <div class="panel-card">
-            <div class="kv">
-              <div><span class="k"><span class="en">02 · Lab mission</span><span class="zh">02 · 实验室任务</span></span><p><span class="en">Order lunch for a friend who is allergic to nuts.</span><span class="zh">为对坚果过敏的朋友点午餐。</span></p></div>
-              <div><span class="k"><span class="en">03 · Unlock phrase</span><span class="zh">03 · 通关表达</span></span><p>"Does this have any nuts in it?" <span class="en">The actor answers, and the gate turns green.</span><span class="zh">演员回应，出口灯变绿。</span></p></div>
-            </div>
-          </div>
-          <div class="panel-card">
-            <h4><span class="en">04 · After the final lab, I can</span><span class="zh">04 · 通过终极实验室后，我能</span></h4>
-            <ul class="cando">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Order food and drinks politely</span><span class="zh">礼貌地点餐和饮品</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for a recommendation or mention an allergy</span><span class="zh">请服务员推荐或说明过敏情况</span></span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><span class="en">Ask for the bill and pay</span><span class="zh">要求买单并付款</span></span></li>
-            </ul>
-          </div>
-        </div>
+        <p class="pt-done-cta"><span class="en">Want to say it for real? In our lab rooms, actors only answer correct English.</span><span class="zh">想真正开口说？在我们的实验室里，演员只回应正确的英语。</span> <a href="#contact"><span class="en">Book a free topic day</span><span class="zh">预约免费体验</span></a></p>
       </div>
     </div>
   </section>
@@ -1599,6 +1611,115 @@ a { text-underline-offset: 3px; }
     if (reduce) { frame(performance.now() + 2000); }
     else requestAnimationFrame(loop);
   }
+})();
+</script>
+<script>
+(function () {
+  var DATA = [{"id": "shopping", "en": "Shopping", "zh": "购物", "img": "wh-lab-shop.jpg", "q": [{"k": "choose", "zh": "你想问价格。哪句最自然？", "en": "You want to ask the price.", "o": ["How much is this?", "This how much money?", "How much money is it this?"], "a": 0, "xe": "English questions put the verb before the subject: How much + is + this.", "xz": "英语疑问句要把动词提前：How much + is + this。"}, {"k": "fix", "zh": "把这句话变得礼貌：\"Give me this one.\"", "en": "Make it polite.", "o": ["Could I get this one, please?", "Give me this one, please.", "I want this one."], "a": 0, "xe": "\"Could I…?\" asks permission, which is what makes it polite.", "xz": "\"Could I…?\" 是在征求许可，所以听起来礼貌。"}, {"k": "order", "zh": "有小一号的吗？", "en": "Ask for a smaller size.", "w": ["Do", "you", "have", "this", "in", "a", "smaller", "size?"], "xe": "\"Do you have this in…?\" is the natural way to ask for another size or colour.", "xz": "问别的尺码或颜色，用 \"Do you have this in…?\""}, {"k": "fill", "zh": "Can I pay ___ WeChat?", "en": "Fill in the blank.", "o": ["by", "with", "use"], "a": 0, "xe": "For ways to pay we say \"by\": by card, by WeChat, by cash… (or \"in cash\").", "xz": "付款方式用 by：by card, by WeChat。"}, {"k": "fix", "zh": "\"太贵了\" 哪句正确？", "en": "\"Too expensive\" — which is correct?", "o": ["It's too expensive.", "It's too much expensive.", "Too expensive it is."], "a": 0, "xe": "\"Too\" goes straight before an adjective. Never \"too much expensive\".", "xz": "too 直接加形容词，形容词前不能加 much。"}, {"k": "fill", "zh": "Can I try it ___?", "en": "Fill in the blank.", "o": ["on", "in", "up"], "a": 0, "xe": "\"Try on\" means to put clothes on to see if they fit.", "xz": "try on 就是\"试穿\"。"}, {"k": "choose", "zh": "店员问 \"Anything else?\" 你不需要了：", "en": "The assistant asks \"Anything else?\" You're done.", "o": ["No, that's all, thanks.", "No more.", "Finish."], "a": 0, "xe": "\"That's all, thanks\" politely ends what you're buying.", "xz": "\"That's all, thanks\" 是礼貌结束购物的常用说法。"}, {"k": "order", "zh": "我只是看看，谢谢。", "en": "Tell the assistant you're only browsing.", "w": ["I'm", "just", "looking,", "thanks."], "xe": "\"I'm just looking\" is the standard phrase. Shop assistants hear it every day.", "xz": "\"I'm just looking\" 是逛店时最常用的一句话。"}]}, {"id": "cafe", "en": "At the café", "zh": "点餐", "img": "wh-lab-cafe.jpg", "q": [{"k": "choose", "zh": "点一杯拿铁，最自然的说法：", "en": "Order a latte.", "o": ["Can I have a latte, please?", "Give me a latte.", "I need latte."], "a": 0, "xe": "English orders by asking: \"Can I have…?\" Chinese \"给我…\" translated directly sounds rude.", "xz": "英语点餐用提问：\"Can I have…?\" 直译\"给我…\"会显得不礼貌。"}, {"k": "fill", "zh": "I'd ___ a cappuccino, please.", "en": "Fill in the blank.", "o": ["like", "want to", "love"], "a": 0, "xe": "\"I'd like\" is the polite form of \"I want\".", "xz": "\"I'd like\" 是 \"I want\" 的礼貌说法。"}, {"k": "fix", "zh": "\"I want one coffee.\" 更自然的说法：", "en": "\"I want one coffee.\" Make it natural.", "o": ["Could I get a coffee?", "I want one coffee please.", "One coffee give me."], "a": 0, "xe": "Use \"a coffee\", not \"one coffee\", and ask with \"Could I get…?\"", "xz": "英语说 \"a coffee\"，不说 \"one coffee\"，并用 \"Could I get…?\" 提问。"}, {"k": "choose", "zh": "服务员问 \"For here or to go?\" 你想带走：", "en": "\"For here or to go?\" You want takeaway.", "o": ["To go, please.", "Take away go.", "I go."], "a": 0, "xe": "\"To go\" means takeaway (in the UK people also say \"Takeaway, please\").", "xz": "\"To go\" 就是打包带走（英式英语也说 \"Takeaway, please\"）。"}, {"k": "order", "zh": "可以买单吗？", "en": "Ask for the bill.", "w": ["Could", "we", "have", "the", "bill,", "please?"], "xe": "\"Could we have the bill, please?\" (Americans often say \"the check\").", "xz": "\"Could we have the bill, please?\"（美式英语常说 \"the check\"）。"}, {"k": "fill", "zh": "Is there any milk ___ this?", "en": "Fill in the blank.", "o": ["in", "on", "at"], "a": 0, "xe": "Ingredients are \"in\" a drink or dish.", "xz": "食物或饮料里的成分用 in。"}, {"k": "fix", "zh": "\"我对坚果过敏\" 哪句正确？", "en": "\"I'm allergic to nuts\" — which is correct?", "o": ["I'm allergic to nuts.", "I'm allergy nuts.", "Nuts make me allergy."], "a": 0, "xe": "\"Allergic\" is the adjective: be allergic to something. \"Allergy\" is the noun.", "xz": "allergic 是形容词：be allergic to…；allergy 是名词。"}, {"k": "choose", "zh": "服务员问 \"How is everything?\" 你觉得很好吃：", "en": "\"How is everything?\" The food is great.", "o": ["It's delicious, thanks!", "Everything is very delicious taste.", "Yes."], "a": 0, "xe": "Keep it short: \"It's delicious, thanks!\" \"Very delicious taste\" is not natural English.", "xz": "简单回答就好：\"It's delicious, thanks!\" \"very delicious taste\" 不是地道说法。"}]}, {"id": "weather", "en": "Weather", "zh": "天气", "img": "wh-lab-storm.jpg", "q": [{"k": "choose", "zh": "\"今天很热\" 最自然：", "en": "\"It's hot today\" — most natural:", "o": ["It's really hot today.", "Today is very hot weather.", "Today very hot."], "a": 0, "xe": "English uses \"it\" as the subject for weather: It's hot, it's sunny.", "xz": "英语谈天气用 it 作主语：It's hot, it's sunny。"}, {"k": "fix", "zh": "\"Today is rain.\" 正确的说法：", "en": "\"Today is rain.\" Fix it.", "o": ["It's raining today.", "Today is raining.", "Today has rain."], "a": 0, "xe": "\"Rain\" is also a verb. Rain falling now = \"it's raining\".", "xz": "rain 也是动词，正在下雨要说 \"it's raining\"。"}, {"k": "fill", "zh": "It looks ___ rain.", "en": "Fill in the blank.", "o": ["like", "as", "to"], "a": 0, "xe": "\"It looks like rain\" = it's probably going to rain.", "xz": "\"It looks like rain\" 意思是\"看起来要下雨了\"。"}, {"k": "order", "zh": "明天天气怎么样？", "en": "Ask about tomorrow's weather.", "w": ["What's", "the", "weather", "like", "tomorrow?"], "xe": "\"What's the weather like?\" — the \"like\" is easy to forget.", "xz": "\"What's the weather like?\" ——别忘了 like。"}, {"k": "choose", "zh": "\"有台风预警\" 怎么说：", "en": "\"There's a typhoon warning\":", "o": ["There's a typhoon warning.", "Have typhoon warning.", "Typhoon is warning."], "a": 0, "xe": "To say something exists, use \"There is / There's\", not \"have\". Chinese 有 ≠ have here.", "xz": "表示\"存在\"用 There is，不用 have。这里的\"有\"不是 have。"}, {"k": "fill", "zh": "It's ___ outside — take an umbrella!", "en": "Fill in the blank (heavy rain).", "o": ["pouring", "pour", "poured"], "a": 0, "xe": "\"It's pouring\" means it's raining very heavily.", "xz": "\"It's pouring\" 表示雨下得很大。"}, {"k": "choose", "zh": "\"It's boiling today!\" 是什么意思？", "en": "What does \"It's boiling today!\" mean?", "o": ["It's very hot.", "The water is cooking.", "It's very cold."], "a": 0, "xe": "\"Boiling\" is a casual way to say very hot. In Sanya you'll hear it a lot!", "xz": "boiling 是口语，意思是\"热死了\"。在三亚很常用！"}, {"k": "choose", "zh": "\"好闷热\" 最自然：", "en": "\"It's so humid\" — most natural:", "o": ["It's so humid.", "It's so wet air.", "It's stuffy hot."], "a": 0, "xe": "\"Humid\" describes air full of moisture.", "xz": "humid 形容空气潮湿闷热。"}]}, {"id": "directions", "en": "Directions", "zh": "问路", "img": "wh-path-market.jpg", "q": [{"k": "choose", "zh": "问路最礼貌的开头：", "en": "The politest way to ask:", "o": ["Excuse me, how do I get to the beach?", "Where beach?", "Tell me the beach."], "a": 0, "xe": "Start with \"Excuse me\", then \"How do I get to…?\"", "xz": "先说 \"Excuse me\"，再问 \"How do I get to…?\""}, {"k": "fill", "zh": "Go straight and turn ___ at the lights.", "en": "Fill in the blank.", "o": ["left", "to left", "the left"], "a": 0, "xe": "We say \"turn left / turn right\" with no \"to\" or \"the\".", "xz": "\"turn left / turn right\" 中间不加 to 或 the。"}, {"k": "choose", "zh": "\"It's just around the corner.\" 是什么意思？", "en": "What does it mean?", "o": ["It's very close.", "It's very far.", "Turn at many corners."], "a": 0, "xe": "\"Just around the corner\" means very close by.", "xz": "\"just around the corner\" 表示\"就在附近\"。"}, {"k": "order", "zh": "离这里远吗？", "en": "Ask if it's far.", "w": ["Is", "it", "far", "from", "here?"], "xe": "\"Is it far from here?\" — the question starts with \"Is it…\".", "xz": "\"Is it far from here?\" ——疑问句以 \"Is it…\" 开头。"}, {"k": "fix", "zh": "\"I lost my way.\" 更自然的说法：", "en": "\"I lost my way.\" More natural:", "o": ["I'm lost.", "I lost myself.", "My way is lost."], "a": 0, "xe": "Native speakers simply say \"I'm lost.\"", "xz": "母语者直接说 \"I'm lost.\""}, {"k": "fill", "zh": "It's ___ to the bank.", "en": "Fill in the blank (就在银行旁边).", "o": ["next", "near", "beside of"], "a": 0, "xe": "\"Next to\" = right beside. \"Near\" doesn't take \"to\" here.", "xz": "\"next to\" 表示\"紧挨着\"。"}, {"k": "choose", "zh": "请对方在地图上指给你看：", "en": "Ask someone to show you on the map:", "o": ["Could you show me on the map?", "Show me map.", "Point map please."], "a": 0, "xe": "\"Could you show me…?\" is a polite request.", "xz": "\"Could you show me…?\" 是礼貌的请求。"}, {"k": "choose", "zh": "上出租车，去机场：", "en": "Getting into a taxi to the airport:", "o": ["To the airport, please.", "Go airport.", "I want go to airport."], "a": 0, "xe": "In a taxi, \"To the …, please\" is all you need.", "xz": "坐出租车只需要说 \"To the …, please\"。"}]}, {"id": "hotel", "en": "Hotel", "zh": "酒店", "img": "wh-lab-hotel.jpg", "q": [{"k": "choose", "zh": "到前台办理入住：", "en": "Checking in at reception:", "o": ["I'd like to check in, please.", "I want check in.", "Check in me."], "a": 0, "xe": "\"I'd like to…\" is polite and natural.", "xz": "\"I'd like to…\" 礼貌又自然。"}, {"k": "fill", "zh": "I have a reservation ___ the name of Wang.", "en": "Fill in the blank.", "o": ["under", "in", "with"], "a": 0, "xe": "Bookings are \"under\" a name.", "xz": "预订\"在某人名下\"用 under。"}, {"k": "choose", "zh": "\"空调坏了\" 最自然：", "en": "\"The air conditioning is broken\":", "o": ["The air conditioning isn't working.", "The air conditioner is broken down working.", "Air condition no work."], "a": 0, "xe": "\"…isn't working\" is the standard way to report a problem.", "xz": "报告故障常用 \"…isn't working\"。"}, {"k": "order", "zh": "几点退房？", "en": "Ask about check-out time.", "w": ["What", "time", "is", "check-out?"], "xe": "\"What time is check-out?\" — short and clear.", "xz": "\"What time is check-out?\" 简洁清楚。"}, {"k": "fix", "zh": "\"Can you give me more one towel?\" 正确说法：", "en": "Fix it.", "o": ["Could I have one more towel?", "Can you give me more one towel?", "Give me towel more."], "a": 0, "xe": "The order is \"one more\", and \"Could I have…?\" is politer.", "xz": "顺序是 \"one more\"，而且 \"Could I have…?\" 更礼貌。"}, {"k": "fill", "zh": "Is breakfast ___?", "en": "Fill in the blank.", "o": ["included", "include", "including"], "a": 0, "xe": "\"Is breakfast included?\" = 含早餐吗？", "xz": "\"Is breakfast included?\" 就是\"含早餐吗？\""}, {"k": "choose", "zh": "问 Wi-Fi 密码：", "en": "Ask for the Wi-Fi password:", "o": ["What's the Wi-Fi password?", "What is password of Wi-Fi?", "Wi-Fi code tell me."], "a": 0, "xe": "\"What's the Wi-Fi password?\" — no \"of\" needed.", "xz": "\"What's the Wi-Fi password?\" 不需要 of。"}, {"k": "choose", "zh": "退房时前台问 \"How was your stay?\"", "en": "Reception asks \"How was your stay?\"", "o": ["It was lovely, thank you.", "Very good stay.", "I stayed."], "a": 0, "xe": "Answer with a full sentence: \"It was lovely, thank you.\"", "xz": "用完整句子回答：\"It was lovely, thank you.\""}]}, {"id": "smalltalk", "en": "Small talk", "zh": "寒暄", "img": "wh-welcome.jpg", "q": [{"k": "choose", "zh": "初次见面：", "en": "Meeting someone for the first time:", "o": ["Nice to meet you.", "Nice to see you first.", "Happy meet you."], "a": 0, "xe": "\"Nice to meet you\" is for first meetings; \"Nice to see you\" is for people you already know.", "xz": "初次见面说 \"Nice to meet you\"；见熟人说 \"Nice to see you\"。"}, {"k": "fix", "zh": "别人问 \"How are you?\" 最自然的回答：", "en": "Someone asks \"How are you?\"", "o": ["Pretty good, thanks. How about you?", "I'm fine, thank you, and you?", "Fine."], "a": 0, "xe": "\"I'm fine, thank you, and you?\" is the textbook answer, but it sounds stiff. Try \"Pretty good, thanks.\"", "xz": "\"I'm fine, thank you, and you?\" 是课本答案，听起来很生硬。试试 \"Pretty good, thanks.\""}, {"k": "fill", "zh": "Where are you ___?", "en": "Fill in the blank.", "o": ["from", "come", "at"], "a": 0, "xe": "\"Where are you from?\" asks someone's home town or country.", "xz": "\"Where are you from?\" 问对方来自哪里。"}, {"k": "order", "zh": "你在三亚住了多久了？", "en": "Ask how long they've lived in Sanya.", "w": ["How", "long", "have", "you", "lived", "in", "Sanya?"], "xe": "\"How long have you…?\" uses the present perfect for something still true now.", "xz": "\"How long have you…?\" 用现在完成时，表示一直持续到现在。"}, {"k": "choose", "zh": "\"What do you do?\" 问的是：", "en": "\"What do you do?\" asks about:", "o": ["Your job", "What you are doing now", "Your hobby"], "a": 0, "xe": "\"What do you do?\" means \"What's your job?\"", "xz": "\"What do you do?\" 是问\"你做什么工作？\""}, {"k": "fix", "zh": "\"I very like Sanya.\" 正确说法：", "en": "Fix it.", "o": ["I really like Sanya.", "I very like Sanya.", "I like very Sanya."], "a": 0, "xe": "\"Very\" can't go before a verb. Use \"really like\" or \"like … very much\".", "xz": "very 不能修饰动词，要说 \"really like\" 或 \"like … very much\"。"}, {"k": "fill", "zh": "See you ___!", "en": "Fill in the blank.", "o": ["later", "after", "next"], "a": 0, "xe": "\"See you later!\" is the everyday goodbye.", "xz": "\"See you later!\" 是日常告别语。"}, {"k": "choose", "zh": "\"Have you eaten?\" 在英语里：", "en": "In English, \"Have you eaten?\" is…", "o": ["Not a usual greeting. Try \"How's your day going?\"", "A normal greeting", "A way to say you're hungry"], "a": 0, "xe": "\"吃了吗\" is a Chinese greeting. In English it sounds like an invitation to eat!", "xz": "\"吃了吗\" 是中文问候语，在英语里听起来像在邀请对方吃饭！"}]}];
+  var root = document.documentElement, $ = function (id) { return document.getElementById(id); };
+  var grid = $('pt-grid'), player = $('pt-player'), done = $('pt-done'), stats = document.querySelector('.pt-stats');
+  if (!grid) return;
+  var store = { get: function (k, d) { try { var v = localStorage.getItem('aq-' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+                set: function (k, v) { try { localStorage.setItem('aq-' + k, JSON.stringify(v)); } catch (e) {} } };
+  var zh = function () { return root.getAttribute('data-lang') === 'zh'; };
+  var KIND = { choose: ['Choose the natural sentence', '选出最自然的说法'], fix: ['Fix the common mistake', '纠正常见错误'], fill: ['Fill in the blank', '填空'], order: ['Put the words in order', '把单词排成句子'] };
+  function today(d) { d = d || new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function streakNow() { var last = store.get('last', null), y = new Date(); y.setDate(y.getDate() - 1);
+    return (last === today() || last === today(y)) ? store.get('streak', 0) : 0; }
+  function paintStats() {
+    $('pt-streak').textContent = streakNow(); $('pt-xp').textContent = store.get('xp', 0);
+    var best = store.get('best', {});
+    DATA.forEach(function (t) { var b = best[t.id];
+      document.querySelector('[data-best="' + t.id + '"]').textContent = b == null ? (zh() ? '未开始' : 'New') : (zh() ? '最佳 ' : 'Best ') + b + '/8';
+      document.querySelector('[data-bar="' + t.id + '"]').style.width = (b ? b / 8 * 100 : 0) + '%'; });
+  }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  var topic, qi, score, picked, answerWords, checked, gained;
+  function open(id) {
+    topic = DATA.filter(function (t) { return t.id === id; })[0]; if (!topic) return;
+    qi = 0; score = 0; gained = 0;
+    grid.hidden = true; stats.hidden = true; done.hidden = true; player.hidden = false;
+    try { history.replaceState(null, '', '#practice-' + id); } catch (e) {}
+    player.scrollIntoView({ block: 'start' }); show();
+  }
+  function close() { player.hidden = true; done.hidden = true; grid.hidden = false; stats.hidden = false; paintStats();
+    try { history.replaceState(null, '', '#practice'); } catch (e) {} }
+  function show() {
+    var q = topic.q[qi]; checked = false; picked = null; answerWords = [];
+    $('pt-prog').style.width = (qi / topic.q.length * 100) + '%';
+    $('pt-count').textContent = (qi + 1) + ' / ' + topic.q.length;
+    $('pt-kind').textContent = KIND[q.k][zh() ? 1 : 0];
+    $('pt-prompt').textContent = q.zh; $('pt-sub').textContent = q.en;
+    var fb = $('pt-fb'); fb.className = 'pt-fb'; fb.innerHTML = '';
+    var btn = $('pt-check'); btn.disabled = true; btn.innerHTML = '<span class="en">Check</span><span class="zh">检查</span>';
+    var opts = $('pt-opts'), ans = $('pt-answer'); opts.innerHTML = ''; ans.innerHTML = '';
+    if (q.k === 'order') {
+      ans.hidden = false; opts.className = 'pt-opts tiles';
+      shuffle(q.w.map(function (w, i) { return { w: w, i: i }; })).forEach(function (o) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-opt'; b.textContent = o.w;
+        b.addEventListener('click', function () { if (checked || b.classList.contains('used')) return; b.classList.add('used');
+          var a = document.createElement('button'); a.type = 'button'; a.className = 'pt-opt'; a.textContent = o.w;
+          a.addEventListener('click', function () { if (checked) return; a.remove(); b.classList.remove('used'); answerWords.splice(answerWords.indexOf(o), 1); btn.disabled = !answerWords.length; });
+          ans.appendChild(a); answerWords.push(o); btn.disabled = false; });
+        opts.appendChild(b); });
+    } else {
+      ans.hidden = true; opts.className = 'pt-opts';
+      shuffle(q.o.map(function (t, i) { return { t: t, i: i }; })).forEach(function (o) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'pt-opt'; b.textContent = o.t; b.dataset.i = o.i;
+        b.addEventListener('click', function () { if (checked) return; opts.querySelectorAll('.pt-opt').forEach(function (x) { x.classList.remove('sel'); });
+          b.classList.add('sel'); picked = o.i; btn.disabled = false; });
+        opts.appendChild(b); });
+    }
+  }
+  function check() {
+    var q = topic.q[qi], ok, right;
+    if (q.k === 'order') { ok = answerWords.map(function (o) { return o.w; }).join(' ') === q.w.join(' '); right = q.w.join(' '); }
+    else { ok = picked === q.a; right = q.o[q.a];
+      $('pt-opts').querySelectorAll('.pt-opt').forEach(function (b) { if (+b.dataset.i === q.a) b.classList.add('ok'); else if (b.classList.contains('sel')) b.classList.add('bad'); }); }
+    if (ok) { score++; gained += 10; }
+    checked = true;
+    var fb = $('pt-fb'); fb.className = 'pt-fb ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = '<b>' + (ok ? (zh() ? '正确！' : 'Correct!') : (zh() ? '正确答案：' : 'Correct answer: ') + (ok ? '' : right)) + '</b><span class="pt-why">' + (zh() ? q.xz : q.xe) + '</span>';
+    var btn = $('pt-check'); btn.innerHTML = '<span class="en">Continue</span><span class="zh">继续</span>'; btn.disabled = false; btn.focus();
+  }
+  function next() { qi++; if (qi < topic.q.length) show(); else finish(); }
+  function finish() {
+    $('pt-prog').style.width = '100%';
+    if (score === topic.q.length) gained += 20;
+    store.set('xp', store.get('xp', 0) + gained);
+    var best = store.get('best', {}); best[topic.id] = Math.max(best[topic.id] || 0, score); store.set('best', best);
+    var last = store.get('last', null), y = new Date(); y.setDate(y.getDate() - 1);
+    var st = last === today() ? store.get('streak', 1) : last === today(y) ? store.get('streak', 0) + 1 : 1;
+    store.set('streak', st); store.set('last', today());
+    player.hidden = true; done.hidden = false;
+    var perfect = score === topic.q.length;
+    $('pt-done-title').textContent = perfect ? (zh() ? '满分！' : 'Perfect!') : score >= 6 ? (zh() ? '真棒！' : 'Great work!') : (zh() ? '继续加油！' : 'Keep going!');
+    $('pt-done-score').textContent = (zh() ? topic.zh + '：答对 ' : topic.en + ': ') + score + ' / ' + topic.q.length + (zh() ? '' : ' correct');
+    $('pt-done-xp').textContent = '+' + gained + ' XP';
+    $('pt-done-streak').textContent = zh() ? '连续打卡 ' + st + ' 天' : st + ' day streak';
+    done.scrollIntoView({ block: 'start' });
+  }
+  grid.addEventListener('click', function (e) { var c = e.target.closest('.pt-card'); if (c) open(c.dataset.topic); });
+  $('pt-close').addEventListener('click', close);
+  $('pt-check').addEventListener('click', function () { if (checked) next(); else check(); });
+  $('pt-again').addEventListener('click', function () { open(topic.id); });
+  $('pt-next').addEventListener('click', function () { var i = DATA.indexOf(topic); open(DATA[(i + 1) % DATA.length].id); });
+  $('pt-share').addEventListener('click', function () {
+    var url = location.href.split('#')[0] + '#practice-' + topic.id;
+    var text = zh() ? '我在「海语英语 Aquaire」完成了「' + topic.zh + '」英语练习，答对 ' + score + '/8，已连续打卡 ' + streakNow() + ' 天！你也来试试：' + url
+                    : 'I scored ' + score + '/8 on "' + topic.en + '" at Aquaire, English by the sea. Try it: ' + url;
+    var b = this, old = b.innerHTML;
+    function okMsg() { b.textContent = zh() ? '已复制，可粘贴到微信' : 'Copied — paste it in WeChat'; setTimeout(function () { b.innerHTML = old; }, 2200); }
+    function manual() { var ta = document.getElementById('pt-sharebox');
+      if (!ta) { ta = document.createElement('textarea'); ta.id = 'pt-sharebox'; ta.readOnly = true; ta.rows = 3; ta.className = 'pt-sharebox'; done.appendChild(ta); }
+      ta.value = text; ta.focus(); ta.select(); b.textContent = zh() ? '长按上方文字复制' : 'Press and hold the text to copy'; setTimeout(function () { b.innerHTML = old; }, 3000); }
+    try { navigator.clipboard.writeText(text).then(okMsg, manual); } catch (err) { manual(); }
+  });
+  document.querySelector('.lang-btn') && document.querySelector('.lang-btn').addEventListener('click', function () { setTimeout(function () { paintStats(); if (!player.hidden && !checked) { var q = topic.q[qi]; $('pt-kind').textContent = KIND[q.k][zh() ? 1 : 0]; } }, 0); });
+  paintStats();
+  var m = location.hash.match(/^#practice-([a-z]+)$/); if (m) open(m[1]);
+  addEventListener('hashchange', function () { var m = location.hash.match(/^#practice-([a-z]+)$/); if (m && (!topic || topic.id !== m[1] || player.hidden)) open(m[1]); });
 })();
 </script>
 </body>
