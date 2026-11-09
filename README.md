@@ -34,3 +34,6 @@ Later, with your own domain + ICP filing, you can bind the domain in the same pa
 
 ## Fonts
 Headings use Instrument Serif (SIL Open Font License, `fonts/InstrumentSerif-OFL.txt`), embedded in `index.html` so it loads without any outside font host (works in mainland China).
+
+## 3D opening
+The opening screen uses three.js 0.149 (MIT, `vendor/three-LICENSE.txt`), stored in `vendor/` so it loads without overseas servers. If WebGL is unavailable it falls back to the flat logo screen; with reduced motion it renders one still frame.
