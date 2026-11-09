@@ -850,7 +850,16 @@ a { text-underline-offset: 3px; }
 @keyframes pt-float { from { opacity: 0; transform: translateY(8px) scale(.8); } 25% { opacity: 1; transform: translateY(-6px) scale(1.1); } to { opacity: 0; transform: translateY(-34px); } }
 .pt-retry { color: #f6b3a6; }
 .playing .action-bar { display: none !important; }
-.action-bar { grid-template-columns: auto 1fr !important; }
+.action-bar { grid-template-columns: 1fr 1.15fr !important; align-items: stretch; }
+.bar-lesson { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 10px 0 4px; border: 1px solid rgba(227,176,97,.55); border-radius: 2px; color: var(--fg); text-decoration: none; min-width: 0; }
+.bar-lesson:active, .bar-book:active { transform: scale(.98); }
+.bar-pud { flex: none; width: 34px; height: 42px; }
+.bar-pud .pud-ava { width: 34px; height: 42px; border-radius: 17px; }
+.bar-txt { display: grid; gap: 2px; min-width: 0; line-height: 1.15; }
+.bar-txt b { font-size: .86rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-txt small { font-size: .72rem; color: var(--brass); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-lesson.done { border-color: var(--line); }
+.bar-book { padding: 0 12px; }
 .wx-btn { width: 52px; height: 48px; display: grid; place-items: center; border-radius: 2px; border: 1px solid var(--line); background: transparent; color: #2fc76f; cursor: pointer; position: relative; }
 .wx-btn svg { width: 30px; height: 30px; }
 .wx-btn:active { transform: scale(.95); }
@@ -1077,7 +1086,7 @@ a { text-underline-offset: 3px; }
       <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
     </ul>
     <div class="nav-right">
-      <a class="play-pill" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Play</span><span class="zh">玩一课</span></span></a>
+      <a class="play-pill" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg><span class="play-pill-t"><span class="en">Lesson</span><span class="zh">今日小课</span></span></a>
       <button class="wx-btn wx-head" type="button" data-copy="wechat-id" aria-label="Copy our WeChat ID / 复制微信号"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12.6 5C6.8 5 2.2 8.9 2.2 13.6c0 2.7 1.5 5.1 3.8 6.7l-.9 2.9 3.4-1.8c1.2.4 2.6.6 4 .6h.6a8 8 0 0 1-.3-2.2c0-4.6 4.4-8.3 9.9-8.3h.6C22.4 7.9 17.9 5 12.6 5z" fill="currentColor"/><circle cx="9" cy="11.6" r="1.3" fill="#0d2226"/><circle cx="16" cy="11.6" r="1.3" fill="#0d2226"/><path d="M29.8 19.8c0-3.9-3.9-7.1-8.6-7.1s-8.6 3.2-8.6 7.1 3.9 7.1 8.6 7.1c1 0 2-.1 2.9-.4l2.7 1.5-.7-2.4c2.2-1.3 3.7-3.4 3.7-5.8z" fill="currentColor"/><circle cx="18.3" cy="18.6" r="1.1" fill="#0d2226"/><circle cx="24.1" cy="18.6" r="1.1" fill="#0d2226"/></svg></button>
       <button class="lang-btn" id="lang-btn" type="button" aria-label="Switch language / 切换语言"><span class="en"><b>EN</b> / 中文</span><span class="zh">EN / <b>中文</b></span></button>
       <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
@@ -1649,8 +1658,8 @@ a { text-underline-offset: 3px; }
 </main>
 
 <div class="action-bar">
-  <a class="bar-play" href="#practice-daily" aria-label="Play today’s lesson / 开始今日小课"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z" fill="currentColor"/></svg></a>
-  <a class="btn btn-solid" href="#contact"><span class="en">Try a day</span><span class="zh">免费体验</span></a>
+  <a class="bar-lesson" href="#practice-daily"><span class="bar-pud" aria-hidden="true"></span><span class="bar-txt"><b><span class="en">Today’s lesson</span><span class="zh">今日小课</span></b><small id="bar-sub"><span class="en">3 min · free</span><span class="zh">3 分钟 · 免费</span></small></span></a>
+  <a class="btn btn-solid bar-book" href="#contact"><span class="en">Book a free day</span><span class="zh">预约免费体验</span></a>
 </div>
 
 <footer class="site-footer">
@@ -2218,6 +2227,11 @@ a { text-underline-offset: 3px; }
     document.querySelector('.pt-goal').classList.toggle('met', tx >= GOAL);
     var sb = store.get('sprintBest', 0);
     $('pt-sprint-best').textContent = sb ? L2('Your best: ' + sb + ' correct', '最佳成绩：答对 ' + sb + ' 题') : L2('Quick-fire questions from every topic', '各个主题的快问快答');
+    var bp = document.querySelector('.bar-pud'), av = document.querySelector('.pud-ava');
+    if (bp && av) { bp.innerHTML = ''; var cl = av.cloneNode(true); cl.removeAttribute('style'); bp.appendChild(cl); }
+    var bl = document.querySelector('.bar-lesson'), bs = $('bar-sub');
+    if (bl && bs) { var dn = store.get('dailyDone', null) === today(), sk = streakNow(); bl.classList.toggle('done', dn);
+      bs.textContent = dn ? L2('Done ✓ · ' + sk + '-day streak', '已完成 ✓ · 连续 ' + sk + ' 天') : sk ? L2('Keep your ' + sk + '-day streak', '保持连续 ' + sk + ' 天') : L2('3 min · free', '3 分钟 · 免费'); }
     paintWeek(); paintBadges(freshB); paintSnd(); requestAnimationFrame(drawRoute);
     var ph = phraseToday(), doneToday = store.get('dailyDone', null) === today();
     $('pt-daily-date').textContent = new Date().toLocaleDateString(zh() ? 'zh-CN' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
