@@ -36,3 +36,11 @@ if len(sys.argv) > 2:
     frag = "<script>document.documentElement.setAttribute('data-look','light')</script>\n" + frag
     pathlib.Path(sys.argv[2]).write_text(frag)
 print('light ok', len(light))
+
+# Bright tropical-morning variant.
+sky = light.replace('data-look="light"', 'data-look="sky"', 1).replace('Oriwis UK Study (light)', 'Oriwis UK Study (sky)', 1)
+(root / 'index-sky.html').write_text(sky)
+if len(sys.argv) > 3:
+    frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', sky)
+    pathlib.Path(sys.argv[3]).write_text("<script>document.documentElement.setAttribute('data-look','sky')</script>\n" + frag)
+print('sky ok', len(sky))

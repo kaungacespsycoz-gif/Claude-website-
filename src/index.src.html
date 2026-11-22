@@ -124,6 +124,36 @@ p { margin: 0; }
 :root[data-look="light"] .steps li.you::before { color: #b8873a; }
 :root[data-look="light"] form.card, :root[data-look="light"] .done { box-shadow: 0 1px 0 rgba(15,43,48,.06); }
 
+
+/* ---------- bright tropical-morning look (html[data-look="sky"]) ---------- */
+:root[data-look="sky"] { --paper: #f4f9fa; --card: #ffffff; --ink: #0c2f3a; --text: #0c2f3a; --muted: #4a6670; --sea: #0f7f8c; --sun: #c88a2c; --sun-dot: #f0a93b;
+  --line: rgba(12,47,58,.12); --band: #dcf0f0; --band-text: #0c2f3a; --band-muted: #46646c; --band-sea: #0f7f8c; --band-line: rgba(12,47,58,.12); --focus: #0f7f8c; --coral: #ef6f5e; color-scheme: light; }
+:root[data-look="sky"] .btn { background: var(--coral); color: #fff; box-shadow: 0 8px 20px -10px rgba(239,111,94,.8); }
+:root[data-look="sky"] .btn::after { background: #fff; }
+:root[data-look="sky"] .hero { background: linear-gradient(180deg, #ffffff 0%, var(--paper) 100%); }
+:root[data-look="sky"] .label { color: var(--sea); }
+:root[data-look="sky"] .chip[aria-selected="true"], :root[data-look="sky"] .seg input:checked + span { background: var(--sea); border-color: var(--sea); color: #fff; }
+:root[data-look="sky"] .lang button[aria-pressed="true"] { background: var(--sea); color: #fff; }
+:root[data-look="sky"] .steps li::before { color: var(--sea); }
+:root[data-look="sky"] .steps li.you::before, :root[data-look="sky"] .steps li.you .who { color: var(--coral); }
+:root[data-look="sky"] #consult.band { background: linear-gradient(160deg, #0f7f8c 0%, #0c5d6b 100%); --band-text: #ffffff; --band-muted: rgba(255,255,255,.82); --band-sea: #bdf0ea; --band-line: rgba(255,255,255,.3); color: #fff; }
+:root[data-look="sky"] #consult .btn { background: var(--coral); }
+:root[data-look="sky"] .path, :root[data-look="sky"] .faq { --line: rgba(12,47,58,.1); }
+:root[data-look="sky"] .path { box-shadow: 0 20px 40px -30px rgba(12,47,58,.35); border-color: transparent; }
+:root[data-look="sky"] .divider { color: #4cc3c0; }
+:root[data-look="sky"] .intro { background: linear-gradient(180deg, #9fd6ec 0%, #d4eef5 45%, #fff3dc 60%, #7fd2cf 100%); color: #0c2f3a; }
+:root[data-look="sky"] .intro.is3d { background: linear-gradient(180deg, #8ccbe6 0%, #bfe5f1 30%, #e6f5f6 50%, #fff2d8 60.5%, #74cbc9 61.2%); }
+:root[data-look="sky"] .intro.is3d::before { background: radial-gradient(ellipse at center, rgba(255,255,255,.55) 0%, rgba(255,255,255,.25) 42%, rgba(255,255,255,0) 70%); }
+:root[data-look="sky"] .intro.is3d::after { background: linear-gradient(180deg, rgba(244,249,250,0) 0%, rgba(244,249,250,.55) 65%, #f4f9fa 100%); }
+:root[data-look="sky"] .intro-logo { color: #0c2f3a; filter: drop-shadow(0 4px 22px rgba(255,255,255,.65)); }
+:root[data-look="sky"] .intro-logo .ow-sun { fill: #f0a93b; }
+:root[data-look="sky"] .intro-line { color: #0c2f3a; text-shadow: 0 1px 12px rgba(255,255,255,.9); }
+:root[data-look="sky"] .intro-cue { color: rgba(12,47,58,.75); }
+:root[data-look="sky"] .intro-cue i { background: linear-gradient(#ef6f5e, transparent); }
+:root[data-look="sky"] .intro .lang-float { border-color: rgba(12,47,58,.25); background: rgba(255,255,255,.35); }
+:root[data-look="sky"] .intro .lang-float button { color: rgba(12,47,58,.75); }
+:root[data-look="sky"] .intro .lang-float button[aria-pressed="true"] { background: #0c2f3a; color: #fff; }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--paper) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .3s; }
@@ -622,7 +652,7 @@ footer .wrap { display: grid; gap: 22px; }
 
   function start() {
     if (!window.THREE) return;
-    var T = window.THREE, mobile = innerWidth < 760, LIGHT = document.documentElement.getAttribute('data-look') === 'light';
+    var T = window.THREE, mobile = innerWidth < 760, LOOK = document.documentElement.getAttribute('data-look') || '', LIGHT = !!LOOK, SKY = LOOK === 'sky';
     var renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.25 : 1.6));
     var scene = new T.Scene();
@@ -635,7 +665,7 @@ footer .wrap { display: grid; gap: 22px; }
     var rip = [new T.Vector3(0, 0, -99), new T.Vector3(0, 0, -99), new T.Vector3(0, 0, -99), new T.Vector3(0, 0, -99)], ripI = 0;
     var sea = new T.ShaderMaterial({
       uniforms: { uTime: { value: 0 }, uMoon: { value: new T.Vector3(0, .16, -1).normalize() }, uRip: { value: rip },
-                  uDeep: { value: new T.Color(LIGHT ? 0x4f8f8e : 0x06222a) }, uShallow: { value: new T.Color(LIGHT ? 0x9fd0c8 : 0x2f8c8f) }, uSky: { value: new T.Color(LIGHT ? 0xf2d5a8 : 0xc98a4c) }, uFog: { value: new T.Color(LIGHT ? 0xeee4d3 : 0x34494a) } },
+                  uDeep: { value: new T.Color(SKY ? 0x138f9b : LIGHT ? 0x4f8f8e : 0x06222a) }, uShallow: { value: new T.Color(SKY ? 0x6fd8d2 : LIGHT ? 0x9fd0c8 : 0x2f8c8f) }, uSky: { value: new T.Color(SKY ? 0xd8f1f6 : LIGHT ? 0xf2d5a8 : 0xc98a4c) }, uFog: { value: new T.Color(SKY ? 0xdff2f5 : LIGHT ? 0xeee4d3 : 0x34494a) } },
       vertexShader: [
         'uniform float uTime; uniform vec3 uRip[4]; varying vec3 vPos; varying vec3 vN;',
         'float h(vec2 p){ float y = sin(p.x*.16+uTime*.8)*.45 + sin(p.y*.21+uTime*.6)*.38 + sin((p.x+p.y)*.42+uTime*1.25)*.14 + sin((p.x-p.y)*.9+uTime*1.7)*.05;',
