@@ -543,53 +543,82 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 /* explore: a full-screen map of UK schools and universities, filtered by age and nation */
 .xp-open { margin-top: 18px; grid-column: 2; justify-self: start; writing-mode: horizontal-tb; }
 @media (max-width: 560px) { .xp-open { justify-self: stretch; } }
-.xp .xp-sub { margin-top: 10px; color: var(--muted); font-size: var(--fs-sm); }
-.xp .chips { margin: 16px -16px 0; padding: 2px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-.xp .chips::-webkit-scrollbar { display: none; }
-.xp .chips + .chips { margin-top: 8px; }
-.xp .chip { flex: none; font: 500 .86rem/1 var(--sans); padding: 10px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); cursor: pointer; white-space: nowrap; transition: background .2s ease, color .2s ease; }
-.xp .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.xp .chip small { font-size: .74rem; opacity: .7; margin-left: 4px; }
-.xp .xmap { position: relative; margin: 16px -16px 0; overflow: hidden; }
+.xp { --xp-ink: #0c2f3a; --xp-uni: #0f7f8c; --xp-sch: #d08a26; --xp-soft: color-mix(in srgb, var(--ink) 5%, var(--paper)); }
+.xp .xp-sub { margin-top: 8px; color: var(--muted); font-size: var(--fs-sm); max-width: 36em; }
+/* filter panel */
+.xp .fpanel { margin-top: 20px; display: grid; gap: 14px; }
+.xp .fgroup { display: grid; gap: 7px; }
+.xp .flab { font: 600 .7rem/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+:root[data-lang="zh"] .xp .flab { letter-spacing: .04em; font-size: .76rem; }
+.xp .seg { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: var(--xp-soft); border: 1px solid var(--rule); overflow-x: auto; scrollbar-width: none; }
+.xp .seg::-webkit-scrollbar { display: none; }
+.xp .seg button { flex: 1 0 auto; font: 500 .84rem/1.15 var(--sans); padding: 9px 12px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: background .2s ease, color .2s ease, box-shadow .2s ease; }
+.xp .seg button:hover { color: var(--ink); }
+.xp .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(12,47,58,.12), 0 2px 8px -2px rgba(12,47,58,.14); }
+.xp .seg button small { display: block; font-size: .68rem; font-weight: 400; color: var(--muted); margin-top: 2px; }
+.xp .rankrow { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+.xp .rankrow .seg { flex: 1 1 220px; }
+.xp .rankrow .seg.tops { flex: 1 1 200px; }
+.xp .rankrow .seg.tops[hidden] { display: none; }
+/* map */
+.xp .xmap { position: relative; margin: 18px -16px 0; overflow: hidden; touch-action: pan-y; cursor: grab; isolation: isolate; z-index: 0; background: #b9d8d6; }
+.xp .xmap.drag { cursor: grabbing; }
 .xp .xmap img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
-.xp .xmap { touch-action: pan-y; cursor: grab; isolation: isolate; z-index: 0; } .xp .xmap.drag { cursor: grabbing; }
 .xp .stage { position: relative; transform-origin: 0 0; transition: transform .7s cubic-bezier(.3,.7,.2,1); will-change: transform; }
 .xp .xmap.drag .stage { transition: none; }
-.xp .zbtn { position: absolute; right: 10px; bottom: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 3; }
-.xp .zbtn button { width: 36px; height: 36px; border-radius: 10px; border: 0; background: rgba(255,255,255,.92); color: #0c2f3a; font: 600 1.1rem/1 var(--sans); box-shadow: 0 2px 8px rgba(0,0,0,.18); cursor: pointer; }
-.xp .zbtn .uk { font-size: .68rem; }
-.xp .xmap.zoomed .pin.lbl b { opacity: 1; }
-.xp .pin.lbl { z-index: 2; } .xp .pin[aria-pressed="true"] { z-index: 3; }
+.xp .zbtn { position: absolute; right: 12px; bottom: 12px; display: grid; z-index: 3; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,.94); box-shadow: 0 4px 14px -4px rgba(12,47,58,.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.xp .zbtn button { width: 38px; height: 36px; border: 0; background: transparent; color: var(--xp-ink); font: 500 1.15rem/1 var(--sans); cursor: pointer; }
+.xp .zbtn button + button { border-top: 1px solid rgba(12,47,58,.1); }
+.xp .zbtn button:hover { background: rgba(12,47,58,.06); }
+.xp .zbtn .uk { font: 600 .62rem/1 var(--sans); letter-spacing: .04em; }
+.xp .xkey { position: absolute; left: 12px; top: 12px; z-index: 3; display: flex; gap: 12px; padding: 7px 11px; border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 4px 14px -4px rgba(12,47,58,.3); font: 500 .72rem/1 var(--sans); color: var(--xp-ink); }
+.xp .xkey span { display: inline-flex; align-items: center; gap: 6px; } .xp .xkey i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 .xp .pin { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; scale: var(--inv, 1); padding: 0; border: 0; background: transparent; cursor: pointer; transition: opacity .3s ease, transform .3s ease; }
-.xp .pin i { position: absolute; left: 50%; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: var(--c); border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,.35); transition: transform .25s ease; }
-.xp .pin.uni { --c: #0f7f8c; } .xp .pin.sch { --c: #d9932f; } .xp .pin.both i { background: linear-gradient(90deg, #0f7f8c 50%, #d9932f 50%); }
-.xp .pin b { position: absolute; left: 50%; top: -2px; transform: translate(-50%, -100%); font: 650 .64rem/1 var(--sans); color: #0c2f3a; background: rgba(255,255,255,.92); padding: 3px 5px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
-.xp .pin[aria-pressed="true"] i { transform: scale(1.45); } .xp .pin[aria-pressed="true"] b, .xp .pin:hover b { opacity: 1; }
+.xp .pin i { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--c); border: 2.5px solid #fff; box-shadow: 0 2px 6px rgba(12,47,58,.4); transition: transform .25s ease; }
+.xp .pin.uni { --c: var(--xp-uni); } .xp .pin.sch { --c: var(--xp-sch); } .xp .pin.both i { background: linear-gradient(90deg, var(--xp-uni) 50%, var(--xp-sch) 50%); }
+.xp .pin b { position: absolute; left: 50%; top: -1px; transform: translate(-50%, -100%); font: 600 .64rem/1 var(--sans); color: var(--xp-ink); background: rgba(255,255,255,.96); padding: 4px 7px; border-radius: 7px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s ease; box-shadow: 0 2px 6px -2px rgba(12,47,58,.3); }
+.xp .pin:hover i { transform: scale(1.2); }
+.xp .pin[aria-pressed="true"] i { transform: scale(1.5); box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 28%, transparent), 0 2px 6px rgba(12,47,58,.4); }
+.xp .pin[aria-pressed="true"] b, .xp .pin:hover b, .xp .xmap.zoomed .pin.lbl b { opacity: 1; }
+.xp .pin.lbl { z-index: 2; } .xp .pin[aria-pressed="true"] { z-index: 3; }
 .xp .pin.off { opacity: 0; transform: scale(.4); pointer-events: none; }
 .xp .pin.pop { animation: xp-pop .45s cubic-bezier(.3,1.6,.5,1) both; }
 @keyframes xp-pop { from { transform: scale(0); } }
-.xp .xkey { display: flex; gap: 16px; padding: 10px 0 0; font-size: .74rem; color: var(--muted); }
-.xp .xkey span { display: inline-flex; align-items: center; gap: 6px; } .xp .xkey i { width: 9px; height: 9px; border-radius: 50%; }
-.xp .xcount { margin-top: 22px; display: flex; justify-content: space-between; align-items: baseline; font: 650 1rem/1.3 var(--sans); color: var(--ink); }
-.xp .xcount button { font: 500 .8rem/1 var(--sans); color: var(--accent); background: none; border: 0; cursor: pointer; padding: 4px 0; }
-.xp .xlist { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-.xp .xi { border: 1px solid var(--rule); border-radius: 14px; padding: 13px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+/* results */
+.xp .xcount { margin-top: 26px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.xp .xcount #xp-count { font: 650 1.05rem/1.3 var(--sans); color: var(--ink); }
+.xp .xcount #xp-count small { display: block; font: 400 .76rem/1.4 var(--sans); color: var(--muted); margin-top: 2px; }
+.xp .xcount button { flex: none; font: 600 .78rem/1 var(--sans); color: var(--accent); background: none; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; padding: 8px 12px; }
+.xp .xcount button:hover { border-color: var(--accent); }
+.xp .xlist { margin: 0; padding: 0; list-style: none; }
+.xp .xi { display: grid; grid-template-columns: 40px 1fr auto; gap: 2px 14px; align-items: center; padding: 15px 4px; border-bottom: 1px solid var(--rule); transition: background .2s ease; }
+.xp .xi:hover { background: var(--xp-soft); }
+.xp .xi .ic { grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font: 700 .95rem/1 var(--sans); font-variant-numeric: tabular-nums; color: #fff; background: var(--xp-uni); }
+.xp .xi .ic.sch { background: var(--xp-sch); }
+.xp .xi .ic svg { width: 20px; height: 20px; }
+.xp .xi .ic.rk { background: var(--xp-ink); font-size: 1rem; display: flex; align-items: baseline; justify-content: center; padding-top: 12px; box-sizing: border-box; }
+.xp .xi .ic.rk small { font-size: .62rem; font-weight: 600; opacity: .7; margin-right: 1px; }
 .xp .xi h4 { margin: 0; font: 650 .98rem/1.3 var(--sans); color: var(--ink); }
-.xp .xi h4 small { display: block; font-weight: 400; font-size: .8rem; color: var(--muted); margin-top: 2px; }
-.xp .xi p { grid-column: 1; margin: 0; font-size: .78rem; color: var(--muted); }
-.xp .xi .tag { display: inline-block; font-size: .7rem; padding: 2px 7px; border-radius: 999px; margin-right: 6px; color: #fff; background: #0f7f8c; }
-.xp .xi .tag.sch { background: #d9932f; } .xp .xi .tag.qs { background: #0c2f3a; } .xp .xi .tag.gu { background: #052962; }
-.xp .xi p { display: flex; flex-wrap: wrap; align-items: center; row-gap: 4px; }
-.xp .xi a { grid-row: 1 / span 2; grid-column: 2; font: 600 .8rem/1 var(--sans); color: var(--accent); text-decoration: none; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 999px; white-space: nowrap; }
-.xp .xi.hl { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
-.xp .xnote { margin-top: 22px; font-size: .74rem; color: var(--muted); line-height: 1.6; }
-@media (min-width: 700px) { .xp .xmap { margin: 18px 0 0; border-radius: 16px; } }
+.xp .xi h4 small { font-weight: 400; font-size: .8rem; color: var(--muted); margin-left: 6px; }
+.xp .xi .meta { grid-column: 2; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: .78rem; color: var(--muted); }
+.xp .xi .meta .dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: .5; }
+.xp .xi .bdg { font: 600 .68rem/1 var(--sans); padding: 4px 7px; border-radius: 6px; border: 1px solid var(--rule); color: var(--ink); background: var(--paper); }
+.xp .xi .bdg b { font-weight: 700; }
+.xp .xi .bdg.gu { border-color: color-mix(in srgb, #052962 30%, var(--rule)); color: #052962; }
+:root[data-mode="night"] .xp .xi .bdg.gu { color: #9fb7e6; }
+.xp .xi a { grid-row: 1 / span 2; grid-column: 3; display: inline-flex; align-items: center; gap: 6px; font: 600 .8rem/1 var(--sans); color: var(--accent); text-decoration: none; padding: 9px 12px; border: 1px solid var(--rule); border-radius: 999px; white-space: nowrap; transition: border-color .2s ease, background .2s ease; }
+.xp .xi a:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.xp .xi a svg { width: 11px; height: 11px; }
+.xp .xempty { padding: 30px 4px; color: var(--muted); font-size: .9rem; }
+.xp .xnote { margin-top: 22px; padding: 14px 16px; border-radius: 12px; background: var(--xp-soft); font-size: .74rem; color: var(--muted); line-height: 1.65; }
+@media (max-width: 420px) { .xp .xi a span { display: none; } .xp .xi a { padding: 10px; } }
+@media (min-width: 700px) { .xp .xmap { margin: 20px 0 0; border-radius: 18px; box-shadow: 0 18px 40px -26px rgba(12,47,58,.6); } }
 @media (min-width: 900px) {
-  .xp .bk-in { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); gap: 36px; align-items: start; }
-  .xp .xp-l { position: sticky; top: 84px; }
-  .xp .chips { margin-left: 0; margin-right: 0; padding: 2px 0; flex-wrap: wrap; overflow: visible; }
-  .xp .xp-r .xcount { margin-top: 6px; }
-  .xp .xp-r { padding-top: 4px; }
+  .xp .bk-in { max-width: 1280px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(340px, 1fr); gap: 44px; align-items: start; padding-top: 32px; }
+  .xp .xp-l { position: sticky; top: 92px; }
+  .xp .xmap { width: min(100%, calc((100vh - 440px) * 1.5)); min-width: 420px; }
+  .xp .xp-r { padding-top: 6px; }
+  .xp .xp-r .xcount { margin-top: 0; position: sticky; top: 64px; background: var(--paper); z-index: 1; padding-top: 14px; }
 }
 
 /* header */
@@ -940,14 +969,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     <div class="xp-l">
     <h2 id="xp-title"><span class="en">Explore UK schools &amp; universities</span><span class="zh">探索英国学校与大学</span></h2>
     <p class="xp-sub"><span class="en">Pick an age, then a part of the UK. Tap a pin to see what is there.</span><span class="zh">先选年龄，再选地区。点地图上的标记查看那里的学校。</span></p>
-    <div class="chips" id="xp-age" role="group" aria-label="Age"></div>
-    <div class="chips" id="xp-nat" role="group" aria-label="Nation"></div>
-    <div class="chips" id="xp-rank" role="group" aria-label="Ranking"></div>
-    <div class="xmap" id="xp-map"><div class="stage" id="xp-stage"><img src="images/v2/ukmap.jpg" alt="Map of the UK" width="960" height="640" loading="lazy" draggable="false"></div><div class="zbtn"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="uk" class="uk"><span class="en">UK</span><span class="zh">全图</span></button></div></div>
-    <div class="xkey"><span><i style="background:#d9932f"></i><span class="en">School</span><span class="zh">中学</span></span><span><i style="background:#0f7f8c"></i><span class="en">University</span><span class="zh">大学</span></span></div>
+    <div class="fpanel">
+      <div class="fgroup"><span class="flab"><span class="en">Age</span><span class="zh">年龄</span></span><div class="seg" id="xp-age" role="group" aria-label="Age"></div></div>
+      <div class="fgroup"><span class="flab"><span class="en">Region</span><span class="zh">地区</span></span><div class="seg" id="xp-nat" role="group" aria-label="Region"></div></div>
+      <div class="fgroup"><span class="flab"><span class="en">University ranking</span><span class="zh">大学排名</span></span><div class="rankrow"><div class="seg" id="xp-sys" role="group" aria-label="Ranking"></div><div class="seg tops" id="xp-top" role="group" aria-label="Top" hidden></div></div></div>
+    </div>
+    <div class="xmap" id="xp-map"><div class="stage" id="xp-stage"><img src="images/v2/ukmap.jpg" alt="Map of the UK" width="960" height="640" loading="lazy" draggable="false"></div><div class="zbtn"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="uk" class="uk"><span class="en">UK</span><span class="zh">全图</span></button></div><div class="xkey"><span><i style="background:#d9932f"></i><span class="en">School</span><span class="zh">中学</span></span><span><i style="background:#0f7f8c"></i><span class="en">University</span><span class="zh">大学</span></span></div></div>
     </div>
     <div class="xp-r">
-    <div class="xcount"><span id="xp-count"></span><button type="button" id="xp-all" hidden><span class="en">Show all places</span><span class="zh">显示全部地点</span></button></div>
+    <div class="xcount"><span id="xp-count"></span><button type="button" id="xp-all" hidden><span class="en">Reset</span><span class="zh">重置</span></button></div>
     <ul class="xlist" id="xp-list"></ul>
     <p class="xnote"><span class="en">A starting selection to explore, not a ranking and not a list of partners. Oriwis is not affiliated with these schools or universities. Ages, entry requirements and boarding options vary, so please check each official website. Links open the school's own site. Rankings: QS World University Rankings 2027 (world position, top 100 only) and The Guardian University Guide 2027 (UK position, out of 123).</span><span class="zh">这是一份入门参考，不是排名，也不是合作名单。Oriwis 与这些学校和大学没有隶属关系。年龄、入学要求和寄宿安排各不相同，请以各校官网为准。链接将打开学校官网。排名：QS 2027 世界大学排名（世界名次，仅列前 100）；《卫报》2027 英国大学排名（英国名次，共 123 所）。</span></p>
     </div>
@@ -2133,13 +2163,13 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     'Swansea University': 25, 'University of Leeds': 26, 'Lancaster University': 27, 'Heriot-Watt University': 29, 'University of Liverpool': 30,
     "Queen's University Belfast": 43, 'Cardiff University': 43, 'University of York': 46, 'University of Aberdeen': 50, 'University of Nottingham': 51,
     'Ulster University': 58, 'Bangor University': 64, 'Newcastle University': 82, 'Aberystwyth University': 98 };
-  var RANKS = [['all', 'Any ranking', '不限排名'], ['q10', 'QS world top 10', 'QS 世界前 10'], ['q50', 'QS world top 50', 'QS 世界前 50'], ['q100', 'QS world top 100', 'QS 世界前 100'],
-    ['g10', 'Guardian UK top 10', 'Guardian 英国前 10'], ['g20', 'Guardian UK top 20', 'Guardian 英国前 20'], ['g50', 'Guardian UK top 50', 'Guardian 英国前 50']];
+  var SYS = [['all', 'Any', '不限'], ['q', 'QS World 2027', 'QS 世界 2027'], ['g', 'Guardian UK 2027', '《卫报》英国 2027']];
+  var TOPS = { q: [10, 50, 100], g: [10, 20, 50] };
   function rk(d) { return st.rank === 'all' ? null : (st.rank[0] === 'q' ? QS : GU)[d[0]]; }
   var NAT = { eng: ['England', '英格兰'], sco: ['Scotland', '苏格兰'], wal: ['Wales', '威尔士'], nir: ['Northern Ireland', '北爱尔兰'] };
-  var AGES = [['all', 'All ages', '全部'], ['11', '11–16 · Secondary school', '11–16 岁 · 中学'], ['16', '16–18 · Sixth form', '16–18 岁 · 高中 / A-Level'], ['18', '18+ · University', '18 岁以上 · 大学']];
+  var AGES = [['all', 'All', '全部', ''], ['11', 'Secondary', '中学', '11–16'], ['16', 'Sixth form', '高中', '16–18'], ['18', 'University', '大学', '18+']];
   var KIND = { uni: ['University', '大学'], sch: ['Senior school with sixth form', '中学（含高中）'], sixth: ['Sixth form only (IB)', '高中（IB 课程）'] };
-  var st = { age: 'all', nat: 'all', rank: 'all', city: null };
+  var st = { age: 'all', nat: 'all', rank: 'all', sys: 'all', top: 10, city: null };
   function fits(d) {
     if (st.nat !== 'all' && d[3] !== st.nat) return false;
     if (st.age === '11' && d[2] !== 'sch') return false;
@@ -2203,13 +2233,16 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     mapEl.addEventListener('pointerup', up); mapEl.addEventListener('pointercancel', up);
   })();
   function chips(el, items, key) {
-    el.innerHTML = items.map(function (it) { return '<button type="button" class="chip" data-v="' + it[0] + '" aria-pressed="' + (st[key] === it[0]) + '">' + it[L() === 'zh' ? 2 : 1] + '</button>'; }).join('');
+    el.innerHTML = items.map(function (it) { return '<button type="button" data-v="' + it[0] + '" aria-pressed="' + (String(st[key]) === String(it[0])) + '">' + it[L() === 'zh' ? 2 : 1] + (it[3] ? '<small>' + it[3] + '</small>' : '') + '</button>'; }).join('');
   }
   function render() {
     var l = L(), zh = l === 'zh';
     chips(document.getElementById('xp-age'), AGES, 'age');
-    chips(document.getElementById('xp-nat'), [['all', 'All of the UK', '全英国']].concat(Object.keys(NAT).map(function (k) { return [k, NAT[k][0], NAT[k][1]]; })), 'nat');
-    chips(document.getElementById('xp-rank'), RANKS, 'rank');
+    chips(document.getElementById('xp-nat'), [['all', 'All UK', '全英国']].concat(Object.keys(NAT).map(function (k) { return [k, k === 'nir' ? 'N. Ireland' : NAT[k][0], NAT[k][1]]; })), 'nat');
+    chips(document.getElementById('xp-sys'), SYS, 'sys');
+    var topEl = document.getElementById('xp-top'); topEl.hidden = st.sys === 'all';
+    if (st.sys !== 'all') chips(topEl, TOPS[st.sys].map(function (n) { return [n, 'Top ' + n, '前 ' + n]; }), 'top');
+    st.rank = st.sys === 'all' ? 'all' : st.sys + st.top;
     if (st.city && !cities[st.city].items.some(fits)) st.city = null;
     Object.keys(pins).forEach(function (k) {
       var its = cities[k].items.filter(fits), u = its.some(function (d) { return d[2] === 'uni'; }), s2 = its.some(function (d) { return d[2] !== 'uni'; });
@@ -2219,19 +2252,34 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     });
     var list = D.filter(function (d) { return fits(d) && (!st.city || (d[4] + '|' + d[5]) === st.city); });
     list.sort(st.rank !== 'all' ? function (a, b) { return rk(a) - rk(b) || a[0].localeCompare(b[0]); } : function (a, b) { return (a[2] === 'uni') - (b[2] === 'uni') || a[3].localeCompare(b[3]) || a[0].localeCompare(b[0]); });
-    cntEl.textContent = (st.city ? cities[st.city].name + ' · ' : '') + (zh ? list.length + ' 所' : list.length + (list.length === 1 ? ' place' : ' places'));
-    allBtn.hidden = !st.city; frame();
-    listEl.innerHTML = list.map(function (d) {
-      var name = zh && d[1] ? d[1] : d[0], sub = zh && d[1] ? d[0] : '';
-      return '<li class="xi"><h4>' + name + (sub ? '<small>' + sub + '</small>' : '') + '</h4><p><span class="tag' + (d[2] === 'uni' ? '' : ' sch') + '">' + KIND[d[2]][zh ? 1 : 0] + '</span>' + (QS[d[0]] ? '<span class="tag qs">QS #' + QS[d[0]] + '</span>' : '') + (GU[d[0]] ? '<span class="tag gu">Guardian #' + GU[d[0]] + '</span>' : '') + d[4] + ' · ' + NAT[d[3]][zh ? 1 : 0] + '</p>' +
-        '<a href="' + d[7] + '" target="_blank" rel="noopener noreferrer">' + (zh ? '官网 ↗' : 'Website ↗') + '</a></li>';
-    }).join('');
+    var bits = [];
+    if (st.age !== 'all') bits.push(AGES.filter(function (a) { return a[0] === st.age; })[0][zh ? 2 : 1]);
+    if (st.nat !== 'all') bits.push(NAT[st.nat][zh ? 1 : 0]);
+    if (st.sys !== 'all') bits.push((st.sys === 'q' ? 'QS' : (zh ? '《卫报》' : 'Guardian')) + (zh ? ' 前 ' : ' top ') + st.top);
+    if (st.city) bits.push(cities[st.city].name);
+    cntEl.innerHTML = (zh ? list.length + ' 所学校与大学' : list.length + (list.length === 1 ? ' place' : ' places')) + '<small>' + (bits.length ? bits.join(' · ') : (zh ? '全英国 · 全部年龄' : 'All of the UK · all ages')) + '</small>';
+    allBtn.hidden = !(st.city || st.age !== 'all' || st.nat !== 'all' || st.sys !== 'all'); frame();
+    var ARR = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var CAP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4L2 9l10 5 10-5-10-5zM6 11.2V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+    var SCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10l8-5 8 5v10M9 20v-5h6v5M3 20h18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+    listEl.innerHTML = list.length ? list.map(function (d) {
+      var name = zh && d[1] ? d[1] : d[0], sub = zh && d[1] ? d[0] : '', r = rk(d), uni = d[2] === 'uni';
+      var ic = r ? '<span class="ic rk"><small>#</small>' + r + '</span>' : '<span class="ic' + (uni ? '' : ' sch') + '">' + (uni ? CAP : SCH) + '</span>';
+      var badges = (QS[d[0]] ? '<span class="bdg">QS <b>#' + QS[d[0]] + '</b></span>' : '') + (GU[d[0]] ? '<span class="bdg gu">' + (zh ? '卫报' : 'Guardian') + ' <b>#' + GU[d[0]] + '</b></span>' : '');
+      return '<li class="xi">' + ic + '<h4>' + name + (sub ? '<small>' + sub + '</small>' : '') + '</h4>' +
+        '<p class="meta"><span>' + KIND[d[2]][zh ? 1 : 0] + '</span><i class="dot"></i><span>' + d[4] + ', ' + NAT[d[3]][zh ? 1 : 0] + '</span>' + (badges ? '<i class="dot"></i>' + badges : '') + '</p>' +
+        '<a href="' + d[7] + '" target="_blank" rel="noopener noreferrer" aria-label="' + d[0] + ' website"><span>' + (zh ? '官网' : 'Website') + '</span>' + ARR + '</a></li>';
+    }).join('') : '<li class="xempty">' + (zh ? '没有符合条件的结果，试试放宽筛选。' : 'Nothing matches these filters yet. Try widening them.') + '</li>';
   }
   xp.addEventListener('click', function (e) {
-    var c = e.target.closest('.chip'); if (!c) return;
-    var g = c.parentNode.id === 'xp-age' ? 'age' : c.parentNode.id === 'xp-rank' ? 'rank' : 'nat'; st[g] = c.dataset.v; if (g === 'rank' && st.rank !== 'all' && st.age !== 'all' && st.age !== '18') st.age = 'all'; st.city = null; render();
+    var c = e.target.closest('.seg button'); if (!c) return;
+    var id = c.parentNode.id, v = c.dataset.v;
+    if (id === 'xp-age') st.age = v; else if (id === 'xp-nat') st.nat = v;
+    else if (id === 'xp-sys') { st.sys = v; st.top = v === 'all' ? 10 : TOPS[v][v === 'q' ? 1 : 1]; if (v !== 'all' && st.age !== 'all' && st.age !== '18') st.age = 'all'; }
+    else if (id === 'xp-top') st.top = +v;
+    st.city = null; render();
   });
-  allBtn.addEventListener('click', function () { st.city = null; render(); });
+  allBtn.addEventListener('click', function () { st.city = null; st.age = 'all'; st.nat = 'all'; st.sys = 'all'; render(); });
   document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { if (!xp.hidden) render(); }); });
 
   var lastFocus = null;
