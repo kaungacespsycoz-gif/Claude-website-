@@ -10,4 +10,4 @@ Bilingual (中文 / English) one-page site for Oriwis, a UK study-abroad **consu
 
 ## Placeholders to replace
 - WeChat ID `OriwisUK`
-- Free consultation length (45 min) and reply time (one working day)
+

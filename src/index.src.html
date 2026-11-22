@@ -30,7 +30,7 @@
   --body: "Outfit", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
 
   --fs-xs: .78rem; --fs-sm: .9rem; --fs-base: 1.02rem; --fs-md: 1.2rem; --fs-lg: 1.6rem;
-  --fs-xl: clamp(2rem, 6vw, 3.1rem); --fs-hero: clamp(2.6rem, 10.5vw, 5.6rem);
+  --fs-xl: clamp(2rem, 6vw, 3.1rem); --fs-hero: clamp(2.5rem, 10vw, 5rem);
   --wrap: 1120px;
   --gut-l: max(20px, env(safe-area-inset-left, 0px));
   --gut-r: max(20px, env(safe-area-inset-right, 0px));
@@ -80,7 +80,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .hero { padding-block: clamp(40px, 9vw, 96px) clamp(36px, 7vw, 72px); }
 .hero .wrap { display: grid; gap: 28px; }
 .cut { position: relative; display: inline; }
-.hero h1 { font-size: var(--fs-hero); font-weight: 800; line-height: .98; letter-spacing: -.02em; color: var(--ink); max-width: 11em; position: relative; }
+.hero h1 { font-size: var(--fs-hero); font-weight: 800; line-height: .98; letter-spacing: -.02em; color: var(--ink); max-width: 10em; position: relative; }
 :root[data-lang="zh"] .hero h1 { line-height: 1.12; letter-spacing: .01em; max-width: 9em; }
 .hero h1 .wave { position: absolute; left: -2%; right: -2%; bottom: .24em; height: .2em; pointer-events: none; color: var(--paper); overflow: hidden; }
 .hero h1 .wave svg { display: block; width: 200%; height: 100%; animation: drift 14s linear infinite; }
@@ -130,11 +130,12 @@ section { padding-block: clamp(56px, 9vw, 104px); }
 .band .label { color: var(--band-sea); }
 .band .head p { color: var(--band-muted); }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: s; }
-@media (min-width: 900px) { .steps { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
 .steps li { counter-increment: s; padding: 22px 0; border-top: 1px solid rgba(241,233,220,.16); display: grid; grid-template-columns: 54px 1fr; gap: 6px 14px; }
 @media (min-width: 900px) { .steps li { grid-template-columns: 1fr; padding: 24px 20px 0 0; } }
 .steps li::before { content: counter(s); font-family: var(--display); font-weight: 800; font-size: 2.2rem; line-height: 1; color: var(--band-text); grid-row: span 2; }
 .steps li.you::before { color: var(--sun-dot); }
+.promise { margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(241,233,220,.16); font-size: var(--fs-sm); color: var(--band-muted); max-width: 46em; }
 .steps h3 { font-size: var(--fs-base); font-weight: 650; }
 .steps p { font-size: var(--fs-sm); color: var(--band-muted); }
 .steps .who { display: block; margin-top: 8px; font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--band-sea); }
@@ -242,11 +243,10 @@ footer .wrap { display: grid; gap: 22px; }
   <div class="wrap">
     <a class="brand" href="#hero" aria-label="Oriwis"><svg viewBox="-4 -10 208 162" aria-hidden="true"><use href="#ow-logo"/></svg></a>
     <nav class="nav" aria-label="Sections">
-      <a href="#role"><span class="en">Our role</span><span class="zh">我们的角色</span></a>
-      <a href="#how"><span class="en">How it works</span><span class="zh">服务流程</span></a>
-      <a href="#paths"><span class="en">UK routes</span><span class="zh">英国升学路径</span></a>
-      <a href="#faq"><span class="en">FAQ</span><span class="zh">常见问题</span></a>
-      <a href="#consult"><span class="en">Free consultation</span><span class="zh">免费咨询</span></a>
+      <a href="#how"><span class="en">How we help</span><span class="zh">如何帮你</span></a>
+      <a href="#paths"><span class="en">UK routes</span><span class="zh">升学路径</span></a>
+      <a href="#faq"><span class="en">Questions</span><span class="zh">常见问题</span></a>
+      <a href="#consult"><span class="en">Contact</span><span class="zh">联系我们</span></a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-set-lang="zh" aria-pressed="true">中</button>
@@ -258,78 +258,34 @@ footer .wrap { display: grid; gap: 22px; }
 <main>
   <div class="hero" id="hero">
     <div class="wrap">
-      <p class="label"><span class="en">UK study consulting · Knowledge by the sea</span><span class="zh">英国留学咨询 · 海边求知</span></p>
+      <p class="label"><span class="en">Welcome to Oriwis · Knowledge by the sea</span><span class="zh">欢迎来到 Oriwis · 海边求知</span></p>
       <h1>
-        <span class="en">Study in the UK with a clear map<span class="sun" aria-hidden="true"></span></span><span class="zh">去英国读书，<br>先把路看清楚<span class="sun" aria-hidden="true"></span></span>
+        <span class="en">Thinking about the UK? Let’s talk<span class="sun" aria-hidden="true"></span></span><span class="zh">想去英国读书？<br>先来聊聊吧<span class="sun" aria-hidden="true"></span></span>
         <span class="wave" aria-hidden="true"><svg viewBox="0 0 400 20" preserveAspectRatio="none"><path d="M0 10 C25 3 50 3 75 10 C100 17 125 17 150 10 C175 3 200 3 225 10 C250 17 275 17 300 10 C325 3 350 3 375 10 C387 13.5 394 15 400 10" fill="none" stroke="currentColor" stroke-width="3.6" vector-effect="non-scaling-stroke"/></svg></span>
       </h1>
       <p class="lede">
-        <span class="en">We match your goals with suitable UK schools and courses, give you a <strong>free first consultation</strong>, and introduce you to the school or its official partner. <strong>You apply and pay them directly.</strong></span>
-        <span class="zh">我们根据你的目标匹配合适的英国学校与课程，提供<strong>免费初步咨询</strong>，并为你对接学校或其海外合作方。<strong>注册、缴费与手续，均由你直接与对方完成。</strong></span>
+        <span class="en">Whether you’re a parent, a student or a working adult, we’ll help you find UK schools and courses that suit you, <strong>starting with a free chat.</strong></span>
+        <span class="zh">无论你是家长、学生还是在职人士，我们都会帮你找到适合的英国学校和课程，<strong>从一次免费咨询开始。</strong></span>
       </p>
       <div class="actions">
-        <a class="btn" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></a>
-        <a class="link" href="#role"><span class="en">What we do and don't do</span><span class="zh">我们做什么、不做什么</span></a>
+        <a class="btn" href="#consult"><span class="en">Book a free chat</span><span class="zh">预约免费咨询</span></a>
+        <a class="link" href="#how"><span class="en">How we help</span><span class="zh">我们如何帮你</span></a>
       </div>
-      <ul class="facts">
-        <li><span class="en">Not an agency</span><span class="zh">非留学中介</span></li>
-        <li><span class="en">No fees collected from students</span><span class="zh">不向学生收取费用</span></li>
-        <li><span class="en">No admission guarantees</span><span class="zh">不签录取担保</span></li>
-      </ul>
     </div>
   </div>
-
-  <svg class="divider" aria-hidden="true"><use href="#ow-wave"/></svg>
-
-  <section id="role">
-    <div class="wrap">
-      <div class="head">
-        <p class="label"><span class="en">Our role</span><span class="zh">我们的角色</span></p>
-        <h2><span class="en">A consultant, not an agency</span><span class="zh">我们是咨询顾问，不是中介</span></h2>
-        <p><span class="en">We help you see your options and meet the right people. Applications, payments and contracts stay between you and the school.</span><span class="zh">我们帮你看清选择、找到对的学校。申请、缴费和合同，始终在你与学校之间完成。</span></p>
-      </div>
-      <div class="role">
-        <div>
-          <h3><span class="en">What we do</span><span class="zh">我们提供</span></h3>
-          <ul>
-            <li><span class="mark yes" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2 6.5 5 9 10 3" fill="none" stroke="var(--card)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <div><b><span class="en">Information matching</span><span class="zh">信息匹配</span></b><span class="sub"><span class="en">We compare your age, grades, English level, budget and goals with UK schools and courses that fit.</span><span class="zh">根据年龄、成绩、英语水平、预算和目标，匹配适合的英国学校与课程。</span></span></div></li>
-            <li><span class="mark yes" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2 6.5 5 9 10 3" fill="none" stroke="var(--card)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <div><b><span class="en">A free first consultation</span><span class="zh">免费初步咨询</span></b><span class="sub"><span class="en">In Chinese or English, for parents and students. We explain routes, timing and what to prepare.</span><span class="zh">中文或英文，家长和学生均可。讲清升学路径、时间安排和需要准备的材料。</span></span></div></li>
-            <li><span class="mark yes" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2 6.5 5 9 10 3" fill="none" stroke="var(--card)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <div><b><span class="en">Referrals</span><span class="zh">对接转介</span></b><span class="sub"><span class="en">When you are ready, we introduce you to the school or its official overseas partner.</span><span class="zh">准备好之后，我们为你对接学校或其官方海外合作方。</span></span></div></li>
-          </ul>
-        </div>
-        <div>
-          <h3><span class="en">What we don't do</span><span class="zh">我们不做</span></h3>
-          <ul>
-            <li><span class="mark no" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3 3 9" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
-              <div><b><span class="en">Handle admissions for you</span><span class="zh">代办入学申请</span></b><span class="sub"><span class="en">You or your family submit the application to the school.</span><span class="zh">申请由学生或家庭直接向学校提交。</span></span></div></li>
-            <li><span class="mark no" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3 3 9" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
-              <div><b><span class="en">Collect fees from students</span><span class="zh">向学生收取费用</span></b><span class="sub"><span class="en">Tuition, deposits and other fees are paid to the school or partner, never to us.</span><span class="zh">学费、押金等费用直接付给学校或合作方，绝不经过我们。</span></span></div></li>
-            <li><span class="mark no" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3 3 9" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
-              <div><b><span class="en">Sign admission guarantees</span><span class="zh">签署录取担保协议</span></b><span class="sub"><span class="en">Only the school decides who gets a place.</span><span class="zh">是否录取，只由学校决定。</span></span></div></li>
-          </ul>
-        </div>
-      </div>
-      <p class="note"><span class="en"><strong>In short:</strong> students register, pay and complete every procedure directly with the school or its overseas partner.</span><span class="zh"><strong>简单说：</strong>学生最终直接与学校或海外合作方完成注册、缴费及全部手续。</span></p>
-    </div>
-  </section>
 
   <section class="band" id="how">
     <div class="wrap">
       <div class="head">
-        <p class="label"><span class="en">How it works</span><span class="zh">服务流程</span></p>
-        <h2><span class="en">Five steps, and the last ones are yours</span><span class="zh">五步走，最后的决定在你手里</span></h2>
-        <p><span class="en">We do the first three steps with you. The application itself happens between you and the school.</span><span class="zh">前三步我们陪你一起做；正式申请在你与学校之间完成。</span></p>
+        <p class="label"><span class="en">How we help</span><span class="zh">我们如何帮你</span></p>
+        <h2><span class="en">Three simple steps</span><span class="zh">简单三步</span></h2>
       </div>
       <ol class="steps">
-        <li><h3><span class="en">Tell us about you</span><span class="zh">告诉我们你的情况</span></h3><p><span class="en">Age, current school, grades, English level, budget and when you want to start.</span><span class="zh">年龄、在读学校、成绩、英语水平、预算和计划入学时间。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 协助</span></span></p></li>
-        <li><h3><span class="en">Free first consultation</span><span class="zh">免费初步咨询</span></h3><p><span class="en">About 45 minutes by WeChat call or in person. We explain the UK routes that suit you.</span><span class="zh">约 45 分钟，微信语音或面谈，讲解适合你的英国升学路径。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 协助</span></span></p></li>
-        <li><h3><span class="en">Your matched shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of schools or courses, with entry requirements, timing and notes on fit.</span><span class="zh">一份精选学校或课程清单，附入学要求、时间节点和匹配说明。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 协助</span></span></p></li>
-        <li class="you"><h3><span class="en">Introduction</span><span class="zh">对接介绍</span></h3><p><span class="en">We introduce you to the school or its official partner. You talk to them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，你与对方直接沟通。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p></li>
-        <li class="you"><h3><span class="en">Apply, pay, enrol</span><span class="zh">申请、缴费、入学</span></h3><p><span class="en">You register, pay and complete procedures directly with the school or partner.</span><span class="zh">你直接与学校或合作方完成注册、缴费和全部手续。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p></li>
+        <li><h3><span class="en">A free chat</span><span class="zh">免费聊一聊</span></h3><p><span class="en">Tell us your age, grades, English level, budget and goals. In Chinese or English.</span><span class="zh">聊聊年龄、成绩、英语水平、预算和目标，中文英文都可以。</span></p></li>
+        <li><h3><span class="en">Your matches</span><span class="zh">为你匹配</span></h3><p><span class="en">We suggest UK schools or courses that fit, and explain the requirements and timing.</span><span class="zh">推荐适合你的英国学校或课程，讲清入学要求和时间安排。</span></p></li>
+        <li class="you"><h3><span class="en">Meet the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">为你介绍学校或其官方合作方，申请和缴费由你直接与对方完成。</span></p></li>
       </ol>
+      <p class="promise"><span class="en">We are a consulting service, not an agency. We never collect fees from students and never promise admission.</span><span class="zh">我们是咨询服务，不是留学中介：不向学生收取任何费用，也不承诺录取。</span></p>
     </div>
   </section>
 
@@ -337,55 +293,26 @@ footer .wrap { display: grid; gap: 22px; }
     <div class="wrap">
       <div class="head">
         <p class="label"><span class="en">UK routes</span><span class="zh">英国升学路径</span></p>
-        <h2><span class="en">Where do you fit in the UK system?</span><span class="zh">你在英国教育体系的哪一站？</span></h2>
-        <p><span class="en">Pick a stage to see the usual route. These are general guides; each school sets its own requirements.</span><span class="zh">选择一个阶段，看看常见路径。以下为一般性参考，具体要求以各校公布为准。</span></p>
+        <h2><span class="en">Which stage are you at?</span><span class="zh">你在哪个阶段？</span></h2>
+        <p><span class="en">Tap a stage for a quick overview. Each school sets its own requirements.</span><span class="zh">点一下，快速了解。具体要求以各校为准。</span></p>
       </div>
       <div class="finder">
         <div class="chips" role="tablist" aria-label="Stage" id="chips"></div>
         <article class="path" id="path" role="tabpanel" aria-live="polite"></article>
       </div>
-
-      <div class="year">
-        <h3><span class="en">A typical year before a September start (undergraduate)</span><span class="zh">九月入学本科：典型的一年准备</span></h3>
-        <p class="small"><span class="en">UCAS deadlines: mid-October for Oxford, Cambridge and most medicine courses; late January for most other courses. Exact dates change each year, and we check them with you.</span><span class="zh">UCAS 截止时间：牛津、剑桥及多数医学类专业约在 10 月中旬；其他多数专业约在次年 1 月下旬。具体日期每年调整，咨询时我们会和你一起核对。</span></p>
-        <div class="tl-scroll">
-          <div class="tl" id="tl"></div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <section id="who" style="padding-top:0">
+  <section id="faq" style="padding-top:0">
     <div class="wrap">
       <div class="head">
-        <p class="label"><span class="en">Who we help</span><span class="zh">服务对象</span></p>
-        <h2><span class="en">Families, students and adults</span><span class="zh">家长、学生和在职成人</span></h2>
-      </div>
-      <div class="who-grid">
-        <div class="who-card"><h3><span class="en">Parents</span><span class="zh">家长</span></h3><p><span class="en">Planning ahead for a child aged 11–17: boarding schools, sixth form, guardianship and costs explained plainly.</span><span class="zh">为 11–17 岁的孩子提前规划：寄宿学校、Sixth Form、监护人要求和费用，一次讲清楚。</span></p></div>
-        <div class="who-card"><h3><span class="en">High school students</span><span class="zh">高中生</span></h3><p><span class="en">A-levels, foundation years or going straight to a UK degree after Chinese high school.</span><span class="zh">A-Level、预科，或国内高中毕业后直接申请英国本科。</span></p></div>
-        <div class="who-card"><h3><span class="en">University students</span><span class="zh">大学生</span></h3><p><span class="en">One-year taught master's, pre-master's and exchange options that match your degree.</span><span class="zh">一年制授课型硕士、硕士预科和交换项目，与你的专业相匹配。</span></p></div>
-        <div class="who-card"><h3><span class="en">Adults and professionals</span><span class="zh">在职成人</span></h3><p><span class="en">Short courses, English courses and career-focused programmes, including part-time study.</span><span class="zh">短期课程、语言课程和职业方向项目，也包括非全日制学习。</span></p></div>
-      </div>
-    </div>
-  </section>
-
-  <svg class="divider" aria-hidden="true"><use href="#ow-wave"/></svg>
-
-  <section id="faq">
-    <div class="wrap">
-      <div class="head">
-        <p class="label"><span class="en">FAQ</span><span class="zh">常见问题</span></p>
-        <h2><span class="en">Questions families ask first</span><span class="zh">家长最常问的问题</span></h2>
+        <p class="label"><span class="en">Questions</span><span class="zh">常见问题</span></p>
       </div>
       <div class="faq">
-        <details><summary><span class="en">Is the first consultation really free?</span><span class="zh">初步咨询真的免费吗？</span></summary><p class="a"><span class="en">Yes. There is no charge for the first consultation and no obligation afterwards.</span><span class="zh">是的。初步咨询不收取任何费用，咨询后也没有任何义务。</span></p></details>
-        <details><summary><span class="en">Can you guarantee an offer?</span><span class="zh">你们能保证录取吗？</span></summary><p class="a"><span class="en">No. Only the school decides admissions, and we never sign admission guarantee agreements. Be careful with anyone who promises a place.</span><span class="zh">不能。录取只由学校决定，我们不签署任何录取担保协议。对任何"保录取"的承诺都请保持警惕。</span></p></details>
-        <details><summary><span class="en">Who do I pay?</span><span class="zh">费用付给谁？</span></summary><p class="a"><span class="en">The school or its official partner, directly. We do not collect tuition, deposits or application fees from students.</span><span class="zh">直接付给学校或其官方合作方。我们不向学生收取学费、押金或申请费。</span></p></details>
-        <details><summary><span class="en">How are you different from a study-abroad agency?</span><span class="zh">你们和留学中介有什么区别？</span></summary><p class="a"><span class="en">An agency usually applies on your behalf and charges service fees. We give you information, a first consultation and an introduction. Everything after that is between you and the school.</span><span class="zh">中介通常代为申请并收取服务费。我们只提供信息、初步咨询和对接介绍，之后的一切都由你与学校直接完成。</span></p></details>
-        <details><summary><span class="en">Do you help with the visa?</span><span class="zh">你们办理签证吗？</span></summary><p class="a"><span class="en">We don't apply for visas. We explain the general steps so you know what to expect; after an offer, the school issues the documents you need and you apply yourself.</span><span class="zh">我们不代办签证。我们会讲解大致流程，让你心里有数；拿到录取后，由学校出具所需文件，学生本人自行申请。</span></p></details>
-        <details><summary><span class="en">What should I prepare for the consultation?</span><span class="zh">咨询前需要准备什么？</span></summary><p class="a"><span class="en">Recent school reports, any English test score (IELTS or similar), a rough budget, and your preferred start date. A rough idea is enough.</span><span class="zh">近期成绩单、英语考试成绩（如雅思）、大致预算和计划入学时间。有个大概即可。</span></p></details>
-        <details><summary><span class="en">Do you cover countries other than the UK?</span><span class="zh">除了英国，还有其他国家吗？</span></summary><p class="a"><span class="en">For now we focus on the UK only, so we can give accurate information.</span><span class="zh">目前我们只专注英国，以便提供准确的信息。</span></p></details>
+        <details><summary><span class="en">Is the chat really free?</span><span class="zh">咨询真的免费吗？</span></summary><p class="a"><span class="en">Yes. The first consultation is free, with no obligation afterwards.</span><span class="zh">是的。初步咨询免费，之后也没有任何义务。</span></p></details>
+        <details><summary><span class="en">Who do I pay?</span><span class="zh">费用付给谁？</span></summary><p class="a"><span class="en">The school or its official partner, directly. We don’t collect tuition, deposits or application fees.</span><span class="zh">直接付给学校或其官方合作方。我们不收取学费、押金或申请费。</span></p></details>
+        <details><summary><span class="en">Can you guarantee an offer?</span><span class="zh">能保证录取吗？</span></summary><p class="a"><span class="en">No. Only the school decides, and we never sign admission guarantees.</span><span class="zh">不能。录取只由学校决定，我们不签署任何录取担保协议。</span></p></details>
+        <details><summary><span class="en">Do you apply or get the visa for me?</span><span class="zh">你们代办申请或签证吗？</span></summary><p class="a"><span class="en">No. We explain the steps so you know what to expect; you apply to the school and for the visa yourself.</span><span class="zh">不代办。我们会讲清流程，申请和签证由你本人完成。</span></p></details>
       </div>
     </div>
   </section>
@@ -393,9 +320,9 @@ footer .wrap { display: grid; gap: 22px; }
   <section class="band" id="consult">
     <div class="wrap consult">
       <div class="aside">
-        <p class="label"><span class="en">Free consultation</span><span class="zh">免费咨询</span></p>
-        <h2 style="font-size:var(--fs-xl);font-weight:750;line-height:1.1"><span class="en">Tell us a little. We'll reply on WeChat.</span><span class="zh">简单说说你的情况，我们在微信回复你。</span></h2>
-        <p><span class="en">Fill in the form and send the summary to us on WeChat, or just add us and say hello.</span><span class="zh">填写下方表格，把生成的信息发到我们的微信；或者直接加微信打个招呼。</span></p>
+        <p class="label"><span class="en">Say hello</span><span class="zh">打个招呼</span></p>
+        <h2 style="font-size:var(--fs-xl);font-weight:750;line-height:1.1"><span class="en">We’d love to hear from you</span><span class="zh">期待认识你</span></h2>
+        <p><span class="en">Add us on WeChat, or fill in the short form and send us the message it makes.</span><span class="zh">直接加微信，或填写下方简短表格，把生成的信息发给我们。</span></p>
         <div class="wx">
           <span class="small" style="color:var(--band-muted)"><span class="en">WeChat ID</span><span class="zh">微信号</span></span>
           <div class="row"><span class="id" id="wxid">OriwisUK</span><button class="ghost" type="button" data-copy="wxid"><span class="en">Copy</span><span class="zh">复制</span></button></div>
@@ -408,7 +335,7 @@ footer .wrap { display: grid; gap: 22px; }
           <div class="seg" role="radiogroup">
             <label><input type="radio" name="role" id="r-parent" value="parent" checked><span><span class="en">A parent</span><span class="zh">家长</span></span></label>
             <label><input type="radio" name="role" id="r-student" value="student"><span><span class="en">A student</span><span class="zh">学生</span></span></label>
-            <label><input type="radio" name="role" id="r-adult" value="adult"><span><span class="en">A working adult</span><span class="zh">在职成人</span></span></label>
+            <label><input type="radio" name="role" id="r-adult" value="adult"><span><span class="en">A working adult</span><span class="zh">在职人士</span></span></label>
           </div>
         </div>
         <div class="two">
@@ -416,14 +343,10 @@ footer .wrap { display: grid; gap: 22px; }
           <div class="field"><label for="f-contact"><span class="en">WeChat ID or phone</span><span class="zh">微信号或手机</span></label><input type="text" id="f-contact" autocomplete="tel" data-ph-en="So we can reply" data-ph-zh="方便我们回复你"></div>
         </div>
         <div class="two">
-          <div class="field"><label for="f-stage"><span class="en">Looking at</span><span class="zh">意向阶段</span></label>
-            <select id="f-stage"></select></div>
-          <div class="field"><label for="f-start"><span class="en">Planned start</span><span class="zh">计划入学</span></label>
-            <select id="f-start"></select></div>
+          <div class="field"><label for="f-stage"><span class="en">Looking at</span><span class="zh">意向阶段</span></label><select id="f-stage"></select></div>
+          <div class="field"><label for="f-start"><span class="en">Planned start</span><span class="zh">计划入学</span></label><select id="f-start"></select></div>
         </div>
-        <div class="field"><label for="f-english"><span class="en">English level</span><span class="zh">英语水平</span> <span class="opt"><span class="en">(optional)</span><span class="zh">（选填）</span></span></label><input type="text" id="f-english" data-ph-en="e.g. IELTS 6.0, or not tested yet" data-ph-zh="例如：雅思 6.0，或尚未考试"></div>
-        <div class="field"><label for="f-note"><span class="en">Anything else</span><span class="zh">其他情况</span> <span class="opt"><span class="en">(optional)</span><span class="zh">（选填）</span></span></label><textarea id="f-note" data-ph-en="Current school, subjects, budget, questions…" data-ph-zh="在读学校、科目、预算、想问的问题……"></textarea></div>
-        <label class="agree"><input type="checkbox" id="f-agree"><span><span class="en">I agree that Oriwis may use these details only to reply to me about UK study. Oriwis is a consulting service, not an agency, and does not guarantee admission.</span><span class="zh">我同意 Oriwis 仅为回复英国留学咨询而使用以上信息。我了解 Oriwis 为咨询服务，不是留学中介，不承诺录取。</span></span></label>
+        <label class="agree"><input type="checkbox" id="f-agree"><span><span class="en">I agree Oriwis may use these details only to reply to me.</span><span class="zh">我同意 Oriwis 仅为回复我而使用以上信息。</span></span></label>
         <p class="err" id="err" hidden></p>
         <div><button class="btn" type="submit"><span class="en">Create my message</span><span class="zh">生成咨询信息</span></button></div>
       </form>
@@ -433,7 +356,7 @@ footer .wrap { display: grid; gap: 22px; }
         <ol class="steps2">
           <li><span class="en">Copy the message below.</span><span class="zh">复制下方信息。</span></li>
           <li><span class="en">Add our WeChat: </span><span class="zh">添加微信：</span><b>OriwisUK</b></li>
-          <li><span class="en">Paste and send. We usually reply within one working day.</span><span class="zh">粘贴发送，我们通常在一个工作日内回复。</span></li>
+          <li><span class="en">Paste and send. We’ll get back to you soon.</span><span class="zh">粘贴发送，我们会尽快回复你。</span></li>
         </ol>
         <pre id="msg"></pre>
         <div class="actions"><button class="btn" type="button" data-copy="msg"><span class="en">Copy message</span><span class="zh">复制信息</span></button><button class="link" type="button" id="edit" style="background:none;border:0;cursor:pointer;font:inherit;font-size:var(--fs-sm);text-decoration:underline"><span class="en">Edit</span><span class="zh">修改</span></button></div>
@@ -541,7 +464,7 @@ footer .wrap { display: grid; gap: 22px; }
     var l = L(), p = PATHS.filter(function (x) { return x.id === current; })[0];
     panel.setAttribute('aria-labelledby', 'chip-' + p.id);
     panel.innerHTML = '<div><h3>' + p.title[l] + '</h3><p class="intro">' + p.intro[l] + '</p><p class="fit">' + p.fit[l].replace(/^([^:：]+[:：])/, '<b>$1</b>') + '</p></div>' +
-      '<dl>' + p.rows.map(function (r) { return '<div><dt>' + r[l][0] + '</dt><dd>' + r[l][1] + '</dd></div>'; }).join('') + '</dl>';
+      '<dl>' + p.rows.slice(1, 4).map(function (r) { return '<div><dt>' + r[l][0] + '</dt><dd>' + r[l][1] + '</dd></div>'; }).join('') + '</dl>';
   }
   chips.addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
@@ -556,22 +479,6 @@ footer .wrap { display: grid; gap: 22px; }
     current = PATHS[i].id; renderChips(); renderPath(); document.getElementById('chip-' + current).focus();
     e.preventDefault();
   });
-
-  /* ---------- timeline: Sep (year before) → Sep (start) ---------- */
-  var MONTHS = { en: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'], zh: ['9月', '10月', '11月', '12月', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '次年9月'] };
-  var BARS = [
-    { c: 1, s: 2, row: '', cls: '', en: 'Consultation and shortlist', zh: '咨询与选校' },
-    { c: 2, s: 4, row: 'r3', cls: 'key', en: 'UCAS application', zh: 'UCAS 申请' },
-    { c: 5, s: 5, row: '', cls: '', en: 'Offers arrive, interviews', zh: '陆续收到录取、面试' },
-    { c: 6, s: 5, row: 'r4', cls: '', en: 'IELTS (if needed)', zh: '雅思考试（如需）' },
-    { c: 10, s: 3, row: 'r3', cls: '', en: 'Results, place, visa', zh: '出成绩、确认、签证' },
-    { c: 13, s: 1, row: '', cls: 'go', en: 'Start', zh: '入学' }
-  ];
-  function renderTl() {
-    var l = L();
-    document.getElementById('tl').innerHTML = MONTHS[l].map(function (m) { return '<div class="m">' + m + '</div>'; }).join('') +
-      BARS.map(function (b) { return '<div class="bar ' + b.row + ' ' + b.cls + '" style="grid-column:' + b.c + ' / span ' + b.s + '" title="' + b[l] + '">' + b[l] + '</div>'; }).join('');
-  }
 
   /* ---------- form ---------- */
   var form = document.getElementById('form'), done = document.getElementById('done'), err = document.getElementById('err');
@@ -592,12 +499,12 @@ footer .wrap { display: grid; gap: 22px; }
     if (!document.getElementById('f-agree').checked) { err.textContent = l === 'zh' ? '请勾选同意说明后再继续。' : 'Please tick the agreement box to continue.'; err.hidden = false; return; }
     err.hidden = true;
     var role = form.querySelector('input[name=role]:checked');
-    var roleTxt = { parent: ['Parent', '家长'], student: ['Student', '学生'], adult: ['Working adult', '在职成人'] }[role.value][l === 'zh' ? 1 : 0];
+    var roleTxt = { parent: ['Parent', '家长'], student: ['Student', '学生'], adult: ['Working adult', '在职人士'] }[role.value][l === 'zh' ? 1 : 0];
     var st = document.getElementById('f-stage'), s2 = document.getElementById('f-start');
-    var name = document.getElementById('f-name').value.trim(), eng = document.getElementById('f-english').value.trim(), note = document.getElementById('f-note').value.trim();
+    var name = document.getElementById('f-name').value.trim();
     var lines = l === 'zh'
-      ? ['【Oriwis 英国留学免费咨询】', '称呼：' + (name || '—'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '英语水平：' + (eng || '—'), '联系方式：' + contact, note ? '其他：' + note : '']
-      : ['[Oriwis free UK study consultation]', 'Name: ' + (name || '—'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'English: ' + (eng || '—'), 'Contact: ' + contact, note ? 'Notes: ' + note : ''];
+      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '—'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact]
+      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || '—'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact];
     document.getElementById('msg').textContent = lines.filter(Boolean).join('\n');
     form.hidden = true; done.hidden = false; done.scrollIntoView({ block: 'nearest' });
   });
@@ -617,7 +524,7 @@ footer .wrap { display: grid; gap: 22px; }
   function setLang(l, save) {
     root.setAttribute('data-lang', l); root.lang = l === 'zh' ? 'zh-CN' : 'en';
     document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === l)); });
-    renderChips(); renderPath(); renderTl(); fillSelects();
+    renderChips(); renderPath(); fillSelects();
     if (save) try { localStorage.setItem('oriwis-lang', l); } catch (x) {}
   }
   document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.setLang, true); }); });
