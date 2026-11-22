@@ -344,6 +344,35 @@ p { margin: 0; }
 @media (min-width: 561px) { .chainlock { width: 380px; } }
 @media (max-width: 560px) { .hero .actions .chainlock { width: 100%; } }
 
+
+textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--field-line); border-radius: 10px; padding: 12px 14px; width: 100%; resize: vertical; min-height: 104px; line-height: 1.5; }
+textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+.field .opt { color: var(--muted); font-weight: 400; }
+/* WeChat: a floating button opens a small card (copy the ID, open WeChat) */
+.wxfab { position: fixed; z-index: 20; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 18px 0 8px; border: 0; border-radius: 999px; cursor: pointer;
+  background: #07c160; color: #fff; font: 600 .95rem/1 var(--sans); box-shadow: 0 10px 24px -10px rgba(7,120,60,.7), 0 2px 6px rgba(0,0,0,.15);
+  transform: translateY(140%); opacity: 0; transition: transform .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease; }
+.wxfab.show { transform: none; opacity: 1; }
+.wxfab .ic { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.18); display: grid; place-items: center; }
+.wxfab svg { width: 24px; height: 24px; }
+.wxfab:focus-visible { outline: 3px solid #0c2f3a; outline-offset: 3px; }
+.wxsheet { position: fixed; inset: 0; z-index: 30; display: grid; align-items: end; justify-items: center; background: rgba(6,20,24,.45); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.wxsheet.open { opacity: 1; pointer-events: auto; }
+.wxsheet .card { width: min(420px, 100%); margin: 0 0 env(safe-area-inset-bottom, 0px); background: var(--paper); color: var(--text); border-radius: 20px 20px 0 0; padding: 22px 22px 26px; display: grid; gap: 14px; transform: translateY(30px); transition: transform .35s cubic-bezier(.22,.61,.36,1); }
+@media (min-width: 561px) { .wxsheet { align-items: center; } .wxsheet .card { border-radius: 20px; } }
+.wxsheet.open .card { transform: none; }
+.wxsheet .hd { display: flex; align-items: center; gap: 12px; }
+.wxsheet .hd .ic { width: 44px; height: 44px; border-radius: 12px; background: #07c160; display: grid; place-items: center; }
+.wxsheet .hd svg { width: 28px; height: 28px; }
+.wxsheet h3 { margin: 0; font: 600 1.15rem/1.3 var(--sans); color: var(--ink); }
+.wxsheet .id { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--tint); font: 600 1.25rem/1 var(--sans); color: var(--ink); letter-spacing: .02em; }
+.wxsheet .steps { margin: 0; padding-left: 1.2em; color: var(--muted); font-size: .9rem; display: grid; gap: 4px; }
+.wxsheet .go { display: flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 999px; border: 0; background: #07c160; color: #fff; font: 600 1rem/1 var(--sans); cursor: pointer; }
+.wxsheet .close { position: absolute; right: 14px; top: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
+.wxsheet .card { position: relative; }
+.wxsheet .wxmsg { margin: 0; font-size: .85rem; color: #07a152; min-height: 1.2em; text-align: center; }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--header-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
@@ -649,6 +678,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
             <div class="field"><label for="f-stage"><span class="en">Looking at</span><span class="zh">意向阶段</span></label><select id="f-stage"></select></div>
             <div class="field"><label for="f-start"><span class="en">Planned start</span><span class="zh">计划入学</span></label><select id="f-start"></select></div>
           </div>
+          <div class="field"><label for="f-about"><span class="en">Tell us a little more about yourself</span><span class="zh">简单介绍一下你自己</span> <span class="opt"><span class="en">(optional)</span><span class="zh">（选填）</span></span></label><textarea id="f-about" rows="4" maxlength="600" data-ph-en="e.g. current school and grade, subjects you like, English level, budget, questions you have" data-ph-zh="例如：目前学校和年级、喜欢的科目、英语水平、预算、想问的问题"></textarea></div>
           <label class="agree"><input type="checkbox" id="f-agree"><span><span class="en">I agree Oriwis may use these details only to reply to me.</span><span class="zh">我同意 Oriwis 仅为回复我而使用以上信息。</span></span></label>
           <p class="err" id="err" hidden></p>
           <div><button class="btn" type="submit"><span class="en">Create my message</span><span class="zh">生成咨询信息</span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></div>
@@ -668,6 +698,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   </section>
 </main>
 
+<button class="wxfab" id="wxfab" type="button" aria-haspopup="dialog"><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M12.5 5C6.7 5 2 8.9 2 13.7c0 2.7 1.5 5.1 3.8 6.7l-.9 3 3.4-1.8c1.3.4 2.7.6 4.2.6h.6a8 8 0 0 1-.3-2.2c0-4.8 4.6-8.6 10.3-8.6h.6C22.7 7.8 18.1 5 12.5 5Zm-3.6 6.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm7.2 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/><path fill="#fff" d="M30 20c0-4-3.9-7.2-8.7-7.2s-8.7 3.2-8.7 7.2 3.9 7.2 8.7 7.2c1 0 2-.1 2.9-.4l2.8 1.5-.7-2.5c2.2-1.3 3.7-3.4 3.7-5.8Zm-11.6-1.2a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm5.8 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z"/></svg></span><span class="en">WeChat us</span><span class="zh">微信咨询</span></button><div class="wxsheet" id="wxsheet" role="dialog" aria-modal="true" aria-labelledby="wx-t"><div class="card"><button class="close" type="button" aria-label="Close">×</button><div class="hd"><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M12.5 5C6.7 5 2 8.9 2 13.7c0 2.7 1.5 5.1 3.8 6.7l-.9 3 3.4-1.8c1.3.4 2.7.6 4.2.6h.6a8 8 0 0 1-.3-2.2c0-4.8 4.6-8.6 10.3-8.6h.6C22.7 7.8 18.1 5 12.5 5Zm-3.6 6.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm7.2 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/><path fill="#fff" d="M30 20c0-4-3.9-7.2-8.7-7.2s-8.7 3.2-8.7 7.2 3.9 7.2 8.7 7.2c1 0 2-.1 2.9-.4l2.8 1.5-.7-2.5c2.2-1.3 3.7-3.4 3.7-5.8Zm-11.6-1.2a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm5.8 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z"/></svg></span><h3 id="wx-t"><span class="en">Add us on WeChat</span><span class="zh">添加我们的微信</span></h3></div><div class="id"><span id="wxid2">OriwisUK</span></div><ol class="steps"><li><span class="en">Tap the button: we copy the ID and open WeChat.</span><span class="zh">点击下方按钮：自动复制微信号并打开微信。</span></li><li><span class="en">In WeChat, tap ＋ › Add Contacts and paste the ID.</span><span class="zh">在微信中点击右上角 ＋ › 添加朋友，粘贴微信号。</span></li><li><span class="en">Say hello. The first consultation is free.</span><span class="zh">打个招呼，初次咨询免费。</span></li></ol><button class="go" type="button" id="wxgo"><span class="en">Copy ID and open WeChat</span><span class="zh">复制微信号并打开微信</span></button><p class="wxmsg" id="wxdone" aria-live="polite"></p></div></div>
 <footer>
   <div class="wrap">
     <div class="cols">
@@ -728,9 +759,10 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var role = form.querySelector('input[name=role]:checked').value;
     var roleTxt = { parent: ['Parent', '家长'], student: ['Student', '学生'], adult: ['Working adult', '在职人士'] }[role][l === 'zh' ? 1 : 0];
     var st = document.getElementById('f-stage'), s2 = document.getElementById('f-start'), name = document.getElementById('f-name').value.trim();
+    var about = (document.getElementById('f-about').value || '').trim();
     var lines = l === 'zh'
-      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '未填写'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact]
-      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || 'not given'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact];
+      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '未填写'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact].concat(about ? ['关于我：' + about] : [])
+      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || 'not given'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact].concat(about ? ['About me: ' + about] : []);
     document.getElementById('msg').textContent = lines.join('\n');
     form.hidden = true; done.hidden = false; done.scrollIntoView({ block: 'nearest' });
   });
@@ -973,6 +1005,29 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
   // a gentle hint: the chain swings once when it first comes into view
   if (!reduce && 'IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { animate(s0 + 26, 0, 500, function () { animate(s0, 0, 700); }); }, 900); } }, { threshold: .8 }); io.observe(el); }
+})();
+</script>
+<script>
+/* WeChat connect: floating button appears after the opening screen; the card copies the ID and tries to open WeChat */
+(function () {
+  var fab = document.getElementById('wxfab'), sheet = document.getElementById('wxsheet'); if (!fab) return;
+  var intro = document.getElementById('intro'), L = function () { return document.documentElement.getAttribute('data-lang') === 'en'; };
+  function upd() { fab.classList.toggle('show', !intro || intro.getBoundingClientRect().bottom < innerHeight * .4); }
+  addEventListener('scroll', upd, { passive: true }); upd();
+  function open() { sheet.classList.add('open'); document.getElementById('wxdone').textContent = ''; setTimeout(function () { document.getElementById('wxgo').focus(); }, 50); }
+  function close() { sheet.classList.remove('open'); fab.focus(); }
+  fab.addEventListener('click', open);
+  sheet.addEventListener('click', function (e) { if (e.target === sheet || e.target.closest('.close')) close(); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && sheet.classList.contains('open')) close(); });
+  document.getElementById('wxgo').addEventListener('click', function () {
+    var id = document.getElementById('wxid2').textContent.trim(), done = document.getElementById('wxdone');
+    function after(ok) {
+      done.textContent = ok ? (L() ? 'Copied "' + id + '". Opening WeChat…' : '已复制「' + id + '」，正在打开微信…') : (L() ? 'Please copy: ' + id : '请手动复制：' + id);
+      setTimeout(function () { location.href = 'weixin://'; }, 600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(function () { after(true); }, function () { after(false); });
+    else { try { var t = document.createElement('textarea'); t.value = id; document.body.appendChild(t); t.select(); var ok = document.execCommand('copy'); t.remove(); after(ok); } catch (e) { after(false); } }
+  });
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
