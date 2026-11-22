@@ -376,18 +376,27 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 
 
 /* envelope rides the logo's wave into a London pillar box */
-.wavepost { position: relative; height: 96px; border-radius: 16px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
-  background: linear-gradient(180deg, #123c47 0%, #0c2f3a 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 14px 30px -16px rgba(12,47,58,.85); }
-.wavepost::before { content: ""; position: absolute; inset: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.07); pointer-events: none; }
+.wavepost { position: relative; height: 112px; border-radius: 18px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
+  background: radial-gradient(120px 90px at calc(100% - 38px) 70%, rgba(240,181,75,.22), transparent 70%), linear-gradient(160deg, #164b57 0%, #0e3440 55%, #0a2730 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 36px -18px rgba(12,47,58,.9), 0 2px 6px rgba(12,47,58,.18);
+  transition: transform .2s ease, box-shadow .2s ease; }
+.wavepost:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 40px -18px rgba(12,47,58,.95), 0 2px 6px rgba(12,47,58,.2); }
+.wavepost:active { transform: translateY(1px); }
 .wavepost .wp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.wavepost .wp-lbl { position: absolute; left: 18px; right: 80px; bottom: 13px; display: grid; justify-items: center; gap: 1px; color: #f4ede0; pointer-events: none; transition: opacity .25s ease; }
-.wavepost .wp-lbl b { font: 600 1rem/1.2 var(--sans); }
-.wavepost .wp-lbl small { font-size: .74rem; color: rgba(244,237,224,.62); letter-spacing: .02em; }
-.wavepost .wp-ok { position: absolute; left: 18px; right: 80px; bottom: 24px; text-align: center; font: 600 1rem/1 var(--sans); color: #f0c46a; opacity: 0; transition: opacity .25s ease .1s; pointer-events: none; }
-.wavepost.sent .wp-lbl { opacity: 0; } .wavepost.sent .wp-ok { opacity: 1; }
+.wavepost .wp-lbl { position: absolute; left: 20px; top: 15px; right: 96px; display: grid; gap: 2px; color: #f6efe2; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+.wavepost .wp-lbl b { font: 650 1.06rem/1.25 var(--sans); letter-spacing: -.005em; }
+.wavepost .wp-lbl small { font-size: .76rem; color: rgba(246,239,226,.62); letter-spacing: .02em; display: flex; align-items: center; gap: 6px; }
+.wavepost .wp-lbl small::after { content: ""; width: 14px; height: 8px; background: currentColor; opacity: .8;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M0 4h12M9 1l3 3-3 3' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M0 4h12M9 1l3 3-3 3' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation: wp-nudge 1.6s ease-in-out infinite; }
+@keyframes wp-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+.wavepost .wp-ok { position: absolute; left: 20px; top: 24px; font: 650 1.06rem/1 var(--sans); color: #f3c66c; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .15s, transform .3s ease .15s; pointer-events: none; }
+.wavepost.sent .wp-lbl { opacity: 0; transform: translateY(-6px); } .wavepost.sent .wp-ok { opacity: 1; transform: none; }
 .wavepost .env { cursor: grab; } .wavepost.dragging .env { cursor: grabbing; }
-@media (min-width: 561px) { .wavepost { width: 400px; } }
+@media (min-width: 561px) { .wavepost { width: 420px; } }
 @media (max-width: 560px) { .hero .actions .wavepost { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .wavepost .wp-lbl small::after { animation: none; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -1052,88 +1061,128 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var el = document.getElementById('wavepost'); if (!el) return;
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 96, path, trail, env, box, slotX, slotY, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, st = 0, table = [];
+  var W = 0, H = 112, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
+  function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
     W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    var x0 = 30, x1 = W - 52, y = 32, a = 9, w = (x1 - x0);
-    slotX = W - 40; slotY = 27;
-    // two gentle humps like the logo's wave, ending at the post box slot
-    var d = 'M' + x0 + ' ' + (y + 4) +
+    bx = W - 46; by = 104;
+    var x0 = 26, x1 = W - 74, y = 78, a = 9, w = x1 - x0, slotX = bx, slotY = by - 60;
+    var d = 'M' + x0 + ' ' + (y + 3) +
       ' C' + (x0 + w * .16) + ' ' + (y - a) + ' ' + (x0 + w * .32) + ' ' + (y - a) + ' ' + (x0 + w * .48) + ' ' + y +
-      ' C' + (x0 + w * .64) + ' ' + (y + a) + ' ' + (x0 + w * .8) + ' ' + (y + a) + ' ' + x1 + ' ' + (y - 2) +
-      ' Q' + (x1 + 8) + ' ' + (y - 6) + ' ' + slotX + ' ' + slotY;
+      ' C' + (x0 + w * .64) + ' ' + (y + a) + ' ' + (x0 + w * .82) + ' ' + (y + a) + ' ' + x1 + ' ' + (y - 4) +
+      ' C' + (x1 + 14) + ' ' + (y - 10) + ' ' + (slotX - 10) + ' ' + (slotY + 6) + ' ' + slotX + ' ' + slotY;
     var defs = mk('defs', {});
-    var g = mk('linearGradient', { id: 'wp-red', x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
-    [['0', '#8f0f1f'], ['.35', '#d4202f'], ['.6', '#e2363f'], ['1', '#8f0f1f']].forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1] }, g); });
-    mk('path', { d: d, fill: 'none', stroke: 'rgba(240,196,106,.35)', 'stroke-width': 2, 'stroke-dasharray': '2 5', 'stroke-linecap': 'round' });
-    trail = mk('path', { d: d, fill: 'none', stroke: '#f0b54b', 'stroke-width': 2.4, 'stroke-linecap': 'round' });
+    grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
+    grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
+    grad(defs, 'wp-cap', [['0', '#ff6b6b'], ['.5', '#d4202f'], ['1', '#7d0c19']], { x1: 0, y1: 0, x2: 0, y2: 1 });
+    grad(defs, 'wp-spark', [['0', '#fffbe9'], ['.4', '#ffe39a', .9], ['1', '#f0b54b', 0]], { cx: '.5', cy: '.5', r: '.5' });
+    var f = mk('filter', { id: 'wp-shadow', x: '-50%', y: '-50%', width: '200%', height: '200%' }, defs);
+    mk('feDropShadow', { dx: 0, dy: 2, stdDeviation: 1.6, 'flood-color': '#000', 'flood-opacity': .35 }, f);
+    var fb = mk('filter', { id: 'wp-blur', x: '-20%', y: '-200%', width: '140%', height: '500%' }, defs);
+    mk('feGaussianBlur', { stdDeviation: 3 }, fb);
+    // soft sea ripples along the bottom
+    for (var r = 0; r < 2; r++) {
+      var yy = H - 10 + r * 6, dd = 'M0 ' + yy;
+      for (var xx = 0; xx <= W; xx += 40) dd += ' q10 -3 20 0 t20 0';
+      mk('path', { d: dd, fill: 'none', stroke: 'rgba(143,208,201,' + (.18 - r * .07) + ')', 'stroke-width': 1.2 });
+    }
+    mk('path', { d: d, fill: 'none', stroke: 'rgba(240,196,106,.32)', 'stroke-width': 1.6, 'stroke-dasharray': '1.5 6', 'stroke-linecap': 'round' });
+    glow = mk('path', { d: d, fill: 'none', stroke: '#f0b54b', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: .45, filter: 'url(#wp-blur)' });
+    trail = mk('path', { d: d, fill: 'none', stroke: 'url(#wp-gold)', 'stroke-width': 2.6, 'stroke-linecap': 'round' });
     path = trail; LEN = path.getTotalLength();
-    trail.setAttribute('stroke-dasharray', LEN + ' ' + LEN);
-    table = []; for (var i = 0; i <= 120; i++) { var pt = path.getPointAtLength(LEN * i / 120); table.push(pt.x); }
+    [trail, glow].forEach(function (n) { n.setAttribute('stroke-dasharray', LEN + ' ' + LEN); });
+    table = []; for (var i = 0; i <= 160; i++) table.push(path.getPointAtLength(LEN * i / 160).x);
+    spark = mk('circle', { r: 6, fill: 'url(#wp-spark)', opacity: 0 });
     // pillar box
-    box = mk('g', { transform: 'translate(' + (W - 40) + ' 50)' });
-    mk('ellipse', { cx: 0, cy: 34, rx: 18, ry: 3, fill: 'rgba(0,0,0,.28)' }, box);
-    mk('rect', { x: -16, y: 26, width: 32, height: 8, rx: 2, fill: '#7a0d1a' }, box);
-    mk('rect', { x: -14, y: -24, width: 28, height: 52, rx: 4, fill: 'url(#wp-red)' }, box);
-    mk('path', { d: 'M-16 -24 Q-16 -40 0 -42 Q16 -40 16 -24 Z', fill: 'url(#wp-red)' }, box);
-    mk('rect', { x: -17, y: -27, width: 34, height: 5, rx: 2, fill: '#a8121f' }, box);
-    mk('rect', { x: -9, y: -21, width: 18, height: 4, rx: 1.5, fill: '#2a0a0e' }, box);          // the slot
-    mk('rect', { x: -8, y: -10, width: 16, height: 11, rx: 1.5, fill: '#f4ede0', opacity: .92 }, box); // collection plate
-    mk('path', { d: 'M-5 -6.5h10M-5 -3.5h7', stroke: '#8f0f1f', 'stroke-width': 1 }, box);
-    mk('circle', { cx: 0, cy: 12, r: 3.2, fill: '#e3b061' }, box);
+    box = mk('g', { filter: 'url(#wp-shadow)' });
+    mk('ellipse', { cx: 0, cy: 0, rx: 20, ry: 3.2, fill: 'rgba(0,0,0,.35)' }, box);
+    mk('rect', { x: -17, y: -9, width: 34, height: 9, rx: 2.5, fill: '#6e0a16' }, box);
+    mk('rect', { x: -14.5, y: -62, width: 29, height: 54, rx: 3, fill: 'url(#wp-red)' }, box);
+    mk('path', { d: 'M-17 -62 Q-17 -82 0 -84 Q17 -82 17 -62 Z', fill: 'url(#wp-cap)' }, box);
+    mk('rect', { x: -18.5, y: -65, width: 37, height: 6, rx: 3, fill: '#a8121f' }, box);
+    mk('path', { d: 'M-12 -80 Q-6 -84 2 -83.5', fill: 'none', stroke: 'rgba(255,255,255,.55)', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, box);
+    mk('rect', { x: -10, y: -58, width: 20, height: 4.6, rx: 2, fill: '#1e0609' }, box);
+    mk('rect', { x: -9, y: -47, width: 18, height: 12, rx: 2, fill: '#fbf5e6', opacity: .95 }, box);
+    mk('path', { d: 'M-5.5 -43h11M-5.5 -39.5h8', stroke: '#9b1222', 'stroke-width': 1.1, 'stroke-linecap': 'round' }, box);
+    mk('rect', { x: -10, y: -30, width: 20, height: 18, rx: 2, fill: 'none', stroke: 'rgba(0,0,0,.22)', 'stroke-width': 1 }, box);
+    mk('circle', { cx: 6, cy: -21, r: 1.6, fill: '#f0c46a' }, box);
+    mk('path', { d: 'M-9 -60 V-12', stroke: 'rgba(255,255,255,.22)', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, box);
+    box.setAttribute('transform', 'translate(' + bx + ' ' + by + ')');
+    burst = mk('g', { opacity: 0, transform: 'translate(' + slotX + ' ' + (slotY - 1) + ')' });
+    for (var k = 0; k < 7; k++) { var ang = -Math.PI * (.05 + .9 * k / 6) - Math.PI * .0; mk('path', { d: 'M' + (Math.cos(ang) * 22).toFixed(1) + ' ' + (Math.sin(ang) * 22).toFixed(1) + ' L' + (Math.cos(ang) * 31).toFixed(1) + ' ' + (Math.sin(ang) * 31).toFixed(1), stroke: '#ffd27a', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, burst); }
+    svg.insertBefore(burst, box);
     // envelope
     env = mk('g', { class: 'env' });
-    mk('rect', { x: -22, y: -18, width: 44, height: 36, fill: 'transparent' }, env);
-    mk('rect', { x: -12, y: -8, width: 24, height: 16, rx: 2, fill: '#fbf5e6', stroke: '#c9b48a', 'stroke-width': .8 }, env);
-    mk('path', { d: 'M-12 -7 L0 2 L12 -7', fill: 'none', stroke: '#c9b48a', 'stroke-width': 1 }, env);
-    mk('circle', { cx: 0, cy: 1.5, r: 2.6, fill: '#c8322f' }, env);   // wax seal
-    t = 0; draw();
+    mk('rect', { x: -26, y: -22, width: 52, height: 44, fill: 'transparent' }, env);
+    envIn = mk('g', { filter: 'url(#wp-shadow)' }, env);
+    mk('rect', { x: -15, y: -10, width: 30, height: 20, rx: 2.5, fill: '#fdf8ec' }, envIn);
+    mk('path', { d: 'M-15 10 L-2 0 M15 10 L2 0', stroke: '#e2d3b0', 'stroke-width': 1 }, envIn);
+    mk('path', { d: 'M-14.5 -9 L0 2.5 L14.5 -9', fill: '#f4e9cf', stroke: '#cdb689', 'stroke-width': 1, 'stroke-linejoin': 'round' }, envIn);
+    mk('circle', { cx: 0, cy: 2.5, r: 3.4, fill: '#c8322f' }, envIn);
+    mk('circle', { cx: -1, cy: 1.5, r: 1, fill: 'rgba(255,255,255,.45)' }, envIn);
+    t = 0; draw(0);
   }
-  function draw() {
+  function draw(now) {
     var L = LEN * t, p = path.getPointAtLength(L), q = path.getPointAtLength(Math.min(LEN, L + 2));
-    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, sc = t > .93 ? 1 - (t - .93) / .07 * .55 : 1;
-    env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + (ang * .6).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
-    env.setAttribute('opacity', t > .97 ? String(Math.max(0, 1 - (t - .97) / .03)) : '1');
-    trail.setAttribute('stroke-dashoffset', String(LEN - L));
+    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, sc = t > .9 ? 1 - (t - .9) / .1 * .6 : 1;
+    var bob = (!busy && !dragging && !reduce && t === 0) ? Math.sin((now || 0) / 420) * 1.6 : 0;
+    env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + (ang * .55).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
+    env.setAttribute('opacity', t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1');
+    trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
   }
-  function tFromX(x) { for (var i = 1; i < table.length; i++) if (table[i] >= x) return (i - 1 + (x - table[i - 1]) / Math.max(.01, table[i] - table[i - 1])) / 120; return 1; }
+  // idle: the envelope bobs and a spark runs along the wave to the post box
+  var sparkT0 = 0;
+  function idle(now) {
+    if (!visible) return;
+    if (!busy && !dragging && t === 0) {
+      draw(now);
+      var k = ((now - sparkT0) % 3200) / 1600;
+      if (k < 1) { var pt = path.getPointAtLength(LEN * (.08 + .9 * k)); spark.setAttribute('cx', pt.x.toFixed(1)); spark.setAttribute('cy', pt.y.toFixed(1)); spark.setAttribute('opacity', String(Math.sin(k * Math.PI))); }
+      else spark.setAttribute('opacity', 0);
+    } else spark.setAttribute('opacity', 0);
+    requestAnimationFrame(idle);
+  }
+  function tFromX(x) { for (var i = 1; i < table.length; i++) if (table[i] >= x) return (i - 1 + (x - table[i - 1]) / Math.max(.01, table[i] - table[i - 1])) / 160; return 1; }
   function fly(to, ms, done) {
     var from = t, t0 = performance.now(); if (reduce) ms = 1;
     (function step(now) { var k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      t = from + (to - from) * e; draw(); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
+      t = from + (to - from) * e; if (t < .0005) t = 0; draw(now); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
   }
   function post() {
     busy = true;
-    fly(1, Math.max(250, (1 - t) * 1400), function () {
+    fly(1, Math.max(300, (1 - t) * 1500), function () {
       el.classList.add('sent');
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
-      (function wig(now) { var k = (now - b0) / 500; var r = k < 1 ? Math.sin(k * Math.PI * 4) * 5 * (1 - k) : 0;
-        box.setAttribute('transform', 'translate(' + (W - 40) + ' 50) rotate(' + r.toFixed(2) + ' 0 34)'); if (k < 1) requestAnimationFrame(wig); })(b0);
-      setTimeout(function () { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 650);
-      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(); busy = false; }, 2200);
+      (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
+        box.setAttribute('transform', 'translate(' + bx + ' ' + by + ') rotate(' + r.toFixed(2) + ')');
+        burst.setAttribute('opacity', k < 1 ? String(Math.sin(Math.min(1, k * 1.6) * Math.PI)) : '0');
+        var sc = 1 + Math.min(1, k * 1.6) * .6; burst.setAttribute('transform', burst.getAttribute('transform').replace(/ scale\([^)]*\)/, '') + ' scale(' + sc.toFixed(2) + ')');
+        if (k < 1) requestAnimationFrame(wig); })(b0);
+      setTimeout(function () { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 700);
+      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; }, 2300);
     });
   }
   svg.addEventListener('pointerdown', function (e) {
     if (busy) return;
     var r = el.getBoundingClientRect(), p = path.getPointAtLength(LEN * t);
-    if (Math.abs(e.clientX - r.left - p.x) > 34 || Math.abs(e.clientY - r.top - p.y) > 30) return;
-    e.preventDefault(); dragging = true; moved = false; sx = e.clientX; st = t; el.classList.add('dragging');
+    if (Math.abs(e.clientX - r.left - p.x) > 36 || Math.abs(e.clientY - r.top - p.y) > 32) return;
+    e.preventDefault(); dragging = true; moved = false; sx = e.clientX; el.classList.add('dragging');
     try { svg.setPointerCapture(e.pointerId); } catch (err) {}
   });
   svg.addEventListener('pointermove', function (e) {
     if (!dragging) return; var r = el.getBoundingClientRect();
     if (Math.abs(e.clientX - sx) > 4) moved = true;
-    t = Math.max(0, Math.min(.96, tFromX(e.clientX - r.left))); if (t < st && !moved) t = st; draw();
+    if (moved) { t = Math.max(0, Math.min(.95, tFromX(e.clientX - r.left))); draw(); }
   });
-  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .7) post(); else fly(0, 450); }
+  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .65) post(); else fly(0, 450); }
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   el.addEventListener('dragstart', function (e) { e.preventDefault(); });
   el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
   window.oriwisPost = { set: function (v) { t = v; draw(); }, post: post };
   build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
-  if (!reduce && 'IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { if (!busy) fly(.08, 450, function () { fly(0, 600); }); }, 900); } }, { threshold: .8 }); io.observe(el); }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = visible; visible = es[0].isIntersecting; if (visible && !was && !reduce) { sparkT0 = performance.now(); requestAnimationFrame(idle); } }, { threshold: .3 }).observe(el);
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
