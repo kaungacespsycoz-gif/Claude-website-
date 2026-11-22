@@ -497,8 +497,16 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .xp .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .xp .chip small { font-size: .74rem; opacity: .7; margin-left: 4px; }
 .xp .xmap { position: relative; margin: 16px -16px 0; overflow: hidden; }
-.xp .xmap img { display: block; width: 100%; height: auto; }
-.xp .pin { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; padding: 0; border: 0; background: transparent; cursor: pointer; transition: opacity .3s ease, transform .3s ease; }
+.xp .xmap img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.xp .xmap { touch-action: pan-y; cursor: grab; } .xp .xmap.drag { cursor: grabbing; }
+.xp .stage { position: relative; transform-origin: 0 0; transition: transform .7s cubic-bezier(.3,.7,.2,1); will-change: transform; }
+.xp .xmap.drag .stage { transition: none; }
+.xp .zbtn { position: absolute; right: 10px; bottom: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 3; }
+.xp .zbtn button { width: 36px; height: 36px; border-radius: 10px; border: 0; background: rgba(255,255,255,.92); color: #0c2f3a; font: 600 1.1rem/1 var(--sans); box-shadow: 0 2px 8px rgba(0,0,0,.18); cursor: pointer; }
+.xp .zbtn .uk { font-size: .68rem; }
+.xp .xmap.zoomed .pin.lbl b { opacity: 1; }
+.xp .pin.lbl { z-index: 2; } .xp .pin[aria-pressed="true"] { z-index: 3; }
+.xp .pin { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; scale: var(--inv, 1); padding: 0; border: 0; background: transparent; cursor: pointer; transition: opacity .3s ease, transform .3s ease; }
 .xp .pin i { position: absolute; left: 50%; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: var(--c); border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,.35); transition: transform .25s ease; }
 .xp .pin.uni { --c: #0f7f8c; } .xp .pin.sch { --c: #d9932f; } .xp .pin.both i { background: linear-gradient(90deg, #0f7f8c 50%, #d9932f 50%); }
 .xp .pin b { position: absolute; left: 50%; top: -2px; transform: translate(-50%, -100%); font: 650 .64rem/1 var(--sans); color: #0c2f3a; background: rgba(255,255,255,.92); padding: 3px 5px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
@@ -862,7 +870,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     <p class="xp-sub"><span class="en">Pick an age, then a part of the UK. Tap a pin to see what is there.</span><span class="zh">先选年龄，再选地区。点地图上的标记查看那里的学校。</span></p>
     <div class="chips" id="xp-age" role="group" aria-label="Age"></div>
     <div class="chips" id="xp-nat" role="group" aria-label="Nation"></div>
-    <div class="xmap" id="xp-map"><img src="images/v2/step2.jpg" alt="Map of the UK" width="960" height="640" loading="lazy"></div>
+    <div class="xmap" id="xp-map"><div class="stage" id="xp-stage"><img src="images/v2/ukmap.jpg" alt="Map of the UK" width="960" height="640" loading="lazy" draggable="false"></div><div class="zbtn"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="uk" class="uk"><span class="en">UK</span><span class="zh">全图</span></button></div></div>
     <div class="xkey"><span><i style="background:#d9932f"></i><span class="en">School</span><span class="zh">中学</span></span><span><i style="background:#0f7f8c"></i><span class="en">University</span><span class="zh">大学</span></span></div>
     <div class="xcount"><span id="xp-count"></span><button type="button" id="xp-all" hidden><span class="en">Show all places</span><span class="zh">显示全部地点</span></button></div>
     <ul class="xlist" id="xp-list"></ul>
@@ -1981,17 +1989,60 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (st.age === '18' && d[2] !== 'uni') return false;
     return true;
   }
-  // lon/lat to the felt map (fitted to its coastline: Lizard, Land's End, Lowestoft, Fermanagh, Duncansby Head)
-  function px(lat, lon) { return [(34.677 * lon + 3.4968 * lat + 413.2395) / 9.6, (0.7988 * lon - 56.5643 * lat + 3406.5763) / 6.4]; }
-  var cities = {}, pins = {};
+  // lon/lat to the felt map (fitted to its coastline: Lizard, Land's End, Lowestoft, Fermanagh, Duncansby Head, and London)
+  function px(lat, lon) { return [(36.9972 * lon + 2.3001 * lat + 492.5221) / 9.6, (0.9781 * lon - 56.6568 * lat + 3412.7031) / 6.4]; }
+  var cities = {}, pins = {}, stage = document.getElementById('xp-stage'), Z = { s: 1, x: 0, y: 0 };
   D.forEach(function (d) { var k = d[4] + '|' + d[5]; (cities[k] = cities[k] || { name: d[4], lat: d[5], lon: d[6], items: [] }).items.push(d); });
   Object.keys(cities).forEach(function (k, n) {
     var c = cities[k], q = px(c.lat, c.lon), b = document.createElement('button');
     b.type = 'button'; b.className = 'pin'; b.style.left = q[0].toFixed(2) + '%'; b.style.top = q[1].toFixed(2) + '%'; b.style.animationDelay = (n * 25) + 'ms';
     b.innerHTML = '<i></i><b></b>'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     b.addEventListener('click', function () { st.city = st.city === k ? null : k; render(); if (st.city) setTimeout(function () { listEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); });
-    mapEl.appendChild(b); pins[k] = b;
+    stage.appendChild(b); pins[k] = b;
   });
+  // zoom: fit a set of points (in % of the map), clamp so the map always fills the frame
+  function apply() {
+    var w = mapEl.clientWidth, h = mapEl.clientHeight;
+    Z.s = Math.max(1, Math.min(6, Z.s)); Z.x = Math.min(0, Math.max(w - w * Z.s, Z.x)); Z.y = Math.min(0, Math.max(h - h * Z.s, Z.y));
+    stage.style.transform = 'translate(' + Z.x.toFixed(1) + 'px,' + Z.y.toFixed(1) + 'px) scale(' + Z.s.toFixed(3) + ')';
+    stage.style.setProperty('--inv', (1 / Z.s).toFixed(3)); mapEl.classList.toggle('zoomed', Z.s > 1.8);
+    // name the pins that have room, busiest first, so labels never overlap
+    var w2 = mapEl.clientWidth, h2 = mapEl.clientHeight, taken = [];
+    Object.keys(pins).map(function (k) { return k; }).filter(function (k) { return !pins[k].classList.contains('off'); })
+      .sort(function (a, b) { return (st.city === b) - (st.city === a) || cities[b].items.filter(fits).length - cities[a].items.filter(fits).length; })
+      .forEach(function (k) {
+        var c = cities[k], q = px(c.lat, c.lon), x = Z.x + q[0] / 100 * w2 * Z.s, y = Z.y + q[1] / 100 * h2 * Z.s, lw = pins[k].querySelector('b').textContent.length * 6.4 + 12;
+        var box = [x - lw / 2, y - 34, x + lw / 2, y - 8], ok = x > 0 && x < w2 && y > 20 && y < h2 && !taken.some(function (t) { return box[0] < t[2] + 4 && box[2] > t[0] - 4 && box[1] < t[3] + 2 && box[3] > t[1] - 2; });
+        if (ok) taken.push(box); pins[k].classList.toggle('lbl', ok);
+      });
+  }
+  function zoomTo(cx, cy, s) { var w = mapEl.clientWidth, h = mapEl.clientHeight; Z.s = s; Z.x = w / 2 - cx / 100 * w * s; Z.y = h / 2 - cy / 100 * h * s; apply(); }
+  function fitPts(list, maxS) {
+    if (!list.length) return zoomTo(50, 50, 1);
+    var xs = list.map(function (q) { return q[0]; }), ys = list.map(function (q) { return q[1]; });
+    var x0 = Math.min.apply(0, xs), x1 = Math.max.apply(0, xs), y0 = Math.min.apply(0, ys), y1 = Math.max.apply(0, ys);
+    var s = Math.min(100 / Math.max(x1 - x0 + 16, 1), 100 / Math.max(y1 - y0 + 20, 1), maxS || 3.6);
+    zoomTo((x0 + x1) / 2, (y0 + y1) / 2, Math.max(1, s));
+  }
+  function frame() {
+    if (st.city) { var c = cities[st.city], q = px(c.lat, c.lon); return zoomTo(q[0], q[1], Math.max(Z.s, 3.4)); }
+    if (st.nat === 'all') return zoomTo(50, 50, 1);
+    fitPts(Object.keys(cities).filter(function (k) { return cities[k].items.some(fits); }).map(function (k) { return px(cities[k].lat, cities[k].lon); }), st.nat === 'eng' ? 2 : 3.6);
+  }
+  mapEl.querySelector('.zbtn').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return; e.stopPropagation();
+    var w = mapEl.clientWidth, h = mapEl.clientHeight, cx = (w / 2 - Z.x) / Z.s, cy = (h / 2 - Z.y) / Z.s;
+    if (b.dataset.z === 'uk') { st.city = null; st.nat = 'all'; render(); return; }
+    var ns = b.dataset.z === 'in' ? Z.s * 1.6 : Z.s / 1.6; Z.s = ns; Z.x = w / 2 - cx * ns; Z.y = h / 2 - cy * ns; apply();
+  });
+  // drag to move around when zoomed in
+  (function () {
+    var dn = null;
+    mapEl.addEventListener('pointerdown', function (e) { if (Z.s <= 1 || e.target.closest('.pin, .zbtn')) return; dn = { x: e.clientX, y: e.clientY, zx: Z.x, zy: Z.y, moved: false }; try { mapEl.setPointerCapture(e.pointerId); } catch (x) {} });
+    mapEl.addEventListener('pointermove', function (e) { if (!dn) return; var dx = e.clientX - dn.x, dy = e.clientY - dn.y; if (Math.abs(dx) + Math.abs(dy) > 4) { dn.moved = true; mapEl.classList.add('drag'); } if (dn.moved) { Z.x = dn.zx + dx; Z.y = dn.zy + dy; apply(); } });
+    function up() { dn = null; mapEl.classList.remove('drag'); }
+    mapEl.addEventListener('pointerup', up); mapEl.addEventListener('pointercancel', up);
+  })();
   function chips(el, items, key) {
     el.innerHTML = items.map(function (it) { return '<button type="button" class="chip" data-v="' + it[0] + '" aria-pressed="' + (st[key] === it[0]) + '">' + it[L() === 'zh' ? 2 : 1] + '</button>'; }).join('');
   }
@@ -2009,7 +2060,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var list = D.filter(function (d) { return fits(d) && (!st.city || (d[4] + '|' + d[5]) === st.city); });
     list.sort(function (a, b) { return (a[2] === 'uni') - (b[2] === 'uni') || a[3].localeCompare(b[3]) || a[0].localeCompare(b[0]); });
     cntEl.textContent = (st.city ? cities[st.city].name + ' · ' : '') + (zh ? list.length + ' 所' : list.length + (list.length === 1 ? ' place' : ' places'));
-    allBtn.hidden = !st.city;
+    allBtn.hidden = !st.city; frame();
     listEl.innerHTML = list.map(function (d) {
       var name = zh && d[1] ? d[1] : d[0], sub = zh && d[1] ? d[0] : '';
       return '<li class="xi"><h4>' + name + (sub ? '<small>' + sub + '</small>' : '') + '</h4><p><span class="tag' + (d[2] === 'uni' ? '' : ' sch') + '">' + KIND[d[2]][zh ? 1 : 0] + '</span>' + d[4] + ' · ' + NAT[d[3]][zh ? 1 : 0] + '</p>' +
@@ -2026,7 +2077,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var lastFocus = null;
   function open(fromHistory) {
     if (!xp.hidden && xp.classList.contains('open')) return;
-    render(); lastFocus = document.activeElement; xp.hidden = false; root.style.overflow = 'hidden'; xp.scrollTop = 0;
+    st.city = null; render(); lastFocus = document.activeElement; xp.hidden = false; requestAnimationFrame(frame); root.style.overflow = 'hidden'; xp.scrollTop = 0;
     Object.keys(pins).forEach(function (k) { pins[k].classList.remove('pop'); void pins[k].offsetWidth; pins[k].classList.add('pop'); });
     requestAnimationFrame(function () { requestAnimationFrame(function () { xp.classList.add('open'); }); });
     if (!fromHistory) try { history.pushState({ explore: 1 }, '', '#explore'); } catch (x) {}
