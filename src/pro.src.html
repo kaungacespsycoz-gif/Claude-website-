@@ -76,9 +76,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .hero { padding-block: clamp(48px, 8vw, 96px) 0; }
 .hero .grid { display: grid; gap: 36px; }
 @media (min-width: 900px) { .hero .grid { grid-template-columns: 6fr 5fr; gap: 64px; align-items: end; } }
-.kicker { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; gap: 12px; }
-.kicker::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
-.hero h1 { font-family: var(--serif); font-weight: 500; font-size: var(--fs-h1); line-height: 1.06; letter-spacing: -.02em; margin-top: 18px; }
+.hero h1 { font-family: var(--serif); font-weight: 500; font-size: var(--fs-h1); line-height: 1.06; letter-spacing: -.02em; margin-top: 0; }
 :root[data-lang="zh"] .hero h1 { line-height: 1.2; font-weight: 600; letter-spacing: .02em; font-size: clamp(2.3rem, 7.6vw, 4.2rem); }
 .hero .lede { margin-top: 22px; color: var(--muted); font-size: var(--fs-md); max-width: 31em; }
 :root[data-lang="zh"] .hero .lede { font-size: var(--fs-base); }
@@ -121,9 +119,6 @@ section.tint { background: var(--tint); }
 section.tint .scope div { background: var(--tint); }
 .scope h3 { font-size: var(--fs-sm); font-weight: 600; font-family: var(--sans); letter-spacing: .02em; }
 .scope ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--fs-sm); color: var(--muted); }
-.scope li { padding-left: 18px; position: relative; }
-.scope li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: var(--accent); }
-.scope .no li::before { background: var(--muted); }
 
 /* routes */
 .routes { border-top: 1px solid var(--ink); }
@@ -227,7 +222,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     <div class="wrap">
       <div class="grid">
         <div>
-          <p class="kicker"><span class="en">UK study consulting</span><span class="zh">英国留学咨询</span></p>
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through.</span><span class="zh">想去英国读书？<br>我们先聊一聊。</span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
@@ -252,7 +246,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   <section class="blk" id="how">
     <div class="wrap split">
       <div class="side">
-        <p class="num">01</p>
         <h2><span class="en">How we work</span><span class="zh">服务方式</span></h2>
         <p><span class="en">Three steps. We guide the first two; the school takes it from there.</span><span class="zh">三个步骤。前两步由我们陪你完成，之后由学校与你直接对接。</span></p>
       </div>
@@ -273,7 +266,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   <section class="blk tint" id="routes">
     <div class="wrap split">
       <div class="side">
-        <p class="num">02</p>
         <h2><span class="en">Routes into UK education</span><span class="zh">英国升学路径</span></h2>
         <p><span class="en">A short overview of each stage. Every school sets its own requirements.</span><span class="zh">各阶段简要介绍，具体要求以各校公布为准。</span></p>
       </div>
@@ -286,7 +278,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   <section class="blk" id="faq">
     <div class="wrap split">
       <div class="side">
-        <p class="num">03</p>
         <h2><span class="en">Common questions</span><span class="zh">常见问题</span></h2>
       </div>
       <div class="faq">
@@ -301,7 +292,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   <section class="blk tint contact" id="consult">
     <div class="wrap split">
       <div class="side">
-        <p class="num">04</p>
         <h2><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></h2>
         <p><span class="en">Add us on WeChat, or fill in the form and send us the message it creates.</span><span class="zh">直接添加微信，或填写表格并把生成的信息发给我们。</span></p>
         <div class="wx">
@@ -369,15 +359,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var L = function () { return root.getAttribute('data-lang') === 'en' ? 'en' : 'zh'; };
   var PATHS = {{PATHS}};
   var open = 'ug', list = document.getElementById('route-list');
+  function nd(t) { return String(t).replace(/(\d)\s*[–-]\s*(\d)/g, L() === 'zh' ? '$1至$2' : '$1 to $2'); }
   function renderRoutes() {
     var l = L();
     list.innerHTML = PATHS.map(function (p) {
       var on = p.id === open, age = p.age === 'Any' ? (l === 'zh' ? '不限年龄' : 'Any age') : (l === 'zh' ? p.age + ' 岁' : 'Ages ' + p.age);
-      var len = p.rows[1][l][1];
-      return '<div class="route" data-open="' + on + '"><button type="button" aria-expanded="' + on + '" aria-controls="rb-' + p.id + '" data-id="' + p.id + '">' +
-        '<span class="rn">' + p.title[l] + '</span><span class="ra">' + age + '</span><span class="pm" aria-hidden="true"></span></button>' +
+            return '<div class="route" data-open="' + on + '"><button type="button" aria-expanded="' + on + '" aria-controls="rb-' + p.id + '" data-id="' + p.id + '">' +
+        '<span class="rn">' + p.title[l] + '</span><span class="ra">' + nd(age) + '</span><span class="pm" aria-hidden="true"></span></button>' +
         '<div class="body" id="rb-' + p.id + '"' + (on ? '' : ' hidden') + '><img src="images/v2/' + p.id + '.jpg" alt="" width="1000" height="666" loading="lazy">' +
-        '<div class="txt"><p>' + p.intro[l] + '</p><dl>' + p.rows.slice(1, 5).map(function (r) { return '<div><dt>' + r[l][0] + '</dt><dd>' + r[l][1] + '</dd></div>'; }).join('') + '</dl></div></div></div>';
+        '<div class="txt"><p>' + nd(p.intro[l]) + '</p><dl>' + p.rows.slice(1, 5).map(function (r) { return '<div><dt>' + r[l][0] + '</dt><dd>' + nd(r[l][1]) + '</dd></div>'; }).join('') + '</dl></div></div></div>';
     }).join('');
   }
   list.addEventListener('click', function (e) {
@@ -407,8 +397,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var roleTxt = { parent: ['Parent', '家长'], student: ['Student', '学生'], adult: ['Working adult', '在职人士'] }[role][l === 'zh' ? 1 : 0];
     var st = document.getElementById('f-stage'), s2 = document.getElementById('f-start'), name = document.getElementById('f-name').value.trim();
     var lines = l === 'zh'
-      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '—'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact]
-      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || '—'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact];
+      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '未填写'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact]
+      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || 'not given'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact];
     document.getElementById('msg').textContent = lines.join('\n');
     form.hidden = true; done.hidden = false; done.scrollIntoView({ block: 'nearest' });
   });
