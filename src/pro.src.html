@@ -229,7 +229,7 @@ p { margin: 0; }
 
 
 /* step 3: a red London bus drives past on the street, in stop-motion hops */
-.stepimg .bus { position: absolute; width: 64%; height: auto; left: 101%; top: 23%; pointer-events: none; filter: drop-shadow(0 3px 2px rgba(0,0,0,.25)); }
+.stepimg .bus { position: absolute; width: 64%; height: auto; left: 101%; top: 28%; pointer-events: none; filter: drop-shadow(0 3px 2px rgba(0,0,0,.25)); }
 .journey.live li.played .stepimg .bus { animation: bus-drive 1.4s steps(1, end) .5s 1 forwards; }
 /* the clasped hands shake up and down a few times, then rest */
 .stepimg .hands { position: absolute; height: auto; pointer-events: none; }
@@ -265,12 +265,11 @@ p { margin: 0; }
 /* when the boy stops, Pudding turns, trots over and jumps up to greet him */
 .journey.live li.played .stepimg .pud { animation: pud-greet 1.9s steps(1, end) 2.9s 1 forwards; }
 @keyframes pud-greet {
-  0% { left: 30.5%; top: 57.5%; transform: none; } 10% { left: 30.5%; top: 57.5%; transform: scaleX(-1); }
-  20% { left: 28.5%; top: 58%; transform: scaleX(-1) translateY(-10%); } 30% { left: 26.5%; top: 58.5%; transform: scaleX(-1); }
-  40% { left: 24.5%; top: 59%; transform: scaleX(-1) translateY(-10%); } 50% { left: 22.5%; top: 59.5%; transform: scaleX(-1); }
-  60% { left: 20.5%; top: 60%; transform: scaleX(-1) translateY(-10%); } 68% { left: 19.5%; top: 60.5%; transform: scaleX(-1); }
-  78% { left: 19.5%; top: 60.5%; transform: scaleX(-1) translateY(-24%) rotate(-6deg); } 86% { left: 19.5%; top: 60.5%; transform: scaleX(-1); }
-  94% { left: 19.5%; top: 60.5%; transform: scaleX(-1) translateY(-16%) rotate(-4deg); } 100% { left: 19.5%; top: 60.5%; transform: scaleX(-1); } }
+  0% { left: 30.5%; top: 57.5%; transform: none; } 12% { left: 30.5%; top: 57.5%; transform: scaleX(-1); }
+  26% { left: 29.5%; top: 58%; transform: scaleX(-1) translateY(-10%); } 40% { left: 28.5%; top: 58.5%; transform: scaleX(-1); }
+  54% { left: 27.5%; top: 59%; transform: scaleX(-1) translateY(-10%); } 66% { left: 27%; top: 59.5%; transform: scaleX(-1); }
+  78% { left: 27%; top: 59.5%; transform: scaleX(-1) translateY(-24%) rotate(-6deg); } 86% { left: 27%; top: 59.5%; transform: scaleX(-1); }
+  94% { left: 27%; top: 59.5%; transform: scaleX(-1) translateY(-16%) rotate(-4deg); } 100% { left: 27%; top: 59.5%; transform: scaleX(-1); } }
 @media (prefers-reduced-motion: reduce) { .stepimg .pudding, .stepimg .pud { animation: none !important; } }
 
 
@@ -289,7 +288,7 @@ p { margin: 0; }
 
 
 /* step 3: a schoolboy cycles in from the left with a book in one hand; his scarf keeps flying */
-.stepimg .cyclist { position: absolute; width: 20.5%; left: -26%; top: 63%; pointer-events: none; filter: drop-shadow(0 3px 2px rgba(0,0,0,.22)); }
+.stepimg .cyclist { position: absolute; width: 19%; left: -26%; top: 55.5%; pointer-events: none; filter: drop-shadow(0 3px 2px rgba(0,0,0,.22)); }
 .stepimg .cyclist img { display: block; width: 100%; height: auto; position: relative; z-index: 1; }
 .stepimg .cyclist .scarf { position: absolute; z-index: 0; width: 30%; left: 9.5%; top: 14.5%; overflow: visible; }
 .stepimg .cyclist .scarf .s2 { opacity: 0; }
