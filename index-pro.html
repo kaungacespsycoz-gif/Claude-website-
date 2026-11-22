@@ -1458,7 +1458,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1498,20 +1498,23 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  vec3 deep = vec3(.03, .15, .18), mid = vec3(.10, .33, .37), gold = vec3(.93, .82, .52);',
       '  vec3 col = mix(mid, deep, clamp(ru.y * .75 + ru.x * .45, 0., 1.));',
       '  col = mix(col, gold, smoothstep(.62, 0., length((ru - vec2(.05, .0)) * vec2(1., 1.5))) * .55);',
-      '  float tr = smoothstep(.42, .78, noise(vec2(ru.x * 7. + 3., ru.y * 1.1 + uT * .02)));',
-      '  col = mix(col, vec3(.02, .09, .09), tr * .55 * (1. - ru.y * .4));',
+      // the London skyline across the river, reflected: wobbling, torn into strips by the ripples, lamp lights drawn out into streaks
+      '  vec2 sp = p + g * 13.; sp.x += sin(sp.y * .35 + uT * 1.5) * 1.4 + (noise(vec2(floor(sp.y / 2.6) * 1.7, uT * 1.2)) - .5) * 2.6;',
+      '  vec2 su = vec2(sp.x / uRes.x, sp.y / (uRes.y * .56));',
+      '  if (su.y < 1.) { float sa = texture2D(uSky, clamp(su, 0., 1.)).a * (.86 + .14 * sin(sp.y * 1.3 + uT * 2.6));',
+      '    col = mix(col, vec3(.015, .07, .08), sa * .62 * smoothstep(1., .82, su.y));',
+      '    float li = 0.; for (int k = -3; k <= 3; k++) li += texture2D(uSky, clamp(su + vec2(0., float(k) * .022), 0., 1.)).r * (1. - abs(float(k)) / 4.);',
+      '    col += vec3(1., .78, .42) * li * .3 * (.75 + .25 * sin(sp.y * 2.1 - uT * 3.)); }',
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
       // the pillar box, standing just above the pond, seen only as its rippling reflection
-      '  vec2 bp = p + g * 9.; bp.x += sin(bp.y * .22 + uT * 1.8) * (.6 + (uRefl.y - bp.y) * .025) + sin(bp.y * .61 - uT * 2.6) * .5; vec2 bq = vec2(bp.x - uRefl.x, bp.y - uRefl.y) / uRefl.z; float aa = 1.2 / uRefl.z;',
-      '  float ct = -62. - 22. * sqrt(max(0., 1. - bq.x * bq.x / 289.));',
-      '  float cap = smoothstep(-aa, aa, bq.y - ct) * smoothstep(-aa, aa, -60. - bq.y) * smoothstep(-aa, aa, 17. - abs(bq.x));',
-      '  float body = rb(bq, vec2(-14.5, -62.), vec2(14.5, -8.), aa), band = rb(bq, vec2(-18.5, -65.), vec2(18.5, -59.), aa);',
-      '  float plinth = rb(bq, vec2(-17., -9.), vec2(17., 0.), aa), slot = rb(bq, vec2(-10., -58.), vec2(10., -53.4), aa), plate = rb(bq, vec2(-9., -47.), vec2(9., -35.), aa);',
-      '  float shade = .5 + .5 * clamp(1. - abs(bq.x + 4.) / 17., 0., 1.);',
-      '  vec3 bc = vec3(.82, .12, .17) * shade; bc = mix(bc, vec3(.62, .07, .12), band); bc = mix(bc, vec3(.40, .04, .08), plinth * (1. - body));',
-      '  bc = mix(bc, vec3(.95, .92, .85), plate); bc = mix(bc, vec3(.10, .02, .03), slot); bc = mix(bc, vec3(1., .8, .45), slot * uHit);',
-      '  float bm = max(max(cap, body), max(band, plinth)) * (1. - smoothstep(30., 100., uRefl.y - bp.y) * .3);',
-      '  col = mix(col, bc * .8 + col * .15, bm * .74);',
+      '  vec2 bp = p + g * 8.; bp.x += sin(bp.y * .28 + uT * 1.7) * .9 + (noise(vec2(floor(bp.y / 2.4) * 3.1, uT * 1.5)) - .5) * 1.1 * uRefl.z;',
+      '  vec2 bu = vec2((bp.x - uRefl.x) / uRefl.z + 20., (bp.y - uRefl.y) / uRefl.z + 90.) / vec2(40., 92.);',
+      '  if (bu.x > 0. && bu.x < 1. && bu.y > 0. && bu.y < 1.) { vec4 bt = texture2D(uBoxT, bu);',
+      '    float rb2 = .9 + .1 * sin(bp.y * 1.15 + uT * 2.8);',
+      '    vec3 bc = bt.rgb * rb2 * .92 + vec3(.0, .05, .06) * bt.a;',
+      '    vec2 bq = (bu * vec2(40., 92.)) - vec2(20., 90.);',
+      '    bc += vec3(1., .78, .4) * uHit * rb(bq, vec2(-10., -58.), vec2(10., -53.4), .6) * 1.4;',
+      '    col = col * (1. - bt.a * .86) + bc * .86; }',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
       '    vec2 ep = p + g * 2.6 - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
@@ -1574,8 +1577,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    var tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
@@ -1599,13 +1602,75 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       }
       load(txt, tex); load(whole, tex2);
     })();
+    function upload(t, c) {
+      gl.bindTexture(gl.TEXTURE_2D, t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    // a Royal Mail pillar box, painted once (units: 40 wide, 92 tall, base at the bottom)
+    (function () {
+      var c = document.createElement('canvas'); c.width = 160; c.height = 368; var x = c.getContext('2d');
+      x.translate(80, 360); x.scale(4, 4);
+      function hg(a, b, stops) { var g = x.createLinearGradient(a, 0, b, 0); stops.forEach(function (s) { g.addColorStop(s[0], s[1]); }); return g; }
+      var red = hg(-15, 15, [[0, '#5a0710'], [.22, '#c41a28'], [.38, '#f0525a'], [.5, '#d42332'], [.85, '#8e0e1b'], [1, '#4d060d']]);
+      x.fillStyle = hg(-18, 18, [[0, '#2b0408'], [.4, '#6d0b15'], [1, '#2b0408']]); x.fillRect(-18, -9, 36, 9);         // plinth
+      x.fillStyle = 'rgba(0,0,0,.35)'; x.fillRect(-18, -9, 36, 1.2);
+      x.fillStyle = red; x.fillRect(-15, -64, 30, 56);                                                                 // body
+      x.fillStyle = hg(-19, 19, [[0, '#4d060d'], [.35, '#d8303a'], [.5, '#e7454c'], [1, '#4d060d']]); x.fillRect(-19, -68, 38, 6);   // rim
+      x.beginPath(); x.moveTo(-17, -67); x.bezierCurveTo(-17, -84, 17, -84, 17, -67); x.closePath(); x.fillStyle = red; x.fill();   // dome
+      x.strokeStyle = 'rgba(255,210,210,.55)'; x.lineWidth = 1.2; x.beginPath(); x.moveTo(-11, -74); x.quadraticCurveTo(-6, -79, 1, -79.5); x.stroke();
+      x.fillStyle = '#7c0a16'; x.fillRect(-4, -84, 8, 3);                                                              // crown knob
+      x.fillStyle = '#150204'; x.fillRect(-10.5, -59, 21, 4.6);                                                        // slot
+      x.fillStyle = '#e7454c'; x.fillRect(-11.5, -60.5, 23, 1.2);
+      x.fillStyle = '#efe9da'; x.fillRect(-8.5, -50, 17, 11);                                                          // collection plate
+      x.fillStyle = '#9b1222'; for (var i = 0; i < 3; i++) x.fillRect(-6, -47.5 + i * 3, 12 - i * 3, .9);
+      x.strokeStyle = 'rgba(40,0,6,.55)'; x.lineWidth = .8; x.strokeRect(-10.5, -35, 21, 22);                          // door
+      x.fillStyle = '#d6a650'; x.beginPath(); x.arc(0, -26, 3.2, 0, Math.PI * 2); x.fill();                          // royal cypher
+      x.fillStyle = '#7c0a16'; x.font = 'bold 3.4px sans-serif'; x.textAlign = 'center'; x.fillText('ER', 0, -24.9);
+      x.fillStyle = 'rgba(255,255,255,.22)'; x.fillRect(-9, -63, 2.2, 54);                                            // shine
+      upload(boxT, c);
+    })();
+    // London across the river: the Eye, Big Ben and Parliament, St Paul's, the Shard, and lamps along the embankment
+    function paintSky(w, h) {
+      var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * .56 * 2));
+      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = cw / 360, base = ch - 6 * u;
+      x.fillStyle = '#000'; x.strokeStyle = '#000';
+      function R(a, b, ww, hh) { x.fillRect(a * u, base - (b + hh) * u, ww * u, hh * u); }
+      // London Eye
+      var ex = 46 * u, ey = base - 66 * u, er = 44 * u; x.lineWidth = 3 * u; x.beginPath(); x.arc(ex, ey, er, 0, Math.PI * 2); x.stroke();
+      x.lineWidth = .9 * u; for (var i = 0; i < 16; i++) { var a = i * Math.PI / 8; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + Math.cos(a) * er, ey + Math.sin(a) * er); x.stroke();
+        x.beginPath(); x.arc(ex + Math.cos(a) * er, ey + Math.sin(a) * er, 2.3 * u, 0, Math.PI * 2); x.fill(); }
+      x.lineWidth = 2.4 * u; x.beginPath(); x.moveTo(ex - 22 * u, base); x.lineTo(ex, ey); x.lineTo(ex + 22 * u, base); x.stroke();
+      // Parliament
+      R(100, 0, 112, 30); for (var k = 0; k < 14; k++) R(102 + k * 8, 30, 2, 8);
+      R(186, 0, 20, 78); R(184, 78, 24, 6); for (var k2 = 0; k2 < 4; k2++) R(185 + k2 * 6.4, 84, 2, 7);   // Victoria Tower
+      // Big Ben (Elizabeth Tower)
+      R(122, 0, 15, 112); R(120, 112, 19, 22); R(122, 134, 15, 10);
+      x.beginPath(); x.moveTo(121 * u, base - 144 * u); x.lineTo(129.5 * u, base - 178 * u); x.lineTo(138 * u, base - 144 * u); x.fill();
+      R(129, 178, 1, 8);
+      // St Paul's
+      R(236, 0, 44, 34); R(244, 34, 28, 14); x.beginPath(); x.arc(258 * u, base - 48 * u, 15 * u, Math.PI, 0); x.fill(); R(256, 63, 4, 14); R(238, 34, 5, 22); R(273, 34, 5, 22);
+      // the Shard
+      x.beginPath(); x.moveTo(292 * u, base); x.lineTo(308 * u, base - 168 * u); x.lineTo(311 * u, base - 158 * u); x.lineTo(330 * u, base); x.fill();
+      // low riverside buildings and the embankment
+      R(0, 0, 360, 9); R(212, 0, 24, 18); R(330, 0, 30, 24); R(80, 0, 20, 14);
+      // lamps: posts are silhouettes, lanterns are lights (red channel)
+      var lamps = [18, 64, 110, 156, 202, 248, 294, 340];
+      lamps.forEach(function (lx) { R(lx - .8, 0, 1.6, 34); R(lx - 3, 34, 6, 2); });
+      x.fillStyle = '#ffcf70'; lamps.forEach(function (lx) { x.beginPath(); x.arc(lx * u, base - 39 * u, 2.6 * u, 0, Math.PI * 2); x.fill(); });
+      x.beginPath(); x.arc(129.5 * u, base - 123 * u, 4.6 * u, 0, Math.PI * 2); x.fill();                          // Big Ben's clock face
+      upload(skyT, c);
+    }
     function frame() {
       var tt = reduce ? 2 : now();
       glowNow += (glowTo - glowNow) * .18;
       gl.uniform2f(U.uRes, Wc, Hc); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uT, tt); gl.uniform1f(U.uGlow, glowNow); gl.uniform1f(U.uTexOn, texOn);
       hitV *= .96; gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uHit, hitV);
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2); gl.activeTexture(gl.TEXTURE0);
+      gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
+      gl.uniform1i(U.uSky, 2); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, skyT);
+      gl.uniform1i(U.uBoxT, 3); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, boxT); gl.activeTexture(gl.TEXTURE0);
       if (cutTo !== cutX) { cutX = cutTo > cutX ? cutTo : cutX + (cutTo - cutX) * .08; if (Math.abs(cutTo - cutX) < 1) cutX = cutTo; } gl.uniform1f(U.uCut, cutX);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
@@ -1619,7 +1684,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
+        paintSky(w, h); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
