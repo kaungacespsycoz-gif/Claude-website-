@@ -459,6 +459,11 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wavepost .wp-logo.pass { transform: scale(1.06); filter: drop-shadow(0 0 10px rgba(240,181,75,.75)); }
 .wavepost .wp-logo.pass .ow-sun { fill: #ffe39a; }
 .wavepost { cursor: grab; } .wavepost.dragging { cursor: grabbing; }
+/* real water: a small WebGL surface with the logo written on it; the plain logo stays as the fallback */
+.wavepost .wp-water { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
+.wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo { visibility: hidden; }
+.wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
+.wavepost.wet .wp-lbl { text-shadow: 0 1px 8px rgba(4,28,34,.55); }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -682,7 +687,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="wavepost" id="wavepost" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="wp-svg" aria-hidden="true"></svg><span class="wp-logo" aria-hidden="true"><svg viewBox="-4 -10 208 162" role="img" aria-label="Oriwis"><defs><clipPath id="owc-wp"><path d="M-10 -20 H220 V106.6 H178 C142.8 116.6 115.2 116.6 86 106.6 C56.8 96.6 29.2 96.6 -6 106.6 H-10 Z"/><path d="M-10 120.6 H-6 C29.2 110.6 56.8 110.6 86 120.6 C115.2 130.6 142.8 130.6 178 120.6 H220 V190 H-10 Z"/></clipPath></defs><g fill="currentColor" clip-path="url(#owc-wp)"><path transform="translate(6.1 66.4)" d="M37.536 1.196Q29.992 1.196 23.644 -1.38Q17.296 -3.956 12.558 -8.556000000000001Q7.82 -13.156 5.152 -19.366Q2.484 -25.576 2.484 -32.752Q2.484 -39.928 5.106 -46.046Q7.728 -52.164 12.419999999999998 -56.763999999999996Q17.112 -61.364 23.46 -63.89399999999999Q29.808 -66.42399999999999 37.352 -66.42399999999999Q44.896 -66.42399999999999 51.244 -63.89399999999999Q57.592 -61.364 62.284 -56.763999999999996Q66.976 -52.164 69.598 -46.0Q72.22 -39.836 72.22 -32.66Q72.22 -25.483999999999998 69.598 -19.32Q66.976 -13.156 62.284 -8.51Q57.592 -3.864 51.29 -1.334Q44.988 1.196 37.536 1.196ZM37.352 -13.524Q42.872 -13.524 46.92 -15.916Q50.967999999999996 -18.308 53.176 -22.631999999999998Q55.384 -26.956 55.384 -32.752Q55.384 -36.984 54.141999999999996 -40.480000000000004Q52.9 -43.976 50.507999999999996 -46.506Q48.116 -49.036 44.804 -50.416Q41.492 -51.796 37.352 -51.796Q31.832 -51.796 27.784 -49.45Q23.736 -47.104 21.528 -42.78Q19.32 -38.455999999999996 19.32 -32.752Q19.32 -28.336 20.561999999999998 -24.793999999999997Q21.804 -21.252 24.195999999999998 -18.722Q26.588 -16.192 29.9 -14.858Q33.211999999999996 -13.524 37.352 -13.524ZM91.564 -26.404V-38.18H103.984Q108.032 -38.18 110.19399999999999 -40.158Q112.356 -42.136 112.356 -45.54Q112.356 -48.852 110.19399999999999 -50.922Q108.032 -52.992 103.984 -52.992H91.564V-65.228H106.28399999999999Q112.90799999999999 -65.228 117.922 -62.744Q122.93599999999999 -60.26 125.78799999999998 -55.936Q128.64 -51.612 128.64 -45.816Q128.64 -40.019999999999996 125.74199999999999 -35.65Q122.844 -31.28 117.692 -28.842Q112.53999999999999 -26.404 105.63999999999999 -26.404ZM78.5 0.0V-65.228H94.96799999999999V0.0ZM113.828 0.0 94.87599999999999 -27.968 109.68799999999999 -31.556 132.87199999999999 0.0ZM137.49599999999998 0.0V-65.228H153.964V0.0Z"/><path transform="translate(0.0 142.8)" d="M21.896 0.0 1.196 -65.228H17.48L32.384 -14.996H25.3L40.019999999999996 -65.228H53.176L67.896 -14.996H60.903999999999996L75.80799999999999 -65.228H92.0L71.208 0.0H57.96L43.24 -50.14H49.864L35.236 0.0ZM96.9 0.0V-65.228H113.368V0.0ZM143.38400000000001 1.012Q135.196 1.012 129.17000000000002 -1.472Q123.144 -3.956 118.176 -9.292L128.572 -19.78Q131.976 -16.192 135.84 -14.306000000000001Q139.704 -12.42 144.58 -12.42Q148.72 -12.42 150.974 -13.846Q153.228 -15.272 153.228 -17.756Q153.228 -20.056 151.572 -21.573999999999998Q149.916 -23.092 147.202 -24.241999999999997Q144.488 -25.392 141.22199999999998 -26.45Q137.956 -27.508 134.69 -29.026Q131.424 -30.544 128.71 -32.752Q125.99600000000001 -34.96 124.34 -38.272Q122.684 -41.583999999999996 122.684 -46.46Q122.684 -52.716 125.67399999999999 -57.132000000000005Q128.664 -61.548 134.0 -63.94Q139.336 -66.332 146.42000000000002 -66.332Q153.504 -66.332 159.48399999999998 -63.94Q165.464 -61.548 169.328 -57.316L158.84 -46.92Q155.89600000000002 -49.864 152.86 -51.336Q149.824 -52.808 146.236 -52.808Q142.832 -52.808 140.89999999999998 -51.611999999999995Q138.968 -50.416 138.968 -48.208Q138.968 -46.0 140.624 -44.620000000000005Q142.28 -43.24 144.994 -42.182Q147.708 -41.124 150.974 -40.019999999999996Q154.24 -38.916 157.46 -37.444Q160.68 -35.972 163.394 -33.672Q166.108 -31.372 167.764 -27.875999999999998Q169.42000000000002 -24.38 169.42000000000002 -19.412Q169.42000000000002 -9.66 162.566 -4.324Q155.712 1.012 143.38400000000001 1.012Z"/></g><circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg></span><span class="wp-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Tap, or drag right to send</span><span class="zh">点击或向右滑动，寄往英国</span></small></span><span class="wp-ok" aria-hidden="true"><span class="en">Sent ✓</span><span class="zh">已寄出 ✓</span></span></a><a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
+            <a class="wavepost" id="wavepost" href="#consult" draggable="false" aria-label="Book a free consultation"><canvas class="wp-water" aria-hidden="true"></canvas><svg class="wp-svg" aria-hidden="true"></svg><span class="wp-logo" aria-hidden="true"><svg viewBox="-4 -10 208 162" role="img" aria-label="Oriwis"><defs><clipPath id="owc-wp"><path d="M-10 -20 H220 V106.6 H178 C142.8 116.6 115.2 116.6 86 106.6 C56.8 96.6 29.2 96.6 -6 106.6 H-10 Z"/><path d="M-10 120.6 H-6 C29.2 110.6 56.8 110.6 86 120.6 C115.2 130.6 142.8 130.6 178 120.6 H220 V190 H-10 Z"/></clipPath></defs><g fill="currentColor" clip-path="url(#owc-wp)"><path transform="translate(6.1 66.4)" d="M37.536 1.196Q29.992 1.196 23.644 -1.38Q17.296 -3.956 12.558 -8.556000000000001Q7.82 -13.156 5.152 -19.366Q2.484 -25.576 2.484 -32.752Q2.484 -39.928 5.106 -46.046Q7.728 -52.164 12.419999999999998 -56.763999999999996Q17.112 -61.364 23.46 -63.89399999999999Q29.808 -66.42399999999999 37.352 -66.42399999999999Q44.896 -66.42399999999999 51.244 -63.89399999999999Q57.592 -61.364 62.284 -56.763999999999996Q66.976 -52.164 69.598 -46.0Q72.22 -39.836 72.22 -32.66Q72.22 -25.483999999999998 69.598 -19.32Q66.976 -13.156 62.284 -8.51Q57.592 -3.864 51.29 -1.334Q44.988 1.196 37.536 1.196ZM37.352 -13.524Q42.872 -13.524 46.92 -15.916Q50.967999999999996 -18.308 53.176 -22.631999999999998Q55.384 -26.956 55.384 -32.752Q55.384 -36.984 54.141999999999996 -40.480000000000004Q52.9 -43.976 50.507999999999996 -46.506Q48.116 -49.036 44.804 -50.416Q41.492 -51.796 37.352 -51.796Q31.832 -51.796 27.784 -49.45Q23.736 -47.104 21.528 -42.78Q19.32 -38.455999999999996 19.32 -32.752Q19.32 -28.336 20.561999999999998 -24.793999999999997Q21.804 -21.252 24.195999999999998 -18.722Q26.588 -16.192 29.9 -14.858Q33.211999999999996 -13.524 37.352 -13.524ZM91.564 -26.404V-38.18H103.984Q108.032 -38.18 110.19399999999999 -40.158Q112.356 -42.136 112.356 -45.54Q112.356 -48.852 110.19399999999999 -50.922Q108.032 -52.992 103.984 -52.992H91.564V-65.228H106.28399999999999Q112.90799999999999 -65.228 117.922 -62.744Q122.93599999999999 -60.26 125.78799999999998 -55.936Q128.64 -51.612 128.64 -45.816Q128.64 -40.019999999999996 125.74199999999999 -35.65Q122.844 -31.28 117.692 -28.842Q112.53999999999999 -26.404 105.63999999999999 -26.404ZM78.5 0.0V-65.228H94.96799999999999V0.0ZM113.828 0.0 94.87599999999999 -27.968 109.68799999999999 -31.556 132.87199999999999 0.0ZM137.49599999999998 0.0V-65.228H153.964V0.0Z"/><path transform="translate(0.0 142.8)" d="M21.896 0.0 1.196 -65.228H17.48L32.384 -14.996H25.3L40.019999999999996 -65.228H53.176L67.896 -14.996H60.903999999999996L75.80799999999999 -65.228H92.0L71.208 0.0H57.96L43.24 -50.14H49.864L35.236 0.0ZM96.9 0.0V-65.228H113.368V0.0ZM143.38400000000001 1.012Q135.196 1.012 129.17000000000002 -1.472Q123.144 -3.956 118.176 -9.292L128.572 -19.78Q131.976 -16.192 135.84 -14.306000000000001Q139.704 -12.42 144.58 -12.42Q148.72 -12.42 150.974 -13.846Q153.228 -15.272 153.228 -17.756Q153.228 -20.056 151.572 -21.573999999999998Q149.916 -23.092 147.202 -24.241999999999997Q144.488 -25.392 141.22199999999998 -26.45Q137.956 -27.508 134.69 -29.026Q131.424 -30.544 128.71 -32.752Q125.99600000000001 -34.96 124.34 -38.272Q122.684 -41.583999999999996 122.684 -46.46Q122.684 -52.716 125.67399999999999 -57.132000000000005Q128.664 -61.548 134.0 -63.94Q139.336 -66.332 146.42000000000002 -66.332Q153.504 -66.332 159.48399999999998 -63.94Q165.464 -61.548 169.328 -57.316L158.84 -46.92Q155.89600000000002 -49.864 152.86 -51.336Q149.824 -52.808 146.236 -52.808Q142.832 -52.808 140.89999999999998 -51.611999999999995Q138.968 -50.416 138.968 -48.208Q138.968 -46.0 140.624 -44.620000000000005Q142.28 -43.24 144.994 -42.182Q147.708 -41.124 150.974 -40.019999999999996Q154.24 -38.916 157.46 -37.444Q160.68 -35.972 163.394 -33.672Q166.108 -31.372 167.764 -27.875999999999998Q169.42000000000002 -24.38 169.42000000000002 -19.412Q169.42000000000002 -9.66 162.566 -4.324Q155.712 1.012 143.38400000000001 1.012Z"/></g><circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg></span><span class="wp-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Tap, or drag right to send</span><span class="zh">点击或向右滑动，寄往英国</span></small></span><span class="wp-ok" aria-hidden="true"><span class="en">Sent ✓</span><span class="zh">已寄出 ✓</span></span></a><a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -1200,7 +1205,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
@@ -1217,6 +1222,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
       ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY;
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
+    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, by);
     var defs = mk('defs', {});
     grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
     grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
@@ -1227,7 +1233,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var fb = mk('filter', { id: 'wp-blur', x: '-20%', y: '-200%', width: '140%', height: '500%' }, defs);
     mk('feGaussianBlur', { stdDeviation: 3 }, fb);
     // soft sea ripples along the bottom
-    for (var r = 0; r < 2; r++) {
+    for (var r = 0; r < (water ? 0 : 2); r++) {
       var yy = H - 10 + r * 6, dd = 'M0 ' + yy;
       for (var xx = 0; xx <= W; xx += 40) dd += ' q10 -3 20 0 t20 0';
       mk('path', { d: dd, fill: 'none', stroke: 'rgba(143,208,201,' + (.18 - r * .07) + ')', 'stroke-width': 1.2 });
@@ -1276,6 +1282,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     env.setAttribute('opacity', t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1');
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
     logo.classList.toggle('pass', t > passA && t < passB);
+    if (water) { water.glow(t > passA && t < passB ? 1 : 0);
+      if (t > 0 && t < .9 && Math.abs(p.x - lastDrop) > 36) { lastDrop = p.x; water.drop(p.x, p.y + 9, inCut ? .45 : .3); }
+      if (t === 0) lastDrop = -99; }
   }
   // idle: the envelope bobs and a spark runs along the wave to the post box
   var sparkT0 = 0;
@@ -1298,7 +1307,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent');
+      el.classList.add('sent'); if (water) water.drop(bx, by - 2, .9);
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1312,6 +1321,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   }
   svg.addEventListener('pointerdown', function (e) {
     if (busy) return;
+    if (water) { var rr = el.getBoundingClientRect(); water.drop(e.clientX - rr.left, e.clientY - rr.top, 1); }
     e.preventDefault(); dragging = true; moved = false; sx = e.clientX; ex0 = path.getPointAtLength(LEN * t).x; el.classList.add('dragging');
     try { svg.setPointerCapture(e.pointerId); } catch (err) {}
   });
@@ -1325,8 +1335,118 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   el.addEventListener('dragstart', function (e) { e.preventDefault(); });
   el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
   window.oriwisPost = { set: function (v) { t = v; draw(); }, post: post };
+
+  // ---- real water (WebGL). Ripples spread as flattened rings, like a pond seen at an angle; the logo is drawn into the surface ----
+  water = (function () {
+    var cv = el.querySelector('.wp-water'), gl = null;
+    try { gl = cv.getContext('webgl', { alpha: false, antialias: false, premultipliedAlpha: false }) || cv.getContext('experimental-webgl'); } catch (e) {}
+    if (!gl) return null;
+    var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
+    var FS = [
+      'precision mediump float;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[8];',
+      'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+      'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
+      '  return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y); }',
+      'float hgt(vec2 p){',
+      '  vec2 q = p * vec2(1., 2.1);',
+      '  float v = sin(q.x * .05 + uT * .9 + noise(q * .015 + uT * .08) * 5.) * .35;',
+      '  v += sin(q.y * .09 - uT * 1.4 + q.x * .015) * .22;',
+      '  v += (noise(q * .045 + vec2(uT * .25, -uT * .18)) - .5) * .7;',
+      '  for (int i = 0; i < 8; i++) { vec4 r = uR[i]; float age = uT - r.z;',
+      '    if (r.w > 0. && age > 0. && age < 4.5) {',
+      '      vec2 d = (p - r.xy) * vec2(1., 2.); float x = length(d) - age * 52.;',
+      '      v += r.w * 2. * sin(x * .38) * exp(-x * x / (160. + age * 260.)) * exp(-age * .9);',
+      '    } }',
+      '  return v; }',
+      'void main(){',
+      '  vec2 p = vec2(gl_FragCoord.x, uRes.y * uDpr - gl_FragCoord.y) / uDpr;',
+      '  float h0 = hgt(p); vec2 g = vec2(hgt(p + vec2(1., 0.)) - h0, hgt(p + vec2(0., 1.)) - h0);',
+      '  vec2 ru = (p + g * 16.) / uRes;',
+      // sky and trees reflected in the water
+      '  vec3 deep = vec3(.03, .15, .18), mid = vec3(.10, .33, .37), gold = vec3(.93, .82, .52);',
+      '  vec3 col = mix(mid, deep, clamp(ru.y * .75 + ru.x * .45, 0., 1.));',
+      '  col = mix(col, gold, smoothstep(.62, 0., length((ru - vec2(.05, .0)) * vec2(1., 1.5))) * .55);',
+      '  float tr = smoothstep(.42, .78, noise(vec2(ru.x * 7. + 3., ru.y * 1.1 + uT * .02)));',
+      '  col = mix(col, vec3(.02, .09, .09), tr * .55 * (1. - ru.y * .4));',
+      '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
+      // light on the ripples
+      '  float s = dot(g, normalize(vec2(-.35, -1.)));',
+      '  col += vec3(.80, .93, .95) * smoothstep(.04, .4, s) * .34;',
+      '  col *= 1. - smoothstep(.04, .4, -s) * .28;',
+      // the logo, floating on the surface and bent by it
+      '  if (uTexOn > .5) {',
+      '    vec2 lu = (p + g * 2.2 - uLogo.xy) / uLogo.zw;',
+      '    vec4 tx = texture2D(uTex, clamp(lu, 0., 1.)); float inb = step(0., lu.x) * step(lu.x, 1.) * step(0., lu.y) * step(lu.y, 1.); tx *= inb;',
+      '    vec2 lr = (p + g * 5. - uLogo.xy - vec2(1., 3.)) / uLogo.zw;',
+      '    float sh = texture2D(uTex, clamp(lr, 0., 1.)).a * step(0., lr.y) * step(lr.y, 1.);',
+      '    col *= 1. - sh * .22;',
+      '    float gs = 0.; for (int k = 0; k < 8; k++) { float an = float(k) * .785; vec2 o = vec2(cos(an), sin(an)) * 6. / uLogo.zw; gs += texture2D(uTex, clamp(lu + o, 0., 1.)).a; }',
+      '    float pad = step(-.12, lu.x) * step(lu.x, 1.12) * step(-.12, lu.y) * step(lu.y, 1.12);',
+      '    col += vec3(1., .72, .3) * gs / 8. * uGlow * .55 * pad;',
+      '    vec3 lc = tx.rgb * (1. + clamp(s, -.2, .4) * .35);',
+      '    col = col * (1. - tx.a * .94) + lc * .94;',
+      '  }',
+      '  vec2 vu = p / uRes - .5; col *= 1. - dot(vu * vec2(.5, 1.), vu * vec2(.5, 1.)) * .55;',
+      '  gl_FragColor = vec4(col, 1.);',
+      '}'].join('\n');
+    function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; }
+    var prog;
+    try { prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('link'); } catch (e) { return null; }
+    gl.useProgram(prog);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var tex = gl.createTexture(), texOn = 0;
+    var rip = new Float32Array(32), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    function now() { return (performance.now() - T0) / 1000; }
+    // draw the logo into a texture (white letters, gold sun)
+    (function () {
+      var src = logo.querySelector('svg'); if (!src) return;
+      var txt = new XMLSerializer().serializeToString(src).replace(/currentColor/g, '#f6efe2').replace('class="ow-sun"', 'class="ow-sun" style="fill:#f0b54b"');
+      if (txt.indexOf('xmlns=') < 0) txt = txt.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+      var img = new Image(); img.onload = function () {
+        try { var c = document.createElement('canvas'); c.width = 624; c.height = 486; c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          gl.bindTexture(gl.TEXTURE_2D, tex); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          texOn = 1; el.classList.add('wet'); frame();
+        } catch (e) { el.classList.remove('wet'); }
+      };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(txt);
+    })();
+    function frame() {
+      var tt = reduce ? 2 : now();
+      glowNow += (glowTo - glowNow) * .18;
+      gl.uniform2f(U.uRes, Wc, Hc); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uT, tt); gl.uniform1f(U.uGlow, glowNow); gl.uniform1f(U.uTexOn, texOn);
+      gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function loop() {
+      if (!visible || document.hidden) { running = false; return; }
+      var tt = now();
+      // now and then a drop falls on the pond
+      if (!reduce && tt > ambientAt) { ambientAt = tt + 3.2 + Math.random() * 2.5; api.drop(Wc * (.08 + Math.random() * .5), Hc * (.55 + Math.random() * .4), .55); }
+      frame(); requestAnimationFrame(loop);
+    }
+    var api = {
+      layout: function (w, h, lx, ly, lw, lh, boxX, boxY) {
+        Wc = w; Hc = h; dpr = Math.min(2, window.devicePixelRatio || 1);
+        cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
+        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY); frame();
+      },
+      drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 8; },
+      glow: function (v) { glowTo = v; },
+      start: function () { if (!running && !reduce) { running = true; ambientAt = now() + .6; requestAnimationFrame(loop); } else frame(); }
+    };
+    if (cv.addEventListener) cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); texOn = 0; el.classList.remove('wet'); });
+    return api;
+  })();
   build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = visible; visible = es[0].isIntersecting; if (visible && !was && !reduce) { sparkT0 = performance.now(); requestAnimationFrame(idle); } }, { threshold: .3 }).observe(el);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = visible; visible = es[0].isIntersecting; if (visible && water) water.start(); if (visible && !was && !reduce) { sparkT0 = performance.now(); requestAnimationFrame(idle); } }, { threshold: .1 }).observe(el);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && visible && water) water.start(); });
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
