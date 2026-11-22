@@ -1158,10 +1158,16 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function build() {
     W = el.clientWidth; H = Math.round(parseFloat(getComputedStyle(el).paddingTop)) || 400; S = Math.max(1.2, Math.min(H / 125, W / 225, 2.4));
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    SB = water ? H * .62 / 84 : S; bx = water ? W - Math.round(12 * SB) : W - Math.round(44 * S);
+    bx = W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * .04);
-    by = REFL_Y = water ? H + 10 : Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S));   // with water: a big box on the near bank, its base just below the pane
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * (water ? .11 : .04));
+    by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S)); SB = S;
+    if (water) {
+      // a huge pillar box on the near bank: only its domed top and the slot show, low in the water under the logo
+      var wSlot = Math.round(H * .83), room = wSlot - (Ly + 162 * k) - 10;
+      SB = Math.max(2.2, Math.min(W * .55 / 40, room / 27.5)); bx = Math.round(W * .6);
+      by = REFL_Y = Math.round(wSlot + 55.7 * SB);
+    }
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
     var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
     var x0 = Math.round(24 * S), slotX = bx, slotY = water ? REFL_Y - 55.7 * SB : by - 60 * S;
@@ -1169,7 +1175,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
       ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
-      ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY;
+      (water ? ' C' + (c6[0] + 34) + ' ' + (c6[1] + 6) + ' ' + (slotX + 18) + ' ' + (slotY - 70) + ' ' + slotX + ' ' + slotY : ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY);
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
     if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, SB);
     var defs = mk('defs', {});
@@ -1386,7 +1392,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    float rb2 = .9 + .1 * sin(bp.y * 1.15 + uT * 2.8);',
       '    vec3 bc = mix(bt.rgb * .74, vec3(.05, .2, .22) * bt.a, .16) * rb2;',
       '    vec2 bq = (bu * vec2(40., 92.)) - vec2(20., 90.);',
-      '    bc += vec3(1., .78, .4) * uHit * rb(bq, vec2(-10., -58.), vec2(10., -53.4), .6) * 1.4;',
+      '    float sl = rb(bq, vec2(-10., -58.), vec2(10., -53.4), .6), slg = exp(-pow(max(abs(bq.x) - 9., 0.) / 3., 2.) - pow((bq.y + 55.7) / 4.5, 2.));',
+      '    bc += vec3(1., .74, .36) * (sl * (.3 + .14 * sin(uT * 2.2)) + slg * .18 + (sl + slg * .6) * uHit * 1.4);',
       '    col = col * (1. - bt.a * .9) + bc * .9; }',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
@@ -1493,7 +1500,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       x.fillStyle = hg(-19, 19, [[0, '#4d060d'], [.35, '#d8303a'], [.5, '#e7454c'], [1, '#4d060d']]); x.fillRect(-19, -68, 38, 6);   // rim
       x.beginPath(); x.moveTo(-17, -67); x.bezierCurveTo(-17, -84, 17, -84, 17, -67); x.closePath(); x.fillStyle = red; x.fill();   // dome
       x.strokeStyle = 'rgba(255,210,210,.55)'; x.lineWidth = 1.2; x.beginPath(); x.moveTo(-11, -74); x.quadraticCurveTo(-6, -79, 1, -79.5); x.stroke();
-      x.fillStyle = '#7c0a16'; x.fillRect(-4, -84, 8, 3);                                                              // crown knob
+      x.fillStyle = '#7c0a16'; x.beginPath(); x.ellipse(0, -80.2, 4.5, 1.8, 0, Math.PI, 0); x.fill();                       // crown knob, sitting on the dome
       x.fillStyle = '#150204'; x.fillRect(-10.5, -59, 21, 4.6);                                                        // slot
       x.fillStyle = '#e7454c'; x.fillRect(-11.5, -60.5, 23, 1.2);
       x.fillStyle = '#efe9da'; x.fillRect(-8.5, -50, 17, 11);                                                          // collection plate
