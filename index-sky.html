@@ -650,7 +650,7 @@ footer .wrap { display: grid; gap: 22px; }
 
   function start() {
     if (!window.THREE) return;
-    var T = window.THREE, mobile = innerWidth < 760, LOOK = document.documentElement.getAttribute('data-look') || '', LIGHT = !!LOOK, SKY = LOOK === 'sky';
+    var T = window.THREE, mobile = innerWidth < 760, LOOK = document.documentElement.getAttribute('data-look') || '', LIGHT = !!LOOK, SKY = LOOK === 'sky', DN = document.documentElement.hasAttribute('data-daynight');
     var renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.25 : 1.6));
     var scene = new T.Scene();
@@ -697,15 +697,23 @@ footer .wrap { display: grid; gap: 22px; }
     var disc = new T.Sprite(new T.SpriteMaterial({ map: glowTex([[0, 'rgba(255,248,226,1)'], [.42, 'rgba(255,236,190,1)'], [.5, 'rgba(250,215,150,.9)'], [.62, 'rgba(240,190,115,0)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false, fog: false }));
     disc.scale.set(22, 22, 1);
     var moon = new T.Group(); moon.add(halo); moon.add(disc); scene.add(moon);
+    var mhalo = null, mdisc = null;
+    if (DN) {
+      mhalo = new T.Sprite(new T.SpriteMaterial({ map: glowTex([[0, 'rgba(235,242,255,.75)'], [.25, 'rgba(200,220,240,.35)'], [.6, 'rgba(180,205,230,.08)'], [1, 'rgba(180,205,230,0)']]), transparent: true, depthWrite: false, fog: false, opacity: 0 }));
+      mhalo.scale.set(80, 80, 1);
+      mdisc = new T.Sprite(new T.SpriteMaterial({ map: glowTex([[0, 'rgba(255,255,250,1)'], [.42, 'rgba(240,244,250,1)'], [.5, 'rgba(220,230,245,.85)'], [.62, 'rgba(200,215,235,0)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false, fog: false, opacity: 0 }));
+      mdisc.scale.set(20, 20, 1);
+      moon.add(mhalo); moon.add(mdisc);
+    }
 
     // ---------- stars ----------
     var N = mobile ? 260 : 520, sp = new Float32Array(N * 3), ph = new Float32Array(N);
     for (var i = 0; i < N; i++) { sp[i*3] = (Math.random() - .5) * 600; sp[i*3+1] = 14 + Math.pow(Math.random(), .7) * 150; sp[i*3+2] = -240 - Math.random() * 30; ph[i] = Math.random() * 6.28; }
     var sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(sp, 3)); sg.setAttribute('phase', new T.BufferAttribute(ph, 1));
-    var stars = new T.Points(sg, new T.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { uTime: { value: 0 }, uPx: { value: renderer.getPixelRatio() } },
+    var stars = new T.Points(sg, new T.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { uTime: { value: 0 }, uPx: { value: renderer.getPixelRatio() }, uN: { value: 1 } },
       vertexShader: 'attribute float phase; uniform float uTime; uniform float uPx; varying float vA; void main(){ vA = .35 + .65*(.5+.5*sin(uTime*1.3+phase*3.)); gl_PointSize = (1.2 + fract(phase)*1.6) * uPx; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }',
-      fragmentShader: 'varying float vA; void main(){ float d = length(gl_PointCoord-.5); if (d > .5) discard; gl_FragColor = vec4(1., .95, .85, vA*(1.-d*2.)); }' }));
-    if (!LIGHT) scene.add(stars);
+      fragmentShader: 'uniform float uN; varying float vA; void main(){ float d = length(gl_PointCoord-.5); if (d > .5) discard; gl_FragColor = vec4(1., .95, .85, vA*(1.-d*2.)*uN); }' }));
+    if (!LIGHT || DN) scene.add(stars);
 
     // ---------- shooting stars (rare, faint) ----------
     var stc = document.createElement('canvas'); stc.width = 512; stc.height = 32; var sx = stc.getContext('2d');
@@ -732,7 +740,10 @@ footer .wrap { display: grid; gap: 22px; }
     }
 
     // ---------- interaction ----------
-    var px = 0, py = 0, tx = 0, ty = 0, lastMove = -1e9, interacted = false;
+    var px = 0, py = 0, tx = 0, ty = 0, lastMove = -1e9, interacted = false, dn = 0;
+    if (DN) { tx = px = document.documentElement.getAttribute('data-mode') === 'night' ? .34 : -.34; }
+    var DAY = [new T.Color(0x138f9b), new T.Color(0x6fd8d2), new T.Color(0xd8f1f6), new T.Color(0xdff2f5)],
+        NIGHT = [new T.Color(0x06222a), new T.Color(0x2f8c8f), new T.Color(0xc98a4c), new T.Color(0x34494a)];
     var ray = new T.Raycaster(), ndc = new T.Vector2(), plane = new T.Plane(new T.Vector3(0, 1, 0), 0), hit = new T.Vector3();
     function setPointer(e) { var r = intro.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width - .5; ty = (e.clientY - r.top) / r.height - .5; lastMove = performance.now(); }
     function firstTouch() { interacted = true; }
@@ -754,9 +765,9 @@ footer .wrap { display: grid; gap: 22px; }
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible && !reduce) requestAnimationFrame(loop); }).observe(intro);
     function frame(now) {
       var t = (now - t0) / 1000; sea.uniforms.uTime.value = t; stars.material.uniforms.uTime.value = t;
-      if (!reduce && !LIGHT) updateShoot(t);
+      if (!reduce && (!LIGHT || (DN && dn > .7))) updateShoot(t);
       var idle = now - lastMove > 3500;
-      var goal = idle ? Math.sin(t * .12) * .32 : tx;
+      var goal = DN ? tx : (idle ? Math.sin(t * .12) * .32 : tx);
       px += (goal - px) * .035; py += ((idle ? 0 : ty) - py) * .04;
       // moon glides along the horizon with the pointer
       var mx = px * (mobile ? 150 : 230);
@@ -765,6 +776,13 @@ footer .wrap { display: grid; gap: 22px; }
       camera.position.set(px * 1.6, 3.1 - py * .7, 14); camera.lookAt(px * .8, 3.4, 0);
       // a gentle ripple now and then where the moonlight falls
       if (!reduce && t > nextAuto) { rip[ripI].set(mx * .12 + (Math.random() - .5) * 10, -30 - Math.random() * 25 - OCEAN_Z * 0, t); ripI = (ripI + 1) % 4; nextAuto = t + 5 + Math.random() * 4; }
+      if (DN) {
+        var k = Math.max(0, Math.min(1, (px + .12) / .26)); dn = k * k * (3 - 2 * k);
+        ['uDeep', 'uShallow', 'uSky', 'uFog'].forEach(function (u, i) { sea.uniforms[u].value.copy(DAY[i]).lerp(NIGHT[i], dn); });
+        halo.material.opacity = disc.material.opacity = 1 - dn; mhalo.material.opacity = mdisc.material.opacity = dn;
+        stars.material.uniforms.uN.value = dn;
+        if (window.oriwisDayNight) window.oriwisDayNight(dn);
+      }
       renderer.render(scene, camera);
     }
     function loop(now) { if (!visible) return; frame(now); if (!reduce) requestAnimationFrame(loop); }

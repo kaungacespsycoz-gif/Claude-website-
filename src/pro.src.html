@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="zh-CN" data-lang="zh" data-look="sky">
+<html lang="zh-CN" data-lang="zh" data-look="sky" data-daynight>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oriwis UK Study</title>
+<script>try { if (localStorage.getItem('oriwis-mode') === 'night') document.documentElement.setAttribute('data-mode', 'night'); } catch (e) {}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Oriwis · Knowledge by the sea · 海边求知. UK study information matching, a free first consultation and referrals.">
 <style>
@@ -22,6 +23,8 @@
   --accent: #0f7f8c;
   --sun: #f0a93b;
   --sun-dot: #f0a93b;
+  --btn: #0c2f3a; --btn-hover: #12414e; --on-btn: #ffffff; --chip: #0f7f8c; --chip-hover: #13909e; --on-chip: #ffffff;
+  --header-bg: rgba(255,255,255,.94); --field-line: #b8c7ca; --footer-bg: #0c2f3a;
 
   --sans: "Inter", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", system-ui, sans-serif;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -30,6 +33,16 @@
   --wrap: 1160px;
   color-scheme: light;
 }
+/* night theme: switched on when the sun is dragged across into a moon on the opening screen */
+:root[data-mode="night"] {
+  --paper: #0b2226; --tint: #0f2b30; --ink: #f1ebe0; --text: #d3dedf; --muted: #96acae; --rule: rgba(241,235,224,.14);
+  --accent: #5fc3c4; --sun: #e3b061; --sun-dot: #e3b061;
+  --btn: #e9d9b8; --btn-hover: #f3e6c9; --on-btn: #0b2226; --chip: #0f7f8c; --chip-hover: #13909e; --on-chip: #ffffff;
+  --header-bg: rgba(11,34,38,.92); --field-line: rgba(241,235,224,.3); --footer-bg: #061619;
+  color-scheme: dark;
+}
+html { transition: background-color .6s ease; }
+body, .top, section.tint, footer, form.card, .done, .scope div, .ghost, input, select { transition: background-color .6s ease, color .6s ease, border-color .6s ease; }
 :root[data-lang="zh"] .en { display: none !important; }
 :root:not([data-lang="zh"]) .zh { display: none !important; }
 * { box-sizing: border-box; }
@@ -172,9 +185,23 @@ p { margin: 0; }
 @keyframes palm-sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
 @keyframes frond-flutter { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg) scale(1, .98); } }
 
+
+/* day / night on the opening screen: the night sky fades in behind the sea as the sun becomes the moon */
+.intro .nightsky { position: absolute; inset: 0; z-index: 0; opacity: 0; pointer-events: none;
+  background: linear-gradient(180deg, #06171a 0%, #0b2a2f 34%, #3c5149 52%, #c98a4c 61%, #0d2226 61.2%); }
+:root[data-daynight] .intro .intro-logo, :root[data-daynight] .intro .intro-line, :root[data-daynight] .intro .intro-cue { color: var(--ifg, #0c2f3a) !important; text-shadow: var(--ishadow, 0 1px 12px rgba(255,255,255,.9)) !important; }
+:root[data-daynight] .intro .intro-logo { filter: drop-shadow(var(--ilogoshadow, 0 4px 22px rgba(255,255,255,.65))) !important; }
+:root[data-daynight] .intro.is3d::before { background: radial-gradient(ellipse at center, var(--veil, rgba(255,255,255,.55)) 0%, transparent 70%) !important; }
+:root[data-daynight] .intro.is3d::after { background: linear-gradient(180deg, transparent 0%, var(--paper) 100%) !important; }
+:root[data-mode="night"] .intro .lang-float { border-color: rgba(241,233,220,.3); background: rgba(6,23,26,.3); }
+:root[data-mode="night"] .intro .lang-float button { color: rgba(241,233,220,.8); }
+:root[data-mode="night"] .intro .lang-float button[aria-pressed="true"] { background: #f1e9dc; color: #0c2f3a; }
+.intro.is3d { cursor: grab; }
+.intro.is3d:active { cursor: grabbing; }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: rgba(255,255,255,.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--header-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
 .top .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
 .brand { color: var(--ink); display: block; }
 .brand svg { width: 46px; height: auto; display: block; }
@@ -183,29 +210,29 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav a:hover { color: var(--ink); }
 .lang { margin-left: auto; display: inline-flex; gap: 2px; font-size: var(--fs-xs); border: 1px solid var(--rule); border-radius: 2px; padding: 2px; }
 .lang button { all: unset; cursor: pointer; padding: 3px 9px; color: var(--muted); border-radius: 1px; }
-.lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.lang button[aria-pressed="true"] { background: var(--btn); color: var(--on-btn); }
 .top .cta-s { display: none; }
 @media (min-width: 900px) { .nav { display: flex; } .lang { margin-left: 0; } .top .cta-s { display: inline-flex; } }
 
 /* buttons */
 /* buttons: one solid primary, one outlined secondary; same height, soft corners, an arrow chip that nudges on hover */
 .btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 52px; padding: 6px 6px 6px 22px;
-  background: var(--ink); color: #fff; text-decoration: none; font: 600 .98rem/1.2 var(--sans); letter-spacing: -.005em;
+  background: var(--btn); color: var(--on-btn); text-decoration: none; font: 600 .98rem/1.2 var(--sans); letter-spacing: -.005em;
   border: 0; border-radius: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent;
   box-shadow: 0 1px 2px rgba(12,47,58,.18), 0 10px 24px -14px rgba(12,47,58,.65);
   transition: background .25s ease, box-shadow .25s ease, transform .2s ease; }
-.btn:hover { background: #12414e; box-shadow: 0 2px 4px rgba(12,47,58,.2), 0 14px 28px -14px rgba(12,47,58,.7); }
+.btn:hover { background: var(--btn-hover); box-shadow: 0 2px 4px rgba(12,47,58,.2), 0 14px 28px -14px rgba(12,47,58,.7); }
 .btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(12,47,58,.2); }
-.btn .ico { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 8px; background: var(--accent); transition: transform .25s ease, background .25s ease; }
-.btn:hover .ico { transform: translateX(2px); background: #13909e; }
+.btn .ico { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 8px; background: var(--chip); color: var(--on-chip); transition: transform .25s ease, background .25s ease; }
+.btn:hover .ico { transform: translateX(2px); background: var(--chip-hover); }
 .btn .arr { width: 15px; height: 11px; }
 .btn.plain { padding: 6px 22px; justify-content: center; }
 .btn.small { min-height: 40px; padding: 4px 16px; font-size: var(--fs-xs); border-radius: 8px; box-shadow: none; }
 .route > button, .faq summary, .seg span, .lang button { cursor: pointer; }
 .btn-line { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 6px 22px; border-radius: 10px;
-  border: 1px solid rgba(12,47,58,.28); color: var(--ink); background: transparent; text-decoration: none; font: 600 .98rem/1.2 var(--sans); cursor: pointer;
+  border: 1px solid var(--rule); color: var(--ink); background: transparent; text-decoration: none; font: 600 .98rem/1.2 var(--sans); cursor: pointer;
   transition: border-color .25s ease, background .25s ease; }
-.btn-line:hover { border-color: var(--ink); background: rgba(12,47,58,.04); }
+.btn-line:hover { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 5%, transparent); }
 .btn-line .chev { width: 10px; height: 10px; transition: transform .25s ease; }
 .btn-line:hover .chev { transform: translateY(2px); }
 .tlink { font-size: var(--fs-sm); color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 5px; text-decoration-thickness: 1px; }
@@ -314,7 +341,7 @@ section.tint .scope div { background: var(--tint); }
 .contact .wx small { font-size: var(--fs-xs); color: var(--muted); }
 .contact .wx .row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .contact .wx .id { font-family: var(--serif); font-weight: 500; font-size: 1.8rem; color: var(--ink); user-select: all; -webkit-user-select: all; }
-.ghost { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; font: 600 var(--fs-xs)/1 var(--sans); padding: 0 12px; border: 1px solid rgba(12,47,58,.22); border-radius: 8px; color: var(--ink); background: var(--paper); transition: border-color .2s ease, background .2s ease; }
+.ghost { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; font: 600 var(--fs-xs)/1 var(--sans); padding: 0 12px; border: 1px solid var(--rule); border-radius: 8px; color: var(--ink); background: var(--paper); transition: border-color .2s ease, background .2s ease; }
 .ghost:hover { border-color: var(--ink); }
 .ghost svg { width: 14px; height: 14px; }
 .ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -323,7 +350,7 @@ form.card, .done { background: var(--paper); border: 1px solid var(--rule); padd
 .field label, .field .lab { font-size: var(--fs-xs); color: var(--muted); letter-spacing: .04em; }
 .two { display: grid; gap: 18px; }
 @media (min-width: 560px) { .two { grid-template-columns: 1fr 1fr; } }
-input[type=text], select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #b8c7ca; border-radius: 0; padding: 10px 0; width: 100%; -webkit-appearance: none; appearance: none; }
+input[type=text], select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid var(--field-line); border-radius: 0; padding: 10px 0; width: 100%; -webkit-appearance: none; appearance: none; }
 select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 10px) 52%, calc(100% - 5px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
 input:focus, select:focus { outline: none; border-bottom: 2px solid var(--accent); padding-bottom: 9px; }
 .seg { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
@@ -332,8 +359,8 @@ input:focus, select:focus { outline: none; border-bottom: 2px solid var(--accent
 .seg label > span { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 46px; padding: 8px 6px; text-align: center; line-height: 1.25; font-size: var(--fs-sm); cursor: pointer; color: var(--muted); background: var(--paper); transition: background .2s ease, color .2s ease; }
 .seg label + label > span { border-left: 1px solid var(--rule); }
 .seg label > span:hover { color: var(--ink); }
-.seg input:checked + span { background: var(--ink); color: #fff; }
-.seg input:checked + span span { color: #fff; }
+.seg input:checked + span { background: var(--btn); color: var(--on-btn); }
+.seg input:checked + span span { color: var(--on-btn); }
 .seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
 .agree { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: var(--fs-xs); color: var(--muted); }
 .agree input { width: 16px; height: 16px; margin: 3px 0 0; accent-color: var(--accent); }
@@ -344,7 +371,7 @@ input:focus, select:focus { outline: none; border-bottom: 2px solid var(--accent
 .done pre { white-space: pre-wrap; font: inherit; font-size: var(--fs-sm); background: var(--tint); padding: 14px; margin: 0; user-select: all; -webkit-user-select: all; }
 
 /* footer */
-footer { background: var(--ink); color: #c9d6d8; padding-block: 56px calc(40px + env(safe-area-inset-bottom, 0px)); font-size: var(--fs-sm); }
+footer { background: var(--footer-bg); color: #c9d6d8; padding-block: 56px calc(40px + env(safe-area-inset-bottom, 0px)); font-size: var(--fs-sm); }
 footer .cols { display: grid; gap: 32px; }
 @media (min-width: 800px) { footer .cols { grid-template-columns: 4fr 3fr 5fr; gap: 48px; } }
 footer .fb { color: #fff; display: grid; gap: 14px; align-content: start; }
@@ -656,6 +683,27 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (done.hidden || reduce) return;
     var d = done.querySelector('h3 .sundot'); d.classList.remove('drop'); void d.offsetWidth; d.classList.add('drop');
   }).observe(done, { attributes: true, attributeFilter: ['hidden'] });
+})();
+</script>
+<script>
+/* Day / night: the opening-screen sea reports how far the sun has crossed (0 day .. 1 night). */
+(function () {
+  var root = document.documentElement, intro = document.getElementById('intro'); if (!intro) return;
+  var sky = document.createElement('div'); sky.className = 'nightsky'; sky.setAttribute('aria-hidden', 'true'); intro.insertBefore(sky, intro.firstChild);
+  function mix(a, b, t) { return a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }); }
+  var last = -1;
+  window.oriwisDayNight = function (n) {
+    if (Math.abs(n - last) < 0.004) return; last = n;
+    sky.style.opacity = n.toFixed(3);
+    var fg = mix([12, 47, 58], [241, 233, 220], n);
+    intro.style.setProperty('--ifg', 'rgb(' + fg.join(',') + ')');
+    intro.style.setProperty('--ishadow', n > .5 ? '0 1px 10px rgba(0,0,0,.6)' : '0 1px 12px rgba(255,255,255,.9)');
+    intro.style.setProperty('--ilogoshadow', n > .5 ? '0 6px 28px rgba(0,0,0,.55)' : '0 4px 22px rgba(255,255,255,.65)');
+    intro.style.setProperty('--veil', 'rgba(' + mix([255, 255, 255], [6, 23, 26], n).join(',') + ',' + (.55 + .15 * n).toFixed(2) + ')');
+    var night = root.getAttribute('data-mode') === 'night';
+    if (!night && n > .55) { root.setAttribute('data-mode', 'night'); try { localStorage.setItem('oriwis-mode', 'night'); } catch (e) {} }
+    else if (night && n < .45) { root.removeAttribute('data-mode'); try { localStorage.setItem('oriwis-mode', 'day'); } catch (e) {} }
+  };
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
