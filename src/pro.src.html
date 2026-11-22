@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oriwis UK Study</title>
+<script>(function () { var m = /[?&]btn=([efg])/.exec(location.search); if (m) document.documentElement.setAttribute('data-btn', m[1]); })();</script>
 <script>try { if (localStorage.getItem('oriwis-mode') === 'night') document.documentElement.setAttribute('data-mode', 'night'); } catch (e) {}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Oriwis · Knowledge by the sea · 海边求知. UK study information matching, a free first consultation and referrals.">
@@ -304,6 +305,24 @@ p { margin: 0; }
   80% { left: 5%; transform: none; } 90% { left: 5.8%; transform: rotate(-1deg); } 100% { left: 6%; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .stepimg .cyclist { animation: none !important; left: 6%; } .stepimg .cyclist .scarf g { animation: none !important; } }
 
+
+/* button options for review: ?btn=e (navy + gold arrow), ?btn=f (warm gold), ?btn=g (outline to fill). Default keeps the slider. */
+.cta2 { display: none; align-items: center; justify-content: center; gap: 12px; min-height: 56px; padding: 6px 28px; border-radius: 999px; font: 600 1rem/1.2 var(--sans); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease; }
+:root[data-btn] #slide-cta { display: none; }
+:root[data-btn] .cta2 { display: inline-flex; }
+.cta2 .go { font-style: normal; transition: transform .2s ease; }
+:root[data-btn="e"] .cta2 { background: var(--btn); color: var(--on-btn); padding-right: 12px; box-shadow: 0 10px 24px -14px rgba(12,47,58,.8); }
+:root[data-btn="e"] .cta2 .go { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #f0a93b; color: #0c2f3a; }
+:root[data-btn="e"] .cta2:hover, :root[data-btn="e"] .cta2:active { background: var(--btn-hover); }
+:root[data-btn="e"] .cta2:hover .go, :root[data-btn="e"] .cta2:active .go { transform: translateX(4px); }
+:root[data-btn="f"] .cta2 { background: #f0a93b; color: #0c2f3a; box-shadow: 0 10px 24px -14px rgba(200,130,30,.9), inset 0 1px 0 rgba(255,255,255,.4); }
+:root[data-btn="f"] .cta2:hover { background: #f3b24c; } :root[data-btn="f"] .cta2:active { background: #e39a2c; transform: translateY(1px); }
+:root[data-btn="f"] .cta2:hover .go { transform: translateX(3px); }
+:root[data-btn="g"] .cta2 { border: 1.5px solid var(--ink); color: var(--ink); background: transparent; }
+:root[data-btn="g"] .cta2:hover, :root[data-btn="g"] .cta2:active { background: var(--ink); color: var(--paper); }
+:root[data-btn="g"] .cta2:hover .go { transform: translateX(3px); }
+@media (max-width: 560px) { .hero .actions .cta2 { width: 100%; } }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--header-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
@@ -517,7 +536,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a>
+            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
