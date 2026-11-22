@@ -430,22 +430,24 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 
 
 /* envelope rides the logo's wave into a London pillar box */
-.wavepost { position: relative; height: 134px; border-radius: 18px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
-  background: radial-gradient(120px 90px at calc(100% - 38px) 70%, rgba(240,181,75,.22), transparent 70%), linear-gradient(160deg, #164b57 0%, #0e3440 55%, #0a2730 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 36px -18px rgba(12,47,58,.9), 0 2px 6px rgba(12,47,58,.18);
-  transition: transform .2s ease, box-shadow .2s ease; }
-.wavepost:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 40px -18px rgba(12,47,58,.95), 0 2px 6px rgba(12,47,58,.2); }
+.wavepost { position: relative; display: block; padding-top: 210px; text-decoration: none; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer; transition: transform .2s ease; }
+/* the water pane is the top 210px; the words sit underneath it, so nothing covers the animation */
+.wavepost::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 210px; border-radius: 20px; z-index: 0; pointer-events: none;
+  background: radial-gradient(160px 130px at calc(100% - 60px) 60%, rgba(240,181,75,.22), transparent 70%), linear-gradient(160deg, #164b57 0%, #0e3440 55%, #0a2730 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 36px -18px rgba(12,47,58,.9), 0 2px 6px rgba(12,47,58,.18); transition: box-shadow .2s ease; }
+.wavepost:hover { transform: translateY(-1px); }
+.wavepost:hover::after { box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 40px -18px rgba(12,47,58,.95), 0 2px 6px rgba(12,47,58,.2); }
 .wavepost:active { transform: translateY(1px); }
-.wavepost .wp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 3; }
-.wavepost .wp-lbl { position: absolute; left: 20px; top: 15px; right: 96px; display: grid; gap: 2px; color: #f6efe2; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
-.wavepost .wp-lbl b { font: 650 1.06rem/1.25 var(--sans); letter-spacing: -.005em; }
-.wavepost .wp-lbl small { font-size: .76rem; color: rgba(246,239,226,.62); letter-spacing: .02em; display: flex; align-items: center; gap: 6px; }
+.wavepost .wp-svg { position: absolute; left: 0; top: 0; width: 100%; height: 210px; overflow: hidden; border-radius: 20px; z-index: 3; }
+.wavepost .wp-lbl { position: relative; margin: 11px 4px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; color: var(--ink); pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+.wavepost .wp-lbl b { font: 650 1rem/1.25 var(--sans); letter-spacing: -.005em; }
+.wavepost .wp-lbl small { font-size: .78rem; color: var(--muted); letter-spacing: .02em; display: flex; align-items: center; gap: 6px; }
 .wavepost .wp-lbl small::after { content: ""; width: 14px; height: 8px; background: currentColor; opacity: .8;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M0 4h12M9 1l3 3-3 3' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M0 4h12M9 1l3 3-3 3' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
   animation: wp-nudge 1.6s ease-in-out infinite; }
 @keyframes wp-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
-.wavepost .wp-ok { position: absolute; left: 20px; top: 24px; font: 650 1.06rem/1 var(--sans); color: #f3c66c; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .15s, transform .3s ease .15s; pointer-events: none; }
+.wavepost .wp-ok { position: absolute; left: 4px; top: 223px; font: 650 1rem/1 var(--sans); color: #c08a2a; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .15s, transform .3s ease .15s; pointer-events: none; }
 .wavepost.sent .wp-lbl { opacity: 0; transform: translateY(-6px); } .wavepost.sent .wp-ok { opacity: 1; transform: none; }
 .wavepost .env { cursor: grab; } .wavepost.dragging .env { cursor: grabbing; }
 @media (min-width: 561px) { .wavepost { width: 420px; } }
@@ -460,11 +462,11 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wavepost .wp-logo.pass .ow-sun { fill: #ffe39a; }
 .wavepost { cursor: grab; } .wavepost.dragging { cursor: grabbing; }
 /* real water: a small WebGL surface with the logo written on it; the plain logo stays as the fallback */
-.wavepost .wp-water { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
+.wavepost .wp-water { position: absolute; left: 0; top: 0; width: 100%; height: 210px; border-radius: 20px; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
 .wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo, .wavepost.wet .wp-box, .wavepost.wet .wp-burst, .wavepost.wet .wp-env { visibility: hidden; }
 .wavepost.wet .wp-trail, .wavepost.wet .wp-glow { opacity: 0; }
 .wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
-.wavepost.wet .wp-lbl { text-shadow: 0 1px 8px rgba(4,28,34,.55); }
+
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -1206,24 +1208,24 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 128, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 210, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
     W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    bx = W - 46; by = H - 8;
+    bx = W - Math.round(44 * S); by = H - 10; REFL_Y = H - 10;
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = 92, k = LW / 208, Lx = Math.round(W * .5 - LW * .55), Ly = H - 8 - Math.round(162 * k) + 2;
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) + 2;
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
     var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
-    var x0 = 38, slotX = bx, slotY = water ? REFL_Y - 55.7 : by - 60;
+    var x0 = Math.round(24 * S), slotX = bx, slotY = water ? REFL_Y - 55.7 * S : by - 60 * S;
     var d = 'M' + x0 + ' ' + (c0[1] - 6) +
       ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
       ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
       ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY;
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
-    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y);
+    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, S);
     var defs = mk('defs', {});
     grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
     grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
@@ -1265,7 +1267,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     mk('rect', { x: -10, y: -30, width: 20, height: 18, rx: 2, fill: 'none', stroke: 'rgba(0,0,0,.22)', 'stroke-width': 1 }, box);
     mk('circle', { cx: 6, cy: -21, r: 1.6, fill: '#f0c46a' }, box);
     mk('path', { d: 'M-9 -60 V-12', stroke: 'rgba(255,255,255,.22)', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, box);
-    box.setAttribute('transform', 'translate(' + bx + ' ' + by + ')');
+    box.setAttribute('transform', 'translate(' + bx + ' ' + by + ') scale(' + S + ')');
     burst = mk('g', { class: 'wp-burst', opacity: 0, transform: 'translate(' + slotX + ' ' + (slotY - 1) + ')' });
     for (var k = 0; k < 7; k++) { var ang = -Math.PI * (.05 + .9 * k / 6) - Math.PI * .0; mk('path', { d: 'M' + (Math.cos(ang) * 22).toFixed(1) + ' ' + (Math.sin(ang) * 22).toFixed(1) + ' L' + (Math.cos(ang) * 31).toFixed(1) + ' ' + (Math.sin(ang) * 31).toFixed(1), stroke: '#ffd27a', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, burst); }
     svg.insertBefore(burst, box);
@@ -1297,11 +1299,11 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       var sk = Math.min(1, (nw - settleT0) / 350); sk = 1 - Math.pow(1 - sk, 3);
       rot = settleFrom * (1 - sk) + ang * .55 * sk;
     }
-    env.setAttribute('transform', 'translate(' + (p.x + dx).toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + rot.toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
+    env.setAttribute('transform', 'translate(' + (p.x + dx).toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + rot.toFixed(1) + ') scale(' + (sc * S * .82).toFixed(2) + ')');
     var hid = Math.max(0, Math.min(1, Math.min((t - (passA - .07)) / .05, ((passB + .07) - t) / .05)));
     var eo = (t > .96 ? Math.max(0, 1 - (t - .96) / .04) : 1) * (1 - hid);
     env.setAttribute('opacity', String(eo));
-    if (water) water.env(p.x + dx, p.y - 2 + bob, rot * Math.PI / 180, sc, eo);
+    if (water) water.env(p.x + dx, p.y - 2 + bob, rot * Math.PI / 180, sc * S * .82, eo);
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
     logo.classList.toggle('pass', t > passA && t < passB);
     if (water) { water.glow(t > passA && t < passB ? 1 : 0);
@@ -1343,11 +1345,11 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56, .9); water.hit(); water.keepCut(); }
+      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56 * S, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
-        box.setAttribute('transform', 'translate(' + bx + ' ' + by + ') rotate(' + r.toFixed(2) + ')');
+        box.setAttribute('transform', 'translate(' + bx + ' ' + by + ') rotate(' + r.toFixed(2) + ') scale(' + S + ')');
         burst.setAttribute('opacity', k < 1 ? String(Math.sin(Math.min(1, k * 1.6) * Math.PI)) : '0');
         var sc = 1 + Math.min(1, k * 1.6) * .6; burst.setAttribute('transform', burst.getAttribute('transform').replace(/ scale\([^)]*\)/, '') + ' scale(' + sc.toFixed(2) + ')');
         if (k < 1) requestAnimationFrame(wig); })(b0);
@@ -1379,7 +1381,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (!gl) return null;
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
-      'precision mediump float;',
+      '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
       'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
@@ -1475,7 +1477,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    vec2 lp = p + g * 3.2; lp.x += sin(lp.y * .34 + uT * 1.9) * .9 + sin(lp.y * .87 - uT * 2.9) * .3;',
       '    vec2 lu = (lp - uLogo.xy) / uLogo.zw;',
       // whole letters; the fresh water trail cuts a gap through them, which closes as the ripples die away
-      '    vec2 tc = trail(lp); float gw = 9. * (1. - smoothstep(2.4, 4.3, max(tc.y, 0.))) * step(tc.y, 4.4);',
+      '    vec2 tc = trail(lp); float gw = 12. * (1. - smoothstep(2.4, 4.3, max(tc.y, 0.))) * step(tc.y, 4.4);',
       '    float gap = 1. - smoothstep(gw - 1.2, gw + .6, tc.x) * step(.3, gw) - (1. - step(.3, gw));',
       '    vec4 tx = texture2D(uTex2, clamp(lu, 0., 1.)) * (1. - gap); float inb = step(0., lu.x) * step(lu.x, 1.) * step(0., lu.y) * step(lu.y, 1.); tx *= inb;',
       '    float gs = 0.; for (int k = 0; k < 8; k++) { float an = float(k) * .785; vec2 o = vec2(cos(an), sin(an)) * 6. / uLogo.zw; gs += texture2D(uTex2, clamp(lu + o, 0., 1.)).a; }',
@@ -1538,10 +1540,10 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       frame(); requestAnimationFrame(loop);
     }
     var api = {
-      layout: function (w, h, lx, ly, lw, lh, boxX, boxY) {
+      layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56); gl.uniform3f(U.uRefl, boxX, boxY, 1); frame();
+        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
