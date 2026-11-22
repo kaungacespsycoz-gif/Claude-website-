@@ -253,6 +253,26 @@ p { margin: 0; }
 .intro.is3d { cursor: grab; }
 .intro.is3d:active { cursor: grabbing; }
 
+
+/* slide to book: like unlocking a phone. Drag the arrow to the end (a plain tap still works) */
+.btn.slide { position: relative; overflow: hidden; justify-content: center; padding: 6px 54px 6px 58px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.btn.slide .ico { position: absolute; left: 6px; top: 50%; margin-top: -20px; z-index: 2; cursor: grab; touch-action: none; will-change: transform; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.btn.slide.dragging .ico { cursor: grabbing; transition: none; }
+.btn.slide .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 52px; z-index: 1; border-radius: 10px; background: var(--chip); opacity: .28; transform-origin: left center; will-change: width; }
+.btn.slide .lbl { position: relative; z-index: 1;
+  background: linear-gradient(100deg, currentColor 0%, currentColor 38%, rgba(255,255,255,1) 50%, currentColor 62%, currentColor 100%);
+  background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: slide-shine 2.6s linear infinite; transition: opacity .2s ease; }
+:root[data-mode="night"] .btn.slide .lbl { background-image: linear-gradient(100deg, currentColor 0%, currentColor 38%, #ffffff 50%, currentColor 62%, currentColor 100%); }
+@keyframes slide-shine { from { background-position: 120% 0; } to { background-position: -20% 0; } }
+.btn.slide .chev { position: absolute; right: 16px; top: 50%; margin-top: -6px; z-index: 1; display: flex; gap: 2px; opacity: .55; }
+.btn.slide .chev i { width: 7px; height: 12px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; animation: chev 1.6s ease-in-out infinite; }
+.btn.slide .chev i:nth-child(2) { animation-delay: .2s; } .btn.slide .chev i:nth-child(3) { animation-delay: .4s; }
+@keyframes chev { 0%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.btn.slide:hover .ico { transform: none; }
+.btn.slide.done .lbl { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .btn.slide .lbl { animation: none; -webkit-text-fill-color: currentColor; background: none; } .btn.slide .chev i { animation: none; } }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--header-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
@@ -475,7 +495,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="btn" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -834,6 +854,44 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (!night && n > .55) { root.setAttribute('data-mode', 'night'); try { localStorage.setItem('oriwis-mode', 'night'); } catch (e) {} }
     else if (night && n < .45) { root.removeAttribute('data-mode'); try { localStorage.setItem('oriwis-mode', 'day'); } catch (e) {} }
   };
+})();
+</script>
+<script>
+/* Slide to book: drag the arrow along the button; let go near the end to jump to the form. A tap still follows the link. */
+(function () {
+  var btn = document.getElementById('slide-cta'); if (!btn) return;
+  var knob = btn.querySelector('.ico'), fill = btn.querySelector('.fill');
+  var dragging = false, moved = false, startX = 0, x = 0, max = 0, pid = null;
+  function set(v, anim) {
+    knob.style.transition = fill.style.transition = anim ? 'transform .35s cubic-bezier(.22,.61,.36,1), width .35s cubic-bezier(.22,.61,.36,1)' : 'none';
+    knob.style.transform = 'translateX(' + v + 'px)'; fill.style.width = (52 + v) + 'px';
+    btn.querySelector('.lbl').style.opacity = String(Math.max(0, 1 - v / (max * .6)));
+  }
+  function finish() {
+    set(max, true); btn.classList.add('done');
+    setTimeout(function () {
+      var t = document.getElementById('consult'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(function () { btn.classList.remove('done'); set(0, true); }, 900);
+    }, 280);
+  }
+  btn.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  knob.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    dragging = true; moved = false; startX = e.clientX; x = 0; pid = e.pointerId;
+    max = btn.clientWidth - knob.offsetWidth - 12; btn.classList.add('dragging');
+    try { knob.setPointerCapture(pid); } catch (err) {}
+  });
+  knob.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    x = Math.max(0, Math.min(max, e.clientX - startX)); if (x > 6) moved = true; set(x, false);
+  });
+  function end() {
+    if (!dragging) return; dragging = false; btn.classList.remove('dragging');
+    if (!moved) return;                      // a tap: let the normal link work
+    if (x > max * .82) finish(); else set(0, true);
+  }
+  knob.addEventListener('pointerup', end); knob.addEventListener('pointercancel', function () { dragging = false; set(0, true); });
+  btn.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } });
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
