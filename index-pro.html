@@ -1305,6 +1305,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
     logo.classList.toggle('pass', t > passA && t < passB);
     if (water) { water.glow(t > passA && t < passB ? 1 : 0);
+      if (t > 0) water.cut(p.x - 2);
       if (t > 0 && t < .95 && Math.abs(p.x - lastDrop) > 12) { lastDrop = p.x; water.trail(p.x, p.y); if (++dropN % 3 === 0) water.drop(p.x, p.y, -.7); }
       if (t === 0) lastDrop = -99; }
   }
@@ -1342,7 +1343,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y + 56, .9); water.hit(); }
+      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y + 56, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1365,7 +1366,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (Math.abs(e.clientX - sx) > 4) moved = true;
     if (moved) { t = Math.max(0, Math.min(.95, tFromX(ex0 + Math.max(0, e.clientX - sx) * 1.15))); draw(); }
   });
-  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .55) post(); else fly(0, 450); }
+  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .55) post(); else { fly(0, 450); if (water) water.heal(); } }
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   el.addEventListener('dragstart', function (e) { e.preventDefault(); });
   el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
@@ -1379,7 +1380,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       'precision mediump float;',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1473,7 +1474,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  if (uTexOn > .5) {',
       '    vec2 lp = p + g * 3.2; lp.x += sin(lp.y * .34 + uT * 1.9) * .9 + sin(lp.y * .87 - uT * 2.9) * .3;',
       '    vec2 lu = (lp - uLogo.xy) / uLogo.zw;',
-      '    vec4 tx = texture2D(uTex, clamp(lu, 0., 1.)); float inb = step(0., lu.x) * step(lu.x, 1.) * step(0., lu.y) * step(lu.y, 1.); tx *= inb;',
+      '    float cutK = smoothstep(uCut + 3., uCut - 3., lp.x);',
+      '    vec4 tx = mix(texture2D(uTex2, clamp(lu, 0., 1.)), texture2D(uTex, clamp(lu, 0., 1.)), cutK); float inb = step(0., lu.x) * step(lu.x, 1.) * step(0., lu.y) * step(lu.y, 1.); tx *= inb;',
       '    float gs = 0.; for (int k = 0; k < 8; k++) { float an = float(k) * .785; vec2 o = vec2(cos(an), sin(an)) * 6. / uLogo.zw; gs += texture2D(uTex, clamp(lu + o, 0., 1.)).a; }',
       '    float pad = step(-.12, lu.x) * step(lu.x, 1.12) * step(-.12, lu.y) * step(lu.y, 1.12);',
       '    col += vec3(1., .72, .3) * gs / 8. * uGlow * .55 * pad;',
@@ -1492,8 +1494,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    var tex = gl.createTexture(), texOn = 0;
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
@@ -1501,17 +1503,21 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       var src = logo.querySelector('svg'); if (!src) return;
       var txt = new XMLSerializer().serializeToString(src).replace(/currentColor/g, '#f6efe2').replace(/<circle class="ow-sun"[^>]*>/, '');
       if (txt.indexOf('xmlns=') < 0) txt = txt.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-      var img = new Image(); img.onload = function () {
-        try { var c = document.createElement('canvas'); c.width = 624; c.height = 486; c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-          gl.bindTexture(gl.TEXTURE_2D, tex); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-          texOn = 1; el.classList.add('wet'); frame();
-        } catch (e) { el.classList.remove('wet'); water = null; build(); }
-      };
-      img.onerror = function () { water = null; build(); };
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(txt);
+      var whole = txt.replace(/ clip-path="url\(#owc-wp\)"/, ''), left = 2;
+      function load(svgText, t) {
+        var img = new Image(); img.onload = function () {
+          try { var c = document.createElement('canvas'); c.width = 624; c.height = 486; c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            gl.bindTexture(gl.TEXTURE_2D, t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            if (--left === 0) { texOn = 1; el.classList.add('wet'); frame(); }
+          } catch (e) { el.classList.remove('wet'); water = null; build(); }
+        };
+        img.onerror = function () { if (water) { water = null; build(); } };
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+      }
+      load(txt, tex); load(whole, tex2);
     })();
     function frame() {
       var tt = reduce ? 2 : now();
@@ -1519,6 +1525,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       gl.uniform2f(U.uRes, Wc, Hc); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uT, tt); gl.uniform1f(U.uGlow, glowNow); gl.uniform1f(U.uTexOn, texOn);
       hitV *= .96; gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uHit, hitV);
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2); gl.activeTexture(gl.TEXTURE0);
+      if (cutTo !== cutX) { cutX = cutTo > cutX ? cutTo : cutX + (cutTo - cutX) * .08; if (Math.abs(cutTo - cutX) < 1) cutX = cutTo; } gl.uniform1f(U.uCut, cutX);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
     function loop() {
@@ -1538,6 +1546,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; if (!running) frame(); },
       hit: function () { hitV = 1; },
+      cut: function (x) { if (!cutDone && x > cutTo) cutTo = x; if (!running) frame(); },
+      keepCut: function () { cutDone = true; cutTo = 1e4; },
+      heal: function () { if (!cutDone) cutTo = -50; },
       start: function () { if (!running && !reduce) { running = true; ambientAt = now() + .6; requestAnimationFrame(loop); } else frame(); }
     };
     if (cv.addEventListener) cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); texOn = 0; el.classList.remove('wet'); });
