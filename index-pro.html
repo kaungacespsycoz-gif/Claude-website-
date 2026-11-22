@@ -430,15 +430,17 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 
 
 /* envelope rides the logo's wave into a London pillar box */
-.wavepost { position: relative; display: block; padding-top: 210px; text-decoration: none; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer; transition: transform .2s ease; }
-/* the water pane is the top 210px; the words sit underneath it, so nothing covers the animation */
-.wavepost::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 210px; border-radius: 20px; z-index: 0; pointer-events: none;
+.wavepost { position: relative; display: block; padding-top: var(--wp-h); text-decoration: none; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer; transition: transform .2s ease; }
+.wavepost { --wp-h: clamp(320px, 64vh, 640px); }
+@supports (height: 1svh) { .wavepost { --wp-h: clamp(320px, 64svh, 640px); } }
+/* the water pane is the top part; the words sit underneath it, so nothing covers the animation */
+.wavepost::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--wp-h); border-radius: 22px; z-index: 0; pointer-events: none;
   background: radial-gradient(160px 130px at calc(100% - 60px) 60%, rgba(240,181,75,.22), transparent 70%), linear-gradient(160deg, #164b57 0%, #0e3440 55%, #0a2730 100%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 36px -18px rgba(12,47,58,.9), 0 2px 6px rgba(12,47,58,.18); transition: box-shadow .2s ease; }
 .wavepost:hover { transform: translateY(-1px); }
 .wavepost:hover::after { box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 40px -18px rgba(12,47,58,.95), 0 2px 6px rgba(12,47,58,.2); }
 .wavepost:active { transform: translateY(1px); }
-.wavepost .wp-svg { position: absolute; left: 0; top: 0; width: 100%; height: 210px; overflow: hidden; border-radius: 20px; z-index: 3; }
+.wavepost .wp-svg { position: absolute; left: 0; top: 0; width: 100%; height: var(--wp-h); overflow: hidden; border-radius: 22px; z-index: 3; }
 .wavepost .wp-lbl { position: relative; margin: 11px 4px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; color: var(--ink); pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
 .wavepost .wp-lbl b { font: 650 1rem/1.25 var(--sans); letter-spacing: -.005em; }
 .wavepost .wp-lbl small { font-size: .78rem; color: var(--muted); letter-spacing: .02em; display: flex; align-items: center; gap: 6px; }
@@ -447,10 +449,10 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M0 4h12M9 1l3 3-3 3' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
   animation: wp-nudge 1.6s ease-in-out infinite; }
 @keyframes wp-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
-.wavepost .wp-ok { position: absolute; left: 4px; top: 223px; font: 650 1rem/1 var(--sans); color: #c08a2a; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .15s, transform .3s ease .15s; pointer-events: none; }
+.wavepost .wp-ok { position: absolute; left: 4px; top: calc(var(--wp-h) + 13px); font: 650 1rem/1 var(--sans); color: #c08a2a; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .15s, transform .3s ease .15s; pointer-events: none; }
 .wavepost.sent .wp-lbl { opacity: 0; transform: translateY(-6px); } .wavepost.sent .wp-ok { opacity: 1; transform: none; }
 .wavepost .env { cursor: grab; } .wavepost.dragging .env { cursor: grabbing; }
-@media (min-width: 561px) { .wavepost { width: 420px; } }
+@media (min-width: 561px) { .wavepost { width: 100%; max-width: 640px; } }
 @media (max-width: 560px) { .hero .actions .wavepost { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .wavepost .wp-lbl small::after { animation: none; } }
 
@@ -462,11 +464,44 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wavepost .wp-logo.pass .ow-sun { fill: #ffe39a; }
 .wavepost { cursor: grab; } .wavepost.dragging { cursor: grabbing; }
 /* real water: a small WebGL surface with the logo written on it; the plain logo stays as the fallback */
-.wavepost .wp-water { position: absolute; left: 0; top: 0; width: 100%; height: 210px; border-radius: 20px; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
+.wavepost .wp-water { position: absolute; left: 0; top: 0; width: 100%; height: var(--wp-h); border-radius: 22px; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
 .wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo, .wavepost.wet .wp-box, .wavepost.wet .wp-burst, .wavepost.wet .wp-env { visibility: hidden; }
 .wavepost.wet .wp-trail, .wavepost.wet .wp-glow { opacity: 0; }
 .wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
 
+
+
+/* booking page: a full-screen sheet; pick a day, a time, then your details */
+.book { position: fixed; inset: 0; z-index: 80; background: var(--paper); overflow-y: auto; -webkit-overflow-scrolling: touch; transform: translateY(100%); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.book.open { transform: none; }
+.book .bk-top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+.book .bk-top .bk-logo { width: 46px; color: var(--ink); } .book .bk-top .bk-logo svg { display: block; width: 100%; height: auto; }
+.book .bk-x { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--rule); background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer; }
+.book .bk-x svg { width: 14px; height: 14px; }
+.book .bk-in { max-width: 640px; margin: 0 auto; padding: 26px 16px 60px; }
+.book h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(1.7rem, 6vw, 2.3rem); line-height: 1.15; }
+:root[data-lang="zh"] .book h2 { font-family: var(--sans); font-weight: 650; }
+.book .bk-sub { margin-top: 10px; color: var(--muted); font-size: var(--fs-sm); }
+.book .bk-h { margin-top: 30px; font: 650 1rem/1.3 var(--sans); color: var(--ink); display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.book .bk-h small { font-weight: 400; font-size: .78rem; color: var(--muted); }
+.book .bk-dates { margin: 12px -16px 0; padding: 2px 16px 6px; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+.book .bk-dates::-webkit-scrollbar { display: none; }
+.book .day, .book .slot { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease; }
+.book .day { flex: 0 0 62px; scroll-snap-align: start; border-radius: 16px; padding: 10px 0 11px; display: grid; justify-items: center; gap: 2px; }
+.book .day small { font-size: .72rem; color: var(--muted); } .book .day b { font-size: 1.3rem; font-weight: 650; line-height: 1.1; }
+.book .slots { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+.book .bk-band { grid-column: 1 / -1; margin-top: 6px; font-size: .74rem; color: var(--muted); letter-spacing: .04em; }
+.book .slot { border-radius: 12px; padding: 11px 0; font-size: .95rem; font-variant-numeric: tabular-nums; }
+.book .day:hover:not(:disabled), .book .slot:hover:not(:disabled) { border-color: var(--ink); }
+.book .day:active:not(:disabled), .book .slot:active:not(:disabled) { transform: scale(.97); }
+.book .day[aria-pressed="true"], .book .slot[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.book .day[aria-pressed="true"] small { color: inherit; opacity: .75; }
+.book .day:disabled, .book .slot:disabled { opacity: .35; cursor: default; text-decoration: line-through; }
+.book .bk-pick { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--ink); font-size: var(--fs-sm); }
+.book .bk-form { margin-top: 12px; }
+.book .bk-form .card { box-shadow: none; }
+.bk-cta p { color: var(--muted); margin: 0 0 16px; }
+@media (prefers-reduced-motion: reduce) { .book { transition: none; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -802,6 +837,20 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   </section>
 </main>
 
+<div class="book" id="book" role="dialog" aria-modal="true" aria-labelledby="bk-title" hidden>
+  <div class="bk-top"><span class="bk-logo" aria-hidden="true"><svg viewBox="-4 -10 208 162" role="img" aria-label="Oriwis"><defs><clipPath id="owc-bk"><path d="M-10 -20 H220 V110.1 H178 C142.8 120.1 115.2 120.1 86 110.1 C56.8 100.1 29.2 100.1 -6 110.1 H-10 Z"/><path d="M-10 117.1 H-6 C29.2 107.1 56.8 107.1 86 117.1 C115.2 127.1 142.8 127.1 178 117.1 H220 V190 H-10 Z"/></clipPath></defs><g fill="currentColor" clip-path="url(#owc-bk)"><path transform="translate(6.1 66.4)" d="M37.536 1.196Q29.992 1.196 23.644 -1.38Q17.296 -3.956 12.558 -8.556000000000001Q7.82 -13.156 5.152 -19.366Q2.484 -25.576 2.484 -32.752Q2.484 -39.928 5.106 -46.046Q7.728 -52.164 12.419999999999998 -56.763999999999996Q17.112 -61.364 23.46 -63.89399999999999Q29.808 -66.42399999999999 37.352 -66.42399999999999Q44.896 -66.42399999999999 51.244 -63.89399999999999Q57.592 -61.364 62.284 -56.763999999999996Q66.976 -52.164 69.598 -46.0Q72.22 -39.836 72.22 -32.66Q72.22 -25.483999999999998 69.598 -19.32Q66.976 -13.156 62.284 -8.51Q57.592 -3.864 51.29 -1.334Q44.988 1.196 37.536 1.196ZM37.352 -13.524Q42.872 -13.524 46.92 -15.916Q50.967999999999996 -18.308 53.176 -22.631999999999998Q55.384 -26.956 55.384 -32.752Q55.384 -36.984 54.141999999999996 -40.480000000000004Q52.9 -43.976 50.507999999999996 -46.506Q48.116 -49.036 44.804 -50.416Q41.492 -51.796 37.352 -51.796Q31.832 -51.796 27.784 -49.45Q23.736 -47.104 21.528 -42.78Q19.32 -38.455999999999996 19.32 -32.752Q19.32 -28.336 20.561999999999998 -24.793999999999997Q21.804 -21.252 24.195999999999998 -18.722Q26.588 -16.192 29.9 -14.858Q33.211999999999996 -13.524 37.352 -13.524ZM91.564 -26.404V-38.18H103.984Q108.032 -38.18 110.19399999999999 -40.158Q112.356 -42.136 112.356 -45.54Q112.356 -48.852 110.19399999999999 -50.922Q108.032 -52.992 103.984 -52.992H91.564V-65.228H106.28399999999999Q112.90799999999999 -65.228 117.922 -62.744Q122.93599999999999 -60.26 125.78799999999998 -55.936Q128.64 -51.612 128.64 -45.816Q128.64 -40.019999999999996 125.74199999999999 -35.65Q122.844 -31.28 117.692 -28.842Q112.53999999999999 -26.404 105.63999999999999 -26.404ZM78.5 0.0V-65.228H94.96799999999999V0.0ZM113.828 0.0 94.87599999999999 -27.968 109.68799999999999 -31.556 132.87199999999999 0.0ZM137.49599999999998 0.0V-65.228H153.964V0.0Z"/><path transform="translate(0.0 142.8)" d="M21.896 0.0 1.196 -65.228H17.48L32.384 -14.996H25.3L40.019999999999996 -65.228H53.176L67.896 -14.996H60.903999999999996L75.80799999999999 -65.228H92.0L71.208 0.0H57.96L43.24 -50.14H49.864L35.236 0.0ZM96.9 0.0V-65.228H113.368V0.0ZM143.38400000000001 1.012Q135.196 1.012 129.17000000000002 -1.472Q123.144 -3.956 118.176 -9.292L128.572 -19.78Q131.976 -16.192 135.84 -14.306000000000001Q139.704 -12.42 144.58 -12.42Q148.72 -12.42 150.974 -13.846Q153.228 -15.272 153.228 -17.756Q153.228 -20.056 151.572 -21.573999999999998Q149.916 -23.092 147.202 -24.241999999999997Q144.488 -25.392 141.22199999999998 -26.45Q137.956 -27.508 134.69 -29.026Q131.424 -30.544 128.71 -32.752Q125.99600000000001 -34.96 124.34 -38.272Q122.684 -41.583999999999996 122.684 -46.46Q122.684 -52.716 125.67399999999999 -57.132000000000005Q128.664 -61.548 134.0 -63.94Q139.336 -66.332 146.42000000000002 -66.332Q153.504 -66.332 159.48399999999998 -63.94Q165.464 -61.548 169.328 -57.316L158.84 -46.92Q155.89600000000002 -49.864 152.86 -51.336Q149.824 -52.808 146.236 -52.808Q142.832 -52.808 140.89999999999998 -51.611999999999995Q138.968 -50.416 138.968 -48.208Q138.968 -46.0 140.624 -44.620000000000005Q142.28 -43.24 144.994 -42.182Q147.708 -41.124 150.974 -40.019999999999996Q154.24 -38.916 157.46 -37.444Q160.68 -35.972 163.394 -33.672Q166.108 -31.372 167.764 -27.875999999999998Q169.42000000000002 -24.38 169.42000000000002 -19.412Q169.42000000000002 -9.66 162.566 -4.324Q155.712 1.012 143.38400000000001 1.012Z"/></g><circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg></span><button class="bk-x" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+  <div class="bk-in">
+    <h2 id="bk-title"><span class="en">Book your free consultation</span><span class="zh">预约免费咨询</span></h2>
+    <p class="bk-sub"><span class="en">Choose a day and time that suits you. It is a 30-minute call on WeChat, and we will confirm the time with you there.</span><span class="zh">选择方便的日期和时间。咨询约 30 分钟，通过微信进行，我们会在微信上和你确认时间。</span></p>
+    <h3 class="bk-h"><span><span class="en">Day</span><span class="zh">日期</span></span></h3>
+    <div class="bk-dates" id="bk-dates"></div>
+    <h3 class="bk-h"><span><span class="en">Time</span><span class="zh">时间</span></span><small><span class="en">China time (UTC+8)</span><span class="zh">北京时间</span></small></h3>
+    <div class="slots" id="bk-slots"></div>
+    <p class="bk-pick" id="bk-pick" hidden></p>
+    <h3 class="bk-h"><span><span class="en">Your details</span><span class="zh">你的信息</span></span></h3>
+    <div class="bk-form" id="bk-form"></div>
+  </div>
+</div>
 <button class="wxfab" id="wxfab" type="button" aria-haspopup="dialog"><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M12.5 5C6.7 5 2 8.9 2 13.7c0 2.7 1.5 5.1 3.8 6.7l-.9 3 3.4-1.8c1.3.4 2.7.6 4.2.6h.6a8 8 0 0 1-.3-2.2c0-4.8 4.6-8.6 10.3-8.6h.6C22.7 7.8 18.1 5 12.5 5Zm-3.6 6.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm7.2 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/><path fill="#fff" d="M30 20c0-4-3.9-7.2-8.7-7.2s-8.7 3.2-8.7 7.2 3.9 7.2 8.7 7.2c1 0 2-.1 2.9-.4l2.8 1.5-.7-2.5c2.2-1.3 3.7-3.4 3.7-5.8Zm-11.6-1.2a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm5.8 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z"/></svg></span><span class="en">WeChat us</span><span class="zh">微信咨询</span></button><div class="wxsheet" id="wxsheet" role="dialog" aria-modal="true" aria-labelledby="wx-t"><div class="card"><button class="close" type="button" aria-label="Close">×</button><div class="hd"><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M12.5 5C6.7 5 2 8.9 2 13.7c0 2.7 1.5 5.1 3.8 6.7l-.9 3 3.4-1.8c1.3.4 2.7.6 4.2.6h.6a8 8 0 0 1-.3-2.2c0-4.8 4.6-8.6 10.3-8.6h.6C22.7 7.8 18.1 5 12.5 5Zm-3.6 6.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm7.2 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/><path fill="#fff" d="M30 20c0-4-3.9-7.2-8.7-7.2s-8.7 3.2-8.7 7.2 3.9 7.2 8.7 7.2c1 0 2-.1 2.9-.4l2.8 1.5-.7-2.5c2.2-1.3 3.7-3.4 3.7-5.8Zm-11.6-1.2a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm5.8 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z"/></svg></span><h3 id="wx-t"><span class="en">Add us on WeChat</span><span class="zh">添加我们的微信</span></h3></div><div class="id"><span id="wxid2">OriwisUK</span></div><ol class="steps"><li><span class="en">Tap the button: we copy the ID and open WeChat.</span><span class="zh">点击下方按钮：自动复制微信号并打开微信。</span></li><li><span class="en">In WeChat, tap ＋ › Add Contacts and paste the ID.</span><span class="zh">在微信中点击右上角 ＋ › 添加朋友，粘贴微信号。</span></li><li><span class="en">Say hello. The first consultation is free.</span><span class="zh">打个招呼，初次咨询免费。</span></li></ol><button class="go" type="button" id="wxgo"><span class="en">Copy ID and open WeChat</span><span class="zh">复制微信号并打开微信</span></button><p class="wxmsg" id="wxdone" aria-live="polite"></p></div></div>
 <footer>
   <div class="wrap">
@@ -1208,14 +1257,16 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 210, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 400, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
-    W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    bx = W - Math.round(44 * S); by = H - 10; REFL_Y = H - 10;
+    W = el.clientWidth; H = Math.round(parseFloat(getComputedStyle(el).paddingTop)) || 400; S = Math.max(1.2, Math.min(H / 125, W / 225, 2.4));
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
+    bx = W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) + 2;
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * .04);
+    by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S));
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
     var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
     var x0 = Math.round(24 * S), slotX = bx, slotY = water ? REFL_Y - 55.7 * S : by - 60 * S;
@@ -1353,7 +1404,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
         burst.setAttribute('opacity', k < 1 ? String(Math.sin(Math.min(1, k * 1.6) * Math.PI)) : '0');
         var sc = 1 + Math.min(1, k * 1.6) * .6; burst.setAttribute('transform', burst.getAttribute('transform').replace(/ scale\([^)]*\)/, '') + ' scale(' + sc.toFixed(2) + ')');
         if (k < 1) requestAnimationFrame(wig); })(b0);
-      setTimeout(function () { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 700);
+      setTimeout(function () { if (window.oriwisBook) window.oriwisBook.open(); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 750);
       setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; }, 2300);
     });
   }
@@ -1558,9 +1609,98 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (cv.addEventListener) cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); texOn = 0; el.classList.remove('wet'); });
     return api;
   })();
-  build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
+  build(); addEventListener('resize', function () { var h = parseFloat(getComputedStyle(el).paddingTop); if (el.clientWidth !== W || Math.abs(h - H) > 40) build(); });
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = visible; visible = es[0].isIntersecting; if (visible && water) water.start(); if (visible && !was && !reduce) { demoT0 = performance.now() - 400; requestAnimationFrame(idle); } }, { threshold: .1 }).observe(el);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && visible && water) water.start(); });
+})();
+</script>
+<script>
+/* Booking page. The site has no server, so a chosen time is a request: it goes into the WeChat message and is confirmed there. */
+(function () {
+  var book = document.getElementById('book'), form = document.getElementById('form'), done = document.getElementById('done'); if (!book || !form) return;
+  var root = document.documentElement, datesEl = document.getElementById('bk-dates'), slotsEl = document.getElementById('bk-slots'), pickEl = document.getElementById('bk-pick');
+  function L() { return root.getAttribute('data-lang') === 'zh' ? 'zh' : 'en'; }
+  // the form moves into the booking page; the contact section gets a button that opens it
+  var col = form.parentNode, holder = document.getElementById('bk-form');
+  holder.appendChild(form); holder.appendChild(done);
+  var cta = document.createElement('div'); cta.className = 'card bk-cta';
+  cta.innerHTML = '<p><span class="en">Pick a day and time for a free 30-minute call. We will confirm it with you on WeChat.</span><span class="zh">选择一个方便的日期和时间，进行 30 分钟免费咨询。我们会在微信上和你确认。</span></p>' +
+    '<button class="btn" type="button" data-open-book><span class="en">Choose a day and time</span><span class="zh">选择日期和时间</span></button>';
+  col.appendChild(cta);
+
+  var WD = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'] };
+  var MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var BANDS = [{ en: 'Morning', zh: '上午', t: ['10:00', '10:30', '11:00', '11:30'] }, { en: 'Afternoon', zh: '下午', t: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'] }, { en: 'Evening', zh: '晚上', t: ['19:00', '19:30', '20:00', '20:30'] }];
+  var sel = { day: null, time: null }, days = [];
+  function cnNow() { var n = new Date(); return new Date(n.getTime() + (n.getTimezoneOffset() + 480) * 60000); }   // China time, as local fields
+  function makeDays() {
+    var n = cnNow(); days = [];
+    for (var i = 0; i < 14; i++) { var d = new Date(n.getFullYear(), n.getMonth(), n.getDate() + i); days.push({ d: d, i: i, closed: d.getDay() === 0 }); }
+  }
+  function dayLabel(x, l) { var d = x.d; return l === 'zh' ? (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + WD.zh[d.getDay()] : WD.en[d.getDay()] + ' ' + d.getDate() + ' ' + MO[d.getMonth()]; }
+  function slotOpen(x, t) {
+    if (x.closed) return false; if (x.i > 0) return true;
+    var n = cnNow(), hm = t.split(':'); return (+hm[0]) * 60 + (+hm[1]) >= n.getHours() * 60 + n.getMinutes() + 120;   // today: at least 2 hours ahead
+  }
+  function anyOpen(x) { return BANDS.some(function (b) { return b.t.some(function (t) { return slotOpen(x, t); }); }); }
+  function render() {
+    var l = L();
+    datesEl.innerHTML = days.map(function (x, k) {
+      var top = x.i === 0 ? (l === 'zh' ? '今天' : 'Today') : x.i === 1 ? (l === 'zh' ? '明天' : 'Tmrw') : WD[l][x.d.getDay()];
+      var off = !anyOpen(x);
+      return '<button type="button" class="day" data-k="' + k + '" aria-pressed="' + (sel.day === k) + '"' + (off ? ' disabled' : '') + ' aria-label="' + dayLabel(x, l) + '"><small>' + top + '</small><b>' + x.d.getDate() + '</b><small>' + (l === 'zh' ? (x.d.getMonth() + 1) + '月' : MO[x.d.getMonth()]) + '</small></button>';
+    }).join('');
+    var x = sel.day == null ? null : days[sel.day];
+    slotsEl.innerHTML = !x ? '<p class="bk-band" style="margin:0">' + (l === 'zh' ? '请先选择日期。' : 'Choose a day first.') + '</p>' : BANDS.map(function (b) {
+      return '<span class="bk-band">' + b[l] + '</span>' + b.t.map(function (t) { return '<button type="button" class="slot" data-t="' + t + '" aria-pressed="' + (sel.time === t) + '"' + (slotOpen(x, t) ? '' : ' disabled') + '>' + t + '</button>'; }).join('');
+    }).join('');
+    if (x && sel.time) { pickEl.hidden = false; pickEl.textContent = (l === 'zh' ? '你选择的时间：' : 'Your time: ') + dayLabel(x, l) + ', ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'); }
+    else pickEl.hidden = true;
+  }
+  datesEl.addEventListener('click', function (e) { var b = e.target.closest('.day'); if (!b || b.disabled) return; sel.day = +b.dataset.k; if (sel.time && !slotOpen(days[sel.day], sel.time)) sel.time = null; render(); });
+  slotsEl.addEventListener('click', function (e) { var b = e.target.closest('.slot'); if (!b || b.disabled) return; sel.time = b.dataset.t; render();
+    setTimeout(function () { pickEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); });
+  document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { if (!book.hidden) render(); }); });
+
+  // the chosen time goes into the message (this runs after the form's own handler)
+  form.addEventListener('submit', function () {
+    var l = L(), err = document.getElementById('err');
+    if (sel.day == null || !sel.time) {
+      done.hidden = true; form.hidden = false; err.textContent = l === 'zh' ? '请先在上方选择日期和时间。' : 'Please choose a day and time above first.'; err.hidden = false;
+      datesEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); return;
+    }
+    if (done.hidden) return;
+    var m = document.getElementById('msg'), lines = m.textContent.split('\n');
+    lines.splice(1, 0, (l === 'zh' ? '希望时间：' : 'Preferred time: ') + dayLabel(days[sel.day], l) + ' ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'));
+    m.textContent = lines.join('\n');
+  });
+
+  var lastFocus = null;
+  function open(fromHistory) {
+    if (!book.hidden && book.classList.contains('open')) return;
+    makeDays(); if (sel.day == null) { for (var k = 0; k < days.length; k++) if (anyOpen(days[k])) { sel.day = k; break; } }
+    render(); lastFocus = document.activeElement;
+    book.hidden = false; root.style.overflow = 'hidden';
+    requestAnimationFrame(function () { requestAnimationFrame(function () { book.classList.add('open'); }); });
+    if (!fromHistory) try { history.pushState({ book: 1 }, '', '#book'); } catch (x) {}
+    setTimeout(function () { book.querySelector('.bk-x').focus({ preventScroll: true }); }, 450);
+  }
+  function close(fromHistory) {
+    if (book.hidden) return;
+    book.classList.remove('open'); root.style.overflow = '';
+    setTimeout(function () { book.hidden = true; }, 500);
+    if (!fromHistory && location.hash === '#book') try { history.back(); } catch (x) {}
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  }
+  book.querySelector('.bk-x').addEventListener('click', function () { close(false); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && !book.hidden) close(false); });
+  addEventListener('popstate', function () { if (location.hash === '#book') open(true); else close(true); });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-open-book], a[href="#consult"]'); if (!a || a.id === 'wavepost') return;
+    e.preventDefault(); open(false);
+  });
+  window.oriwisBook = { open: function () { open(false); }, close: function () { close(false); } };
+  if (location.hash === '#book') open(true);
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
