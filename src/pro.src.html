@@ -99,15 +99,66 @@ p { margin: 0; }
 @keyframes talk-1 { 0% { transform: none; } 5% { transform: rotate(-3deg) translateY(-1%); } 10% { transform: rotate(1.5deg); } 15% { transform: rotate(-2deg) translateY(-1%); } 20% { transform: rotate(.5deg); } 25% { transform: rotate(-2.5deg); } 30% { transform: rotate(1deg) translateY(-.5%); } 35% { transform: rotate(-1.5deg); } 40% { transform: rotate(.5deg); } 45% { transform: none; } 70% { transform: rotate(1.5deg); } 80% { transform: none; } 100% { transform: none; } }
 @keyframes talk-2 { 0% { transform: none; } 20% { transform: rotate(1.5deg) translateY(1.5%); } 25% { transform: none; } 50% { transform: rotate(2.5deg); } 55% { transform: rotate(-1.5deg) translateY(-1%); } 60% { transform: rotate(2deg); } 65% { transform: rotate(-1deg); } 70% { transform: rotate(1.5deg) translateY(-1%); } 75% { transform: none; } 100% { transform: none; } }
 @keyframes talk-3 { 0% { transform: none; } 35% { transform: rotate(-2deg); } 40% { transform: none; } 80% { transform: rotate(-4deg); } 85% { transform: rotate(-4deg) translateY(1.5%); } 90% { transform: rotate(-3deg); } 95% { transform: rotate(-1deg); } 100% { transform: none; } }
-.stepimg .ps { position: absolute; width: 7%; aspect-ratio: 1; border-radius: 50%; background: var(--sun); box-shadow: 0 2px 0 rgba(12,47,58,.18); left: 6%; top: 12%; opacity: 0; }
 @media (min-width: 700px) { .stepimg { grid-column: 3; max-width: 420px; } }
 .journey.live li:not(.played) .stepimg .scene { opacity: .35; transform: scale(.94) rotate(-1.5deg); }
 .journey.live li.played .stepimg .scene { animation: sm-pop .6s steps(1, end) both, sm-boil .5s steps(1, end) .6s 5; }
-.journey.live li.played .stepimg .ps { animation: sm-hop 1.6s steps(1, end) .3s both; }
-@keyframes sm-pop { 0% { opacity: .35; transform: scale(.94) rotate(-1.5deg); } 25% { opacity: .8; transform: scale(1.05) rotate(1.2deg); } 50% { opacity: 1; transform: scale(.98) rotate(-.6deg); } 75% { transform: scale(1.01) rotate(.3deg); } 100% { opacity: 1; transform: none; } }
+.journey.live li.played @keyframes sm-pop { 0% { opacity: .35; transform: scale(.94) rotate(-1.5deg); } 25% { opacity: .8; transform: scale(1.05) rotate(1.2deg); } 50% { opacity: 1; transform: scale(.98) rotate(-.6deg); } 75% { transform: scale(1.01) rotate(.3deg); } 100% { opacity: 1; transform: none; } }
 @keyframes sm-boil { 0% { transform: translate(0,0) rotate(0); } 25% { transform: translate(.4%, -.3%) rotate(.25deg); } 50% { transform: translate(-.3%, .2%) rotate(-.2deg); } 75% { transform: translate(.2%, .3%) rotate(.15deg); } 100% { transform: none; } }
-@keyframes sm-hop { 0% { opacity: 1; left: 6%; top: 30%; } 12% { left: 18%; top: 14%; } 25% { left: 31%; top: 8%; } 37% { left: 44%; top: 6%; } 50% { left: 57%; top: 8%; } 62% { left: 70%; top: 14%; } 75% { left: 81%; top: 9%; } 87% { left: 87%; top: 7%; } 100% { opacity: 1; left: 87%; top: 7%; } }
 @media (prefers-reduced-motion: reduce) { .journey.live li .stepimg .scene, .stepimg .head, .stepimg .pc, .stepimg .arm { opacity: 1 !important; transform: none !important; animation: none !important; } }
+
+
+/* step 1 extras: the sea in the window rocks, a paper seagull crosses the sky */
+.stepimg .sea { position: absolute; overflow: hidden; pointer-events: none; }
+.stepimg .sea img { position: absolute; max-width: none; height: auto; transform-origin: 50% 50%; }
+.journey.live li.played .stepimg .sea img { animation: sea-rock 2.4s steps(1, end) infinite; }
+@keyframes sea-rock { 0% { transform: translate(0,0); } 25% { transform: translate(-1.2%, .8%); } 50% { transform: translate(-2.2%, 0); } 75% { transform: translate(-1%, -.8%); } 100% { transform: translate(0,0); } }
+.stepimg .gull { position: absolute; width: 5%; left: 33%; top: 6%; opacity: 0; pointer-events: none; }
+.stepimg .gull path { fill: #fbf7ef; stroke: #0c2f3a; stroke-width: 1.4; stroke-linejoin: round; }
+.stepimg .gull .w2 { display: none; }
+.journey.live li.played .stepimg .gull { animation: gull-fly 6s steps(1, end) 1.6s infinite; }
+.journey.live li.played .stepimg .gull .w1 { animation: flap-a .5s steps(1, end) infinite; }
+.journey.live li.played .stepimg .gull .w2 { display: block; animation: flap-b .5s steps(1, end) infinite; }
+@keyframes flap-a { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes flap-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes gull-fly { 0% { opacity: 0; left: 32%; top: 7%; } 4% { opacity: 1; left: 33%; top: 6%; } 12% { left: 38%; top: 4.5%; } 20% { left: 43%; top: 6%; } 28% { left: 48%; top: 4%; } 36% { left: 53%; top: 5.5%; } 44% { left: 58%; top: 3.5%; } 52% { left: 62%; top: 5%; } 60% { left: 67%; top: 3%; opacity: 1; } 64% { opacity: 0; } 100% { opacity: 0; } }
+
+/* step 2: the magnifying glass tours the map; a school pops up at each pin */
+.stepimg .card { position: absolute; height: auto; opacity: 0; transform: scale(.6); pointer-events: none; filter: drop-shadow(0 3px 4px rgba(12,47,58,.25)); }
+.stepimg .mag { position: absolute; width: 24%; left: 22%; top: 6%; pointer-events: none; filter: drop-shadow(0 4px 5px rgba(12,47,58,.3)); }
+.journey.live li.played .stepimg .mag { animation: mag-tour 7.2s steps(1, end) .8s infinite; }
+.journey.live li.played .stepimg .cardA { animation: card-a 7.2s steps(1, end) .8s infinite; }
+.journey.live li.played .stepimg .cardC { animation: card-c 7.2s steps(1, end) .8s infinite; }
+.journey.live li.played .stepimg .cardB { animation: card-b 7.2s steps(1, end) .8s infinite; }
+/* lens centre sits at 40% of the glass; pins: Scotland 50.3%/25%, Midlands 56.5%/61%, London 64.2%/77.2% */
+@keyframes mag-tour {
+  0% { left: 22%; top: 6%; } 4% { left: 28%; top: 9%; } 8% { left: 34%; top: 11%; } 12% { left: 40.7%; top: 10.6%; }
+  30% { left: 41.5%; top: 20%; } 33% { left: 43%; top: 30%; } 36% { left: 45%; top: 39%; } 40% { left: 46.9%; top: 46.5%; }
+  58% { left: 50%; top: 52%; } 62% { left: 52.5%; top: 57.5%; } 66% { left: 54.6%; top: 62.8%; }
+  88% { left: 62%; top: 45%; } 92% { left: 70%; top: 28%; } 96% { left: 76%; top: 12%; } 100% { left: 22%; top: 6%; } }
+@keyframes card-a { 0%, 12% { opacity: 0; transform: scale(.6) rotate(-6deg); } 14% { opacity: 1; transform: scale(1.08) rotate(3deg); } 16% { transform: scale(.97) rotate(-1deg); } 18%, 86% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: scale(.6); } }
+@keyframes card-c { 0%, 40% { opacity: 0; transform: scale(.6) rotate(6deg); } 42% { opacity: 1; transform: scale(1.08) rotate(-3deg); } 44% { transform: scale(.97) rotate(1deg); } 46%, 86% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: scale(.6); } }
+@keyframes card-b { 0%, 66% { opacity: 0; transform: scale(.6) rotate(-6deg); } 68% { opacity: 1; transform: scale(1.1) rotate(3deg); } 70% { transform: scale(.97) rotate(-1deg); } 72%, 86% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: scale(.6); } }
+
+/* step 3: a paper-confetti "big bang" bursts from the handshake */
+.stepimg .bang { position: absolute; width: 0; height: 0; pointer-events: none; }
+.stepimg .bang .rays { position: absolute; left: -95px; top: -95px; width: 190px; height: 190px; opacity: 0;
+  background: repeating-conic-gradient(from 0deg, rgba(240,169,59,.85) 0deg 8deg, transparent 8deg 30deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 28%, #000 30% 62%, transparent 64%); mask: radial-gradient(circle, transparent 0 28%, #000 30% 62%, transparent 64%); }
+.stepimg .cf { position: absolute; left: -6px; top: -5px; width: 13px; height: 9px; opacity: 0; box-shadow: 0 1px 0 rgba(12,47,58,.25); }
+.stepimg .cf.c { width: 11px; height: 11px; border-radius: 50%; }
+.journey.live li.played .stepimg .bang .rays { animation: rays 4.5s steps(1, end) 1s infinite; }
+.journey.live li.played .stepimg .cf { animation: confetti 4.5s steps(1, end) 1s infinite; }
+@keyframes rays { 0% { opacity: 0; transform: scale(.3); } 3% { opacity: 1; transform: scale(.6) rotate(10deg); } 6% { opacity: 1; transform: scale(1) rotate(20deg); } 9% { opacity: .6; transform: scale(1.25) rotate(28deg); } 12%, 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes confetti {
+  0% { opacity: 0; transform: translate(0,0) scale(.4); }
+  3% { opacity: 1; transform: translate(calc(var(--dx) * 1.6px), calc(var(--dy) * 1.1px)) rotate(calc(var(--r) * .3)); }
+  7% { transform: translate(calc(var(--dx) * 3.4px), calc(var(--dy) * 2.4px)) rotate(calc(var(--r) * .6)); }
+  12% { transform: translate(calc(var(--dx) * 4.4px), calc(var(--dy) * 3px + 6px)) rotate(var(--r)); }
+  20% { transform: translate(calc(var(--dx) * 4.9px), calc(var(--dy) * 3px + 22px)) rotate(calc(var(--r) * 1.4)); }
+  30% { opacity: 1; transform: translate(calc(var(--dx) * 5.2px), calc(var(--dy) * 3px + 44px)) rotate(calc(var(--r) * 1.8)); }
+  38%, 100% { opacity: 0; transform: translate(calc(var(--dx) * 5.3px), calc(var(--dy) * 3px + 60px)); } }
+.stepimg:not(.inview) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) { .stepimg .sea img, .stepimg .gull, .stepimg .mag, .stepimg .card, .stepimg .cf, .stepimg .rays { animation: none !important; } .stepimg .card { opacity: 1; transform: none; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -244,12 +295,14 @@ form.card, .done { background: var(--paper); border: 1px solid var(--rule); padd
 input[type=text], select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #b8c7ca; border-radius: 0; padding: 10px 0; width: 100%; -webkit-appearance: none; appearance: none; }
 select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 10px) 52%, calc(100% - 5px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
 input:focus, select:focus { outline: none; border-bottom: 2px solid var(--accent); padding-bottom: 9px; }
-.seg { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--rule); width: fit-content; max-width: 100%; }
-.seg label { position: relative; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+.seg label { position: relative; display: block; min-width: 0; }
 .seg input { position: absolute; opacity: 0; pointer-events: none; }
-.seg span { display: inline-block; padding: 9px 16px; font-size: var(--fs-sm); cursor: pointer; color: var(--muted); }
-.seg label + label span { border-left: 1px solid var(--rule); }
+.seg label > span { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 46px; padding: 8px 6px; text-align: center; line-height: 1.25; font-size: var(--fs-sm); cursor: pointer; color: var(--muted); background: var(--paper); transition: background .2s ease, color .2s ease; }
+.seg label + label > span { border-left: 1px solid var(--rule); }
+.seg label > span:hover { color: var(--ink); }
 .seg input:checked + span { background: var(--ink); color: #fff; }
+.seg input:checked + span span { color: #fff; }
 .seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
 .agree { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: var(--fs-xs); color: var(--muted); }
 .agree input { width: 16px; height: 16px; margin: 3px 0 0; accent-color: var(--accent); }
@@ -306,8 +359,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           </div>
         </div>
         <figure class="pframe">
-          <img src="images/v2/consult.jpg" alt="" width="1400" height="933">
-          <figcaption><span class="en">First consultations take place in Chinese or English.</span><span class="zh">初步咨询可使用中文或英文。</span></figcaption>
+          <img src="images/v2/consult.jpg" alt="A consultant talking with a mother and her daughter by a window over the sea" width="1400" height="933">
         </figure>
       </div>
       <div class="facts">
@@ -328,9 +380,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       <div>
         <div class="journey" id="journey"><span class="track" aria-hidden="true"><span class="fill"></span><span class="dot"></span></span>
         <ol class="process">
-          <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step1.jpg" alt="Paper-cut illustration: a consultant talking with a mother and her daughter at a table" width="960" height="640" loading="lazy"><div class="pc b1" style="left:0.000%;top:14.062%;width:38.438%;transform-origin:35.8% 98.7%"><img class="bimg" src="images/v2/step1-b1.png" alt="" loading="lazy"><img class="arm" src="images/v2/step1-arm.png" alt="" loading="lazy" style="left:64.499%;top:58.824%;width:35.501%;transform-origin:18.3% 84.4%"><img class="head h1" src="images/v2/step1-h1.png" alt="" loading="lazy" style="left:7.588%;top:-0.512%;width:57.453%;transform-origin:64.6% 96.2%"></div><div class="pc b2" style="left:40.417%;top:16.250%;width:26.562%;transform-origin:49.8% 99.2%"><img class="bimg" src="images/v2/step1-b2.png" alt="" loading="lazy"><img class="head h2" src="images/v2/step1-h2.png" alt="" loading="lazy" style="left:14.118%;top:0.000%;width:77.647%;transform-origin:49.5% 98.0%"></div><div class="pc b3" style="left:72.500%;top:23.750%;width:26.771%;transform-origin:47.5% 99.1%"><img class="bimg" src="images/v2/step1-b3.png" alt="" loading="lazy"><img class="head h3" src="images/v2/step1-h3.png" alt="" loading="lazy" style="left:20.233%;top:-0.623%;width:79.377%;transform-origin:31.4% 98.9%"></div></div><i class="ps" aria-hidden="true"></i></div></li>
-          <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step2.jpg" alt="Paper-cut illustration: a shortlist of three British schools beside a map" width="960" height="640" loading="lazy"></div><i class="ps" aria-hidden="true"></i></div></li>
-          <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step3.jpg" alt="Paper-cut illustration: a student and her mother welcomed at a British school gate" width="960" height="640" loading="lazy"></div><i class="ps" aria-hidden="true"></i></div></li>
+          <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step1.jpg" alt="Paper-cut illustration: a consultant talking with a mother and her daughter at a table" width="960" height="640" loading="lazy"><div class="sea" style="left:31.667%;top:20.938%;width:41.875%;height:21.250%"><img src="images/v2/step1.jpg" alt="" style="width:238.806%;left:-75.622%;top:-98.529%"></div><svg class="gull" viewBox="0 0 40 20" aria-hidden="true"><path class="w1" d="M2 12 Q10 2 20 11 Q30 2 38 12 Q30 7 20 14 Q10 7 2 12Z"/><path class="w2" d="M3 6 Q11 13 20 11 Q29 13 37 6 Q29 15 20 15 Q11 15 3 6Z"/></svg><div class="pc b1" style="left:0.000%;top:14.062%;width:38.438%;transform-origin:35.8% 98.7%"><img class="bimg" src="images/v2/step1-b1.png" alt="" loading="lazy"><img class="arm" src="images/v2/step1-arm.png" alt="" loading="lazy" style="left:64.499%;top:58.824%;width:35.501%;transform-origin:18.3% 84.4%"><img class="head h1" src="images/v2/step1-h1.png" alt="" loading="lazy" style="left:7.588%;top:-0.512%;width:57.453%;transform-origin:64.6% 96.2%"></div><div class="pc b2" style="left:40.417%;top:16.250%;width:26.562%;transform-origin:49.8% 99.2%"><img class="bimg" src="images/v2/step1-b2.png" alt="" loading="lazy"><img class="head h2" src="images/v2/step1-h2.png" alt="" loading="lazy" style="left:14.118%;top:0.000%;width:77.647%;transform-origin:49.5% 98.0%"></div><div class="pc b3" style="left:72.500%;top:23.750%;width:26.771%;transform-origin:47.5% 99.1%"><img class="bimg" src="images/v2/step1-b3.png" alt="" loading="lazy"><img class="head h3" src="images/v2/step1-h3.png" alt="" loading="lazy" style="left:20.233%;top:-0.623%;width:79.377%;transform-origin:31.4% 98.9%"></div></div></div></li>
+          <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step2.jpg" alt="Paper-cut illustration: a magnifying glass moves over a map of the UK and finds schools in Scotland, the Midlands and London" width="960" height="640" loading="lazy"><img class="card cardA" src="images/v2/step2-cardA.png" alt="" loading="lazy" style="left:62.500%;top:6.562%;width:26.042%"><img class="card cardC" src="images/v2/step2-cardC.png" alt="" loading="lazy" style="left:12.500%;top:39.062%;width:22.396%"><img class="card cardB" src="images/v2/step2-cardB.png" alt="" loading="lazy" style="left:70.000%;top:51.562%;width:26.042%"><svg class="mag" viewBox="0 0 120 120" aria-hidden="true"><rect x="74" y="70" width="16" height="52" rx="7" transform="rotate(-45 82 96)" fill="#1e4a63"/><rect x="77" y="73" width="6" height="40" rx="3" transform="rotate(-45 80 93)" fill="#2f6582"/><circle cx="48" cy="48" r="38" fill="rgba(255,255,255,.22)" stroke="#1e4a63" stroke-width="10"/><circle cx="48" cy="48" r="31" fill="none" stroke="#8fc6c9" stroke-width="3"/><path d="M30 30 Q38 22 50 22" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".75"/></svg></div></div></li>
+          <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step3.jpg" alt="Paper-cut illustration: a student and her mother welcomed at a British school gate" width="960" height="640" loading="lazy"><div class="bang" style="left:52.083%;top:61.250%"><i class="rays"></i><i class="cf c" style="--dx:-5.96;--dy:13.77;--r:-136deg;background:#f0a93b"></i><i class="cf r" style="--dx:-10.68;--dy:15.70;--r:27deg;background:#0f7f8c"></i><i class="cf r" style="--dx:-17.86;--dy:9.06;--r:-51deg;background:#ef6f5e"></i><i class="cf c" style="--dx:-13.63;--dy:4.02;--r:-125deg;background:#ffffff"></i><i class="cf r" style="--dx:-14.92;--dy:-3.67;--r:-130deg;background:#8fd0c9"></i><i class="cf r" style="--dx:-8.59;--dy:-9.48;--r:-46deg;background:#f0a93b"></i><i class="cf c" style="--dx:-9.95;--dy:-17.72;--r:-129deg;background:#0c2f3a"></i><i class="cf r" style="--dx:-5.51;--dy:-18.50;--r:-47deg;background:#f0a93b"></i><i class="cf r" style="--dx:-5.13;--dy:-26.38;--r:-12deg;background:#0f7f8c"></i><i class="cf c" style="--dx:1.85;--dy:-22.34;--r:132deg;background:#ef6f5e"></i><i class="cf r" style="--dx:6.73;--dy:-24.84;--r:-68deg;background:#ffffff"></i><i class="cf r" style="--dx:8.91;--dy:-18.71;--r:-64deg;background:#8fd0c9"></i><i class="cf c" style="--dx:12.66;--dy:-12.29;--r:-128deg;background:#f0a93b"></i><i class="cf r" style="--dx:15.44;--dy:-5.20;--r:94deg;background:#0c2f3a"></i><i class="cf r" style="--dx:13.75;--dy:2.27;--r:0deg;background:#f0a93b"></i><i class="cf c" style="--dx:17.90;--dy:9.52;--r:25deg;background:#0f7f8c"></i><i class="cf r" style="--dx:14.70;--dy:14.66;--r:-36deg;background:#ef6f5e"></i><i class="cf r" style="--dx:8.56;--dy:13.67;--r:93deg;background:#ffffff"></i></div></div></div></li>
         </ol></div>
         <div class="scope">
           <div><h3><span class="en">What we do</span><span class="zh">我们提供</span></h3><ul><li><span class="en">Match your profile to suitable UK options</span><span class="zh">根据你的情况匹配英国学校与课程</span></li><li><span class="en">A free first consultation</span><span class="zh">免费初步咨询</span></li><li><span class="en">Referral to the school or its partner</span><span class="zh">转介至学校或其合作方</span></li></ul></div>
