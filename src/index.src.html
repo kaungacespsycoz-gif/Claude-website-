@@ -91,6 +91,20 @@ p { margin: 0; }
 
 .ow-sun { fill: var(--sun-dot); }
 .intro-logo .ow-sun { fill: #e3b061; }
+/* the sun drops in and bounces a few times, then settles */
+.intro-logo { overflow: visible; }
+.intro-logo .ow-sun { transform-box: fill-box; transform-origin: 50% 100%; animation: sun-bounce 2.2s 1s both; }
+@keyframes sun-bounce {
+  0%   { transform: translateY(-320px); opacity: 0; animation-timing-function: cubic-bezier(.55, 0, 1, .45); }
+  8%   { opacity: 1; }
+  34%  { transform: translateY(0) scale(1.18, .8); animation-timing-function: cubic-bezier(0, .55, .45, 1); }
+  52%  { transform: translateY(-70px) scale(.95, 1.06); animation-timing-function: cubic-bezier(.55, 0, 1, .45); }
+  68%  { transform: translateY(0) scale(1.1, .88); animation-timing-function: cubic-bezier(0, .55, .45, 1); }
+  79%  { transform: translateY(-26px); animation-timing-function: cubic-bezier(.55, 0, 1, .45); }
+  88%  { transform: translateY(0) scale(1.05, .94); animation-timing-function: cubic-bezier(0, .55, .45, 1); }
+  94%  { transform: translateY(-8px); animation-timing-function: cubic-bezier(.55, 0, 1, .45); }
+  100% { transform: translateY(0); opacity: 1; }
+}
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--paper) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .3s; }

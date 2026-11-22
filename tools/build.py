@@ -5,7 +5,7 @@ root = pathlib.Path(__file__).resolve().parent.parent
 src = (root / 'src/index.src.html').read_text()
 font = base64.b64encode((root / 'fonts/outfit-latin-wght-normal.woff2').read_bytes()).decode()
 mark = (root / 'brand/v2/oriwis10-mark.svg').read_text()
-letters = re.search(r'<g fill="currentColor" mask="url\(#ow-cut\)">(.*?)</g>', mark).group(1)
+letters = re.search(r'<g fill="[^"]*" (?:mask|clip-path)="url\(#[^)]*\)">(.*?)</g>', mark).group(1)
 # Logo 10, drawn inline in each place (no <use>/<mask>, which some phone browsers drop).
 # The wave "cut" is made by clipping the letters to the areas above and below a 7-unit wave band.
 TOP = 'M-10 -20 H220 V110.1 H178 C142.8 120.1 115.2 120.1 86 110.1 C56.8 100.1 29.2 100.1 -6 110.1 H-10 Z'
