@@ -578,7 +578,8 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .xp .xi h4 small { display: block; font-weight: 400; font-size: .8rem; color: var(--muted); margin-top: 2px; }
 .xp .xi p { grid-column: 1; margin: 0; font-size: .78rem; color: var(--muted); }
 .xp .xi .tag { display: inline-block; font-size: .7rem; padding: 2px 7px; border-radius: 999px; margin-right: 6px; color: #fff; background: #0f7f8c; }
-.xp .xi .tag.sch { background: #d9932f; } .xp .xi .tag.qs { background: #0c2f3a; }
+.xp .xi .tag.sch { background: #d9932f; } .xp .xi .tag.qs { background: #0c2f3a; } .xp .xi .tag.gu { background: #052962; }
+.xp .xi p { display: flex; flex-wrap: wrap; align-items: center; row-gap: 4px; }
 .xp .xi a { grid-row: 1 / span 2; grid-column: 2; font: 600 .8rem/1 var(--sans); color: var(--accent); text-decoration: none; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 999px; white-space: nowrap; }
 .xp .xi.hl { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .xp .xnote { margin-top: 22px; font-size: .74rem; color: var(--muted); line-height: 1.6; }
@@ -948,7 +949,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     <div class="xp-r">
     <div class="xcount"><span id="xp-count"></span><button type="button" id="xp-all" hidden><span class="en">Show all places</span><span class="zh">显示全部地点</span></button></div>
     <ul class="xlist" id="xp-list"></ul>
-    <p class="xnote"><span class="en">A starting selection to explore, not a ranking and not a list of partners. Oriwis is not affiliated with these schools or universities. Ages, entry requirements and boarding options vary, so please check each official website. Links open the school's own site. Rankings: QS World University Rankings 2027 (world position, top 100 only).</span><span class="zh">这是一份入门参考，不是排名，也不是合作名单。Oriwis 与这些学校和大学没有隶属关系。年龄、入学要求和寄宿安排各不相同，请以各校官网为准。链接将打开学校官网。排名：QS 2027 世界大学排名（世界名次，仅列前 100）。</span></p>
+    <p class="xnote"><span class="en">A starting selection to explore, not a ranking and not a list of partners. Oriwis is not affiliated with these schools or universities. Ages, entry requirements and boarding options vary, so please check each official website. Links open the school's own site. Rankings: QS World University Rankings 2027 (world position, top 100 only) and The Guardian University Guide 2027 (UK position, out of 123).</span><span class="zh">这是一份入门参考，不是排名，也不是合作名单。Oriwis 与这些学校和大学没有隶属关系。年龄、入学要求和寄宿安排各不相同，请以各校官网为准。链接将打开学校官网。排名：QS 2027 世界大学排名（世界名次，仅列前 100）；《卫报》2027 英国大学排名（英国名次，共 123 所）。</span></p>
     </div>
   </div>
 </div>
@@ -2124,7 +2125,17 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var QS = { 'Imperial College London': 2, 'University of Oxford': 4, 'University of Cambridge': 6, 'UCL (University College London)': 8, 'University of Edinburgh': 35,
     "King's College London": 37, 'University of Manchester': 40, 'University of Bristol': 57, 'London School of Economics (LSE)': 62, 'University of Warwick': 68,
     'University of Birmingham': 68, 'University of Leeds': 77, 'University of Glasgow': 80, 'University of Sheffield': 82, 'Durham University': 85, 'University of Nottingham': 97 };
-  var RANKS = [['all', 'Any ranking', '不限排名'], ['10', 'QS world top 10', 'QS 世界前 10'], ['50', 'QS world top 50', 'QS 世界前 50'], ['100', 'QS world top 100', 'QS 世界前 100']];
+  // The Guardian University Guide 2027 (published September 2026): UK league table position, read from the Guardian's own table
+  var GU = { 'University of Oxford': 1, 'University of Cambridge': 2, 'London School of Economics (LSE)': 3, 'University of St Andrews': 4, 'Imperial College London': 5,
+    'Durham University': 6, 'University of Warwick': 7, 'University of Bath': 8, 'Loughborough University': 9, 'University of Edinburgh': 11, 'University of Bristol': 12,
+    'UCL (University College London)': 13, 'University of Birmingham': 14, 'University of Sheffield': 15, 'University of Exeter': 16, 'University of Strathclyde': 17,
+    'University of Southampton': 18, "King's College London": 19, 'University of Manchester': 20, 'University of Glasgow': 21, 'University of Dundee': 21,
+    'Swansea University': 25, 'University of Leeds': 26, 'Lancaster University': 27, 'Heriot-Watt University': 29, 'University of Liverpool': 30,
+    "Queen's University Belfast": 43, 'Cardiff University': 43, 'University of York': 46, 'University of Aberdeen': 50, 'University of Nottingham': 51,
+    'Ulster University': 58, 'Bangor University': 64, 'Newcastle University': 82, 'Aberystwyth University': 98 };
+  var RANKS = [['all', 'Any ranking', '不限排名'], ['q10', 'QS world top 10', 'QS 世界前 10'], ['q50', 'QS world top 50', 'QS 世界前 50'], ['q100', 'QS world top 100', 'QS 世界前 100'],
+    ['g10', 'Guardian UK top 10', 'Guardian 英国前 10'], ['g20', 'Guardian UK top 20', 'Guardian 英国前 20'], ['g50', 'Guardian UK top 50', 'Guardian 英国前 50']];
+  function rk(d) { return st.rank === 'all' ? null : (st.rank[0] === 'q' ? QS : GU)[d[0]]; }
   var NAT = { eng: ['England', '英格兰'], sco: ['Scotland', '苏格兰'], wal: ['Wales', '威尔士'], nir: ['Northern Ireland', '北爱尔兰'] };
   var AGES = [['all', 'All ages', '全部'], ['11', '11–16 · Secondary school', '11–16 岁 · 中学'], ['16', '16–18 · Sixth form', '16–18 岁 · 高中 / A-Level'], ['18', '18+ · University', '18 岁以上 · 大学']];
   var KIND = { uni: ['University', '大学'], sch: ['Senior school with sixth form', '中学（含高中）'], sixth: ['Sixth form only (IB)', '高中（IB 课程）'] };
@@ -2134,7 +2145,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (st.age === '11' && d[2] !== 'sch') return false;
     if (st.age === '16' && d[2] === 'uni') return false;
     if (st.age === '18' && d[2] !== 'uni') return false;
-    if (st.rank !== 'all' && !(QS[d[0]] && QS[d[0]] <= +st.rank)) return false;
+    if (st.rank !== 'all') { var r = rk(d); if (!(r && r <= +st.rank.slice(1))) return false; }
     return true;
   }
   // lon/lat to the felt map (fitted to its coastline: Lizard, Land's End, Lowestoft, Fermanagh, Duncansby Head, and London)
@@ -2207,12 +2218,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       b.setAttribute('aria-label', cities[k].name + ', ' + its.length);
     });
     var list = D.filter(function (d) { return fits(d) && (!st.city || (d[4] + '|' + d[5]) === st.city); });
-    list.sort(st.rank !== 'all' ? function (a, b) { return QS[a[0]] - QS[b[0]] || a[0].localeCompare(b[0]); } : function (a, b) { return (a[2] === 'uni') - (b[2] === 'uni') || a[3].localeCompare(b[3]) || a[0].localeCompare(b[0]); });
+    list.sort(st.rank !== 'all' ? function (a, b) { return rk(a) - rk(b) || a[0].localeCompare(b[0]); } : function (a, b) { return (a[2] === 'uni') - (b[2] === 'uni') || a[3].localeCompare(b[3]) || a[0].localeCompare(b[0]); });
     cntEl.textContent = (st.city ? cities[st.city].name + ' · ' : '') + (zh ? list.length + ' 所' : list.length + (list.length === 1 ? ' place' : ' places'));
     allBtn.hidden = !st.city; frame();
     listEl.innerHTML = list.map(function (d) {
       var name = zh && d[1] ? d[1] : d[0], sub = zh && d[1] ? d[0] : '';
-      return '<li class="xi"><h4>' + name + (sub ? '<small>' + sub + '</small>' : '') + '</h4><p><span class="tag' + (d[2] === 'uni' ? '' : ' sch') + '">' + KIND[d[2]][zh ? 1 : 0] + '</span>' + (QS[d[0]] ? '<span class="tag qs">QS #' + QS[d[0]] + '</span>' : '') + d[4] + ' · ' + NAT[d[3]][zh ? 1 : 0] + '</p>' +
+      return '<li class="xi"><h4>' + name + (sub ? '<small>' + sub + '</small>' : '') + '</h4><p><span class="tag' + (d[2] === 'uni' ? '' : ' sch') + '">' + KIND[d[2]][zh ? 1 : 0] + '</span>' + (QS[d[0]] ? '<span class="tag qs">QS #' + QS[d[0]] + '</span>' : '') + (GU[d[0]] ? '<span class="tag gu">Guardian #' + GU[d[0]] + '</span>' : '') + d[4] + ' · ' + NAT[d[3]][zh ? 1 : 0] + '</p>' +
         '<a href="' + d[7] + '" target="_blank" rel="noopener noreferrer">' + (zh ? '官网 ↗' : 'Website ↗') + '</a></li>';
     }).join('');
   }
