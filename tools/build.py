@@ -44,3 +44,23 @@ if len(sys.argv) > 3:
     frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', sky)
     pathlib.Path(sys.argv[3]).write_text("<script>document.documentElement.setAttribute('data-look','sky')</script>\n" + frag)
 print('sky ok', len(sky))
+
+# "Pro" sky page: new editorial layout below the same sky opening screen.
+s = src
+intro_css = re.search(r'/\* opening: moonlit sea.*?\.intro \.lang-float button\[aria-pressed="true"\] \{[^}]*\}\n', s, re.S).group(0)
+intro_css += ''.join(l + '\n' for l in s.splitlines() if l.startswith(':root[data-look="sky"] .intro'))
+intro_css += re.search(r'\.ow-sun \{ fill.*?@keyframes sun-bounce \{.*?\n\}\n', s, re.S).group(0)
+intro_html = re.search(r'<section class="intro".*?</section>', s, re.S).group(0)
+sea_js = [m for m in re.findall(r'<script>.*?</script>', s, re.S) if 'sea3d' in m][0]
+paths = re.search(r'var PATHS = (\[.*?\n  \]);', s, re.S).group(1)
+pro = (root / 'src/pro.src.html').read_text()
+pro = (pro.replace('{{INTRO_CSS}}', intro_css).replace('{{INTRO_HTML}}', intro_html).replace('{{SEA_JS}}', sea_js)
+          .replace('{{PATHS}}', paths).replace('{{OUTFIT}}', font)
+          .replace('{{SERIF}}', base64.b64encode((root / 'fonts/instrument-serif-latin-400-normal.woff2').read_bytes()).decode()))
+pro = re.sub(r'\{\{LOGO:(\w+):([\w-]*)\}\}', logo, pro)
+assert '{{' not in pro
+(root / 'index-pro.html').write_text(pro)
+if len(sys.argv) > 4:
+    frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', pro)
+    pathlib.Path(sys.argv[4]).write_text("<script>document.documentElement.setAttribute('data-look','sky')</script>\n" + frag)
+print('pro ok', len(pro))

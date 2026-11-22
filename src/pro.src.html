@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh-CN" data-lang="zh" data-look="sky">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oriwis UK Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Oriwis · Knowledge by the sea · 海边求知. UK study information matching, a free first consultation and referrals.">
+<style>
+@font-face { font-family: "Outfit"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(data:font/woff2;base64,{{OUTFIT}}) format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: normal; font-weight: 400; font-display: swap; src: url(data:font/woff2;base64,{{SERIF}}) format("woff2"); }
+
+/* Layout: a consultancy-style page. Section titles sit in a narrow left column, content in a wide right column,
+   separated by hairline rules. Serif display headings, plain square buttons, one accent (sea teal). */
+:root {
+  --paper: #ffffff;
+  --tint: #f1f6f6;
+  --ink: #0c2f3a;
+  --text: #1d3a43;
+  --muted: #5d7279;
+  --rule: #d9e3e4;
+  --accent: #0f7f8c;
+  --sun: #f0a93b;
+  --sun-dot: #f0a93b;
+
+  --serif: "Instrument Serif", "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", Georgia, serif;
+  --sans: "Outfit", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --fs-xs: .8rem; --fs-sm: .92rem; --fs-base: 1.03rem; --fs-md: 1.22rem;
+  --fs-h2: clamp(2rem, 5.4vw, 3.1rem); --fs-h1: clamp(2.6rem, 8.4vw, 4.8rem);
+  --wrap: 1160px;
+  color-scheme: light;
+}
+:root[data-lang="zh"] .en { display: none !important; }
+:root:not([data-lang="zh"]) .zh { display: none !important; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { margin: 0; background: var(--paper); color: var(--text); font: 400 var(--fs-base)/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+:root[data-lang="zh"] body { line-height: 1.85; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { margin: 0; font-weight: 400; color: var(--ink); text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.serif { font-family: var(--serif); }
+:root[data-lang="zh"] .serif { font-weight: 600; letter-spacing: .02em; }
+
+{{INTRO_CSS}}
+
+/* header */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: rgba(255,255,255,.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
+.brand { color: var(--ink); display: block; }
+.brand svg { width: 46px; height: auto; display: block; }
+.nav { display: none; gap: 28px; font-size: var(--fs-sm); margin-left: auto; }
+.nav a { text-decoration: none; color: var(--muted); }
+.nav a:hover { color: var(--ink); }
+.lang { margin-left: auto; display: inline-flex; gap: 2px; font-size: var(--fs-xs); border: 1px solid var(--rule); border-radius: 2px; padding: 2px; }
+.lang button { all: unset; cursor: pointer; padding: 3px 9px; color: var(--muted); border-radius: 1px; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.top .cta-s { display: none; }
+@media (min-width: 900px) { .nav { display: flex; } .lang { margin-left: 0; } .top .cta-s { display: inline-flex; } }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; background: var(--ink); color: #fff; text-decoration: none; font: 500 var(--fs-sm)/1 var(--sans); letter-spacing: .02em; border: 0; border-radius: 2px; cursor: pointer; transition: background .2s; }
+.btn:hover { background: var(--accent); }
+.btn .arr { width: 14px; height: 10px; }
+.btn.small { padding: 10px 16px; font-size: var(--fs-xs); }
+.tlink { font-size: var(--fs-sm); color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.tlink:hover { text-decoration-color: var(--accent); }
+
+/* hero */
+.hero { padding-block: clamp(48px, 8vw, 96px) 0; }
+.hero .grid { display: grid; gap: 36px; }
+@media (min-width: 900px) { .hero .grid { grid-template-columns: 6fr 5fr; gap: 64px; align-items: end; } }
+.kicker { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; gap: 12px; }
+.kicker::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+.hero h1 { font-family: var(--serif); font-size: var(--fs-h1); line-height: 1.02; letter-spacing: -.01em; margin-top: 18px; }
+:root[data-lang="zh"] .hero h1 { line-height: 1.2; font-weight: 600; letter-spacing: .02em; font-size: clamp(2.3rem, 7.6vw, 4.2rem); }
+.hero .lede { margin-top: 22px; color: var(--muted); font-size: var(--fs-md); max-width: 31em; }
+:root[data-lang="zh"] .hero .lede { font-size: var(--fs-base); }
+.hero .actions { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; }
+.hero figure { margin: 0; }
+.hero img { width: 100%; max-width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; border-radius: 2px; }
+@media (max-width: 899px) { .hero img { aspect-ratio: 3 / 2; } }
+figcaption { margin-top: 10px; font-size: var(--fs-xs); color: var(--muted); }
+.facts { margin-top: clamp(48px, 7vw, 80px); display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); }
+@media (min-width: 760px) { .facts { grid-template-columns: repeat(4, 1fr); } }
+.facts div { padding: 18px 16px 0 0; display: grid; gap: 2px; }
+.facts b { font-family: var(--sans); font-weight: 600; font-size: 1.12rem; color: var(--ink); line-height: 1.3; }
+.facts span { font-size: var(--fs-xs); color: var(--muted); }
+
+/* sections */
+section.blk { padding-block: clamp(64px, 10vw, 120px); }
+section.tint { background: var(--tint); }
+.split { display: grid; gap: 28px; }
+@media (min-width: 900px) { .split { grid-template-columns: 4fr 8fr; gap: 64px; } .split > .side { position: sticky; top: 104px; align-self: start; } }
+.side { display: grid; gap: 14px; align-content: start; }
+.side .num { font-size: var(--fs-xs); color: var(--accent); letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+.side h2 { font-family: var(--serif); font-size: var(--fs-h2); line-height: 1.05; }
+:root[data-lang="zh"] .side h2 { font-weight: 600; line-height: 1.25; font-size: clamp(1.8rem, 4.6vw, 2.6rem); }
+.side p { color: var(--muted); max-width: 26em; }
+
+/* process */
+.process { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.process li { display: grid; grid-template-columns: 56px 1fr; gap: 4px 16px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
+@media (min-width: 700px) { .process li { grid-template-columns: 72px 1fr 1.3fr; gap: 24px; } }
+.process .n { font-family: var(--serif); font-size: 2rem; line-height: 1; color: var(--accent); }
+.process h3 { font-size: var(--fs-md); font-weight: 600; font-family: var(--sans); }
+.process p { color: var(--muted); grid-column: 2; }
+@media (min-width: 700px) { .process p { grid-column: 3; } }
+.process .who { display: block; margin-top: 6px; font-size: var(--fs-xs); color: var(--ink); }
+.process .who::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+.process li.you .who::before { background: var(--sun); }
+.scope { margin-top: 28px; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+@media (min-width: 700px) { .scope { grid-template-columns: 1fr 1fr; } }
+.scope div { background: var(--paper); padding: 22px; display: grid; gap: 10px; }
+section.tint .scope div { background: var(--tint); }
+.scope h3 { font-size: var(--fs-sm); font-weight: 600; font-family: var(--sans); letter-spacing: .02em; }
+.scope ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--fs-sm); color: var(--muted); }
+.scope li { padding-left: 18px; position: relative; }
+.scope li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: var(--accent); }
+.scope .no li::before { background: var(--muted); }
+
+/* routes */
+.routes { border-top: 1px solid var(--ink); }
+.route { border-bottom: 1px solid var(--rule); }
+.route > button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: 1fr auto 20px; align-items: baseline; gap: 4px 16px; padding: 20px 0; }
+.route > button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.route .rn { font-family: var(--serif); font-size: 1.6rem; color: var(--ink); line-height: 1.2; }
+:root[data-lang="zh"] .route .rn { font-size: 1.25rem; font-weight: 600; }
+.route .ra { font-size: var(--fs-xs); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.route .pm { width: 14px; height: 14px; position: relative; align-self: center; }
+.route .pm::before, .route .pm::after { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 1.5px; background: var(--ink); transition: transform .25s; }
+.route .pm::after { transform: rotate(90deg); }
+.route[data-open="true"] .pm::after { transform: rotate(0); }
+.route .body { display: grid; gap: 22px; padding: 0 0 28px; }
+@media (min-width: 700px) { .route .body { grid-template-columns: 5fr 6fr; gap: 32px; } }
+.route img { width: 100%; max-width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; border-radius: 2px; }
+.route .txt { display: grid; gap: 16px; align-content: start; }
+.route .txt p { color: var(--muted); }
+.route dl { margin: 0; display: grid; }
+.route dl div { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; padding: 9px 0; border-top: 1px solid var(--rule); font-size: var(--fs-sm); }
+.route dt { color: var(--muted); }
+.route dd { margin: 0; color: var(--ink); }
+.note { font-size: var(--fs-xs); color: var(--muted); margin-top: 16px; }
+
+/* faq */
+.faq { border-top: 1px solid var(--ink); }
+.faq details { border-bottom: 1px solid var(--rule); }
+.faq summary { list-style: none; cursor: pointer; padding: 20px 40px 20px 0; position: relative; font-weight: 500; color: var(--ink); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before, .faq summary::after { content: ""; position: absolute; right: 4px; top: 50%; width: 14px; height: 1.5px; background: var(--ink); transition: transform .25s; }
+.faq summary::after { transform: rotate(90deg); }
+.faq details[open] summary::after { transform: rotate(0); }
+.faq .a { padding: 0 0 22px; color: var(--muted); max-width: 40em; }
+
+/* contact */
+.contact .wx { margin-top: 10px; border-top: 1px solid var(--ink); padding-top: 16px; display: grid; gap: 4px; }
+.contact .wx small { font-size: var(--fs-xs); color: var(--muted); }
+.contact .wx .row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.contact .wx .id { font-family: var(--serif); font-size: 2rem; color: var(--ink); user-select: all; -webkit-user-select: all; }
+.ghost { all: unset; cursor: pointer; font-size: var(--fs-xs); padding: 6px 12px; border: 1px solid var(--rule); border-radius: 2px; color: var(--ink); background: var(--paper); }
+.ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+form.card, .done { background: var(--paper); border: 1px solid var(--rule); padding: clamp(20px, 4vw, 36px); display: grid; gap: 18px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label, .field .lab { font-size: var(--fs-xs); color: var(--muted); letter-spacing: .04em; }
+.two { display: grid; gap: 18px; }
+@media (min-width: 560px) { .two { grid-template-columns: 1fr 1fr; } }
+input[type=text], select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #b8c7ca; border-radius: 0; padding: 10px 0; width: 100%; -webkit-appearance: none; appearance: none; }
+select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 10px) 52%, calc(100% - 5px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+input:focus, select:focus { outline: none; border-bottom: 2px solid var(--accent); padding-bottom: 9px; }
+.seg { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--rule); width: fit-content; max-width: 100%; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: inline-block; padding: 9px 16px; font-size: var(--fs-sm); cursor: pointer; color: var(--muted); }
+.seg label + label span { border-left: 1px solid var(--rule); }
+.seg input:checked + span { background: var(--ink); color: #fff; }
+.seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
+.agree { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: var(--fs-xs); color: var(--muted); }
+.agree input { width: 16px; height: 16px; margin: 3px 0 0; accent-color: var(--accent); }
+.err { color: #b4463a; font-size: var(--fs-sm); }
+.done h3 { font-family: var(--serif); font-size: 1.8rem; }
+:root[data-lang="zh"] .done h3 { font-size: 1.3rem; font-weight: 600; }
+.done ol { margin: 0; padding-left: 1.2em; color: var(--muted); font-size: var(--fs-sm); display: grid; gap: 4px; }
+.done pre { white-space: pre-wrap; font: inherit; font-size: var(--fs-sm); background: var(--tint); padding: 14px; margin: 0; user-select: all; -webkit-user-select: all; }
+
+/* footer */
+footer { background: var(--ink); color: #c9d6d8; padding-block: 56px calc(40px + env(safe-area-inset-bottom, 0px)); font-size: var(--fs-sm); }
+footer .cols { display: grid; gap: 32px; }
+@media (min-width: 800px) { footer .cols { grid-template-columns: 4fr 3fr 5fr; gap: 48px; } }
+footer .fb { color: #fff; display: grid; gap: 14px; align-content: start; }
+footer .fb svg { width: 84px; height: auto; }
+footer .fb .slogan { font-family: var(--serif); font-size: 1.3rem; color: #fff; }
+footer h4 { margin: 0 0 10px; font-size: var(--fs-xs); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #8fb3b8; }
+footer a { text-decoration: none; }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+footer .legal { font-size: var(--fs-xs); line-height: 1.7; color: #a9bec1; }
+footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-size: var(--fs-xs); color: #8fa8ab; }
+</style>
+</head>
+<body>
+
+{{INTRO_HTML}}
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#hero" aria-label="Oriwis">{{LOGO:top:}}</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#how"><span class="en">How we work</span><span class="zh">服务方式</span></a>
+      <a href="#routes"><span class="en">UK routes</span><span class="zh">升学路径</span></a>
+      <a href="#faq"><span class="en">Questions</span><span class="zh">常见问题</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="zh" aria-pressed="true">中</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="btn small cta-s" href="#consult"><span class="en">Free consultation</span><span class="zh">免费咨询</span></a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <p class="kicker"><span class="en">UK study consulting</span><span class="zh">英国留学咨询</span></p>
+          <h1><span class="en">Thinking about studying in the UK? Let’s talk it through.</span><span class="zh">想去英国读书？<br>我们先聊一聊。</span></h1>
+          <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
+          <div class="actions">
+            <a class="btn" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+            <a class="tlink" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span></a>
+          </div>
+        </div>
+        <figure>
+          <img src="images/v2/consult.jpg" alt="" width="1400" height="933">
+          <figcaption><span class="en">First consultations take place in Chinese or English.</span><span class="zh">初步咨询可使用中文或英文。</span></figcaption>
+        </figure>
+      </div>
+      <div class="facts">
+        <div><b><span class="en">UK only</span><span class="zh">专注英国</span></b><span><span class="en">One country, known well</span><span class="zh">只做一个国家，做深做透</span></span></div>
+        <div><b><span class="en">Free</span><span class="zh">免费</span></b><span><span class="en">First consultation</span><span class="zh">初步咨询</span></span></div>
+        <div><b><span class="en">Ages 11+</span><span class="zh">11 岁以上</span></b><span><span class="en">School to master’s</span><span class="zh">从中学到硕士</span></span></div>
+        <div><b><span class="en">No student fees</span><span class="zh">零学生收费</span></b><span><span class="en">You pay the school directly</span><span class="zh">费用直接付给学校</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="how">
+    <div class="wrap split">
+      <div class="side">
+        <p class="num">01</p>
+        <h2><span class="en">How we work</span><span class="zh">服务方式</span></h2>
+        <p><span class="en">Three steps. We guide the first two; the school takes it from there.</span><span class="zh">三个步骤。前两步由我们陪你完成，之后由学校与你直接对接。</span></p>
+      </div>
+      <div>
+        <ol class="process">
+          <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p></li>
+          <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p></li>
+          <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p></li>
+        </ol>
+        <div class="scope">
+          <div><h3><span class="en">What we do</span><span class="zh">我们提供</span></h3><ul><li><span class="en">Match your profile to suitable UK options</span><span class="zh">根据你的情况匹配英国学校与课程</span></li><li><span class="en">A free first consultation</span><span class="zh">免费初步咨询</span></li><li><span class="en">Referral to the school or its partner</span><span class="zh">转介至学校或其合作方</span></li></ul></div>
+          <div class="no"><h3><span class="en">What we don’t do</span><span class="zh">我们不做</span></h3><ul><li><span class="en">Submit applications on your behalf</span><span class="zh">代办入学申请</span></li><li><span class="en">Collect any fees from students</span><span class="zh">向学生收取任何费用</span></li><li><span class="en">Promise or guarantee admission</span><span class="zh">承诺或担保录取</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint" id="routes">
+    <div class="wrap split">
+      <div class="side">
+        <p class="num">02</p>
+        <h2><span class="en">Routes into UK education</span><span class="zh">英国升学路径</span></h2>
+        <p><span class="en">A short overview of each stage. Every school sets its own requirements.</span><span class="zh">各阶段简要介绍，具体要求以各校公布为准。</span></p>
+      </div>
+      <div>
+        <div class="routes" id="route-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="faq">
+    <div class="wrap split">
+      <div class="side">
+        <p class="num">03</p>
+        <h2><span class="en">Common questions</span><span class="zh">常见问题</span></h2>
+      </div>
+      <div class="faq">
+        <details><summary><span class="en">Is the first consultation free?</span><span class="zh">初步咨询免费吗？</span></summary><p class="a"><span class="en">Yes, with no obligation afterwards.</span><span class="zh">免费，之后也没有任何义务。</span></p></details>
+        <details><summary><span class="en">Who do I pay?</span><span class="zh">费用付给谁？</span></summary><p class="a"><span class="en">The school or its official partner, directly. We do not collect tuition, deposits or application fees.</span><span class="zh">直接付给学校或其官方合作方。我们不收取学费、押金或申请费。</span></p></details>
+        <details><summary><span class="en">Can you guarantee an offer?</span><span class="zh">能保证录取吗？</span></summary><p class="a"><span class="en">No. Admission decisions are made only by the school, and we do not sign admission guarantees.</span><span class="zh">不能。录取只由学校决定，我们不签署任何录取担保协议。</span></p></details>
+        <details><summary><span class="en">Do you handle applications or visas?</span><span class="zh">你们代办申请或签证吗？</span></summary><p class="a"><span class="en">No. We explain the process so you know what to expect; you apply to the school and for the visa yourself.</span><span class="zh">不代办。我们会讲清流程，申请和签证由你本人完成。</span></p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint contact" id="consult">
+    <div class="wrap split">
+      <div class="side">
+        <p class="num">04</p>
+        <h2><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></h2>
+        <p><span class="en">Add us on WeChat, or fill in the form and send us the message it creates.</span><span class="zh">直接添加微信，或填写表格并把生成的信息发给我们。</span></p>
+        <div class="wx">
+          <small><span class="en">WeChat ID</span><span class="zh">微信号</span></small>
+          <div class="row"><span class="id" id="wxid">OriwisUK</span><button class="ghost" type="button" data-copy="wxid"><span class="en">Copy</span><span class="zh">复制</span></button></div>
+        </div>
+      </div>
+      <div>
+        <form class="card" id="form" novalidate>
+          <div class="field">
+            <span class="lab"><span class="en">I am</span><span class="zh">我是</span></span>
+            <div class="seg" role="radiogroup">
+              <label><input type="radio" name="role" id="r-parent" value="parent" checked><span><span class="en">A parent</span><span class="zh">家长</span></span></label>
+              <label><input type="radio" name="role" id="r-student" value="student"><span><span class="en">A student</span><span class="zh">学生</span></span></label>
+              <label><input type="radio" name="role" id="r-adult" value="adult"><span><span class="en">Working adult</span><span class="zh">在职人士</span></span></label>
+            </div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="f-name"><span class="en">Name</span><span class="zh">称呼</span></label><input type="text" id="f-name" autocomplete="name" data-ph-en="e.g. Ms Wang" data-ph-zh="例如：王女士"></div>
+            <div class="field"><label for="f-contact"><span class="en">WeChat ID or phone</span><span class="zh">微信号或手机</span></label><input type="text" id="f-contact" autocomplete="tel" data-ph-en="So we can reply" data-ph-zh="方便我们回复你"></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="f-stage"><span class="en">Looking at</span><span class="zh">意向阶段</span></label><select id="f-stage"></select></div>
+            <div class="field"><label for="f-start"><span class="en">Planned start</span><span class="zh">计划入学</span></label><select id="f-start"></select></div>
+          </div>
+          <label class="agree"><input type="checkbox" id="f-agree"><span><span class="en">I agree Oriwis may use these details only to reply to me.</span><span class="zh">我同意 Oriwis 仅为回复我而使用以上信息。</span></span></label>
+          <p class="err" id="err" hidden></p>
+          <div><button class="btn" type="submit"><span class="en">Create my message</span><span class="zh">生成咨询信息</span><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button></div>
+        </form>
+        <div class="done" id="done" hidden>
+          <h3><span class="en">Your message is ready</span><span class="zh">咨询信息已生成</span></h3>
+          <ol>
+            <li><span class="en">Copy the message below.</span><span class="zh">复制下方信息。</span></li>
+            <li><span class="en">Add our WeChat: </span><span class="zh">添加微信：</span><b>OriwisUK</b></li>
+            <li><span class="en">Paste and send. We’ll reply soon.</span><span class="zh">粘贴发送，我们会尽快回复。</span></li>
+          </ol>
+          <pre id="msg"></pre>
+          <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><button class="btn" type="button" data-copy="msg"><span class="en">Copy message</span><span class="zh">复制信息</span></button><button class="tlink" type="button" id="edit" style="background:none;border:0;cursor:pointer;font:inherit;font-size:var(--fs-sm)"><span class="en">Edit</span><span class="zh">修改</span></button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div class="fb">{{LOGO:foot:}}<span class="slogan"><span class="en">Knowledge by the sea</span><span class="zh">海边求知</span></span></div>
+      <div>
+        <h4><span class="en">Contact</span><span class="zh">联系方式</span></h4>
+        <ul><li><span class="en">WeChat</span><span class="zh">微信</span>: OriwisUK</li><li><a href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></a></li></ul>
+      </div>
+      <div>
+        <h4><span class="en">About our service</span><span class="zh">服务说明</span></h4>
+        <p class="legal"><span class="en">Oriwis provides study-abroad information matching, preliminary consultations and referrals only. We are not a study-abroad agency. We do not handle admissions, collect fees from students, or sign admission guarantee agreements. Students register, pay and complete all procedures directly with the school or its overseas partner.</span><span class="zh">Oriwis 仅提供留学信息匹配、初步咨询与转介服务，不是留学中介机构。我们不代办入学申请，不向学生收取费用，不签署任何录取担保协议。学生最终直接向学校或海外合作方注册、缴费并办理相关手续。</span></p>
+      </div>
+    </div>
+    <div class="base"><span>© <span id="yr">2026</span> Oriwis</span><span><span class="en">Photos are AI-generated illustrations, not real students or schools.</span><span class="zh">网站图片为 AI 生成的示意图，并非真实学生或学校。</span></span></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var L = function () { return root.getAttribute('data-lang') === 'en' ? 'en' : 'zh'; };
+  var PATHS = {{PATHS}};
+  var open = 'ug', list = document.getElementById('route-list');
+  function renderRoutes() {
+    var l = L();
+    list.innerHTML = PATHS.map(function (p) {
+      var on = p.id === open, age = p.age === 'Any' ? (l === 'zh' ? '不限年龄' : 'Any age') : (l === 'zh' ? p.age + ' 岁' : 'Ages ' + p.age);
+      var len = p.rows[1][l][1];
+      return '<div class="route" data-open="' + on + '"><button type="button" aria-expanded="' + on + '" aria-controls="rb-' + p.id + '" data-id="' + p.id + '">' +
+        '<span class="rn">' + p.title[l] + '</span><span class="ra">' + age + '</span><span class="pm" aria-hidden="true"></span></button>' +
+        '<div class="body" id="rb-' + p.id + '"' + (on ? '' : ' hidden') + '><img src="images/v2/' + p.id + '.jpg" alt="" width="1000" height="666" loading="lazy">' +
+        '<div class="txt"><p>' + p.intro[l] + '</p><dl>' + p.rows.slice(1, 5).map(function (r) { return '<div><dt>' + r[l][0] + '</dt><dd>' + r[l][1] + '</dd></div>'; }).join('') + '</dl></div></div></div>';
+    }).join('');
+  }
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-id]'); if (!b) return;
+    open = open === b.dataset.id ? '' : b.dataset.id; renderRoutes();
+    var nb = list.querySelector('button[data-id="' + b.dataset.id + '"]'); if (nb) nb.focus({ preventScroll: true });
+  });
+
+  var form = document.getElementById('form'), done = document.getElementById('done'), err = document.getElementById('err');
+  function fillSelects() {
+    var l = L(), st = document.getElementById('f-stage'), sv = st.value || 'ug';
+    st.innerHTML = PATHS.map(function (p) { return '<option value="' + p.id + '">' + p[l] + '</option>'; }).join('') + '<option value="unsure">' + (l === 'zh' ? '还不确定' : 'Not sure yet') + '</option>';
+    st.value = sv;
+    var s2 = document.getElementById('f-start'), v2 = s2.value, y = new Date().getFullYear(), o = [];
+    for (var i = 1; i <= 3; i++) o.push(y + i);
+    s2.innerHTML = o.map(function (yy) { return '<option value="' + yy + '">' + (l === 'zh' ? yy + ' 年' : yy) + '</option>'; }).join('') + '<option value="unsure">' + (l === 'zh' ? '还不确定' : 'Not sure yet') + '</option>';
+    if (v2) s2.value = v2;
+    document.querySelectorAll('[data-ph-en]').forEach(function (el) { el.placeholder = el.getAttribute('data-ph-' + l); });
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var l = L(), contact = document.getElementById('f-contact').value.trim();
+    if (!contact) { err.textContent = l === 'zh' ? '请填写微信号或手机，方便我们回复你。' : 'Add a WeChat ID or phone number so we can reply.'; err.hidden = false; document.getElementById('f-contact').focus(); return; }
+    if (!document.getElementById('f-agree').checked) { err.textContent = l === 'zh' ? '请勾选同意说明后再继续。' : 'Please tick the agreement box to continue.'; err.hidden = false; return; }
+    err.hidden = true;
+    var role = form.querySelector('input[name=role]:checked').value;
+    var roleTxt = { parent: ['Parent', '家长'], student: ['Student', '学生'], adult: ['Working adult', '在职人士'] }[role][l === 'zh' ? 1 : 0];
+    var st = document.getElementById('f-stage'), s2 = document.getElementById('f-start'), name = document.getElementById('f-name').value.trim();
+    var lines = l === 'zh'
+      ? ['你好 Oriwis，我想预约免费咨询：', '称呼：' + (name || '—'), '身份：' + roleTxt, '意向阶段：' + st.options[st.selectedIndex].text, '计划入学：' + s2.options[s2.selectedIndex].text, '联系方式：' + contact]
+      : ['Hi Oriwis, I’d like a free consultation:', 'Name: ' + (name || '—'), 'I am: ' + roleTxt, 'Looking at: ' + st.options[st.selectedIndex].text, 'Planned start: ' + s2.options[s2.selectedIndex].text, 'Contact: ' + contact];
+    document.getElementById('msg').textContent = lines.join('\n');
+    form.hidden = true; done.hidden = false; done.scrollIntoView({ block: 'nearest' });
+  });
+  document.getElementById('edit').addEventListener('click', function () { done.hidden = true; form.hidden = false; });
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var el = document.getElementById(b.getAttribute('data-copy')), text = el.textContent, label = b.innerHTML;
+    function ok() { b.innerHTML = L() === 'zh' ? '已复制' : 'Copied'; setTimeout(function () { b.innerHTML = label; }, 1600); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { if (document.execCommand('copy')) { ok(); return; } } catch (x) {} b.innerHTML = L() === 'zh' ? '已选中，请长按复制' : 'Selected: press and hold to copy'; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+  });
+
+  function setLang(l, save) {
+    root.setAttribute('data-lang', l); root.lang = l === 'zh' ? 'zh-CN' : 'en';
+    document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === l)); });
+    renderRoutes(); fillSelects();
+    if (save) try { localStorage.setItem('oriwis-lang', l); } catch (x) {}
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.setLang, true); }); });
+  var saved = null; try { saved = localStorage.getItem('oriwis-lang'); } catch (x) {}
+  setLang(saved || ((navigator.language || 'zh').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en'), false);
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+{{SEA_JS}}
+</body>
+</html>
