@@ -1500,12 +1500,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col = mix(col, gold, smoothstep(.62, 0., length((ru - vec2(.05, .0)) * vec2(1., 1.5))) * .55);',
       // the London skyline across the river, reflected: wobbling, torn into strips by the ripples, lamp lights drawn out into streaks
       '  vec2 sp = p + g * 13.; sp.x += sin(sp.y * .35 + uT * 1.5) * 1.4 + (noise(vec2(sp.y * .1, uT * .8)) - .5) * 4.;',
-      '  vec2 su = vec2(sp.x / uRes.x, 1. - sp.y / (uRes.y * .42));',
-      '  if (su.y > 0.) { vec2 bl = vec2(1.6 / uRes.x, 3. / (uRes.y * .42)); float sa = 0.;',
+      '  vec2 su = vec2(sp.x / uRes.x, 1. - sp.y / (uRes.y * .34));',
+      '  if (su.y > 0.) { vec2 bl = vec2(1.6 / uRes.x, 3. / (uRes.y * .34)); float sa = 0.;',
       '    sa += texture2D(uSky, clamp(su, 0., 1.)).a * .4; sa += texture2D(uSky, clamp(su + bl, 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su - bl, 0., 1.)).a * .15;',
       '    sa += texture2D(uSky, clamp(su + vec2(bl.x, -bl.y), 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su + vec2(-bl.x, bl.y), 0., 1.)).a * .15;',
-      '    sa *= (.82 + .18 * sin(sp.y * 1.3 + uT * 2.6)) * mix(.5, 1., su.y);',
-      '    col = mix(col, col * .3 + vec3(.0, .025, .03), min(1., sa * 1.1));',
+      '    sa *= (.82 + .18 * sin(sp.y * 1.3 + uT * 2.6)) * mix(.62, 1., su.y);',
+      '    col = mix(col, col * .2 + vec3(.0, .02, .025), min(1., sa * 1.25));',
       '    float li = 0.; for (int k = -3; k <= 3; k++) li += texture2D(uSky, clamp(su + vec2(0., float(k) * .022), 0., 1.)).r * (1. - abs(float(k)) / 4.);',
       '    col += vec3(1., .78, .42) * li * .3 * (.75 + .25 * sin(sp.y * 2.1 - uT * 3.)); }',
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
@@ -1581,7 +1581,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    var skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
+    var SKY = .34, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
@@ -1636,26 +1636,21 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     })();
     // London across the river: the Eye, Big Ben and Parliament, St Paul's, the Shard, and lamps along the embankment
     function paintSky(w, h) {
-      var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * .42 * 2));
-      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = cw / 360, base = ch - 6 * u;
-      x.fillStyle = '#000'; x.strokeStyle = '#000';
-      function R(a, b, ww, hh) { x.fillRect(a * u, base - (b + hh) * u, ww * u, hh * u); }
-      // London Eye
-      var ex = 58 * u, ey = base - 70 * u, er = 50 * u; x.lineWidth = 3.4 * u; x.beginPath(); x.arc(ex, ey, er, 0, Math.PI * 2); x.stroke();
-      x.lineWidth = 1 * u; for (var i = 0; i < 16; i++) { var a = i * Math.PI / 8; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + Math.cos(a) * er, ey + Math.sin(a) * er); x.stroke();
-        x.beginPath(); x.arc(ex + Math.cos(a) * er, ey + Math.sin(a) * er, 2.6 * u, 0, Math.PI * 2); x.fill(); }
-      x.lineWidth = 2.8 * u; x.beginPath(); x.moveTo(ex - 26 * u, base); x.lineTo(ex, ey); x.lineTo(ex + 26 * u, base); x.stroke();
-      // Parliament with Big Ben (Elizabeth Tower) and Victoria Tower
-      R(160, 0, 200, 32); for (var k = 0; k < 24; k++) R(162 + k * 8, 32, 2, 8);
-      R(318, 0, 22, 86); R(316, 86, 26, 6); for (var k2 = 0; k2 < 4; k2++) R(317 + k2 * 7, 92, 2, 7);
-      R(182, 0, 17, 122); R(180, 122, 21, 24); R(182, 146, 17, 10);
-      x.beginPath(); x.moveTo(181 * u, base - 156 * u); x.lineTo(190.5 * u, base - 194 * u); x.lineTo(200 * u, base - 156 * u); x.fill();
-      R(190, 194, 1, 9);
-      R(0, 0, 360, 9); R(110, 0, 34, 14);
-      // lamps: posts are silhouettes, lanterns are lights (red channel)
-      var lamps = [22, 104, 262, 300];
+      // Big Ben and Parliament on the far bank; drawn upright here, the shader shows it upside down hanging from the top edge
+      var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * SKY * 2));
+      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = ch / 212, base = ch - 2 * u, bx0 = cw * .22; x.scale(1, 1);
+      x.fillStyle = '#000';
+      function R(a, b, ww, hh) { x.fillRect(bx0 + a * u * 1.35, base - (b + hh) * u, ww * u * 1.35, hh * u); }
+      R(-200, 0, 400, 6);                                                   // embankment
+      R(-150, 0, 270, 30); for (var k = 0; k < 34; k++) R(-148 + k * 8, 30, 2, 8);          // Parliament with its pinnacles
+      R(-120, 30, 10, 16); R(60, 30, 10, 18); R(95, 30, 8, 22);                            // small towers
+      R(-8.5, 0, 17, 124); R(-10.5, 124, 21, 26); R(-8.5, 150, 17, 10);                      // Elizabeth Tower, clock stage, belfry
+      x.beginPath(); x.moveTo(bx0 - 9.5 * u * 1.35, base - 160 * u); x.lineTo(bx0, base - 200 * u); x.lineTo(bx0 + 9.5 * u * 1.35, base - 160 * u); x.fill();
+      R(-.5, 200, 1, 8);
+      var lamps = [-120, -60, 50, 110];
       lamps.forEach(function (lx) { R(lx - .8, 0, 1.6, 34); R(lx - 3, 34, 6, 2); });
-      x.fillStyle = '#ffcf70'; lamps.forEach(function (lx) { x.beginPath(); x.arc(lx * u, base - 39 * u, 2.6 * u, 0, Math.PI * 2); x.fill(); });
+      x.fillStyle = '#ffcf70'; lamps.forEach(function (lx) { x.beginPath(); x.arc(bx0 + lx * u * 1.35, base - 39 * u, 2.8 * u, 0, Math.PI * 2); x.fill(); });
+      x.fillStyle = '#ffe2a0'; x.beginPath(); x.arc(bx0, base - 137 * u, 5.5 * u, 0, Math.PI * 2); x.fill();        // the clock face, lit
       upload(skyT, c);
     }
     function frame() {
