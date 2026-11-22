@@ -24,3 +24,15 @@ if len(sys.argv) > 1:
     frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', out)
     pathlib.Path(sys.argv[1]).write_text(frag)
 print('ok', len(out))
+
+# Light, creamy variant: same page with html data-look="light" and no dark-mode switch.
+light = out.replace('<html lang="zh-CN" data-lang="zh">', '<html lang="zh-CN" data-lang="zh" data-look="light">', 1)
+light = re.sub(r'@media \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{.*?\} \}\n', '', light, count=1, flags=re.S)
+light = re.sub(r':root\[data-theme="dark"\] \{.*?\}\n', '', light, count=1, flags=re.S)
+light = light.replace('<title>Oriwis UK Study</title>', '<title>Oriwis UK Study (light)</title>', 1)
+(root / 'index-light.html').write_text(light)
+if len(sys.argv) > 2:
+    frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', light)
+    frag = "<script>document.documentElement.setAttribute('data-look','light')</script>\n" + frag
+    pathlib.Path(sys.argv[2]).write_text(frag)
+print('light ok', len(light))
