@@ -462,7 +462,7 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 /* real water: a small WebGL surface with the logo written on it; the plain logo stays as the fallback */
 .wavepost .wp-water { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
 .wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo, .wavepost.wet .wp-box, .wavepost.wet .wp-burst, .wavepost.wet .wp-env { visibility: hidden; }
-.wavepost.wet .wp-trail { opacity: .55; } .wavepost.wet .wp-glow { opacity: .28; }
+.wavepost.wet .wp-trail, .wavepost.wet .wp-glow { opacity: 0; }
 .wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
 .wavepost.wet .wp-lbl { text-shadow: 0 1px 8px rgba(4,28,34,.55); }
 
@@ -1285,7 +1285,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
     logo.classList.toggle('pass', t > passA && t < passB);
     if (water) { water.glow(t > passA && t < passB ? 1 : 0);
-      if (t > 0 && t < .9 && Math.abs(p.x - lastDrop) > 36) { lastDrop = p.x; water.drop(p.x, p.y + 9, inCut ? .45 : .3); }
+      if (t > 0 && t < .93 && Math.abs(p.x - lastDrop) > 11) { lastDrop = p.x; water.drop(p.x, p.y, -1); }
       if (t === 0) lastDrop = -99; }
   }
   // idle: the envelope bobs and a spark runs along the wave to the post box
@@ -1346,7 +1346,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       'precision mediump float;',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[8]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1356,10 +1356,14 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  float v = sin(q.x * .05 + uT * .9 + noise(q * .015 + uT * .08) * 5.) * .35;',
       '  v += sin(q.y * .09 - uT * 1.4 + q.x * .015) * .22;',
       '  v += (noise(q * .045 + vec2(uT * .25, -uT * .18)) - .5) * .7;',
-      '  for (int i = 0; i < 8; i++) { vec4 r = uR[i]; float age = uT - r.z;',
+      '  for (int i = 0; i < 24; i++) { vec4 r = uR[i]; float age = uT - r.z;',
       '    if (r.w > 0. && age > 0. && age < 4.5) {',
       '      vec2 d = (p - r.xy) * vec2(1., 2.); float x = length(d) - age * 52.;',
       '      v += r.w * 2. * sin(x * .38) * exp(-x * x / (160. + age * 260.)) * exp(-age * .9);',
+      '    } else if (r.w < 0. && age > 0. && age < 2.2) {',
+      '      vec2 d = (p - r.xy) * vec2(1., 1.8); float rr = length(d), x = rr - age * 34.;',
+      '      v += -r.w * 2.2 * sin(x * .55) * exp(-x * x / (50. + age * 170.)) * exp(-age * 1.4);',
+      '      v -= -r.w * 1.4 * exp(-rr * rr / 60.) * exp(-age * 5.);',
       '    } }',
       '  return v; }',
       'void main(){',
@@ -1386,14 +1390,34 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col = mix(col, bc * .8 + col * .15, bm * .74);',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
-      '    vec2 ep = p + g * 7. - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z);',
-      '    ep = vec2(cs * ep.x - sn * ep.y, sn * ep.x + cs * ep.y) / uEnv.w; float ea = 1.3 / uEnv.w;',
+      '    vec2 ep = p + g * 7. - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
+      '    ep = vec2(cs * ep.x - sn * ep.y, sn * ep.x + cs * ep.y) / es; float ea = 1.1 / es;',
+      // soft shadow on the bed below
+      '    float shd = rb(ep - vec2(3.5, 6.), vec2(-15., -10.), vec2(15., 10.), 5. / es);',
+      '    col *= 1. - shd * .3 * uEnvA;',
       '    float eb = rb(ep, vec2(-15., -10.), vec2(15., 10.), ea), yl = 2.5 - abs(ep.x) * .793;',
-      '    vec3 ec = mix(vec3(.99, .97, .92), vec3(.96, .91, .81), smoothstep(-ea, ea, yl - ep.y));',
-      '    ec = mix(ec, vec3(.78, .68, .50), 1. - smoothstep(.3, .9, abs(ep.y - yl) / max(ea, .5)));',
-      '    ec = mix(ec, vec3(.78, .2, .18), 1. - smoothstep(3.0, 3.6, length(ep - vec2(0., 2.5))));',
-      '    ec = mix(ec, vec3(.30, .60, .62), .36) * (.86 + .3 * smoothstep(.55, .9, noise(p * .09 + vec2(uT * .7, uT * .4))));',
-      '    col = mix(col, ec, eb * uEnvA * .92);',
+      // paper: fibres, a gentle soggy bend, darker edges
+      '    float fib = noise(ep * vec2(.8, 3.2)) * .05 + noise(ep * 7.) * .035;',
+      '    vec3 ec = vec3(.97, .95, .89) - fib;',
+      '    ec *= .9 + .1 * sin(ep.x * .16 + ep.y * .09 + uT * 1.6);',
+      '    float flap = smoothstep(-ea, ea, yl - ep.y);',
+      '    ec = mix(ec, ec * vec3(.97, .93, .85), flap);',
+      '    ec *= 1. - .2 * (1. - flap) * (1. - smoothstep(0., 3., ep.y - yl));',
+      '    ec = mix(ec, vec3(.74, .64, .47), (1. - smoothstep(.25, .8, abs(ep.y - yl))) * step(abs(ep.x), 14.6));',
+      '    float sl = min(abs((ep.y - 10.) + (abs(ep.x) - 15.) * .77), 9.);',
+      '    ec *= 1. - .08 * (1. - smoothstep(0., .9, sl)) * step(yl, ep.y);',
+      '    ec *= .82 + .18 * smoothstep(0., 2.2, min(15. - abs(ep.x), 10. - abs(ep.y)));',
+      // wax seal with a raised rim and a little shine
+      '    vec2 sq = ep - vec2(0., 2.5); float sr = length(sq), sw = 3.7 + (noise(sq * 1.6) - .5) * .7;',
+      '    float seal = 1. - smoothstep(sw - .4, sw + .2, sr);',
+      '    vec3 wx = vec3(.62, .1, .1) + vec3(.25, .08, .06) * clamp(.6 - dot(sq, vec2(.2, .25)), 0., 1.);',
+      '    wx *= .85 + .3 * smoothstep(sw - 1.3, sw - .5, sr) * (1. - smoothstep(sw - .5, sw, sr));',
+      '    wx += vec3(1., .8, .7) * .35 * (1. - smoothstep(0., 1.1, length(sq - vec2(-1.1, -1.2))));',
+      '    ec = mix(ec, wx, seal);',
+      // seen through the water: tinted, softened, with moving caustic light
+      '    float cau = smoothstep(.86, .99, 1. - abs(noise(p * .11 + vec2(uT * .6, uT * .35)) * 2. - 1.));',
+      '    ec = mix(ec, vec3(.32, .60, .62), .2) * (.95 + cau * .18);',
+      '    col = mix(col, ec, eb * uEnvA * .93);',
       '  }',
       // light on the ripples
       '  float s = dot(g, normalize(vec2(-.35, -1.)));',
@@ -1424,7 +1448,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uEnv', 'uEnvA', 'uHit', 'uRefl'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var tex = gl.createTexture(), texOn = 0;
-    var ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(32), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    var ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
     (function () {
@@ -1464,7 +1488,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
         gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY + 56); gl.uniform3f(U.uRefl, boxX, boxY, 1); frame();
       },
-      drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 8; },
+      drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; if (!running) frame(); },
       hit: function () { hitV = 1; },
