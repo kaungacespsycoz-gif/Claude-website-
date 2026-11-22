@@ -155,9 +155,22 @@ section.tint { background: var(--tint); }
 
 /* process */
 .process { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.process li { display: grid; grid-template-columns: 56px 1fr; gap: 4px 16px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
+.process li { display: grid; grid-template-columns: 56px 1fr; align-items: start; gap: 4px 16px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
 @media (min-width: 700px) { .process li { grid-template-columns: 72px 1fr 1.3fr; gap: 24px; } }
-.process .n { font-family: var(--serif); font-weight: 400; font-size: 1.9rem; line-height: 1; color: var(--accent); }
+.process .n { position: relative; z-index: 1; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; grid-row: span 2;
+  font: 600 .95rem/1 var(--sans); color: var(--accent); background: var(--paper); border: 1px solid var(--accent);
+  transition: background .4s ease, color .4s ease, border-color .4s ease, transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s ease; }
+/* the journey: a line beside the steps; the logo's sun travels down it as you scroll */
+.journey { position: relative; }
+.track { display: none; position: absolute; left: 19.5px; width: 1px; background: var(--rule); pointer-events: none; }
+.journey.live .track { display: block; }
+.track .fill { position: absolute; left: -0.5px; top: 0; width: 2px; height: 0; background: linear-gradient(var(--accent) 0%, var(--accent) 75%, var(--sun) 100%); }
+.track .dot { position: absolute; left: 0.5px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--sun); transform: translate(-50%, -50%); box-shadow: 0 0 0 5px rgba(240,169,59,.22); }
+.journey.live .process .n { color: var(--muted); border-color: var(--rule); }
+.journey.live .process li h3, .journey.live .process li p { transition: opacity .45s ease, color .45s ease; opacity: .45; }
+.journey.live .process li.on h3, .journey.live .process li.on p { opacity: 1; }
+.journey.live .process li.on .n { background: var(--accent); border-color: var(--accent); color: #fff; transform: scale(1.08); box-shadow: 0 0 0 6px rgba(15,127,140,.12); }
+.journey.live .process li.you.on .n { background: var(--sun); border-color: var(--sun); color: var(--ink); box-shadow: 0 0 0 6px rgba(240,169,59,.18); }
 .process h3 { font-size: var(--fs-md); font-weight: 600; font-family: var(--sans); }
 .process p { color: var(--muted); grid-column: 2; }
 @media (min-width: 700px) { .process p { grid-column: 3; } }
@@ -310,11 +323,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
         <p><span class="en">Three steps. We guide the first two; the school takes it from there.</span><span class="zh">三个步骤。前两步由我们陪你完成，之后由学校与你直接对接。</span></p>
       </div>
       <div>
+        <div class="journey" id="journey"><span class="track" aria-hidden="true"><span class="fill"></span><span class="dot"></span></span>
         <ol class="process">
           <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p></li>
           <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p></li>
           <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p></li>
-        </ol>
+        </ol></div>
         <div class="scope">
           <div><h3><span class="en">What we do</span><span class="zh">我们提供</span></h3><ul><li><span class="en">Match your profile to suitable UK options</span><span class="zh">根据你的情况匹配英国学校与课程</span></li><li><span class="en">A free first consultation</span><span class="zh">免费初步咨询</span></li><li><span class="en">Referral to the school or its partner</span><span class="zh">转介至学校或其合作方</span></li></ul></div>
           <div class="no"><h3><span class="en">What we don’t do</span><span class="zh">我们不做</span></h3><ul><li><span class="en">Submit applications on your behalf</span><span class="zh">代办入学申请</span></li><li><span class="en">Collect any fees from students</span><span class="zh">向学生收取任何费用</span></li><li><span class="en">Promise or guarantee admission</span><span class="zh">承诺或担保录取</span></li></ul></div>
@@ -551,6 +565,31 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   document.getElementById('yr').textContent = new Date().getFullYear();
 })();
 </script>
+<script>
+/* How we work: scroll-linked journey. The reading line sits at 62% of the screen; the sun follows it
+   between the first and last step badges, and each step lights up once the sun has reached it. */
+(function () {
+  var j = document.getElementById('journey'); if (!j) return;
+  var track = j.querySelector('.track'), fill = j.querySelector('.fill'), dot = j.querySelector('.dot');
+  var items = Array.prototype.slice.call(j.querySelectorAll('.process > li')), badges = items.map(function (li) { return li.querySelector('.n'); });
+  j.classList.add('live');
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var jr = j.getBoundingClientRect();
+    var c = badges.map(function (b) { var r = b.getBoundingClientRect(); return r.top + r.height / 2 - jr.top; });
+    var top = c[0], len = c[c.length - 1] - top;
+    track.style.top = top + 'px'; track.style.height = len + 'px';
+    var read = innerHeight * 0.62 - jr.top - top;
+    var d = Math.max(0, Math.min(len, read));
+    fill.style.height = d + 'px'; dot.style.top = d + 'px';
+    dot.style.opacity = read < -40 ? 0 : 1;
+    items.forEach(function (li, k) { li.classList.toggle('on', read >= c[k] - top - 2); });
+  }
+  function req() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); update();
+})();
+</script>
 <script src="vendor/motion.min.js"></script>
 <script>
 /* Calm entrance animations with Motion (vendor/motion.min.js). Content is visible by default;
@@ -577,7 +616,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   group('#hero .facts', '.facts > div', { s: 0.08, y: 12 });
   // 2. each section: title column, then its rows one after another
   ['#how', '#routes', '#faq', '#consult'].forEach(function (id) { group(id + ' .side', '.side > *', { s: 0.08 }); });
-  group('#how .process', '.process > li', { s: 0.12 });
   group('#how .scope', '.scope > div', { s: 0.1, y: 12 });
   group('#routes .routes', '.route', { s: 0.06, y: 12, d: 0.6 });
   group('#faq .faq', 'details', { s: 0.06, y: 12, d: 0.6 });
