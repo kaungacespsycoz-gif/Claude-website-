@@ -468,6 +468,7 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo, .wavepost.wet .wp-box, .wavepost.wet .wp-burst, .wavepost.wet .wp-env { visibility: hidden; }
 .wavepost.wet .wp-trail, .wavepost.wet .wp-glow { opacity: 0; }
 .wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
+.wavepost.wet .wp-lbl, .wavepost.wet .wp-ok { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
 
 
 
@@ -1282,7 +1283,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var SB = 1.6, floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 400, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var BANK = 92, SB = 1.6, floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 400, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
@@ -1290,11 +1291,11 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
     bx = W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * (water ? .05 : .04));
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round(((water ? H - BANK : H) - 162 * k) / 2) - Math.round(H * (water ? .03 : .04));
     by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S)); SB = S;
     if (water) {
       // a huge pillar box on the near bank: only its domed top and the slot show, low in the water under the logo
-      var wSlot = Math.round(H * .78), room = wSlot - (Ly + 162 * k) + 30;
+      var wSlot = Math.min(Math.round(H * .78), H - BANK - 26), room = wSlot - (Ly + 162 * k) + 30;
       SB = Math.max(2.2, Math.min(W * .55 / 40, room / 27.5)); bx = Math.round(W - 14 * SB);   // far right, cropped by the edge
       by = REFL_Y = Math.round(wSlot + 55.7 * SB);
     }
@@ -1307,7 +1308,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
       (water ? ' C' + (c6[0] + 34) + ' ' + (c6[1] + 6) + ' ' + (slotX - 16) + ' ' + (slotY - 80) + ' ' + slotX + ' ' + slotY : ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY);
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
-    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, SB);
+    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, SB, H - BANK);
     var defs = mk('defs', {});
     grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
     grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
@@ -1427,7 +1428,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
+      el.classList.add('sent'); if (water) { water.sand(true); water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1436,7 +1437,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
         var sc = 1 + Math.min(1, k * 1.6) * .6; burst.setAttribute('transform', burst.getAttribute('transform').replace(/ scale\([^)]*\)/, '') + ' scale(' + sc.toFixed(2) + ')');
         if (k < 1) requestAnimationFrame(wig); })(b0);
       setTimeout(function () { if (window.oriwisBook) window.oriwisBook.open(); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 750);
-      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; }, 2300);
+      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; if (water) water.sand(false); }, 2300);
     });
   }
   svg.addEventListener('pointerdown', function (e) {
@@ -1464,7 +1465,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT, uSand; uniform float uBank; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1577,6 +1578,35 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    vec3 lc = mix(tx.rgb, vec3(.55, .78, .78) * tx.a, .12) * band * (1. + clamp(s, -.2, .4) * .5);',
       '    col = col * (1. - tx.a * .84) + lc * .84;',
       '  }',
+      // the Thames foreshore: sand and pebbles, a wave washing up and back, the words written into the sand
+      '  float swash = sin(uT * .75) * 6. + sin(uT * 1.9 + 1.) * 1.5;',
+      '  float shore = uBank + 4. + sin(p.x * .04 + uT * .5) * 3. + sin(p.x * .11 - uT * 1.1) * 1.3 - swash;',
+      '  float reach = uBank + 4. + sin(p.x * .04) * 3. - 8.;',
+      '  if (p.y > shore - 16.) {',
+      '    float gr = noise(p * .9) * .5 + noise(p * 2.7) * .3 + noise(p * .2) * .4;',
+      '    vec3 sand = vec3(.72, .62, .47) * (.8 + gr * .24);',
+      // pebbles, two sizes, kept clear of the writing
+      '    vec2 tq = vec2(p.x / uRes.x, (p.y - uBank) / (uRes.y - uBank)), o4 = vec2(5. / uRes.x, 5. / (uRes.y - uBank));',
+      '    float near = texture2D(uSand, clamp(tq, 0., 1.)).a + texture2D(uSand, clamp(tq + o4, 0., 1.)).a + texture2D(uSand, clamp(tq - o4, 0., 1.)).a + texture2D(uSand, clamp(tq + vec2(o4.x, -o4.y), 0., 1.)).a + texture2D(uSand, clamp(tq + vec2(-o4.x, o4.y), 0., 1.)).a;',
+      '    float clear = 1. - step(.01, near);',
+      '    for (int j = 0; j < 2; j++) { float sz = j == 0 ? 11. : 6.5; vec2 cc = floor(p / sz); vec2 ff = p / sz - cc;',
+      '      float ex = step(j == 0 ? .8 : .86, hash(cc + 11.3 + float(j))) * clear, rad = .16 + .17 * hash(cc + 3.1), dd = length((ff - (.3 + .4 * vec2(hash(cc), hash(cc + 7.3)))) * vec2(1., 1.25));',
+      '      float pm = (1. - smoothstep(rad - .05, rad, dd)) * ex; vec3 pc = mix(vec3(.33, .31, .29), vec3(.62, .57, .5), hash(cc + 5.)) * (.85 + .3 * (1. - dd / max(rad, .01)));',
+      '      sand = mix(sand, pc, pm); sand *= 1. - (1. - smoothstep(rad, rad + .12, dd)) * (1. - pm) * ex * .25; }',
+      // wet sand where the wave has just been
+      '    float wet = 1. - smoothstep(0., 26., p.y - min(shore, reach + 8.)); sand = mix(sand, sand * .58 + vec3(.0, .03, .04), wet * .75);',
+      '    sand += vec3(.6, .7, .7) * wet * .1 * smoothstep(.6, .9, noise(vec2(p.x * .07, p.y * .3)));',
+      '    vec2 tu = vec2(p.x / uRes.x, (p.y - uBank) / (uRes.y - uBank)); vec2 off = vec2(1.3 / uRes.x, 1.3 / (uRes.y - uBank));',
+      '    float a0 = texture2D(uSand, clamp(tu, 0., 1.)).a, a1 = texture2D(uSand, clamp(tu - off, 0., 1.)).a, a2 = texture2D(uSand, clamp(tu + off, 0., 1.)).a;',
+      '    sand *= 1. - a0 * .45; sand += vec3(1., .93, .8) * max(a2 - a0, 0.) * .32; sand *= 1. - max(a1 - a0, 0.) * .28;',
+      // thin water over the sand near the edge, then the lacy foam line
+      '    float thin = smoothstep(shore - 16., shore, p.y);',
+      '    vec3 under = mix(col, sand * vec3(.72, .86, .86), thin * .8);',
+      '    col = p.y < shore ? under : sand;',
+      '    float lace = smoothstep(.45, .8, noise(vec2(p.x * .18, p.y * .5 + uT * .8)));',
+      '    float foam = exp(-pow((p.y - shore) / 1.8, 2.)) * (.5 + .5 * lace) + exp(-pow((p.y - shore + 6.) / 2.5, 2.)) * lace * .35;',
+      '    col += vec3(.88, .94, .92) * foam * .5;',
+      '  }',
       '  vec2 vu = p / uRes - .5; col *= 1. - dot(vu * vec2(.5, 1.), vu * vec2(.5, 1.)) * .55;',
       '  gl_FragColor = vec4(col, 1.);',
       '}'].join('\n');
@@ -1587,8 +1617,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    var SKY = .44, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var SKY = .44, sandT = gl.createTexture(), bankY = 1e4, sentTxt = false, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
@@ -1642,6 +1672,20 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       upload(boxT, c);
     })();
     // London across the river: the Eye, Big Ben and Parliament, St Paul's, the Shard, and lamps along the embankment
+    // the words written in the sand
+    function paintSand() {
+      if (!Wc || bankY > Hc) return;
+      var bh = Hc - bankY, c = document.createElement('canvas'); c.width = Math.round(Wc * 2); c.height = Math.round(bh * 2);
+      var x = c.getContext('2d'), zh = root.getAttribute('data-lang') === 'zh', fam = getComputedStyle(document.body).fontFamily;
+      x.scale(2, 2); x.fillStyle = '#000'; x.textBaseline = 'middle';
+      var big = sentTxt ? (zh ? '已寄出 ✓' : 'Sent ✓') : (zh ? '预约免费咨询' : 'Book a free consultation');
+      var small = sentTxt ? (zh ? '正在打开预约页面' : 'Opening the booking page') : (zh ? '点击或向右滑动，寄往英国 →' : 'Tap, or drag right to send →');
+      x.font = '700 ' + (zh ? 21 : 19) + 'px ' + fam; x.fillText(big, 20, bh * .44);
+      x.font = '500 12.5px ' + fam; x.globalAlpha = .75; x.fillText(small, 21, bh * .44 + 22);
+      upload(sandT, c);
+    }
+    var root = document.documentElement;
+    document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { setTimeout(function () { paintSand(); frame(); }, 30); }); });
     function paintSky(w, h) {
       // Big Ben and Parliament on the far bank; drawn upright here, the shader shows it upside down hanging from the top edge
       var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * SKY * 2));
@@ -1668,7 +1712,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
       gl.uniform1i(U.uSky, 2); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, skyT);
-      gl.uniform1i(U.uBoxT, 3); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, boxT); gl.activeTexture(gl.TEXTURE0);
+      gl.uniform1i(U.uBoxT, 3); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, boxT);
+      gl.uniform1i(U.uSand, 4); gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, sandT); gl.activeTexture(gl.TEXTURE0); gl.uniform1f(U.uBank, bankY);
       if (cutTo !== cutX) { cutX = cutTo > cutX ? cutTo : cutX + (cutTo - cutX) * .08; if (Math.abs(cutTo - cutX) < 1) cutX = cutTo; } gl.uniform1f(U.uCut, cutX);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
@@ -1679,16 +1724,17 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       frame(); requestAnimationFrame(loop);
     }
     var api = {
-      layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs) {
+      layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs, bank) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        paintSky(w, h); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
+        bankY = bank || 1e4; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; if (!running) frame(); },
       hit: function () { hitV = 1; },
+      sand: function (sent) { sentTxt = sent; paintSand(); },
       cut: function (x) { if (!cutDone && x > cutTo) cutTo = x; if (!running) frame(); },
       keepCut: function () { cutDone = true; cutTo = 1e4; },
       heal: function () { if (!cutDone) cutTo = -50; },
