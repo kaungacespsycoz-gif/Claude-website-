@@ -16,7 +16,13 @@ def logo(m):
     return (f'<svg{c} viewBox="-4 -10 208 162" role="img" aria-label="Oriwis">'
             f'<defs><clipPath id="owc-{uid}"><path d="{TOP}"/><path d="{BOT}"/></clipPath></defs>'
             f'<g fill="currentColor" clip-path="url(#owc-{uid})">{letters}</g>'
+            + (BREEZE.format(uid=uid, letters=letters) if uid == 'intro' else '') +
             f'<circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg>')
+# Opening screen only: the letters start whole; a breeze then sweeps left to right and carves the wave stripe.
+BREEZE = ('<defs><clipPath id="owb-{uid}"><rect class="breeze-wipe" x="-12" y="-20" width="240" height="190"/></clipPath></defs>'
+          '<g class="uncut" fill="currentColor" clip-path="url(#owb-{uid})">{letters}</g>'
+          '<path class="breeze" pathLength="100" d="M-30 113.6 C-12 108 0 104 12 105 C29.2 103.6 56.8 103.6 86.0 113.6 C115.2 123.6 142.8 123.6 178.0 113.6 C192 109 204 106 222 107" '
+          'fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>')
 out = src.replace('{{OUTFIT}}', font)
 out = re.sub(r'\{\{LOGO:(\w+):([\w-]*)\}\}', logo, out)
 (root / 'index.html').write_text(out)
