@@ -1,19 +1,21 @@
-# Aquaire · 海语英语 — English by the sea · 海边学英语
+# Oriwis brand · Orient Wisdom · 东方智慧
 
-**The crest:** a serif "A" inside a fine double circle, with one wave line beneath — an academy
-seal for a school by the sea. One colour only: deep sea on light grounds, sand on dark ones.
-Wordmark in Instrument Serif; slogan in Outfit (both SIL OFL); Chinese in WenQuanYi Zen Hei.
-All lettering is outlined, so the SVGs look the same everywhere without the fonts.
+The mark: a half sun rising from an open book, inside a thin double ring.
+The book's two pages also read as waves (Sanya, by the sea). Wisdom from the East: knowledge rising like the morning.
+No sun rays, on purpose.
 
 | File | Use |
 |---|---|
-| aquaire-logo.svg / aquaire-logo-sand.png | Main logo on light backgrounds (website, letterheads, documents) |
-| aquaire-logo-light.svg / aquaire-logo-dark.png | Main logo on dark backgrounds |
-| aquaire-logo-stacked(.svg/.png), -stacked-dark | Posters, signage, the warehouse wall, social posts |
-| aquaire-crest.svg / .png, aquaire-crest-light.svg | The seal on its own: stamps, certificates, phrase cards, merchandise |
-| aquaire-icon.svg / aquaire-icon-1024.png | WeChat avatar, app icon, favicon (heavier lines for small sizes) |
-| aquaire-logo-sheet.png | Overview of the set |
-| options/ | Earlier explorations, kept for reference |
+| oriwis-logo.svg / .png | Horizontal logo on light backgrounds |
+| oriwis-logo-light.svg | Horizontal logo on dark backgrounds |
+| oriwis-logo-stacked.svg / .png | Stacked logo on sand |
+| oriwis-logo-stacked-dark.svg / .png | Stacked logo on deep teal |
+| oriwis-crest.svg / oriwis-crest-light.svg | Mark only |
+| oriwis-icon.svg / oriwis-icon-1024.png | App icon, WeChat avatar, favicon |
+| oriwis-wordmark-light.svg | Name only, sand, for dark backgrounds |
+| oriwis-logo-sheet.png | Overview |
 
-Colours: deep sea #0f2b30 · sand #f1e9dc · (website accent: sun #e3b061).
-Keep clear space around the logo of at least the height of the crest's "A".
+Colours: deep teal #0f2b30 · sand #f1e9dc · gold #e3b061 (on dark) / #b8873a (on light) · muted #a9bcbb / #5f7072
+Type: Instrument Serif (name), Outfit (tagline). Both under the SIL Open Font License.
+
+The previous Aquaire logos are kept in archive-aquaire/.
