@@ -529,6 +529,13 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .xp .xi.hl { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .xp .xnote { margin-top: 22px; font-size: .74rem; color: var(--muted); line-height: 1.6; }
 @media (min-width: 700px) { .xp .xmap { margin: 18px 0 0; border-radius: 16px; } }
+@media (min-width: 900px) {
+  .xp .bk-in { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); gap: 36px; align-items: start; }
+  .xp .xp-l { position: sticky; top: 84px; }
+  .xp .chips { margin-left: 0; margin-right: 0; padding: 2px 0; flex-wrap: wrap; overflow: visible; }
+  .xp .xp-r .xcount { margin-top: 6px; }
+  .xp .xp-r { padding-top: 4px; }
+}
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -866,6 +873,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
 <div class="book xp" id="explore" role="dialog" aria-modal="true" aria-labelledby="xp-title" hidden>
   <div class="bk-top"><span class="bk-logo" aria-hidden="true">{{LOGO:xp:}}</span><button class="bk-x" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
   <div class="bk-in">
+    <div class="xp-l">
     <h2 id="xp-title"><span class="en">Explore UK schools &amp; universities</span><span class="zh">探索英国学校与大学</span></h2>
     <p class="xp-sub"><span class="en">Pick an age, then a part of the UK. Tap a pin to see what is there.</span><span class="zh">先选年龄，再选地区。点地图上的标记查看那里的学校。</span></p>
     <div class="chips" id="xp-age" role="group" aria-label="Age"></div>
@@ -873,9 +881,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     <div class="chips" id="xp-rank" role="group" aria-label="Ranking"></div>
     <div class="xmap" id="xp-map"><div class="stage" id="xp-stage"><img src="images/v2/ukmap.jpg" alt="Map of the UK" width="960" height="640" loading="lazy" draggable="false"></div><div class="zbtn"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="uk" class="uk"><span class="en">UK</span><span class="zh">全图</span></button></div></div>
     <div class="xkey"><span><i style="background:#d9932f"></i><span class="en">School</span><span class="zh">中学</span></span><span><i style="background:#0f7f8c"></i><span class="en">University</span><span class="zh">大学</span></span></div>
+    </div>
+    <div class="xp-r">
     <div class="xcount"><span id="xp-count"></span><button type="button" id="xp-all" hidden><span class="en">Show all places</span><span class="zh">显示全部地点</span></button></div>
     <ul class="xlist" id="xp-list"></ul>
     <p class="xnote"><span class="en">A starting selection to explore, not a ranking and not a list of partners. Oriwis is not affiliated with these schools or universities. Ages, entry requirements and boarding options vary, so please check each official website. Links open the school's own site. Rankings: QS World University Rankings 2027 (world position, top 100 only).</span><span class="zh">这是一份入门参考，不是排名，也不是合作名单。Oriwis 与这些学校和大学没有隶属关系。年龄、入学要求和寄宿安排各不相同，请以各校官网为准。链接将打开学校官网。排名：QS 2027 世界大学排名（世界名次，仅列前 100）。</span></p>
+    </div>
   </div>
 </div>
 <div class="book" id="book" role="dialog" aria-modal="true" aria-labelledby="bk-title" hidden>
@@ -2004,7 +2015,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var c = cities[k], q = px(c.lat, c.lon), b = document.createElement('button');
     b.type = 'button'; b.className = 'pin'; b.style.left = q[0].toFixed(2) + '%'; b.style.top = q[1].toFixed(2) + '%'; b.style.animationDelay = (n * 25) + 'ms';
     b.innerHTML = '<i></i><b></b>'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
-    b.addEventListener('click', function () { st.city = st.city === k ? null : k; render(); if (st.city) setTimeout(function () { listEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); });
+    b.addEventListener('click', function () { st.city = st.city === k ? null : k; render(); if (st.city && innerWidth < 900) setTimeout(function () { listEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); });
     stage.appendChild(b); pins[k] = b;
   });
   // zoom: fit a set of points (in % of the map), clamp so the map always fills the frame
