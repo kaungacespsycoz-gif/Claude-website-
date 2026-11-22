@@ -711,7 +711,7 @@ footer .wrap { display: grid; gap: 22px; }
       mhalo.scale.set(80, 80, 1);
       mdisc = new T.Sprite(new T.SpriteMaterial({ map: glowTex([[0, 'rgba(255,255,250,1)'], [.42, 'rgba(240,244,250,1)'], [.5, 'rgba(220,230,245,.85)'], [.62, 'rgba(200,215,235,0)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false, fog: false, opacity: 0 }));
       mdisc.scale.set(20, 20, 1);
-      moon.add(mhalo); moon.add(mdisc);
+      var luna = new T.Group(); luna.add(mhalo); luna.add(mdisc); scene.add(luna);
     }
 
     // ---------- stars ----------
@@ -748,10 +748,13 @@ footer .wrap { display: grid; gap: 22px; }
     }
 
     // ---------- interaction ----------
-    var px = 0, py = 0, tx = 0, ty = 0, lastMove = -1e9, interacted = false, dn = 0;
+    var px = 0, py = 0, tx = 0, ty = 0, lastMove = -1e9, interacted = false, dn = 0, ss = 0;
     if (DN) { tx = px = document.documentElement.getAttribute('data-mode') === 'night' ? .34 : -.34; }
     var DAY = [new T.Color(0x138f9b), new T.Color(0x6fd8d2), new T.Color(0xd8f1f6), new T.Color(0xdff2f5)],
-        NIGHT = [new T.Color(0x06222a), new T.Color(0x2f8c8f), new T.Color(0xc98a4c), new T.Color(0x34494a)];
+        NIGHT = [new T.Color(0x06222a), new T.Color(0x2f8c8f), new T.Color(0xc98a4c), new T.Color(0x34494a)],
+        DUSK = [new T.Color(0x1d5566), new T.Color(0x58a7a6), new T.Color(0xf3a463), new T.Color(0xeab48c)],
+        WHITE = new T.Color(1, 1, 1), SUNSET_HALO = new T.Color(1, .55, .33), SUNSET_DISC = new T.Color(1, .78, .58);
+    function sstep(a, b, x) { var k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); }
     var ray = new T.Raycaster(), ndc = new T.Vector2(), plane = new T.Plane(new T.Vector3(0, 1, 0), 0), hit = new T.Vector3();
     function setPointer(e) { var r = intro.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width - .5; ty = (e.clientY - r.top) / r.height - .5; lastMove = performance.now(); }
     function firstTouch() { interacted = true; }
@@ -778,18 +781,32 @@ footer .wrap { display: grid; gap: 22px; }
       var goal = DN ? tx : (idle ? Math.sin(t * .12) * .32 : tx);
       px += (goal - px) * .035; py += ((idle ? 0 : ty) - py) * .04;
       // moon glides along the horizon with the pointer
-      var mx = px * (mobile ? 150 : 230);
-      moon.position.set(mx, 9 + Math.cos(px * 2.2) * 3, MOON_Z);
-      var md = new T.Vector3(mx, 9, MOON_Z).sub(new T.Vector3(0, 3, 14)).normalize(); sea.uniforms.uMoon.value.copy(md);
+      var mx = px * (mobile ? 150 : 230), my = 9 + Math.cos(px * 2.2) * 3, lightY = my;
+      if (DN) {
+        // time of day from the finger: 0 = morning (left) .. 1 = night (right)
+        var td = Math.max(0, Math.min(1, (px + .34) / .68));
+        // the sun climbs high, then arcs down and sets into the sea
+        var u = Math.min(td / .62, 1), el = td < .62 ? Math.sin(Math.PI * (.18 + .82 * u)) : -(td - .62) / .1;
+        my = el >= 0 ? 2.5 + el * (mobile ? 84 : 72) : 2.5 + el * 14;
+        var span = mobile ? 52 : 150; mx = -span + 2 * span * u;   // rises on the left, sets on the right
+        ss = sstep(.3, .58, td) * (1 - sstep(.68, .8, td));      // sunset glow
+        dn = sstep(.68, .86, td);                                // night
+        // the moon rises from the sea once the sun has gone
+        var mr = sstep(.72, 1, td); luna.position.set(-span * .6, -8 + mr * (mobile ? 96 : 70), MOON_Z - 4);
+        lightY = dn > .5 ? luna.position.y : my;
+      }
+      moon.position.set(mx, my, MOON_Z);
+      var md = new T.Vector3(mx, Math.max(lightY, 2), MOON_Z).sub(new T.Vector3(0, 3, 14)).normalize(); sea.uniforms.uMoon.value.copy(md);
       camera.position.set(px * 1.6, 3.1 - py * .7, 14); camera.lookAt(px * .8, 3.4, 0);
       // a gentle ripple now and then where the moonlight falls
       if (!reduce && t > nextAuto) { rip[ripI].set(mx * .12 + (Math.random() - .5) * 10, -30 - Math.random() * 25 - OCEAN_Z * 0, t); ripI = (ripI + 1) % 4; nextAuto = t + 5 + Math.random() * 4; }
       if (DN) {
-        var k = Math.max(0, Math.min(1, (px + .12) / .26)); dn = k * k * (3 - 2 * k);
-        ['uDeep', 'uShallow', 'uSky', 'uFog'].forEach(function (u, i) { sea.uniforms[u].value.copy(DAY[i]).lerp(NIGHT[i], dn); });
-        halo.material.opacity = disc.material.opacity = 1 - dn; mhalo.material.opacity = mdisc.material.opacity = dn;
+        ['uDeep', 'uShallow', 'uSky', 'uFog'].forEach(function (u, i) { sea.uniforms[u].value.copy(DAY[i]).lerp(DUSK[i], ss).lerp(NIGHT[i], dn); });
+        halo.material.color.copy(WHITE).lerp(SUNSET_HALO, ss); disc.material.color.copy(WHITE).lerp(SUNSET_DISC, ss);
+        var sunVis = sstep(-6, 3, my); halo.material.opacity = disc.material.opacity = sunVis * (1 - dn * .9);
+        mhalo.material.opacity = mdisc.material.opacity = dn;
         stars.material.uniforms.uN.value = dn;
-        if (window.oriwisDayNight) window.oriwisDayNight(dn);
+        if (window.oriwisDayNight) window.oriwisDayNight(dn, ss);
       }
       renderer.render(scene, camera);
     }
