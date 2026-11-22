@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oriwis UK Study</title>
-<script>(function () { var m = /[?&]btn=([efgs])/.exec(location.search); document.documentElement.setAttribute('data-btn', m ? m[1] : 'h'); })();</script>
+<script>(function () { var m = /[?&]btn=([efgsh])/.exec(location.search); document.documentElement.setAttribute('data-btn', m ? m[1] : 'w'); })();</script>
 <script>try { if (localStorage.getItem('oriwis-mode') === 'night') document.documentElement.setAttribute('data-mode', 'night'); } catch (e) {}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Oriwis · Knowledge by the sea · 海边求知. UK study information matching, a free first consultation and referrals.">
@@ -367,7 +367,8 @@ p { margin: 0; }
 .cta2 { display: none; align-items: center; justify-content: center; gap: 12px; min-height: 56px; padding: 6px 28px; border-radius: 999px; font: 600 1rem/1.2 var(--sans); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease; }
 :root[data-btn]:not([data-btn="s"]) #slide-cta { display: none; }
 :root[data-btn="e"] .cta2, :root[data-btn="f"] .cta2, :root[data-btn="g"] .cta2 { display: inline-flex; }
-.chainlock { display: none; }
+.chainlock, .wavepost { display: none; }
+:root[data-btn="w"] .wavepost { display: block; }
 :root[data-btn="h"] .chainlock { display: block; }
 .cta2 .go { font-style: normal; transition: transform .2s ease; }
 :root[data-btn="e"] .cta2 { background: var(--btn); color: var(--on-btn); padding-right: 12px; box-shadow: 0 10px 24px -14px rgba(12,47,58,.8); }
@@ -426,6 +427,21 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wxsheet .close { position: absolute; right: 14px; top: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
 .wxsheet .card { position: relative; }
 .wxsheet .wxmsg { margin: 0; font-size: .85rem; color: #07a152; min-height: 1.2em; text-align: center; }
+
+
+/* envelope rides the logo's wave into a London pillar box */
+.wavepost { position: relative; height: 96px; border-radius: 16px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
+  background: linear-gradient(180deg, #123c47 0%, #0c2f3a 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 14px 30px -16px rgba(12,47,58,.85); }
+.wavepost::before { content: ""; position: absolute; inset: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.07); pointer-events: none; }
+.wavepost .wp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wavepost .wp-lbl { position: absolute; left: 18px; right: 80px; bottom: 13px; display: grid; justify-items: center; gap: 1px; color: #f4ede0; pointer-events: none; transition: opacity .25s ease; }
+.wavepost .wp-lbl b { font: 600 1rem/1.2 var(--sans); }
+.wavepost .wp-lbl small { font-size: .74rem; color: rgba(244,237,224,.62); letter-spacing: .02em; }
+.wavepost .wp-ok { position: absolute; left: 18px; right: 80px; bottom: 24px; text-align: center; font: 600 1rem/1 var(--sans); color: #f0c46a; opacity: 0; transition: opacity .25s ease .1s; pointer-events: none; }
+.wavepost.sent .wp-lbl { opacity: 0; } .wavepost.sent .wp-ok { opacity: 1; }
+.wavepost .env { cursor: grab; } .wavepost.dragging .env { cursor: grabbing; }
+@media (min-width: 561px) { .wavepost { width: 400px; } }
+@media (max-width: 560px) { .hero .actions .wavepost { width: 100%; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -649,7 +665,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
+            <a class="wavepost" id="wavepost" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="wp-svg" aria-hidden="true"></svg><span class="wp-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Tap, or slide the letter to the UK</span><span class="zh">点击或滑动信封，寄往英国</span></small></span><span class="wp-ok" aria-hidden="true"><span class="en">Sent ✓</span><span class="zh">已寄出 ✓</span></span></a><a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -1158,6 +1174,96 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(function () { after(true); }, function () { after(false); });
     else { try { var t = document.createElement('textarea'); t.value = id; document.body.appendChild(t); t.select(); var ok = document.execCommand('copy'); t.remove(); after(ok); } catch (e) { after(false); } }
   });
+})();
+</script>
+<script>
+/* Wave post: the envelope follows a wave shaped like the logo's cut; drag it, or tap and it flies by itself */
+(function () {
+  var el = document.getElementById('wavepost'); if (!el) return;
+  var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 0, H = 96, path, trail, env, box, slotX, slotY, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, st = 0, table = [];
+  function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
+  function build() {
+    W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
+    var x0 = 30, x1 = W - 52, y = 32, a = 9, w = (x1 - x0);
+    slotX = W - 40; slotY = 27;
+    // two gentle humps like the logo's wave, ending at the post box slot
+    var d = 'M' + x0 + ' ' + (y + 4) +
+      ' C' + (x0 + w * .16) + ' ' + (y - a) + ' ' + (x0 + w * .32) + ' ' + (y - a) + ' ' + (x0 + w * .48) + ' ' + y +
+      ' C' + (x0 + w * .64) + ' ' + (y + a) + ' ' + (x0 + w * .8) + ' ' + (y + a) + ' ' + x1 + ' ' + (y - 2) +
+      ' Q' + (x1 + 8) + ' ' + (y - 6) + ' ' + slotX + ' ' + slotY;
+    var defs = mk('defs', {});
+    var g = mk('linearGradient', { id: 'wp-red', x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
+    [['0', '#8f0f1f'], ['.35', '#d4202f'], ['.6', '#e2363f'], ['1', '#8f0f1f']].forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1] }, g); });
+    mk('path', { d: d, fill: 'none', stroke: 'rgba(240,196,106,.35)', 'stroke-width': 2, 'stroke-dasharray': '2 5', 'stroke-linecap': 'round' });
+    trail = mk('path', { d: d, fill: 'none', stroke: '#f0b54b', 'stroke-width': 2.4, 'stroke-linecap': 'round' });
+    path = trail; LEN = path.getTotalLength();
+    trail.setAttribute('stroke-dasharray', LEN + ' ' + LEN);
+    table = []; for (var i = 0; i <= 120; i++) { var pt = path.getPointAtLength(LEN * i / 120); table.push(pt.x); }
+    // pillar box
+    box = mk('g', { transform: 'translate(' + (W - 40) + ' 50)' });
+    mk('ellipse', { cx: 0, cy: 34, rx: 18, ry: 3, fill: 'rgba(0,0,0,.28)' }, box);
+    mk('rect', { x: -16, y: 26, width: 32, height: 8, rx: 2, fill: '#7a0d1a' }, box);
+    mk('rect', { x: -14, y: -24, width: 28, height: 52, rx: 4, fill: 'url(#wp-red)' }, box);
+    mk('path', { d: 'M-16 -24 Q-16 -40 0 -42 Q16 -40 16 -24 Z', fill: 'url(#wp-red)' }, box);
+    mk('rect', { x: -17, y: -27, width: 34, height: 5, rx: 2, fill: '#a8121f' }, box);
+    mk('rect', { x: -9, y: -21, width: 18, height: 4, rx: 1.5, fill: '#2a0a0e' }, box);          // the slot
+    mk('rect', { x: -8, y: -10, width: 16, height: 11, rx: 1.5, fill: '#f4ede0', opacity: .92 }, box); // collection plate
+    mk('path', { d: 'M-5 -6.5h10M-5 -3.5h7', stroke: '#8f0f1f', 'stroke-width': 1 }, box);
+    mk('circle', { cx: 0, cy: 12, r: 3.2, fill: '#e3b061' }, box);
+    // envelope
+    env = mk('g', { class: 'env' });
+    mk('rect', { x: -22, y: -18, width: 44, height: 36, fill: 'transparent' }, env);
+    mk('rect', { x: -12, y: -8, width: 24, height: 16, rx: 2, fill: '#fbf5e6', stroke: '#c9b48a', 'stroke-width': .8 }, env);
+    mk('path', { d: 'M-12 -7 L0 2 L12 -7', fill: 'none', stroke: '#c9b48a', 'stroke-width': 1 }, env);
+    mk('circle', { cx: 0, cy: 1.5, r: 2.6, fill: '#c8322f' }, env);   // wax seal
+    t = 0; draw();
+  }
+  function draw() {
+    var L = LEN * t, p = path.getPointAtLength(L), q = path.getPointAtLength(Math.min(LEN, L + 2));
+    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, sc = t > .93 ? 1 - (t - .93) / .07 * .55 : 1;
+    env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + (ang * .6).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
+    env.setAttribute('opacity', t > .97 ? String(Math.max(0, 1 - (t - .97) / .03)) : '1');
+    trail.setAttribute('stroke-dashoffset', String(LEN - L));
+  }
+  function tFromX(x) { for (var i = 1; i < table.length; i++) if (table[i] >= x) return (i - 1 + (x - table[i - 1]) / Math.max(.01, table[i] - table[i - 1])) / 120; return 1; }
+  function fly(to, ms, done) {
+    var from = t, t0 = performance.now(); if (reduce) ms = 1;
+    (function step(now) { var k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      t = from + (to - from) * e; draw(); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
+  }
+  function post() {
+    busy = true;
+    fly(1, Math.max(250, (1 - t) * 1400), function () {
+      el.classList.add('sent');
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+      var b0 = performance.now();
+      (function wig(now) { var k = (now - b0) / 500; var r = k < 1 ? Math.sin(k * Math.PI * 4) * 5 * (1 - k) : 0;
+        box.setAttribute('transform', 'translate(' + (W - 40) + ' 50) rotate(' + r.toFixed(2) + ' 0 34)'); if (k < 1) requestAnimationFrame(wig); })(b0);
+      setTimeout(function () { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 650);
+      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(); busy = false; }, 2200);
+    });
+  }
+  svg.addEventListener('pointerdown', function (e) {
+    if (busy) return;
+    var r = el.getBoundingClientRect(), p = path.getPointAtLength(LEN * t);
+    if (Math.abs(e.clientX - r.left - p.x) > 34 || Math.abs(e.clientY - r.top - p.y) > 30) return;
+    e.preventDefault(); dragging = true; moved = false; sx = e.clientX; st = t; el.classList.add('dragging');
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  svg.addEventListener('pointermove', function (e) {
+    if (!dragging) return; var r = el.getBoundingClientRect();
+    if (Math.abs(e.clientX - sx) > 4) moved = true;
+    t = Math.max(0, Math.min(.96, tFromX(e.clientX - r.left))); if (t < st && !moved) t = st; draw();
+  });
+  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .7) post(); else fly(0, 450); }
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
+  window.oriwisPost = { set: function (v) { t = v; draw(); }, post: post };
+  build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
+  if (!reduce && 'IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { if (!busy) fly(.08, 450, function () { fly(0, 600); }); }, 900); } }, { threshold: .8 }); io.observe(el); }
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
