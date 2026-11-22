@@ -76,16 +76,29 @@ p { margin: 0; }
 
 /* step illustrations: paper-cut scenes that "play" like stop-motion when the sun reaches them */
 .stepimg { grid-column: 2 / -1; margin-top: 16px; position: relative; overflow: hidden; border-radius: 3px; aspect-ratio: 3 / 2; max-width: 100%; background: var(--tint); }
-.stepimg img { display: block; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 60%; }
+.stepimg .scene { position: absolute; inset: 0; transform-origin: 50% 60%; }
+.stepimg .base { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* step 1: the three heads are separate paper pieces that tilt in turn, as if talking */
+.stepimg .head { position: absolute; display: block; pointer-events: none; }
+.stepimg .h1 { left: 2.917%; top: 13.75%; width: 22.083%; transform-origin: 64.6% 96%; }
+.stepimg .h2 { left: 44.167%; top: 16.25%; width: 20.625%; transform-origin: 49.5% 98%; }
+.stepimg .h3 { left: 77.917%; top: 23.4375%; width: 21.25%; transform-origin: 31.4% 98.5%; }
+.journey.live li.played .stepimg .h1 { animation: talk-1 4.8s steps(1, end) 1.2s infinite; }
+.journey.live li.played .stepimg .h2 { animation: talk-2 4.8s steps(1, end) 1.2s infinite; }
+.journey.live li.played .stepimg .h3 { animation: talk-3 4.8s steps(1, end) 1.2s infinite; }
+.stepimg:not(.inview) .head { animation-play-state: paused !important; }
+@keyframes talk-1 { 0% { transform: none; } 5% { transform: rotate(-3deg) translateY(-1%); } 10% { transform: rotate(1.5deg); } 15% { transform: rotate(-2deg) translateY(-1%); } 20% { transform: rotate(.5deg); } 25% { transform: rotate(-2.5deg); } 30% { transform: rotate(1deg) translateY(-.5%); } 35% { transform: rotate(-1.5deg); } 40% { transform: rotate(.5deg); } 45% { transform: none; } 70% { transform: rotate(1.5deg); } 80% { transform: none; } 100% { transform: none; } }
+@keyframes talk-2 { 0% { transform: none; } 20% { transform: rotate(1.5deg) translateY(1.5%); } 25% { transform: none; } 50% { transform: rotate(2.5deg); } 55% { transform: rotate(-1.5deg) translateY(-1%); } 60% { transform: rotate(2deg); } 65% { transform: rotate(-1deg); } 70% { transform: rotate(1.5deg) translateY(-1%); } 75% { transform: none; } 100% { transform: none; } }
+@keyframes talk-3 { 0% { transform: none; } 35% { transform: rotate(-2deg); } 40% { transform: none; } 80% { transform: rotate(-4deg); } 85% { transform: rotate(-4deg) translateY(1.5%); } 90% { transform: rotate(-3deg); } 95% { transform: rotate(-1deg); } 100% { transform: none; } }
 .stepimg .ps { position: absolute; width: 7%; aspect-ratio: 1; border-radius: 50%; background: var(--sun); box-shadow: 0 2px 0 rgba(12,47,58,.18); left: 6%; top: 12%; opacity: 0; }
 @media (min-width: 700px) { .stepimg { grid-column: 3; max-width: 420px; } }
-.journey.live li:not(.played) .stepimg img { opacity: .35; transform: scale(.94) rotate(-1.5deg); }
-.journey.live li.played .stepimg img { animation: sm-pop .6s steps(1, end) both, sm-boil .5s steps(1, end) .6s 5; }
+.journey.live li:not(.played) .stepimg .scene { opacity: .35; transform: scale(.94) rotate(-1.5deg); }
+.journey.live li.played .stepimg .scene { animation: sm-pop .6s steps(1, end) both, sm-boil .5s steps(1, end) .6s 5; }
 .journey.live li.played .stepimg .ps { animation: sm-hop 1.6s steps(1, end) .3s both; }
 @keyframes sm-pop { 0% { opacity: .35; transform: scale(.94) rotate(-1.5deg); } 25% { opacity: .8; transform: scale(1.05) rotate(1.2deg); } 50% { opacity: 1; transform: scale(.98) rotate(-.6deg); } 75% { transform: scale(1.01) rotate(.3deg); } 100% { opacity: 1; transform: none; } }
 @keyframes sm-boil { 0% { transform: translate(0,0) rotate(0); } 25% { transform: translate(.4%, -.3%) rotate(.25deg); } 50% { transform: translate(-.3%, .2%) rotate(-.2deg); } 75% { transform: translate(.2%, .3%) rotate(.15deg); } 100% { transform: none; } }
 @keyframes sm-hop { 0% { opacity: 1; left: 6%; top: 30%; } 12% { left: 18%; top: 14%; } 25% { left: 31%; top: 8%; } 37% { left: 44%; top: 6%; } 50% { left: 57%; top: 8%; } 62% { left: 70%; top: 14%; } 75% { left: 81%; top: 9%; } 87% { left: 87%; top: 7%; } 100% { opacity: 1; left: 87%; top: 7%; } }
-@media (prefers-reduced-motion: reduce) { .journey.live li .stepimg img { opacity: 1 !important; transform: none !important; } }
+@media (prefers-reduced-motion: reduce) { .journey.live li .stepimg .scene, .stepimg .head { opacity: 1 !important; transform: none !important; animation: none !important; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -306,9 +319,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       <div>
         <div class="journey" id="journey"><span class="track" aria-hidden="true"><span class="fill"></span><span class="dot"></span></span>
         <ol class="process">
-          <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><img src="images/v2/step1.jpg" alt="Paper-cut illustration: a consultant talking with a mother and daughter" width="960" height="640" loading="lazy"><i class="ps" aria-hidden="true"></i></div></li>
-          <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><img src="images/v2/step2.jpg" alt="Paper-cut illustration: a shortlist of three British schools beside a map" width="960" height="640" loading="lazy"><i class="ps" aria-hidden="true"></i></div></li>
-          <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p><div class="stepimg"><img src="images/v2/step3.jpg" alt="Paper-cut illustration: a student and her mother welcomed at a British school gate" width="960" height="640" loading="lazy"><i class="ps" aria-hidden="true"></i></div></li>
+          <li><span class="n">1</span><h3><span class="en">A free conversation</span><span class="zh">免费沟通</span></h3><p><span class="en">Tell us about age, grades, English level, budget and goals, by WeChat call or in person.</span><span class="zh">通过微信语音或面谈，聊聊年龄、成绩、英语水平、预算和目标。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step1.jpg" alt="Paper-cut illustration: a consultant talking with a mother and her daughter at a table" width="960" height="640" loading="lazy"><img class="head h1" src="images/v2/step1-h1.png" alt="" loading="lazy"><img class="head h2" src="images/v2/step1-h2.png" alt="" loading="lazy"><img class="head h3" src="images/v2/step1-h3.png" alt="" loading="lazy"></div><i class="ps" aria-hidden="true"></i></div></li>
+          <li><span class="n">2</span><h3><span class="en">Your shortlist</span><span class="zh">匹配清单</span></h3><p><span class="en">A short list of suitable UK schools or courses, with entry requirements and timing explained.</span><span class="zh">一份适合你的英国学校或课程清单，讲清入学要求和时间安排。</span><span class="who"><span class="en">With Oriwis</span><span class="zh">Oriwis 陪同</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step2.jpg" alt="Paper-cut illustration: a shortlist of three British schools beside a map" width="960" height="640" loading="lazy"></div><i class="ps" aria-hidden="true"></i></div></li>
+          <li class="you"><span class="n">3</span><h3><span class="en">Introduction to the school</span><span class="zh">对接学校</span></h3><p><span class="en">We introduce you to the school or its official partner. You apply and pay them directly.</span><span class="zh">我们为你介绍学校或其官方合作方，申请与缴费由你直接完成。</span><span class="who"><span class="en">You and the school</span><span class="zh">你与学校</span></span></p><div class="stepimg"><div class="scene"><img class="base" src="images/v2/step3.jpg" alt="Paper-cut illustration: a student and her mother welcomed at a British school gate" width="960" height="640" loading="lazy"></div><i class="ps" aria-hidden="true"></i></div></li>
         </ol></div>
         <div class="scope">
           <div><h3><span class="en">What we do</span><span class="zh">我们提供</span></h3><ul><li><span class="en">Match your profile to suitable UK options</span><span class="zh">根据你的情况匹配英国学校与课程</span></li><li><span class="en">A free first consultation</span><span class="zh">免费初步咨询</span></li><li><span class="en">Referral to the school or its partner</span><span class="zh">转介至学校或其合作方</span></li></ul></div>
@@ -500,6 +513,10 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     dot.style.opacity = read < -40 ? 0 : 1;
     items.forEach(function (li, k) { var on = read >= c[k] - top - 2; li.classList.toggle('on', on); if (on) li.classList.add('played'); });
   }
+  if ('IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('inview', e.isIntersecting); }); }, { threshold: 0.3 });
+    j.querySelectorAll('.stepimg').forEach(function (el) { vio.observe(el); });
+  } else j.querySelectorAll('.stepimg').forEach(function (el) { el.classList.add('inview'); });
   function req() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); update();
 })();
