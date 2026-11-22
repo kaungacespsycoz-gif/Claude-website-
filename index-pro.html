@@ -309,12 +309,12 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .stepimg .lamp i { animation: none !important; opacity: 1; } }
 
 
-/* Pudding the puppy sits on the pavement by the student: hops in, then wags and tilts her head */
-.stepimg .pudding { position: absolute; width: 7.6%; height: auto; left: 30.5%; top: 57.5%; transform-origin: 50% 100%; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(0,0,0,.22)); opacity: 0; }
-.journey.live li.played .stepimg .pudding { animation: pud-in .9s steps(1, end) 1.2s forwards, pud-wag 2.4s steps(1, end) 2.2s infinite; }
-@keyframes pud-in { 0% { opacity: 0; transform: translate(-60%, -10%); } 25% { opacity: 1; transform: translate(-40%, -22%); } 50% { transform: translate(-20%, 0); } 75% { transform: translate(-6%, -12%); } 100% { opacity: 1; transform: none; } }
-@keyframes pud-wag { 0%, 100% { opacity: 1; transform: none; } 15% { transform: rotate(-5deg); } 30% { transform: rotate(4deg); } 45% { transform: rotate(-4deg); } 60% { transform: rotate(3deg) translateY(-4%); } 75% { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .stepimg .pudding { animation: none !important; opacity: 1; } }
+/* Pudding the puppy sits on the pavement by the student from the start; when the journey arrives she hops, then wags and tilts her head */
+.stepimg .pudding { position: absolute; width: 7.6%; height: auto; left: 30.5%; top: 57.5%; transform-origin: 50% 100%; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(0,0,0,.22)); }
+.journey.live li.played .stepimg .pudding { animation: pud-hop .9s steps(1, end) 1.2s 1, pud-wag 2.4s steps(1, end) 2.2s infinite; }
+@keyframes pud-hop { 0%, 100% { transform: none; } 20% { transform: scale(1.06, .9); } 40% { transform: translateY(-24%) scale(.96, 1.06); } 60% { transform: translateY(-8%); } 80% { transform: scale(1.04, .94); } }
+@keyframes pud-wag { 0%, 100% { transform: none; } 15% { transform: rotate(-5deg); } 30% { transform: rotate(4deg); } 45% { transform: rotate(-4deg); } 60% { transform: rotate(3deg) translateY(-4%); } 75% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .stepimg .pudding { animation: none !important; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
