@@ -376,13 +376,13 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 
 
 /* envelope rides the logo's wave into a London pillar box */
-.wavepost { position: relative; height: 112px; border-radius: 18px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
+.wavepost { position: relative; height: 134px; border-radius: 18px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer;
   background: radial-gradient(120px 90px at calc(100% - 38px) 70%, rgba(240,181,75,.22), transparent 70%), linear-gradient(160deg, #164b57 0%, #0e3440 55%, #0a2730 100%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 36px -18px rgba(12,47,58,.9), 0 2px 6px rgba(12,47,58,.18);
   transition: transform .2s ease, box-shadow .2s ease; }
 .wavepost:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 40px -18px rgba(12,47,58,.95), 0 2px 6px rgba(12,47,58,.2); }
 .wavepost:active { transform: translateY(1px); }
-.wavepost .wp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wavepost .wp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 3; }
 .wavepost .wp-lbl { position: absolute; left: 20px; top: 15px; right: 96px; display: grid; gap: 2px; color: #f6efe2; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
 .wavepost .wp-lbl b { font: 650 1.06rem/1.25 var(--sans); letter-spacing: -.005em; }
 .wavepost .wp-lbl small { font-size: .76rem; color: rgba(246,239,226,.62); letter-spacing: .02em; display: flex; align-items: center; gap: 6px; }
@@ -399,10 +399,10 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 @media (prefers-reduced-motion: reduce) { .wavepost .wp-lbl small::after { animation: none; } }
 
 
-.wavepost .wp-logo { position: absolute; width: 58px; transform: translate(-50%, -50%); color: #f6efe2; pointer-events: none; z-index: 2; transition: transform .25s ease, filter .25s ease; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+.wavepost .wp-logo { position: absolute; width: 92px; transform-origin: 50% 70%; color: #f6efe2; pointer-events: none; z-index: 2; transition: transform .25s ease, filter .25s ease; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
 .wavepost .wp-logo svg { display: block; width: 100%; height: auto; }
 .wavepost .wp-logo .ow-sun { fill: #f0b54b; transition: fill .2s ease; }
-.wavepost .wp-logo.pass { transform: translate(-50%, -50%) scale(1.12); filter: drop-shadow(0 0 10px rgba(240,181,75,.75)); }
+.wavepost .wp-logo.pass { transform: scale(1.06); filter: drop-shadow(0 0 10px rgba(240,181,75,.75)); }
 .wavepost .wp-logo.pass .ow-sun { fill: #ffe39a; }
 .wavepost { cursor: grab; } .wavepost.dragging { cursor: grabbing; }
 
@@ -1070,17 +1070,23 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ex0 = 0, W = 0, H = 112, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
     W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    bx = W - 46; by = 104;
-    var x0 = 26, x1 = W - 74, y = 78, a = 9, w = x1 - x0, slotX = bx, slotY = by - 60;
-    var d = 'M' + x0 + ' ' + (y + 3) +
-      ' C' + (x0 + w * .16) + ' ' + (y - a) + ' ' + (x0 + w * .32) + ' ' + (y - a) + ' ' + (x0 + w * .48) + ' ' + y +
-      ' C' + (x0 + w * .64) + ' ' + (y + a) + ' ' + (x0 + w * .82) + ' ' + (y + a) + ' ' + x1 + ' ' + (y - 4) +
-      ' C' + (x1 + 14) + ' ' + (y - 10) + ' ' + (slotX - 10) + ' ' + (slotY + 6) + ' ' + slotX + ' ' + slotY;
+    bx = W - 46; by = H - 8;
+    // the path runs exactly along the wave cut in the logo's "WIS"
+    var LW = 92, k = LW / 208, Lx = Math.round(W * .5 - LW * .55), Ly = H - 8 - Math.round(162 * k) + 2;
+    function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
+    var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
+    var x0 = 26, slotX = bx, slotY = by - 60;
+    var d = 'M' + x0 + ' ' + (c0[1] - 6) +
+      ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
+      ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
+      ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
+      ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY;
+    logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
     var defs = mk('defs', {});
     grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
     grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
@@ -1102,7 +1108,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     [trail, glow].forEach(function (n) { n.setAttribute('stroke-dasharray', LEN + ' ' + LEN); });
     table = []; for (var i = 0; i <= 160; i++) table.push(path.getPointAtLength(LEN * i / 160).x);
     spark = mk('circle', { r: 6, fill: 'url(#wp-spark)', opacity: 0 });
-    var mid = path.getPointAtLength(LEN * .5); logo.style.left = mid.x + 'px'; logo.style.top = mid.y + 'px';
+    passA = tFromX(c0[0] + 4); passB = tFromX(c6[0] - 4);
     // pillar box
     box = mk('g', { filter: 'url(#wp-shadow)' });
     mk('ellipse', { cx: 0, cy: 0, rx: 20, ry: 3.2, fill: 'rgba(0,0,0,.35)' }, box);
@@ -1134,13 +1140,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   }
   function draw(now) {
     var L = LEN * t, p = path.getPointAtLength(L), q = path.getPointAtLength(Math.min(LEN, L + 2));
-    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, sc = t > .9 ? 1 - (t - .9) / .1 * .6 : 1;
+    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, inCut = t > passA - .03 && t < passB + .03, sc = t > .9 ? 1 - (t - .9) / .1 * .6 : (inCut ? .72 : 1);
     var bob = (!busy && !dragging && !reduce && t === 0) ? Math.sin((now || 0) / 420) * 1.6 : 0;
     env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + (ang * .55).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
     env.setAttribute('opacity', t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1');
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
-    logo.classList.toggle('pass', t > .4 && t < .62);
-    env.setAttribute('opacity', t > .44 && t < .56 ? '0' : (t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1'));
+    logo.classList.toggle('pass', t > passA && t < passB);
   }
   // idle: the envelope bobs and a spark runs along the wave to the post box
   var sparkT0 = 0;
