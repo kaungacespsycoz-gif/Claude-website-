@@ -1316,7 +1316,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       t = from + (to - from) * e; if (t < .0005) t = 0; draw(now); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
   }
   function post() {
-    busy = true;
+    busy = true; if (water) water.quiet(7);
     var slide = function (done) { if (water) fly(1, 650, done); else done(); };
     fly(water ? .93 : 1, Math.max(300, ((water ? .93 : 1) - t) * 1500), function () { slide(function () {
       el.classList.add('sent'); if (water) { water.sand(true); water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
@@ -1334,7 +1334,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   svg.addEventListener('pointerdown', function (e) {
     if (busy) return;
     if (water) { var rr = el.getBoundingClientRect(); water.drop(e.clientX - rr.left, e.clientY - rr.top, 1); }
-    demoOn = false; e.preventDefault(); dragging = true; moved = false; sx = e.clientX; ex0 = path.getPointAtLength(LEN * t).x; el.classList.add('dragging');
+    demoOn = false; if (water) water.quiet(6); e.preventDefault(); dragging = true; moved = false; sx = e.clientX; ex0 = path.getPointAtLength(LEN * t).x; el.classList.add('dragging');
     try { svg.setPointerCapture(e.pointerId); } catch (err) {}
   });
   svg.addEventListener('pointermove', function (e) {
@@ -1373,7 +1373,11 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  v += sin(q.y * .09 - uT * 1.4 + q.x * .015) * .22;',
       '  v += (noise(q * .045 + vec2(uT * .25, -uT * .18)) - .5) * .7;',
       '  for (int i = 0; i < 24; i++) { vec4 r = uR[i]; float age = uT - r.z;',
-      '    if (r.w > 0. && age > 0. && age < 4.5) {',
+      '    if (r.w >= 2. && age > 0. && age < 3.2) {',
+      '      vec2 d = (p - r.xy) * vec2(1., 1.9); float rr = length(d), x = rr - age * 22.;',
+      '      v += (r.w - 2.) * 1.6 * sin(x * .7) * exp(-x * x / (30. + age * 90.)) * exp(-age * 1.15);',
+      '      v -= (r.w - 2.) * 1.2 * exp(-rr * rr / 6.) * exp(-age * 7.);',
+      '    } else if (r.w > 0. && age > 0. && age < 4.5) {',
       '      vec2 d = (p - r.xy) * vec2(1., 2.); float x = length(d) - age * 52.;',
       '      v += r.w * 2. * sin(x * .38) * exp(-x * x / (160. + age * 260.)) * exp(-age * .9);',
       '    } else if (r.w < 0. && age > 0. && age < 2.2) {',
@@ -1512,7 +1516,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank', 'uBoxRot', 'uEnvSY'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var SKY = .44, sandT = gl.createTexture(), bankY = 1e4, sentTxt = false, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
-    var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    var DROPS = /[?&]drops=1/.test(location.search), nextDrop = 3, quietUntil = 0, LG = [0, 0, 0, 0], BX = [0, 0], pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
     (function () {
@@ -1614,20 +1618,31 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     function loop() {
       if (!visible || document.hidden) { running = false; return; }
       var tt = now();
-      // now and then a drop falls on the pond
+      // test link only (?drops=1): now and then a gentle raindrop, in open water, never while someone is using the button
+      if (DROPS && !reduce && tt > nextDrop) {
+        nextDrop = tt + 6 + Math.random() * 4;
+        if (tt > quietUntil) for (var tries = 0; tries < 8; tries++) {
+          var rx = Wc * (.06 + Math.random() * .88), ry = Hc * (.08 + Math.random() * .84);
+          if (ry > bankY - 24) continue;
+          if (rx > LG[0] - 24 && rx < LG[0] + LG[2] + 24 && ry > LG[1] - 24 && ry < LG[1] + LG[3] + 24) continue;
+          if (Math.abs(rx - BX[0]) < 70 && Math.abs(ry - BX[1]) < 50) continue;
+          api.drop(rx, ry, 2.55); break;
+        }
+      }
       frame(); requestAnimationFrame(loop);
     }
     var api = {
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs, bank) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        bankY = bank || 1e4; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
+        bankY = bank || 1e4; LG = [lx, ly, lw, lh]; BX = [boxX, boxY - 56 * bs]; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op, sy) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; ev[5] = sy == null ? 1 : sy; if (!running) frame(); },
       hit: function () { hitV = 1; },
+      quiet: function (sec) { quietUntil = Math.max(quietUntil, now() + sec); nextDrop = Math.max(nextDrop, quietUntil); },
       sand: function (sent) { sentTxt = sent; paintSand(); },
       cut: function (x) { if (!cutDone && x > cutTo) cutTo = x; if (!running) frame(); },
       keepCut: function () { cutDone = true; cutTo = 1e4; },
