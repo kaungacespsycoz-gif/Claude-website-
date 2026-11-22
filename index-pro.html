@@ -169,6 +169,8 @@ p { margin: 0; }
 @media (min-width: 700px) { .stepimg { grid-column: 3; max-width: 420px; } }
 .journey.live li:not(.played) .stepimg .scene { opacity: .35; transform: scale(.94) rotate(-1.5deg); }
 .journey.live li.played .stepimg .scene { animation: sm-pop .6s steps(1, end) both; }
+/* step 3 stays completely still: only the handshake, the bus, Pudding and the lamp move */
+.journey.live li.you .stepimg .scene, .journey.live li.you:not(.played) .stepimg .scene { animation: none; opacity: 1; transform: none; }
 .journey.live li.played @keyframes sm-pop { 0% { opacity: .35; transform: scale(.94) rotate(-1.5deg); } 25% { opacity: .8; transform: scale(1.05) rotate(1.2deg); } 50% { opacity: 1; transform: scale(.98) rotate(-.6deg); } 75% { transform: scale(1.01) rotate(.3deg); } 100% { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .journey.live li .stepimg .scene, .stepimg .head, .stepimg .pc, .stepimg .arm { opacity: 1 !important; transform: none !important; animation: none !important; } }
 
