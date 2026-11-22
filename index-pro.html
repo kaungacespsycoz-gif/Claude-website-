@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oriwis UK Study</title>
-<script>(function () { var m = /[?&]btn=([efg])/.exec(location.search); if (m) document.documentElement.setAttribute('data-btn', m[1]); })();</script>
+<script>(function () { var m = /[?&]btn=([efgs])/.exec(location.search); document.documentElement.setAttribute('data-btn', m ? m[1] : 'h'); })();</script>
 <script>try { if (localStorage.getItem('oriwis-mode') === 'night') document.documentElement.setAttribute('data-mode', 'night'); } catch (e) {}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Oriwis · Knowledge by the sea · 海边求知. UK study information matching, a free first consultation and referrals.">
@@ -365,8 +365,10 @@ p { margin: 0; }
 
 /* button options for review: ?btn=e (navy + gold arrow), ?btn=f (warm gold), ?btn=g (outline to fill). Default keeps the slider. */
 .cta2 { display: none; align-items: center; justify-content: center; gap: 12px; min-height: 56px; padding: 6px 28px; border-radius: 999px; font: 600 1rem/1.2 var(--sans); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease; }
-:root[data-btn] #slide-cta { display: none; }
-:root[data-btn] .cta2 { display: inline-flex; }
+:root[data-btn]:not([data-btn="s"]) #slide-cta { display: none; }
+:root[data-btn="e"] .cta2, :root[data-btn="f"] .cta2, :root[data-btn="g"] .cta2 { display: inline-flex; }
+.chainlock { display: none; }
+:root[data-btn="h"] .chainlock { display: block; }
 .cta2 .go { font-style: normal; transition: transform .2s ease; }
 :root[data-btn="e"] .cta2 { background: var(--btn); color: var(--on-btn); padding-right: 12px; box-shadow: 0 10px 24px -14px rgba(12,47,58,.8); }
 :root[data-btn="e"] .cta2 .go { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #f0a93b; color: #0c2f3a; }
@@ -379,6 +381,22 @@ p { margin: 0; }
 :root[data-btn="g"] .cta2:hover, :root[data-btn="g"] .cta2:active { background: var(--ink); color: var(--paper); }
 :root[data-btn="g"] .cta2:hover .go { transform: translateX(3px); }
 @media (max-width: 560px) { .hero .actions .cta2 { width: 100%; } }
+
+
+/* door-chain slide to unlock: a navy door with brass fittings; drag the knob along the slot, the chain straightens, then drops free */
+.chainlock { position: relative; height: 92px; border-radius: 16px; text-decoration: none; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(180deg, #123c47 0%, #0c2f3a 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(255,255,255,.04), 0 14px 30px -16px rgba(12,47,58,.85); }
+.chainlock::before { content: ""; position: absolute; inset: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.07); pointer-events: none; }
+.chainlock .cl-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.chainlock .cl-lbl { position: absolute; left: 0; right: 0; bottom: 13px; display: grid; justify-items: center; gap: 1px; color: #f4ede0; pointer-events: none; transition: opacity .25s ease; }
+.chainlock .cl-lbl b { font: 600 1rem/1.2 var(--sans); }
+.chainlock .cl-lbl small { font-size: .74rem; color: rgba(244,237,224,.62); letter-spacing: .02em; }
+.chainlock .cl-ok { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font: 600 1rem/1 var(--sans); color: #f0c46a; opacity: 0; transition: opacity .25s ease .1s; pointer-events: none; }
+.chainlock.open .cl-lbl { opacity: 0; } .chainlock.open .cl-ok { opacity: 1; }
+.chainlock .knob { cursor: grab; }
+.chainlock.dragging .knob { cursor: grabbing; }
+@media (min-width: 561px) { .chainlock { width: 380px; } }
+@media (max-width: 560px) { .hero .actions .chainlock { width: 100%; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -602,7 +620,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
+            <a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -1004,6 +1022,87 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   }
   knob.addEventListener('pointerup', end); knob.addEventListener('pointercancel', function () { dragging = false; set(0, true); });
   btn.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } });
+})();
+</script>
+<script>
+/* Door-chain slide to unlock (vanilla SVG). The chain has a fixed length, so it sags when the knob is near the anchor and pulls straight as it slides away. */
+(function () {
+  var el = document.getElementById('chainlock'); if (!el) return;
+  var svg = el.querySelector('.cl-svg'), NS = 'http://www.w3.org/2000/svg';
+  var W = 0, H = 92, ax = 40, ay = 30, s0 = 80, s1 = 0, sy = 24, x = 0, drop = 0, LEN = 0, state = 'locked', dragging = false, moved = false, startX = 0, startK = 0;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function mk(tag, attrs, parent) { var n = document.createElementNS(NS, tag); for (var k in attrs) n.setAttribute(k, attrs[k]); (parent || svg).appendChild(n); return n; }
+  var defs, links = [], knob, chainG;
+  function build() {
+    W = el.clientWidth; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
+    s0 = 74; s1 = W - 40; LEN = (W - 40) * .62; x = s0;
+    defs = mk('defs', {});
+    var g = mk('linearGradient', { id: 'cl-brass', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+    [['0', '#fff0bf'], ['.35', '#e6b85a'], ['.7', '#b9862f'], ['1', '#8a5f1d']].forEach(function (st) { mk('stop', { offset: st[0], 'stop-color': st[1] }, g); });
+    var r = mk('radialGradient', { id: 'cl-ball', cx: '.35', cy: '.3', r: '.75' }, defs);
+    [['0', '#fff6d6'], ['.45', '#e9bb5c'], ['1', '#8a5f1d']].forEach(function (st) { mk('stop', { offset: st[0], 'stop-color': st[1] }, r); });
+    // slot rail
+    mk('rect', { x: s0 - 16, y: sy - 9, width: s1 - s0 + 30, height: 18, rx: 9, fill: 'url(#cl-brass)', stroke: '#7a531a', 'stroke-width': .8 });
+    mk('rect', { x: s0 - 6, y: sy - 2.5, width: s1 - s0 + 10, height: 5, rx: 2.5, fill: '#3b2a10', opacity: .85 });
+    mk('rect', { x: s1 - 1, y: sy - 2.5, width: 10, height: 13, rx: 2.5, fill: '#3b2a10', opacity: .85 });   // the open end of the slot
+    [s0 - 9, s1 + 13].forEach(function (cx) { mk('circle', { cx: cx, cy: sy, r: 2.6, fill: '#8a5f1d' }); mk('path', { d: 'M' + (cx - 1.6) + ' ' + sy + 'h3.2', stroke: '#fff3cf', 'stroke-width': .8 }); });
+    // anchor plate
+    mk('rect', { x: ax - 20, y: ay - 16, width: 30, height: 34, rx: 7, fill: 'url(#cl-brass)', stroke: '#7a531a', 'stroke-width': .8 });
+    [ay - 8, ay + 10].forEach(function (cy) { mk('circle', { cx: ax - 5, cy: cy, r: 2.6, fill: '#8a5f1d' }); mk('path', { d: 'M' + (ax - 6.6) + ' ' + cy + 'h3.2', stroke: '#fff3cf', 'stroke-width': .8 }); });
+    chainG = mk('g', {}); links = [];
+    var n = Math.max(10, Math.round(LEN / 9));
+    for (var i = 0; i < n; i++) links.push(mk('ellipse', { rx: 5.6, ry: i % 2 ? 1.6 : 3.4, fill: 'none', stroke: 'url(#cl-brass)', 'stroke-width': i % 2 ? 2.6 : 2.1 }, chainG));
+    knob = mk('g', { class: 'knob' });
+    mk('circle', { cx: 0, cy: 0, r: 15, fill: 'transparent' }, knob);
+    mk('circle', { cx: 0, cy: 0, r: 8.5, fill: 'url(#cl-ball)', stroke: '#7a531a', 'stroke-width': .8 }, knob);
+    mk('circle', { cx: -2.6, cy: -2.8, r: 2.2, fill: '#fffbe9', opacity: .8 }, knob);
+    draw();
+  }
+  function draw() {
+    var kx = x, ky = sy + drop;
+    var dx = kx - ax, dy = ky - ay, d = Math.sqrt(dx * dx + dy * dy);
+    var sag = d < LEN ? Math.min(46, Math.sqrt(LEN * LEN - d * d) * .55) : 0;
+    var cx = (ax + kx) / 2, cy = (ay + ky) / 2 + sag * 2;
+    var n = links.length;
+    for (var i = 0; i < n; i++) {
+      var t = (i + .5) / n, u = 1 - t;
+      var px = u * u * ax + 2 * u * t * cx + t * t * kx, py = u * u * ay + 2 * u * t * cy + t * t * ky;
+      var tx = 2 * u * (cx - ax) + 2 * t * (kx - cx), ty = 2 * u * (cy - ay) + 2 * t * (ky - cy);
+      links[i].setAttribute('transform', 'translate(' + px.toFixed(1) + ' ' + py.toFixed(1) + ') rotate(' + (Math.atan2(ty, tx) * 180 / Math.PI).toFixed(1) + ')');
+    }
+    knob.setAttribute('transform', 'translate(' + kx.toFixed(1) + ' ' + ky.toFixed(1) + ')');
+  }
+  function animate(to, todrop, ms, done) {
+    var fx = x, fd = drop, t0 = performance.now();
+    if (reduce) ms = 1;
+    (function step(now) { var k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+      x = fx + (to - fx) * e; drop = fd + (todrop - fd) * (todrop > fd ? k * k : e); draw();
+      if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
+  }
+  function open() {
+    state = 'open'; el.classList.add('open');
+    try { if (navigator.vibrate) navigator.vibrate(14); } catch (e) {}
+    animate(s1 + 4, 0, 120, function () { animate(s1 + 4, 40, 380, function () {
+      setTimeout(function () { var t = document.getElementById('consult'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+      setTimeout(function () { el.classList.remove('open'); state = 'locked'; animate(s1 + 4, 0, 1, function () { animate(s0, 0, 600); }); }, 1700);
+    }); });
+  }
+  svg.addEventListener('pointerdown', function (e) {
+    if (state !== 'locked') return;
+    var r = el.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    if (Math.abs(px - x) > 30 || Math.abs(py - sy) > 30) return;
+    e.preventDefault(); dragging = true; moved = false; startX = e.clientX; startK = x; el.classList.add('dragging');
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  svg.addEventListener('pointermove', function (e) { if (!dragging) return; var nx = Math.max(s0, Math.min(s1, startK + e.clientX - startX)); if (Math.abs(nx - startK) > 4) moved = true; x = nx; draw(); });
+  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (x > s0 + (s1 - s0) * .85) open(); else animate(s0, 0, 450); }
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } });
+  window.oriwisChain = { set: function (v) { x = s0 + (s1 - s0) * v; draw(); }, open: open };
+  build(); addEventListener('resize', function () { if (el.clientWidth !== W) build(); });
+  // a gentle hint: the chain swings once when it first comes into view
+  if (!reduce && 'IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { animate(s0 + 26, 0, 500, function () { animate(s0, 0, 700); }); }, 900); } }, { threshold: .8 }); io.observe(el); }
 })();
 </script>
 <script src="vendor/motion.min.js"></script>
