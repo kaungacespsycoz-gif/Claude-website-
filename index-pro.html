@@ -1206,7 +1206,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var REFL_Y = -4, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var dropN = 0, REFL_Y = -4, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
@@ -1285,7 +1285,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
     logo.classList.toggle('pass', t > passA && t < passB);
     if (water) { water.glow(t > passA && t < passB ? 1 : 0);
-      if (t > 0 && t < .93 && Math.abs(p.x - lastDrop) > 11) { lastDrop = p.x; water.drop(p.x, p.y, -1); }
+      if (t > 0 && t < .95 && Math.abs(p.x - lastDrop) > 12) { lastDrop = p.x; water.trail(p.x, p.y); if (++dropN % 3 === 0) water.drop(p.x, p.y, -.7); }
       if (t === 0) lastDrop = -99; }
   }
   // idle: the envelope bobs and a spark runs along the wave to the post box
@@ -1346,11 +1346,17 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       'precision mediump float;',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
       '  return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y); }',
+      'vec2 trail(vec2 p){ float bd = 1e4, ba = 9.;',
+      '  for (int i = 0; i < 23; i++) { vec3 a = uP[i], b = uP[i + 1];',
+      '    if (a.z > -50. && b.z > -50.) { vec2 sa = p - a.xy, sb = b.xy - a.xy; float L = dot(sb, sb);',
+      '      if (L < 900.) { float h = clamp(dot(sa, sb) / max(L, .01), 0., 1.); vec2 dv = (sa - sb * h) * vec2(1., 1.7); float d = length(dv);',
+      '        if (d < bd) { bd = d; ba = uT - mix(a.z, b.z, h); } } } }',
+      '  return vec2(bd, ba); }',
       'float hgt(vec2 p){',
       '  vec2 q = p * vec2(1., 2.1);',
       '  float v = sin(q.x * .05 + uT * .9 + noise(q * .015 + uT * .08) * 5.) * .35;',
@@ -1365,6 +1371,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '      v += -r.w * 2.2 * sin(x * .55) * exp(-x * x / (50. + age * 170.)) * exp(-age * 1.4);',
       '      v -= -r.w * 1.4 * exp(-rr * rr / 60.) * exp(-age * 5.);',
       '    } }',
+      '  vec2 tr = trail(p); if (tr.y < 4.5 && tr.x < 70.) { float age = max(tr.y, 0.), w = 5. + age * 13., k = exp(-age * .75);',
+      '    float x = tr.x - w; v += 3.2 * sin(x * .55) * exp(-x * x / (30. + age * 40.)) * k;',
+      '    float x2 = tr.x - w * .55; v += 1.6 * sin(x2 * .7) * exp(-x2 * x2 / (16. + age * 24.)) * k;',
+      '    float core = exp(-tr.x * tr.x / (20. + age * 60.));',
+      '    v += (noise(p * .3 + vec2(uT * 2.4, -uT * 1.7)) - .5) * 4. * core * smoothstep(.05, .35, age) * exp(-age * 1.1);',
+      '  }',
       '  return v; }',
       'void main(){',
       '  vec2 p = vec2(gl_FragCoord.x, uRes.y * uDpr - gl_FragCoord.y) / uDpr;',
@@ -1390,7 +1402,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col = mix(col, bc * .8 + col * .15, bm * .74);',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
-      '    vec2 ep = p + g * 7. - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
+      '    vec2 ep = p + g * 2.6 - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
       '    ep = vec2(cs * ep.x - sn * ep.y, sn * ep.x + cs * ep.y) / es; float ea = 1.1 / es;',
       // soft shadow on the bed below
       '    float shd = rb(ep - vec2(3.5, 6.), vec2(-15., -10.), vec2(15., 10.), 5. / es);',
@@ -1423,6 +1435,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  float s = dot(g, normalize(vec2(-.35, -1.)));',
       '  col += vec3(.80, .93, .95) * smoothstep(.04, .4, s) * .34;',
       '  col *= 1. - smoothstep(.04, .4, -s) * .28;',
+      '  vec2 tw = trail(p); if (tw.y < 4.5) col += vec3(.6, .8, .8) * exp(-tw.x * tw.x / (24. + tw.y * 70.)) * exp(-max(tw.y, 0.) * .9) * .26 * (.5 + noise(p * .4 + uT * 2.));',
       // the logo, floating on the surface and bent by it
       '  if (uTexOn > .5) {',
       '    vec2 lp = p + g * 3.2; lp.x += sin(lp.y * .34 + uT * 1.9) * .9 + sin(lp.y * .87 - uT * 2.9) * .3;',
@@ -1446,9 +1459,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uEnv', 'uEnvA', 'uHit', 'uRefl'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var tex = gl.createTexture(), texOn = 0;
-    var ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
     (function () {
@@ -1472,7 +1485,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       glowNow += (glowTo - glowNow) * .18;
       gl.uniform2f(U.uRes, Wc, Hc); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uT, tt); gl.uniform1f(U.uGlow, glowNow); gl.uniform1f(U.uTexOn, texOn);
       hitV *= .96; gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uHit, hitV);
-      gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
     function loop() {
@@ -1484,10 +1497,11 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     }
     var api = {
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY) {
-        Wc = w; Hc = h; dpr = Math.min(2, window.devicePixelRatio || 1);
+        Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
         gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY + 56); gl.uniform3f(U.uRefl, boxX, boxY, 1); frame();
       },
+      trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; if (!running) frame(); },
