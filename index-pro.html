@@ -1290,12 +1290,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
     bx = W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * (water ? .11 : .04));
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * (water ? .05 : .04));
     by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S)); SB = S;
     if (water) {
       // a huge pillar box on the near bank: only its domed top and the slot show, low in the water under the logo
-      var wSlot = Math.round(H * .83), room = wSlot - (Ly + 162 * k) - 10;
-      SB = Math.max(2.2, Math.min(W * .55 / 40, room / 27.5)); bx = Math.round(W * .6);
+      var wSlot = Math.round(H * .78), room = wSlot - (Ly + 162 * k) + 30;
+      SB = Math.max(2.2, Math.min(W * .55 / 40, room / 27.5)); bx = Math.round(W - 14 * SB);   // far right, cropped by the edge
       by = REFL_Y = Math.round(wSlot + 55.7 * SB);
     }
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
@@ -1305,7 +1305,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
       ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
-      (water ? ' C' + (c6[0] + 34) + ' ' + (c6[1] + 6) + ' ' + (slotX + 18) + ' ' + (slotY - 70) + ' ' + slotX + ' ' + slotY : ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY);
+      (water ? ' C' + (c6[0] + 34) + ' ' + (c6[1] + 6) + ' ' + (slotX - 16) + ' ' + (slotY - 80) + ' ' + slotX + ' ' + slotY : ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY);
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
     if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, SB);
     var defs = mk('defs', {});
@@ -1506,12 +1506,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col = mix(col, gold, smoothstep(.62, 0., length((ru - vec2(.05, .0)) * vec2(1., 1.5))) * .55);',
       // the London skyline across the river, reflected: wobbling, torn into strips by the ripples, lamp lights drawn out into streaks
       '  vec2 sp = p + g * 13.; sp.x += sin(sp.y * .35 + uT * 1.5) * 1.4 + (noise(vec2(sp.y * .1, uT * .8)) - .5) * 4.;',
-      '  vec2 su = vec2(sp.x / uRes.x, 1. - sp.y / (uRes.y * .34));',
-      '  if (su.y > 0.) { vec2 bl = vec2(1.6 / uRes.x, 3. / (uRes.y * .34)); float sa = 0.;',
+      '  vec2 su = vec2(sp.x / uRes.x, 1. - sp.y / (uRes.y * .44));',
+      '  if (su.y > 0.) { vec2 bl = vec2(1.6 / uRes.x, 3. / (uRes.y * .44)); float sa = 0.;',
       '    sa += texture2D(uSky, clamp(su, 0., 1.)).a * .4; sa += texture2D(uSky, clamp(su + bl, 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su - bl, 0., 1.)).a * .15;',
       '    sa += texture2D(uSky, clamp(su + vec2(bl.x, -bl.y), 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su + vec2(-bl.x, bl.y), 0., 1.)).a * .15;',
-      '    sa *= (.82 + .18 * sin(sp.y * 1.3 + uT * 2.6)) * mix(.62, 1., su.y);',
-      '    col = mix(col, col * .2 + vec3(.0, .02, .025), min(1., sa * 1.25));',
+      '    sa *= (.82 + .18 * sin(sp.y * 1.3 + uT * 2.6)) * mix(.72, 1., su.y);',
+      '    col = mix(col, col * .16 + vec3(.0, .015, .02), min(1., sa * 1.35));',
       '    float li = 0.; for (int k = -3; k <= 3; k++) li += texture2D(uSky, clamp(su + vec2(0., float(k) * .022), 0., 1.)).r * (1. - abs(float(k)) / 4.);',
       '    col += vec3(1., .78, .42) * li * .3 * (.75 + .25 * sin(sp.y * 2.1 - uT * 3.)); }',
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
@@ -1588,7 +1588,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    var SKY = .34, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
+    var SKY = .44, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
@@ -1645,7 +1645,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     function paintSky(w, h) {
       // Big Ben and Parliament on the far bank; drawn upright here, the shader shows it upside down hanging from the top edge
       var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * SKY * 2));
-      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = ch / 212, base = ch - 2 * u, bx0 = cw * .22; x.scale(1, 1);
+      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = ch / 212, base = ch - 2 * u, bx0 = cw * .76; x.scale(1, 1);
       x.fillStyle = '#000';
       function R(a, b, ww, hh) { x.fillRect(bx0 + a * u * 1.35, base - (b + hh) * u, ww * u * 1.35, hh * u); }
       R(-200, 0, 400, 6);                                                   // embankment
