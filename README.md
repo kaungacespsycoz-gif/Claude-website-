@@ -19,3 +19,8 @@ Replace with real photos of the same name later (landscape 3:2, under ~200 KB).
 
 ## Opening screen
 Moonlit 3D sea from v1 (three.js in `vendor/`), now with logo 10. Falls back to a still dark gradient without WebGL.
+
+## Design tools
+- `.claude/skills/ui-ux-pro-max/`: UI/UX Pro Max design skill (MIT, from npm `uipro-cli` 2.2.3), installed by hand after review.
+  Run `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system` for suggestions. Its font picks for "education" are children's fonts; ignore them.
+- `vendor/motion.min.js`: Motion 11.11.17 (MIT), stored locally so animations work in mainland China. Used only by `index-pro.html`.
