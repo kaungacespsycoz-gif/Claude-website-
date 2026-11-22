@@ -1302,12 +1302,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
     bx = W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round(((water ? H - BANK : H) - 162 * k) / 2) - Math.round(H * (water ? .03 : .04));
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .36 : .47) - LW * .5), Ly = Math.round(((water ? H - BANK : H) - 162 * k) / 2) - Math.round(H * (water ? .03 : .04));
     by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S)); SB = S;
     if (water) {
       // a huge pillar box on the near bank: only its domed top and the slot show, low in the water under the logo
       var wSlot = Math.min(Math.round(H * .78), H - BANK - 26), room = wSlot - (Ly + 162 * k) + 30;
-      SB = Math.max(2.2, Math.min(W * .55 / 40, room / 27.5)); bx = Math.round(W - 14 * SB);   // far right, cropped by the edge
+      SB = Math.max(2.4, Math.min(W * .66 / 40, (room + 50) / 27.5)); bx = Math.round(W - 13 * SB);   // big, far right, cropped by the edge, leaning in
       by = REFL_Y = Math.round(wSlot + 55.7 * SB);
     }
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
@@ -1476,7 +1476,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT, uSand; uniform float uBank; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT, uSand; uniform float uBank, uBoxRot; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1529,6 +1529,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
       // the pillar box, standing just above the pond, seen only as its rippling reflection
       '  vec2 bp = p + g * 8.; bp.x += sin(bp.y * .28 + uT * 1.7) * .9 + (noise(vec2(bp.y * .09, uT * .9)) - .5) * 5. + sin(bp.y * .5 - uT * 2.2) * .8;',
+      '  { vec2 d0 = bp - uBox; float ra = uBoxRot + sin(uT * .6) * .02, cr = cos(ra), sr = sin(ra); bp = uBox + vec2(cr * d0.x + sr * d0.y, -sr * d0.x + cr * d0.y); }',
       '  vec2 bu = vec2((bp.x - uRefl.x) / uRefl.z + 20., (bp.y - uRefl.y) / uRefl.z + 90.) / vec2(40., 92.);',
       '  if (bu.x > 0. && bu.x < 1. && bu.y > 0. && bu.y < 1.) { vec4 bt = texture2D(uBoxT, bu);',
       '    float rb2 = .9 + .1 * sin(bp.y * 1.15 + uT * 2.8);',
@@ -1628,7 +1629,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank', 'uBoxRot'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var SKY = .44, sandT = gl.createTexture(), bankY = 1e4, sentTxt = false, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
     var pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
@@ -1701,7 +1702,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     function paintSky(w, h) {
       // Big Ben and Parliament on the far bank; drawn upright here, the shader shows it upside down hanging from the top edge
       var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * SKY * 2));
-      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = ch / 212, base = ch - 2 * u, bx0 = cw * .76; x.scale(1, 1);
+      c.width = cw; c.height = ch; var x = c.getContext('2d'), u = ch / 212, base = ch - 2 * u, bx0 = cw * .1; x.scale(1, 1);
       x.fillStyle = '#000';
       function R(a, b, ww, hh) { x.fillRect(bx0 + a * u * 1.35, base - (b + hh) * u, ww * u * 1.35, hh * u); }
       R(-200, 0, 400, 6);                                                   // embankment
@@ -1725,7 +1726,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
       gl.uniform1i(U.uSky, 2); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, skyT);
       gl.uniform1i(U.uBoxT, 3); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, boxT);
-      gl.uniform1i(U.uSand, 4); gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, sandT); gl.activeTexture(gl.TEXTURE0); gl.uniform1f(U.uBank, bankY);
+      gl.uniform1i(U.uSand, 4); gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, sandT); gl.activeTexture(gl.TEXTURE0); gl.uniform1f(U.uBank, bankY); gl.uniform1f(U.uBoxRot, -.17);
       if (cutTo !== cutX) { cutX = cutTo > cutX ? cutTo : cutX + (cutTo - cutX) * .08; if (Math.abs(cutTo - cutX) < 1) cutX = cutTo; } gl.uniform1f(U.uCut, cutX);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
