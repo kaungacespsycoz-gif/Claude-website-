@@ -421,7 +421,6 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .wavepost .wp-water { position: absolute; left: 0; top: 0; width: 100%; height: var(--wp-h); border-radius: 22px; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; }
 .wavepost.wet .wp-water { opacity: 1; } .wavepost.wet .wp-logo, .wavepost.wet .wp-box, .wavepost.wet .wp-burst, .wavepost.wet .wp-env { visibility: hidden; }
 .wavepost.wet .wp-trail, .wavepost.wet .wp-glow { opacity: 0; }
-.wavepost.wet.held .wp-env { visibility: visible; }
 .wavepost .wp-lbl, .wavepost .wp-ok { z-index: 4; }
 .wavepost.wet .wp-lbl, .wavepost.wet .wp-ok { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
 
@@ -430,6 +429,8 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 /* booking page: a full-screen sheet; pick a day, a time, then your details */
 .book { position: fixed; inset: 0; z-index: 80; background: var(--paper); overflow-y: auto; -webkit-overflow-scrolling: touch; transform: translateY(100%); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
 .book.open { transform: none; }
+.book.ripple { transform: none; transition: clip-path .75s cubic-bezier(.3,.7,.2,1), -webkit-clip-path .75s cubic-bezier(.3,.7,.2,1); -webkit-clip-path: circle(0 at var(--rx) var(--ry)); clip-path: circle(0 at var(--rx) var(--ry)); }
+.book.ripple.open { -webkit-clip-path: circle(150vmax at var(--rx) var(--ry)); clip-path: circle(150vmax at var(--rx) var(--ry)); }
 .book .bk-top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
 .book .bk-top .bk-logo { width: 46px; color: var(--ink); } .book .bk-top .bk-logo svg { display: block; width: 100%; height: auto; }
 .book .bk-x { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--rule); background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer; }
@@ -1329,14 +1330,14 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     (function step(now) { var k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
       t = from + (to - from) * e; if (t < .0005) t = 0; draw(now); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
   }
-  function openBook() { if (window.oriwisBook) window.oriwisBook.open(); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+  function openBook(at) { if (window.oriwisBook) window.oriwisBook.open(at); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
   function post() {
     busy = true; demoOn = false; lastTouch = performance.now() + 2500; if (water) water.quiet(7);
     var slide = function (done) { if (water) fly(1, 650, done); else done(); };
     fly(water ? .93 : 1, Math.max(300, ((water ? .93 : 1) - t) * 1500), function () { slide(function () {
-      el.classList.add('sent'); var withPud = water && water.pudding(function () { el.classList.remove('held'); openBook(); });
+      el.classList.add('sent'); var withPud = water && water.pudding(function (nx, ny) { el.classList.remove('held'); var r = el.getBoundingClientRect(); openBook(nx == null ? null : { x: Math.round(r.left + nx), y: Math.round(r.top + ny) }); });
       if (withPud) { el.classList.add('held'); (function hold() { var L2 = water && water.pudLetter(); if (!L2 || !el.classList.contains('held')) { el.classList.remove('held'); return; }
-        env.setAttribute('transform', 'translate(' + L2.x.toFixed(1) + ' ' + L2.y.toFixed(1) + ') rotate(' + L2.r.toFixed(1) + ') scale(' + L2.s.toFixed(2) + ')'); env.setAttribute('opacity', L2.o.toFixed(2));
+        water.env(L2.x, L2.y, L2.r * Math.PI / 180, L2.s, L2.o, 1);
         requestAnimationFrame(hold); })(); } if (water) { if (!withPud) water.sand(true); water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
@@ -1445,6 +1446,19 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    float sl = rb(bq, vec2(-10., -58.), vec2(10., -53.4), .6), slg = exp(-pow(max(abs(bq.x) - 9., 0.) / 3., 2.) - pow((bq.y + 55.7) / 4.5, 2.));',
       '    bc += vec3(1., .74, .36) * (sl * (.3 + .14 * sin(uT * 2.2)) + slg * .18 + (sl + slg * .6) * uHit * 1.4);',
       '    col = col * (1. - bt.a * .9) + bc * .9; }',
+      // Pudding on the near bank, seen only as her reflection: rises, tilts her head, smiles, dips her nose
+      '  if (uPudA > .01) {',
+      '    vec2 pp = p + g * 7.; pp.x += (noise(vec2(pp.y * .08, uT * .9)) - .5) * 5. + sin(pp.y * .45 - uT * 2.) * .9;',
+      '    vec2 q = (pp - uPudR.xy) / uPudR.zw;',
+      '    vec4 sh = texture2D(uPud, vec2(clamp(q.x - .03, 0., 1.) * .5, clamp(q.y - .02, 0., 1.))); col *= 1. - sh.a * .25 * uPudA * step(0., q.x) * step(q.x, 1.) * step(0., q.y);',
+      '    float hw = smoothstep(.72, .5, q.y), ang = uPudTilt * hw; vec2 pv = vec2(.5, .66);',
+      '    vec2 d2 = (q - pv) * vec2(uPudR.z / uPudR.w, 1.); float ca = cos(ang), sa2 = sin(ang); d2 = vec2(ca * d2.x - sa2 * d2.y, sa2 * d2.x + ca * d2.y);',
+      '    q = pv + d2 * vec2(uPudR.w / uPudR.z, 1.); q.y -= uPudDip * .12 * hw;',
+      '    if (q.x > 0. && q.x < 1. && q.y > 0. && q.y < 1.) {',
+      '      vec4 a1 = texture2D(uPud, vec2(q.x * .5, q.y)), a2 = texture2D(uPud, vec2(.5 + q.x * .5, q.y)); vec4 pc = mix(a1, a2, uPudSmile);',
+      '      float band = .88 + .12 * sin(pp.y * 1.1 + uT * 2.6);',
+      '      vec3 rc = mix(pc.rgb * .86, vec3(.05, .2, .22) * pc.a, .14) * band;',
+      '      float k = pc.a * uPudA * .9; col = col * (1. - k) + rc * uPudA * .9; } }',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
       '    vec2 ep = p + g * 2.6 - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
@@ -1527,19 +1541,6 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    float foam = exp(-pow((p.y - shore) / 1.8, 2.)) * (.5 + .5 * lace) + exp(-pow((p.y - shore + 6.) / 2.5, 2.)) * lace * .35;',
       '    col += vec3(.88, .94, .92) * foam * .5;',
       '  }',
-      // Pudding on the near bank, seen only as her reflection: rises, tilts her head, smiles, dips her nose
-      '  if (uPudA > .01) {',
-      '    vec2 pp = p + g * 7.; pp.x += (noise(vec2(pp.y * .08, uT * .9)) - .5) * 5. + sin(pp.y * .45 - uT * 2.) * .9;',
-      '    vec2 q = (pp - uPudR.xy) / uPudR.zw;',
-      '    vec4 sh = texture2D(uPud, vec2(clamp(q.x - .03, 0., 1.) * .5, clamp(q.y - .02, 0., 1.))); col *= 1. - sh.a * .25 * uPudA * step(0., q.x) * step(q.x, 1.) * step(0., q.y);',
-      '    float hw = smoothstep(.72, .5, q.y), ang = uPudTilt * hw; vec2 pv = vec2(.5, .66);',
-      '    vec2 d2 = (q - pv) * vec2(uPudR.z / uPudR.w, 1.); float ca = cos(ang), sa2 = sin(ang); d2 = vec2(ca * d2.x - sa2 * d2.y, sa2 * d2.x + ca * d2.y);',
-      '    q = pv + d2 * vec2(uPudR.w / uPudR.z, 1.); q.y -= uPudDip * .07 * hw;',
-      '    if (q.x > 0. && q.x < 1. && q.y > 0. && q.y < 1.) {',
-      '      vec4 a1 = texture2D(uPud, vec2(q.x * .5, q.y)), a2 = texture2D(uPud, vec2(.5 + q.x * .5, q.y)); vec4 pc = mix(a1, a2, uPudSmile);',
-      '      float band = .88 + .12 * sin(pp.y * 1.1 + uT * 2.6);',
-      '      vec3 rc = mix(pc.rgb * .86, vec3(.05, .2, .22) * pc.a, .14) * band;',
-      '      float k = pc.a * uPudA * .9; col = col * (1. - k) + rc * uPudA * .9; } }',
       '  vec2 vu = p / uRes - .5; col *= 1. - dot(vu * vec2(.5, 1.), vu * vec2(.5, 1.)) * .55;',
       '  gl_FragColor = vec4(col, 1.);',
       '}'].join('\n');
@@ -1665,9 +1666,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       var fl = pk < 0 || pk > 9 ? 0 : ease(0, .9) * (1 - ease(6.5, 8.5)), pa = pk < 0 || pk > 9 ? 0 : ease(.5, 1.4) * (1 - ease(6, 7.5));
       var rise = 1 - ease(.5, 1.5);
       gl.uniform1f(U.uFlood, fl); gl.uniform1f(U.uPudA, pa); gl.uniform1f(U.uPudTilt, (ease(1.5, 1.9) - ease(2.8, 3.2) * .6) * .26);
-      gl.uniform1f(U.uPudSmile, ease(2.4, 2.8)); gl.uniform1f(U.uPudDip, ease(3.2, 3.7));
-      gl.uniform4f(U.uPudR, PR[0], PR[1] + rise * PR[3] * .6 + ease(3.2, 3.7) * PR[3] * .04, PR[2], PR[3]);
-      if (pudCb && pk > 3.75) { var cb = pudCb; pudCb = null; api.drop(PR[0] + PR[2] * .5, PR[1] + PR[3] * .48, 1.1); setTimeout(cb, 420); }
+      gl.uniform1f(U.uPudSmile, ease(2.4, 2.8)); gl.uniform1f(U.uPudDip, ease(3.1, 3.75));
+      gl.uniform4f(U.uPudR, PR[0], PR[1] + rise * PR[3] * .6 + ease(3.1, 3.75) * PR[3] * .14, PR[2], PR[3]); gl.uniform1f(U.uPudA, pa * (1 - ease(3.8, 4.6) * .85));
+      if (pudCb && pk > 3.75) { var cb = pudCb; pudCb = null; var nx = PR[0] + PR[2] * .5, ny = PR[1] + PR[3] * .74; api.drop(nx, ny, 1.4); api.drop(nx, ny, 2.9); setTimeout(function () { cb(nx, ny); }, 380); }
       gl.uniform1i(U.uPud, 5); gl.activeTexture(gl.TEXTURE5); gl.bindTexture(gl.TEXTURE_2D, pudT); gl.activeTexture(gl.TEXTURE0); gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uEnvSY, ev[5]); gl.uniform1f(U.uHit, hitV);
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
@@ -1712,9 +1713,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       pudLetter: function () {
         var pk = (performance.now() - pudT0) / 1000; if (pk < 0 || pk > 6) return null;
         var e2 = function (a, b) { var z = Math.max(0, Math.min(1, (pk - a) / (b - a))); return z * z * (3 - 2 * z); };
-        var mx = PR[0] + PR[2] * .5, fx = PR[0] - PR[2] * .06, fy = PR[1] + PR[3] * .8, my = PR[1] + PR[3] * .62, up = e2(3.1, 3.7), cx = fx + (mx - fx) * up;
-        return { x: cx + Math.sin(pk * 1.3) * 3 * (1 - up), y: fy + (my - fy) * up + Math.sin(pk * 1.7) * 2 * (1 - up), r: Math.sin(pk * 1.1) * 8 * (1 - up) + up * -4,
-          s: PR[3] / 125 * (1 - up * .12), o: e2(.9, 1.4) };
+        var cx = PR[0] + PR[2] * .5, fy = PR[1] + PR[3] * .74, up = 0, gone = e2(3.75, 4.1);
+        return { x: cx + Math.sin(pk * 1.3) * 4, y: fy + Math.sin(pk * 1.7) * 2.5, r: Math.sin(pk * 1.1) * 10, s: PR[3] / 150, o: e2(.9, 1.6) * .55 * (1 - gone) };
       },
       pudSkip: function () { if (pudCb) { var cb = pudCb; pudCb = null; cb(); } },
       quiet: function (sec) { quietUntil = Math.max(quietUntil, now() + sec); nextDrop = Math.max(nextDrop, quietUntil); },
@@ -1813,8 +1813,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   });
 
   var lastFocus = null;
-  function open(fromHistory) {
+  function open(fromHistory, at) {
     if (!book.hidden && book.classList.contains('open')) return;
+    book.classList.toggle('ripple', !!at && !reduce); if (at) { book.style.setProperty('--rx', at.x + 'px'); book.style.setProperty('--ry', at.y + 'px'); }
     makeDays(); if (!sel.day) { for (var k = 0; k <= AHEAD; k++) { var dk = new Date(today.getFullYear(), today.getMonth(), today.getDate() + k); if (inRange(dk) && freeCount(dk)) { sel.day = dk; view = new Date(dk.getFullYear(), dk.getMonth(), 1); break; } } }
     render(); lastFocus = document.activeElement;
     book.hidden = false; root.style.overflow = 'hidden';
@@ -1836,7 +1837,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var a = e.target.closest('[data-open-book], a[href="#consult"]'); if (!a || a.id === 'wavepost') return;
     e.preventDefault(); open(false);
   });
-  window.oriwisBook = { open: function () { open(false); }, close: function () { close(false); } };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.oriwisBook = { open: function (at) { open(false, at); }, close: function () { close(false); } };
   if (location.hash === '#book') open(true);
 })();
 </script>
