@@ -1,7 +1,7 @@
-# Oriwis brand · Orient Wisdom · 东方智慧
+# Oriwis brand · Knowledge by the sea · 海边求知
 
 The mark: a half sun rising from an open book, inside a thin double ring.
-The book's two pages also read as waves (Sanya, by the sea). Wisdom from the East: knowledge rising like the morning.
+The book's two pages also read as waves: knowledge, by the sea.
 No sun rays, on purpose.
 
 | File | Use |
