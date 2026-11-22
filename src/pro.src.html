@@ -1076,7 +1076,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = -4, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 128, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 134, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
@@ -1086,7 +1086,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var LW = 92, k = LW / 208, Lx = Math.round(W * .5 - LW * .55), Ly = H - 8 - Math.round(162 * k) + 2;
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
     var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
-    var x0 = 38, slotX = bx, slotY = water ? REFL_Y + 55.7 : by - 60;
+    var x0 = 38, slotX = bx, slotY = water ? REFL_Y - 55.7 : by - 60;
     var d = 'M' + x0 + ' ' + (c0[1] - 6) +
       ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
       ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
@@ -1213,7 +1213,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y + 56, .9); water.hit(); water.keepCut(); }
+      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1294,7 +1294,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  col = mix(col, vec3(.02, .09, .09), tr * .55 * (1. - ru.y * .4));',
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
       // the pillar box, standing just above the pond, seen only as its rippling reflection
-      '  vec2 bp = p + g * 9.; bp.x += sin(bp.y * .22 + uT * 1.8) * (.6 + (bp.y - uRefl.y) * .025) + sin(bp.y * .61 - uT * 2.6) * .5; vec2 bq = vec2(bp.x - uRefl.x, -(bp.y - uRefl.y)) / uRefl.z; float aa = 1.2 / uRefl.z;',
+      '  vec2 bp = p + g * 9.; bp.x += sin(bp.y * .22 + uT * 1.8) * (.6 + (uRefl.y - bp.y) * .025) + sin(bp.y * .61 - uT * 2.6) * .5; vec2 bq = vec2(bp.x - uRefl.x, bp.y - uRefl.y) / uRefl.z; float aa = 1.2 / uRefl.z;',
       '  float ct = -62. - 22. * sqrt(max(0., 1. - bq.x * bq.x / 289.));',
       '  float cap = smoothstep(-aa, aa, bq.y - ct) * smoothstep(-aa, aa, -60. - bq.y) * smoothstep(-aa, aa, 17. - abs(bq.x));',
       '  float body = rb(bq, vec2(-14.5, -62.), vec2(14.5, -8.), aa), band = rb(bq, vec2(-18.5, -65.), vec2(18.5, -59.), aa);',
@@ -1302,7 +1302,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  float shade = .5 + .5 * clamp(1. - abs(bq.x + 4.) / 17., 0., 1.);',
       '  vec3 bc = vec3(.82, .12, .17) * shade; bc = mix(bc, vec3(.62, .07, .12), band); bc = mix(bc, vec3(.40, .04, .08), plinth * (1. - body));',
       '  bc = mix(bc, vec3(.95, .92, .85), plate); bc = mix(bc, vec3(.10, .02, .03), slot); bc = mix(bc, vec3(1., .8, .45), slot * uHit);',
-      '  float bm = max(max(cap, body), max(band, plinth)) * (1. - smoothstep(30., 100., bp.y - uRefl.y) * .3);',
+      '  float bm = max(max(cap, body), max(band, plinth)) * (1. - smoothstep(30., 100., uRefl.y - bp.y) * .3);',
       '  col = mix(col, bc * .8 + col * .15, bm * .74);',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
@@ -1411,7 +1411,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY + 56); gl.uniform3f(U.uRefl, boxX, boxY, 1); frame();
+        gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56); gl.uniform3f(U.uRefl, boxX, boxY, 1); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
