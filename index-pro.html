@@ -1657,13 +1657,14 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  if (uPudA > .01) {',
       '    vec2 pp = p + g * 7.; pp.x += (noise(vec2(pp.y * .08, uT * .9)) - .5) * 5. + sin(pp.y * .45 - uT * 2.) * .9;',
       '    vec2 q = (pp - uPudR.xy) / uPudR.zw;',
+      '    vec4 sh = texture2D(uPud, vec2(clamp(q.x - .03, 0., 1.) * .5, clamp(q.y - .02, 0., 1.))); col *= 1. - sh.a * .25 * uPudA * step(0., q.x) * step(q.x, 1.) * step(0., q.y);',
       '    float hw = smoothstep(.72, .5, q.y), ang = uPudTilt * hw; vec2 pv = vec2(.5, .66);',
       '    vec2 d2 = (q - pv) * vec2(uPudR.z / uPudR.w, 1.); float ca = cos(ang), sa2 = sin(ang); d2 = vec2(ca * d2.x - sa2 * d2.y, sa2 * d2.x + ca * d2.y);',
       '    q = pv + d2 * vec2(uPudR.w / uPudR.z, 1.); q.y -= uPudDip * .07 * hw;',
       '    if (q.x > 0. && q.x < 1. && q.y > 0. && q.y < 1.) {',
       '      vec4 a1 = texture2D(uPud, vec2(q.x * .5, q.y)), a2 = texture2D(uPud, vec2(.5 + q.x * .5, q.y)); vec4 pc = mix(a1, a2, uPudSmile);',
       '      float band = .88 + .12 * sin(pp.y * 1.1 + uT * 2.6);',
-      '      vec3 rc = mix(pc.rgb * .8, vec3(.05, .2, .22) * pc.a, .2) * band;',
+      '      vec3 rc = mix(pc.rgb * .86, vec3(.05, .2, .22) * pc.a, .14) * band;',
       '      float k = pc.a * uPudA * .9; col = col * (1. - k) + rc * uPudA * .9; } }',
       '  vec2 vu = p / uRes - .5; col *= 1. - dot(vu * vec2(.5, 1.), vu * vec2(.5, 1.)) * .55;',
       '  gl_FragColor = vec4(col, 1.);',
@@ -1677,7 +1678,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank', 'uBoxRot', 'uEnvSY', 'uLit', 'uFlood', 'uPudA', 'uPudTilt', 'uPudSmile', 'uPudDip', 'uPudR', 'uPud'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var SKY = .44, arrowK = 1, pawN = 0, pawTimer = 0, sandT = gl.createTexture(), bankY = 1e4, sentTxt = false, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
-    var PUD = /[?&]pud=1/.test(location.search), pudT = gl.createTexture(), pudReady = false, pudT0 = -1e9, pudCb = null, PR = [0, 0, 1, 1], litV = 0, litOff = -1e9, DROPS = !/[?&]drops=0/.test(location.search), nextDrop = 3, quietUntil = 0, LG = [0, 0, 0, 0], BX = [0, 0], pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    var PUD = /[?&]pud=1/.test(location.search), pudT = (function () { var t0 = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t0); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4)); return t0; })(), pudReady = false, pudT0 = -1e9, pudCb = null, PR = [0, 0, 1, 1], litV = 0, litOff = -1e9, DROPS = !/[?&]drops=0/.test(location.search), nextDrop = 3, quietUntil = 0, LG = [0, 0, 0, 0], BX = [0, 0], pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
     (function () {
@@ -1792,7 +1793,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       gl.uniform1f(U.uFlood, fl); gl.uniform1f(U.uPudA, pa); gl.uniform1f(U.uPudTilt, (ease(1.5, 1.9) - ease(2.8, 3.2) * .6) * .26);
       gl.uniform1f(U.uPudSmile, ease(2.4, 2.8)); gl.uniform1f(U.uPudDip, ease(3.2, 3.7));
       gl.uniform4f(U.uPudR, PR[0], PR[1] + rise * PR[3] * .6 + ease(3.2, 3.7) * PR[3] * .04, PR[2], PR[3]);
-      if (pudCb && pk > 3.75) { var cb = pudCb; pudCb = null; api.drop(PR[0] + PR[2] * .53, PR[1] + PR[3] * .5, 1.1); setTimeout(cb, 420); }
+      if (pudCb && pk > 3.75) { var cb = pudCb; pudCb = null; api.drop(PR[0] + PR[2] * .5, PR[1] + PR[3] * .48, 1.1); setTimeout(cb, 420); }
       gl.uniform1i(U.uPud, 5); gl.activeTexture(gl.TEXTURE5); gl.bindTexture(gl.TEXTURE_2D, pudT); gl.activeTexture(gl.TEXTURE0); gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uEnvSY, ev[5]); gl.uniform1f(U.uHit, hitV);
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
@@ -1826,7 +1827,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs, bank) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        bankY = bank || 1e4; var ph = h * .46, pw = ph * 288 / 340; PR = [w * .4 - pw / 2, h - ph * .94, pw, ph]; LG = [lx, ly, lw, lh]; BX = [boxX, boxY - 56 * bs]; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
+        bankY = bank || 1e4; var ph = h * .56, pw = ph * 285 / 340; PR = [Math.min(w * .58, w - pw * .62) - pw / 2, h - ph * .9, pw, ph]; /* standing in front of the post box, nearer to us */ LG = [lx, ly, lw, lh]; BX = [boxX, boxY - 56 * bs]; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
