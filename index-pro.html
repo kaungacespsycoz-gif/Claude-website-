@@ -1282,26 +1282,26 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 400, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var SB = 1.6, floating = false, floatT0 = 0, floatAng = 0, settleFrom = 0, settleT0 = -1e9, sunX = 0, sunY = 0, sunR = 5, tailEls = [], tailPts = [], dotGlow, dotCore, demoOn = true, demoT0 = 0, dropN = 0, REFL_Y = 114, water = null, lastDrop = -99, passA = .4, passB = .6, ex0 = 0, W = 0, H = 400, S = 1.6, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
     W = el.clientWidth; H = Math.round(parseFloat(getComputedStyle(el).paddingTop)) || 400; S = Math.max(1.2, Math.min(H / 125, W / 225, 2.4));
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.innerHTML = '';
-    bx = W - Math.round(44 * S);
+    SB = water ? H * .62 / 84 : S; bx = water ? W - Math.round(12 * SB) : W - Math.round(44 * S);
     // the path runs exactly along the wave cut in the logo's "WIS"
-    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * .47 - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * .04);
-    by = REFL_Y = Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S));
+    var LW = Math.round(92 * S), k = LW / 208, Lx = Math.round(W * (water ? .4 : .47) - LW * .5), Ly = Math.round((H - 162 * k) / 2) - Math.round(H * .04);
+    by = REFL_Y = water ? H + 10 : Math.min(H - 12, Math.round(Ly + 162 * k + 30 * S));   // with water: a big box on the near bank, its base just below the pane
     function P(u, v) { return [Lx + (u + 4) * k, Ly + (v + 10) * k]; }
     var c0 = P(-6, 113.6), c1 = P(29.2, 103.6), c2 = P(56.8, 103.6), c3 = P(86, 113.6), c4 = P(115.2, 123.6), c5 = P(142.8, 123.6), c6 = P(178, 113.6);
-    var x0 = Math.round(24 * S), slotX = bx, slotY = water ? REFL_Y - 55.7 * S : by - 60 * S;
+    var x0 = Math.round(24 * S), slotX = bx, slotY = water ? REFL_Y - 55.7 * SB : by - 60 * S;
     var d = 'M' + x0 + ' ' + (c0[1] - 6) +
       ' C' + (x0 + (c0[0] - x0) * .45) + ' ' + (c0[1] - 16) + ' ' + (c0[0] - 18) + ' ' + (c0[1] + 2) + ' ' + c0[0] + ' ' + c0[1] +
       ' C' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + c3.join(' ') +
       ' C' + c4.join(' ') + ' ' + c5.join(' ') + ' ' + c6.join(' ') +
       ' C' + (c6[0] + 20) + ' ' + (c6[1] - 8) + ' ' + (slotX - 14) + ' ' + (slotY + 10) + ' ' + slotX + ' ' + slotY;
     logo.style.left = Lx + 'px'; logo.style.top = Ly + 'px'; logo.style.width = LW + 'px';
-    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, S);
+    if (water) water.layout(W, H, Lx, Ly, LW, LW * 162 / 208, bx, REFL_Y, SB);
     var defs = mk('defs', {});
     grad(defs, 'wp-gold', [['0', '#ffe6a6'], ['.5', '#f2b34a'], ['1', '#ffd27a']]);
     grad(defs, 'wp-red', [['0', '#7d0c19'], ['.3', '#cc1d2c'], ['.55', '#ee4148'], ['.75', '#cc1d2c'], ['1', '#7d0c19']]);
@@ -1421,7 +1421,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function post() {
     busy = true;
     fly(1, Math.max(300, (1 - t) * 1500), function () {
-      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56 * S, .9); water.hit(); water.keepCut(); }
+      el.classList.add('sent'); if (water) { water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1499,22 +1499,25 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  vec3 col = mix(mid, deep, clamp(ru.y * .75 + ru.x * .45, 0., 1.));',
       '  col = mix(col, gold, smoothstep(.62, 0., length((ru - vec2(.05, .0)) * vec2(1., 1.5))) * .55);',
       // the London skyline across the river, reflected: wobbling, torn into strips by the ripples, lamp lights drawn out into streaks
-      '  vec2 sp = p + g * 13.; sp.x += sin(sp.y * .35 + uT * 1.5) * 1.4 + (noise(vec2(floor(sp.y / 2.6) * 1.7, uT * 1.2)) - .5) * 2.6;',
-      '  vec2 su = vec2(sp.x / uRes.x, sp.y / (uRes.y * .56));',
-      '  if (su.y < 1.) { float sa = texture2D(uSky, clamp(su, 0., 1.)).a * (.86 + .14 * sin(sp.y * 1.3 + uT * 2.6));',
-      '    col = mix(col, vec3(.015, .07, .08), sa * .62 * smoothstep(1., .82, su.y));',
+      '  vec2 sp = p + g * 13.; sp.x += sin(sp.y * .35 + uT * 1.5) * 1.4 + (noise(vec2(sp.y * .1, uT * .8)) - .5) * 4.;',
+      '  vec2 su = vec2(sp.x / uRes.x, 1. - sp.y / (uRes.y * .42));',
+      '  if (su.y > 0.) { vec2 bl = vec2(1.6 / uRes.x, 3. / (uRes.y * .42)); float sa = 0.;',
+      '    sa += texture2D(uSky, clamp(su, 0., 1.)).a * .4; sa += texture2D(uSky, clamp(su + bl, 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su - bl, 0., 1.)).a * .15;',
+      '    sa += texture2D(uSky, clamp(su + vec2(bl.x, -bl.y), 0., 1.)).a * .15; sa += texture2D(uSky, clamp(su + vec2(-bl.x, bl.y), 0., 1.)).a * .15;',
+      '    sa *= (.82 + .18 * sin(sp.y * 1.3 + uT * 2.6)) * mix(.5, 1., su.y);',
+      '    col = mix(col, col * .3 + vec3(.0, .025, .03), min(1., sa * 1.1));',
       '    float li = 0.; for (int k = -3; k <= 3; k++) li += texture2D(uSky, clamp(su + vec2(0., float(k) * .022), 0., 1.)).r * (1. - abs(float(k)) / 4.);',
       '    col += vec3(1., .78, .42) * li * .3 * (.75 + .25 * sin(sp.y * 2.1 - uT * 3.)); }',
       '  col += gold * .22 * exp(-dot((p - uBox) / vec2(80., 46.), (p - uBox) / vec2(80., 46.)));',
       // the pillar box, standing just above the pond, seen only as its rippling reflection
-      '  vec2 bp = p + g * 8.; bp.x += sin(bp.y * .28 + uT * 1.7) * .9 + (noise(vec2(floor(bp.y / 2.4) * 3.1, uT * 1.5)) - .5) * 1.1 * uRefl.z;',
+      '  vec2 bp = p + g * 8.; bp.x += sin(bp.y * .28 + uT * 1.7) * .9 + (noise(vec2(bp.y * .09, uT * .9)) - .5) * 5. + sin(bp.y * .5 - uT * 2.2) * .8;',
       '  vec2 bu = vec2((bp.x - uRefl.x) / uRefl.z + 20., (bp.y - uRefl.y) / uRefl.z + 90.) / vec2(40., 92.);',
       '  if (bu.x > 0. && bu.x < 1. && bu.y > 0. && bu.y < 1.) { vec4 bt = texture2D(uBoxT, bu);',
       '    float rb2 = .9 + .1 * sin(bp.y * 1.15 + uT * 2.8);',
-      '    vec3 bc = bt.rgb * rb2 * .92 + vec3(.0, .05, .06) * bt.a;',
+      '    vec3 bc = mix(bt.rgb * .74, vec3(.05, .2, .22) * bt.a, .16) * rb2;',
       '    vec2 bq = (bu * vec2(40., 92.)) - vec2(20., 90.);',
       '    bc += vec3(1., .78, .4) * uHit * rb(bq, vec2(-10., -58.), vec2(10., -53.4), .6) * 1.4;',
-      '    col = col * (1. - bt.a * .86) + bc * .86; }',
+      '    col = col * (1. - bt.a * .9) + bc * .9; }',
       // the letter, under the surface: bent by the ripples, tinted by the water, with moving caustics
       '  if (uEnvA > .01) {',
       '    vec2 ep = p + g * 2.6 - uEnv.xy; float cs = cos(-uEnv.z), sn = sin(-uEnv.z); float es = uEnv.w * 1.3;',
@@ -1633,33 +1636,26 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     })();
     // London across the river: the Eye, Big Ben and Parliament, St Paul's, the Shard, and lamps along the embankment
     function paintSky(w, h) {
-      var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * .56 * 2));
+      var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * .42 * 2));
       c.width = cw; c.height = ch; var x = c.getContext('2d'), u = cw / 360, base = ch - 6 * u;
       x.fillStyle = '#000'; x.strokeStyle = '#000';
       function R(a, b, ww, hh) { x.fillRect(a * u, base - (b + hh) * u, ww * u, hh * u); }
       // London Eye
-      var ex = 46 * u, ey = base - 66 * u, er = 44 * u; x.lineWidth = 3 * u; x.beginPath(); x.arc(ex, ey, er, 0, Math.PI * 2); x.stroke();
-      x.lineWidth = .9 * u; for (var i = 0; i < 16; i++) { var a = i * Math.PI / 8; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + Math.cos(a) * er, ey + Math.sin(a) * er); x.stroke();
-        x.beginPath(); x.arc(ex + Math.cos(a) * er, ey + Math.sin(a) * er, 2.3 * u, 0, Math.PI * 2); x.fill(); }
-      x.lineWidth = 2.4 * u; x.beginPath(); x.moveTo(ex - 22 * u, base); x.lineTo(ex, ey); x.lineTo(ex + 22 * u, base); x.stroke();
-      // Parliament
-      R(100, 0, 112, 30); for (var k = 0; k < 14; k++) R(102 + k * 8, 30, 2, 8);
-      R(186, 0, 20, 78); R(184, 78, 24, 6); for (var k2 = 0; k2 < 4; k2++) R(185 + k2 * 6.4, 84, 2, 7);   // Victoria Tower
-      // Big Ben (Elizabeth Tower)
-      R(122, 0, 15, 112); R(120, 112, 19, 22); R(122, 134, 15, 10);
-      x.beginPath(); x.moveTo(121 * u, base - 144 * u); x.lineTo(129.5 * u, base - 178 * u); x.lineTo(138 * u, base - 144 * u); x.fill();
-      R(129, 178, 1, 8);
-      // St Paul's
-      R(236, 0, 44, 34); R(244, 34, 28, 14); x.beginPath(); x.arc(258 * u, base - 48 * u, 15 * u, Math.PI, 0); x.fill(); R(256, 63, 4, 14); R(238, 34, 5, 22); R(273, 34, 5, 22);
-      // the Shard
-      x.beginPath(); x.moveTo(292 * u, base); x.lineTo(308 * u, base - 168 * u); x.lineTo(311 * u, base - 158 * u); x.lineTo(330 * u, base); x.fill();
-      // low riverside buildings and the embankment
-      R(0, 0, 360, 9); R(212, 0, 24, 18); R(330, 0, 30, 24); R(80, 0, 20, 14);
+      var ex = 58 * u, ey = base - 70 * u, er = 50 * u; x.lineWidth = 3.4 * u; x.beginPath(); x.arc(ex, ey, er, 0, Math.PI * 2); x.stroke();
+      x.lineWidth = 1 * u; for (var i = 0; i < 16; i++) { var a = i * Math.PI / 8; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + Math.cos(a) * er, ey + Math.sin(a) * er); x.stroke();
+        x.beginPath(); x.arc(ex + Math.cos(a) * er, ey + Math.sin(a) * er, 2.6 * u, 0, Math.PI * 2); x.fill(); }
+      x.lineWidth = 2.8 * u; x.beginPath(); x.moveTo(ex - 26 * u, base); x.lineTo(ex, ey); x.lineTo(ex + 26 * u, base); x.stroke();
+      // Parliament with Big Ben (Elizabeth Tower) and Victoria Tower
+      R(160, 0, 200, 32); for (var k = 0; k < 24; k++) R(162 + k * 8, 32, 2, 8);
+      R(318, 0, 22, 86); R(316, 86, 26, 6); for (var k2 = 0; k2 < 4; k2++) R(317 + k2 * 7, 92, 2, 7);
+      R(182, 0, 17, 122); R(180, 122, 21, 24); R(182, 146, 17, 10);
+      x.beginPath(); x.moveTo(181 * u, base - 156 * u); x.lineTo(190.5 * u, base - 194 * u); x.lineTo(200 * u, base - 156 * u); x.fill();
+      R(190, 194, 1, 9);
+      R(0, 0, 360, 9); R(110, 0, 34, 14);
       // lamps: posts are silhouettes, lanterns are lights (red channel)
-      var lamps = [18, 64, 110, 156, 202, 248, 294, 340];
+      var lamps = [22, 104, 262, 300];
       lamps.forEach(function (lx) { R(lx - .8, 0, 1.6, 34); R(lx - 3, 34, 6, 2); });
       x.fillStyle = '#ffcf70'; lamps.forEach(function (lx) { x.beginPath(); x.arc(lx * u, base - 39 * u, 2.6 * u, 0, Math.PI * 2); x.fill(); });
-      x.beginPath(); x.arc(129.5 * u, base - 123 * u, 4.6 * u, 0, Math.PI * 2); x.fill();                          // Big Ben's clock face
       upload(skyT, c);
     }
     function frame() {
