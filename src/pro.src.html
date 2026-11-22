@@ -200,24 +200,50 @@ p { margin: 0; }
 .intro.is3d:active { cursor: grabbing; }
 
 
-/* slide to book: like unlocking a phone. Drag the arrow to the end (a plain tap still works) */
-.btn.slide { position: relative; overflow: hidden; justify-content: center; padding: 6px 54px 6px 58px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
-.btn.slide .ico { position: absolute; left: 6px; top: 50%; margin-top: -20px; z-index: 2; cursor: grab; touch-action: none; will-change: transform; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
-.btn.slide.dragging .ico { cursor: grabbing; transition: none; }
-.btn.slide .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 52px; z-index: 1; border-radius: 10px; background: var(--chip); opacity: .28; transform-origin: left center; will-change: width; }
-.btn.slide .lbl { position: relative; z-index: 1;
-  background: linear-gradient(100deg, currentColor 0%, currentColor 38%, rgba(255,255,255,1) 50%, currentColor 62%, currentColor 100%);
-  background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  animation: slide-shine 2.6s linear infinite; transition: opacity .2s ease; }
-:root[data-mode="night"] .btn.slide .lbl { background-image: linear-gradient(100deg, currentColor 0%, currentColor 38%, #ffffff 50%, currentColor 62%, currentColor 100%); }
-@keyframes slide-shine { from { background-position: 120% 0; } to { background-position: -20% 0; } }
-.btn.slide .chev { position: absolute; right: 16px; top: 50%; margin-top: -6px; z-index: 1; display: flex; gap: 2px; opacity: .55; }
-.btn.slide .chev i { width: 7px; height: 12px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; animation: chev 1.6s ease-in-out infinite; }
-.btn.slide .chev i:nth-child(2) { animation-delay: .2s; } .btn.slide .chev i:nth-child(3) { animation-delay: .4s; }
-@keyframes chev { 0%, 100% { opacity: .25; } 40% { opacity: 1; } }
-.btn.slide:hover .ico { transform: none; }
+/* slide to book: like unlocking a phone. A golden sun knob slides along a glassy track (a plain tap still works) */
+.btn.slide { --trk-a: #0c2f3a; --trk-b: #134e5a; --knob-a: #ffd27a; --knob-b: #f0a93b; --knob-ink: #0c2f3a; --lbl: #eaf3f3;
+  position: relative; overflow: hidden; justify-content: center; min-height: 60px; padding: 6px 58px 6px 66px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--trk-a) 0%, var(--trk-b) 100%); color: var(--lbl);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 -2px 6px rgba(0,0,0,.25), 0 14px 30px -16px rgba(12,47,58,.8), 0 2px 6px rgba(12,47,58,.18);
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.btn.slide::before { content: ""; position: absolute; inset: 1px; border-radius: inherit; pointer-events: none; z-index: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 55%); }
+.btn.slide:hover { background: linear-gradient(135deg, var(--trk-a) 0%, var(--trk-b) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 6px rgba(0,0,0,.25), 0 18px 34px -16px rgba(12,47,58,.85), 0 2px 6px rgba(12,47,58,.2); }
+:root[data-mode="night"] .btn.slide { --trk-a: #173a40; --trk-b: #22555d; --lbl: #f4ede0; box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 0 0 1px rgba(241,235,224,.14), 0 14px 30px -16px rgba(0,0,0,.9); }
+.btn.slide .ico { position: absolute; left: 6px; top: 50%; width: 48px; height: 48px; margin-top: -24px; z-index: 3; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--knob-a) 0%, var(--knob-b) 70%); color: var(--knob-ink);
+  box-shadow: 0 4px 12px rgba(240,169,59,.45), 0 1px 2px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.6);
+  cursor: grab; touch-action: none; will-change: transform; }
+.btn.slide .ico::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid rgba(255,210,122,.7); animation: knob-breathe 2.2s ease-out infinite; pointer-events: none; }
+.btn.slide.dragging .ico::after, .btn.slide.done .ico::after { animation: none; opacity: 0; }
+@keyframes knob-breathe { 0% { transform: scale(.9); opacity: .9; } 70%, 100% { transform: scale(1.35); opacity: 0; } }
+.btn.slide:hover .ico { transform: none; background: radial-gradient(circle at 35% 30%, #ffe09a 0%, #f3b24c 70%); }
+.btn.slide.dragging .ico { cursor: grabbing; box-shadow: 0 6px 18px rgba(240,169,59,.6), 0 1px 2px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.6); }
+.btn.slide .arr { width: 17px; height: 12px; }
+.btn.slide .ok { display: none; width: 18px; height: 14px; }
+.btn.slide.done .arr { display: none; } .btn.slide.done .ok { display: block; }
+.btn.slide .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 60px; z-index: 1; border-radius: 999px; pointer-events: none;
+  background: linear-gradient(90deg, rgba(240,169,59,.05) 0%, rgba(240,169,59,.38) 100%); will-change: width; }
+.btn.slide.done .fill { background: linear-gradient(90deg, rgba(240,169,59,.35), rgba(255,210,122,.75)); }
+.btn.slide .lbl { position: relative; z-index: 2; font-weight: 600; letter-spacing: .01em;
+  background: linear-gradient(100deg, rgba(234,243,243,.8) 0%, rgba(234,243,243,.8) 36%, #ffffff 50%, rgba(234,243,243,.8) 64%, rgba(234,243,243,.8) 100%);
+  background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: slide-shine 2.4s linear infinite; transition: opacity .2s ease; }
+:root[data-mode="night"] .btn.slide .lbl { background-image: linear-gradient(100deg, rgba(244,237,224,.8) 0%, rgba(244,237,224,.8) 36%, #ffffff 50%, rgba(244,237,224,.8) 64%, rgba(244,237,224,.8) 100%); }
+@keyframes slide-shine { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+.btn.slide .chev { position: absolute; right: 20px; top: 50%; margin-top: -6px; z-index: 2; display: flex; gap: 1px; color: #ffd27a; }
+.btn.slide .chev i { width: 7px; height: 12px; background: currentColor; opacity: .2;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12'%3E%3Cpath d='M1 1l5 5-5 5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation: chev 1.4s ease-in-out infinite; }
+.btn.slide .chev i:nth-child(2) { animation-delay: .18s; } .btn.slide .chev i:nth-child(3) { animation-delay: .36s; }
+@keyframes chev { 0%, 100% { opacity: .15; transform: translateX(0); } 40% { opacity: 1; transform: translateX(2px); } }
+.btn.slide.dragging .chev, .btn.slide.done .chev { opacity: 0; transition: opacity .2s ease; }
 .btn.slide.done .lbl { opacity: 0; }
-@media (prefers-reduced-motion: reduce) { .btn.slide .lbl { animation: none; -webkit-text-fill-color: currentColor; background: none; } .btn.slide .chev i { animation: none; } }
+.btn.slide.flash { animation: slide-flash .5s ease-out; }
+@keyframes slide-flash { 0% { box-shadow: 0 0 0 0 rgba(240,169,59,.6), 0 14px 30px -16px rgba(12,47,58,.8); } 100% { box-shadow: 0 0 0 14px rgba(240,169,59,0), 0 14px 30px -16px rgba(12,47,58,.8); } }
+@media (min-width: 561px) { .btn.slide { min-width: 330px; } }
+@media (prefers-reduced-motion: reduce) { .btn.slide .lbl { animation: none; -webkit-text-fill-color: currentColor; background: none; } .btn.slide .chev i, .btn.slide .ico::after { animation: none; } }
 
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
@@ -249,7 +275,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .btn.plain { padding: 6px 22px; justify-content: center; }
 .btn.small { min-height: 40px; padding: 4px 16px; font-size: var(--fs-xs); border-radius: 8px; box-shadow: none; }
 .route > button, .faq summary, .seg span, .lang button { cursor: pointer; }
-.btn-line { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 6px 22px; border-radius: 10px;
+.btn-line { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 6px 24px; border-radius: 999px;
   border: 1px solid var(--rule); color: var(--ink); background: transparent; text-decoration: none; font: 600 .98rem/1.2 var(--sans); cursor: pointer;
   transition: border-color .25s ease, background .25s ease; }
 .btn-line:hover { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 5%, transparent); }
@@ -432,7 +458,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a>
+            <a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -734,14 +760,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   var dragging = false, moved = false, startX = 0, x = 0, max = 0, pid = null;
   function set(v, anim) {
     knob.style.transition = fill.style.transition = anim ? 'transform .35s cubic-bezier(.22,.61,.36,1), width .35s cubic-bezier(.22,.61,.36,1)' : 'none';
-    knob.style.transform = 'translateX(' + v + 'px)'; fill.style.width = (52 + v) + 'px';
+    knob.style.transform = 'translateX(' + v + 'px)'; fill.style.width = (60 + v) + 'px';
     btn.querySelector('.lbl').style.opacity = String(Math.max(0, 1 - v / (max * .6)));
   }
   function finish() {
-    set(max, true); btn.classList.add('done');
+    set(max, true); btn.classList.add('done', 'flash');
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch (err) {}
     setTimeout(function () {
       var t = document.getElementById('consult'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(function () { btn.classList.remove('done'); set(0, true); }, 900);
+      setTimeout(function () { btn.classList.remove('done', 'flash'); set(0, true); }, 900);
     }, 280);
   }
   btn.addEventListener('dragstart', function (e) { e.preventDefault(); });
