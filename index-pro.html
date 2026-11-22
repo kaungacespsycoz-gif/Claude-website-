@@ -1458,11 +1458,12 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     (function step(now) { var k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
       t = from + (to - from) * e; if (t < .0005) t = 0; draw(now); if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
   }
+  function openBook() { if (window.oriwisBook) window.oriwisBook.open(); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
   function post() {
     busy = true; demoOn = false; lastTouch = performance.now() + 2500; if (water) water.quiet(7);
     var slide = function (done) { if (water) fly(1, 650, done); else done(); };
     fly(water ? .93 : 1, Math.max(300, ((water ? .93 : 1) - t) * 1500), function () { slide(function () {
-      el.classList.add('sent'); if (water) { water.sand(true); water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
+      el.classList.add('sent'); var withPud = water && water.pudding(openBook); if (water) { if (!withPud) water.sand(true); water.drop(bx, REFL_Y - 56 * SB, .9); water.hit(); water.keepCut(); }
       try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       var b0 = performance.now();
       (function wig(now) { var k = (now - b0) / 600, r = k < 1 ? Math.sin(k * Math.PI * 4) * 4 * (1 - k) : 0;
@@ -1470,8 +1471,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
         burst.setAttribute('opacity', k < 1 ? String(Math.sin(Math.min(1, k * 1.6) * Math.PI)) : '0');
         var sc = 1 + Math.min(1, k * 1.6) * .6; burst.setAttribute('transform', burst.getAttribute('transform').replace(/ scale\([^)]*\)/, '') + ' scale(' + sc.toFixed(2) + ')');
         if (k < 1) requestAnimationFrame(wig); })(b0);
-      setTimeout(function () { if (window.oriwisBook) window.oriwisBook.open(); else { var c = document.getElementById('consult'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 750);
-      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; if (water) water.sand(false); }, 2300);
+      if (!withPud) setTimeout(openBook, 750);
+      setTimeout(function () { el.classList.remove('sent'); t = 0; draw(0); busy = false; if (water) water.sand(false); }, withPud ? 8600 : 2300);
     }); });
   }
   svg.addEventListener('pointerdown', function (e) {
@@ -1488,7 +1489,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .55) post(); else { fly(0, 450); if (water) water.heal(); } }
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   el.addEventListener('dragstart', function (e) { e.preventDefault(); });
-  el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
+  el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); else if (water) water.pudSkip(); });
   window.oriwisPost = { set: function (v) { t = v; draw(); }, post: post };
 
   // ---- real water (WebGL). Ripples spread as flattened rings, like a pond seen at an angle; the logo is drawn into the surface ----
@@ -1499,7 +1500,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var VS = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
     var FS = [
       '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
-      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT, uSand; uniform float uBank, uBoxRot, uEnvSY, uLit; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
+      'uniform vec2 uRes; uniform float uDpr, uT, uGlow, uTexOn; uniform vec4 uLogo; uniform vec2 uBox; uniform sampler2D uTex, uTex2, uSky, uBoxT, uSand; uniform float uBank, uBoxRot, uEnvSY, uLit, uFlood, uPudA, uPudTilt, uPudSmile, uPudDip; uniform vec4 uPudR; uniform sampler2D uPud; uniform float uCut; uniform vec4 uR[24]; uniform vec3 uP[24]; uniform vec4 uEnv; uniform float uEnvA, uHit; uniform vec3 uRefl;',
       'float rb(vec2 q, vec2 a, vec2 b, float aa){ vec2 lo = smoothstep(a - aa, a + aa, q), hi = 1. - smoothstep(b - aa, b + aa, q); return lo.x * lo.y * hi.x * hi.y; }',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
@@ -1625,8 +1626,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '  }',
       // the Thames foreshore: sand and pebbles, a wave washing up and back, the words written into the sand
       '  float swash = sin(uT * .75 + p.x * .012) * 5. + (noise(vec2(p.x * .017, uT * .32)) - .5) * 16. + sin(uT * 1.9 + p.x * .03) * 1.5;',
-      '  float shore = uBank + 4. + sin(p.x * .04 + uT * .5) * 3. + sin(p.x * .11 - uT * 1.1) * 1.3 - swash;',
-      '  float reach = uBank + 4. + sin(p.x * .04) * 3. - 14. + (noise(vec2(p.x * .017, 3.)) - .5) * 10.;',
+      '  float shore = uBank + 4. + sin(p.x * .04 + uT * .5) * 3. + sin(p.x * .11 - uT * 1.1) * 1.3 - swash + uFlood * (uRes.y - uBank + 30.);',
+      '  float reach = uBank + 4. + sin(p.x * .04) * 3. - 14. + (noise(vec2(p.x * .017, 3.)) - .5) * 10. + uFlood * (uRes.y - uBank + 30.);',
       '  if (p.y > min(shore, reach) - 16.) {',
       '    float gr = noise(p * .9) * .5 + noise(p * 2.7) * .3 + noise(p * .2) * .4;',
       '    vec3 sand = vec3(.72, .62, .47) * (.8 + gr * .24);',
@@ -1652,6 +1653,18 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       '    float foam = exp(-pow((p.y - shore) / 1.8, 2.)) * (.5 + .5 * lace) + exp(-pow((p.y - shore + 6.) / 2.5, 2.)) * lace * .35;',
       '    col += vec3(.88, .94, .92) * foam * .5;',
       '  }',
+      // Pudding on the near bank, seen only as her reflection: rises, tilts her head, smiles, dips her nose
+      '  if (uPudA > .01) {',
+      '    vec2 pp = p + g * 7.; pp.x += (noise(vec2(pp.y * .08, uT * .9)) - .5) * 5. + sin(pp.y * .45 - uT * 2.) * .9;',
+      '    vec2 q = (pp - uPudR.xy) / uPudR.zw;',
+      '    float hw = smoothstep(.72, .5, q.y), ang = uPudTilt * hw; vec2 pv = vec2(.5, .66);',
+      '    vec2 d2 = (q - pv) * vec2(uPudR.z / uPudR.w, 1.); float ca = cos(ang), sa2 = sin(ang); d2 = vec2(ca * d2.x - sa2 * d2.y, sa2 * d2.x + ca * d2.y);',
+      '    q = pv + d2 * vec2(uPudR.w / uPudR.z, 1.); q.y -= uPudDip * .07 * hw;',
+      '    if (q.x > 0. && q.x < 1. && q.y > 0. && q.y < 1.) {',
+      '      vec4 a1 = texture2D(uPud, vec2(q.x * .5, q.y)), a2 = texture2D(uPud, vec2(.5 + q.x * .5, q.y)); vec4 pc = mix(a1, a2, uPudSmile);',
+      '      float band = .88 + .12 * sin(pp.y * 1.1 + uT * 2.6);',
+      '      vec3 rc = mix(pc.rgb * .8, vec3(.05, .2, .22) * pc.a, .2) * band;',
+      '      float k = pc.a * uPudA * .9; col = col * (1. - k) + rc * uPudA * .9; } }',
       '  vec2 vu = p / uRes - .5; col *= 1. - dot(vu * vec2(.5, 1.), vu * vec2(.5, 1.)) * .55;',
       '  gl_FragColor = vec4(col, 1.);',
       '}'].join('\n');
@@ -1662,9 +1675,9 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     gl.useProgram(prog);
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var aL = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(aL); gl.vertexAttribPointer(aL, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank', 'uBoxRot', 'uEnvSY', 'uLit'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    var U = {}; ['uRes', 'uDpr', 'uT', 'uGlow', 'uTexOn', 'uLogo', 'uBox', 'uTex', 'uR', 'uP', 'uEnv', 'uEnvA', 'uHit', 'uRefl', 'uTex2', 'uCut', 'uSky', 'uBoxT', 'uSand', 'uBank', 'uBoxRot', 'uEnvSY', 'uLit', 'uFlood', 'uPudA', 'uPudTilt', 'uPudSmile', 'uPudDip', 'uPudR', 'uPud'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     var SKY = .44, arrowK = 1, pawN = 0, pawTimer = 0, sandT = gl.createTexture(), bankY = 1e4, sentTxt = false, skyT = gl.createTexture(), boxT = gl.createTexture(), tex = gl.createTexture(), tex2 = gl.createTexture(), texOn = 0, cutX = -50, cutTo = -50, cutDone = false;
-    var litV = 0, litOff = -1e9, DROPS = !/[?&]drops=0/.test(location.search), nextDrop = 3, quietUntil = 0, LG = [0, 0, 0, 0], BX = [0, 0], pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
+    var PUD = /[?&]pud=1/.test(location.search), pudT = gl.createTexture(), pudReady = false, pudT0 = -1e9, pudCb = null, PR = [0, 0, 1, 1], litV = 0, litOff = -1e9, DROPS = !/[?&]drops=0/.test(location.search), nextDrop = 3, quietUntil = 0, LG = [0, 0, 0, 0], BX = [0, 0], pts = new Float32Array(72).map(function (v, i) { return i % 3 === 2 ? -100 : 0; }), ev = [0, 0, 0, 1, 0, 1], hitV = 0, rip = new Float32Array(96), ri = 0, T0 = performance.now(), glowNow = 0, glowTo = 0, Wc = 0, Hc = 0, dpr = 1, running = false, ambientAt = 0;
     function now() { return (performance.now() - T0) / 1000; }
     // draw the logo into a texture (white letters, gold sun)
     (function () {
@@ -1749,6 +1762,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     var root = document.documentElement;
     document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { setTimeout(function () { paintSand(); frame(); }, 30); }); });
     if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('700 30px SandHand'), document.fonts.load('30px SandHandZh', '寄出')]).then(function () { paintSand(); frame(); }, function () {});
+    if (PUD) { var pim = new Image(); pim.onload = function () { try { upload(pudT, pim); pudReady = true; } catch (e) {} }; pim.src = 'images/v2/pud-pair.png'; }
     function paintSky(w, h) {
       // Big Ben and Parliament on the far bank; drawn upright here, the shader shows it upside down hanging from the top edge
       var c = document.createElement('canvas'), cw = Math.min(1024, Math.round(w * 2)), ch = Math.min(1024, Math.round(h * SKY * 2));
@@ -1771,7 +1785,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       var tt = reduce ? 2 : now();
       glowNow += (glowTo - glowNow) * .18;
       gl.uniform2f(U.uRes, Wc, Hc); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uT, tt); gl.uniform1f(U.uGlow, glowNow); gl.uniform1f(U.uTexOn, texOn);
-      hitV *= .96; var lk = (performance.now() - litOff) / 1000; litV = lk < 0 || lk > 5 ? 0 : Math.min(1, lk / .5) * (lk < 3 ? 1 : 1 - (lk - 3) / 2); gl.uniform1f(U.uLit, litV); gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uEnvSY, ev[5]); gl.uniform1f(U.uHit, hitV);
+      hitV *= .96; var lk = (performance.now() - litOff) / 1000; litV = lk < 0 || lk > 5 ? 0 : Math.min(1, lk / .5) * (lk < 3 ? 1 : 1 - (lk - 3) / 2); gl.uniform1f(U.uLit, litV);
+      var pk = (performance.now() - pudT0) / 1000, ease = function (a, b) { var z = Math.max(0, Math.min(1, (pk - a) / (b - a))); return z * z * (3 - 2 * z); };
+      var fl = pk < 0 || pk > 9 ? 0 : ease(0, .9) * (1 - ease(6.5, 8.5)), pa = pk < 0 || pk > 9 ? 0 : ease(.5, 1.4) * (1 - ease(6, 7.5));
+      var rise = 1 - ease(.5, 1.5);
+      gl.uniform1f(U.uFlood, fl); gl.uniform1f(U.uPudA, pa); gl.uniform1f(U.uPudTilt, (ease(1.5, 1.9) - ease(2.8, 3.2) * .6) * .26);
+      gl.uniform1f(U.uPudSmile, ease(2.4, 2.8)); gl.uniform1f(U.uPudDip, ease(3.2, 3.7));
+      gl.uniform4f(U.uPudR, PR[0], PR[1] + rise * PR[3] * .6 + ease(3.2, 3.7) * PR[3] * .04, PR[2], PR[3]);
+      if (pudCb && pk > 3.75) { var cb = pudCb; pudCb = null; api.drop(PR[0] + PR[2] * .53, PR[1] + PR[3] * .5, 1.1); setTimeout(cb, 420); }
+      gl.uniform1i(U.uPud, 5); gl.activeTexture(gl.TEXTURE5); gl.bindTexture(gl.TEXTURE_2D, pudT); gl.activeTexture(gl.TEXTURE0); gl.uniform4f(U.uEnv, ev[0], ev[1], ev[2], ev[3]); gl.uniform1f(U.uEnvA, ev[4]); gl.uniform1f(U.uEnvSY, ev[5]); gl.uniform1f(U.uHit, hitV);
       gl.uniform3fv(U.uP, pts); gl.uniform4fv(U.uR, rip); gl.uniform1i(U.uTex, 0); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.uniform1i(U.uTex2, 1); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2);
       gl.uniform1i(U.uSky, 2); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, skyT);
@@ -1804,13 +1826,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       layout: function (w, h, lx, ly, lw, lh, boxX, boxY, bs, bank) {
         Wc = w; Hc = h; dpr = Math.min(1.75, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); gl.viewport(0, 0, cv.width, cv.height);
-        bankY = bank || 1e4; LG = [lx, ly, lw, lh]; BX = [boxX, boxY - 56 * bs]; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
+        bankY = bank || 1e4; var ph = h * .46, pw = ph * 288 / 340; PR = [w * .4 - pw / 2, h - ph * .94, pw, ph]; LG = [lx, ly, lw, lh]; BX = [boxX, boxY - 56 * bs]; paintSky(w, h); paintSand(); gl.useProgram(prog); gl.uniform4f(U.uLogo, lx, ly, lw, lh); gl.uniform2f(U.uBox, boxX, boxY - 56 * bs); gl.uniform3f(U.uRefl, boxX, boxY, bs); frame();
       },
       trail: function (x, y) { if (reduce) return; pts.copyWithin(3, 0, 69); pts[0] = x; pts[1] = y; pts[2] = now(); },
       drop: function (x, y, k) { if (reduce) return; rip[ri * 4] = x; rip[ri * 4 + 1] = y; rip[ri * 4 + 2] = now(); rip[ri * 4 + 3] = k; ri = (ri + 1) % 24; },
       glow: function (v) { glowTo = v; },
       env: function (x, y, a, sc, op, sy) { ev[0] = x; ev[1] = y; ev[2] = a; ev[3] = sc; ev[4] = op; ev[5] = sy == null ? 1 : sy; if (!running) frame(); },
       hit: function () { hitV = 1; litOff = performance.now(); },
+      pudding: function (done) { if (!PUD || !pudReady || reduce) return false; pudT0 = performance.now(); pudCb = done; if (!running) api.start(); return true; },
+      pudSkip: function () { if (pudCb) { var cb = pudCb; pudCb = null; cb(); } },
       quiet: function (sec) { quietUntil = Math.max(quietUntil, now() + sec); nextDrop = Math.max(nextDrop, quietUntil); },
       sand: function (sent) {
         sentTxt = sent; clearInterval(pawTimer); pawN = 0; paintSand();
