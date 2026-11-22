@@ -447,6 +447,27 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 .book .bk-form { margin-top: 12px; }
 .book .bk-form .card { box-shadow: none; }
 .bk-cta p { color: var(--muted); margin: 0 0 16px; }
+.book .cal { margin-top: 22px; border: 1px solid var(--rule); border-radius: 18px; padding: 14px 12px 12px; }
+.book .cal-head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+.book .cal-head b { font: 650 1.05rem/1 var(--sans); color: var(--ink); }
+.book .cal-nav { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--rule); background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer; }
+.book .cal-nav svg { width: 12px; height: 12px; } .book .cal-nav:disabled { opacity: .3; cursor: default; }
+.book .cal-wd, .book .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.book .cal-wd span { text-align: center; font-size: .72rem; color: var(--muted); padding: 4px 0 6px; }
+.book .cal-grid .cd { position: relative; aspect-ratio: 1 / 1; border: 0; border-radius: 50%; background: transparent; font: 500 .98rem/1 var(--sans); color: var(--ink); cursor: pointer; font-variant-numeric: tabular-nums; transition: background .2s ease, color .2s ease; }
+.book .cal-grid .cd::after { content: ""; position: absolute; left: 50%; bottom: 14%; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--dot, transparent); }
+.book .cal-grid .cd.free { --dot: #2a9d8f; } .book .cal-grid .cd.few { --dot: #e3a33b; }
+.book .cal-grid .cd.full, .book .cal-grid .cd:disabled { color: color-mix(in srgb, var(--muted) 55%, transparent); cursor: default; }
+.book .cal-grid .cd.full { text-decoration: line-through; }
+.book .cal-grid .cd.today { box-shadow: inset 0 0 0 1px var(--rule); }
+.book .cal-grid .cd:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.book .cal-grid .cd[aria-pressed="true"] { background: var(--ink); color: var(--paper); --dot: var(--paper); }
+.book .cal-key { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 12px 4px 0; font-size: .72rem; color: var(--muted); }
+.book .cal-key span { display: inline-flex; align-items: center; gap: 6px; } .book .cal-key i { width: 7px; height: 7px; border-radius: 50%; }
+.book .k-free { background: #2a9d8f; } .book .k-few { background: #e3a33b; } .book .k-full { background: color-mix(in srgb, var(--muted) 45%, transparent); }
+.book .slot.taken { text-decoration: line-through; }
+.book .bk-left { font-size: .78rem; color: var(--muted); }
+
 @media (prefers-reduced-motion: reduce) { .book { transition: none; } }
 
 /* header */
@@ -779,9 +800,13 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   <div class="bk-in">
     <h2 id="bk-title"><span class="en">Book your free consultation</span><span class="zh">预约免费咨询</span></h2>
     <p class="bk-sub"><span class="en">Choose a day and time that suits you. It is a 30-minute call on WeChat, and we will confirm the time with you there.</span><span class="zh">选择方便的日期和时间。咨询约 30 分钟，通过微信进行，我们会在微信上和你确认时间。</span></p>
-    <h3 class="bk-h"><span><span class="en">Day</span><span class="zh">日期</span></span></h3>
-    <div class="bk-dates" id="bk-dates"></div>
-    <h3 class="bk-h"><span><span class="en">Time</span><span class="zh">时间</span></span><small><span class="en">China time (UTC+8)</span><span class="zh">北京时间</span></small></h3>
+    <div class="cal" id="bk-cal">
+      <div class="cal-head"><button type="button" class="cal-nav" data-nav="-1" aria-label="Previous month"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5L3 5l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><b id="bk-month"></b><button type="button" class="cal-nav" data-nav="1" aria-label="Next month"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 1.5L7 5 3.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      <div class="cal-wd" id="bk-wd"></div>
+      <div class="cal-grid" id="bk-dates"></div>
+      <div class="cal-key"><span><i class="k-free"></i><span class="en">Times free</span><span class="zh">可预约</span></span><span><i class="k-few"></i><span class="en">Almost full</span><span class="zh">即将约满</span></span><span><i class="k-full"></i><span class="en">Fully booked</span><span class="zh">已约满</span></span></div>
+    </div>
+    <h3 class="bk-h"><span id="bk-dayname"><span class="en">Time</span><span class="zh">时间</span></span><small><span class="en">China time (UTC+8)</span><span class="zh">北京时间</span></small></h3>
     <div class="slots" id="bk-slots"></div>
     <p class="bk-pick" id="bk-pick" hidden></p>
     <h3 class="bk-h"><span><span class="en">Your details</span><span class="zh">你的信息</span></span></h3>
@@ -1499,35 +1524,50 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   col.appendChild(cta);
 
   var WD = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'] };
-  var MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], MOL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var BANDS = [{ en: 'Morning', zh: '上午', t: ['10:00', '10:30', '11:00', '11:30'] }, { en: 'Afternoon', zh: '下午', t: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'] }, { en: 'Evening', zh: '晚上', t: ['19:00', '19:30', '20:00', '20:30'] }];
-  var sel = { day: null, time: null }, days = [];
+  var ALL = BANDS.reduce(function (a, b) { return a.concat(b.t); }, []), AHEAD = 60;
+  var sel = { day: null, time: null }, view = null, today = null, monthEl = document.getElementById('bk-month'), wdEl = document.getElementById('bk-wd'), dnEl = document.getElementById('bk-dayname');
   function cnNow() { var n = new Date(); return new Date(n.getTime() + (n.getTimezoneOffset() + 480) * 60000); }   // China time, as local fields
-  function makeDays() {
-    var n = cnNow(); days = [];
-    for (var i = 0; i < 14; i++) { var d = new Date(n.getFullYear(), n.getMonth(), n.getDate() + i); days.push({ d: d, i: i, closed: d.getDay() === 0 }); }
+  function dayOf(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function diff(d) { return Math.round((dayOf(d) - today) / 864e5); }
+  // DEMO AVAILABILITY: a steady made-up pattern so the calendar looks lived-in. Replace with real availability before taking real bookings.
+  function rnd(d, k) { var x = Math.sin(d.getFullYear() * 374761 + (d.getMonth() + 1) * 668265 + d.getDate() * 2147483 + k * 9301) * 43758.5453; return x - Math.floor(x); }
+  function taken(d, t) { var i = ALL.indexOf(t), r0 = rnd(d, 99), busy = r0 < .1 ? 1 : r0 < .32 ? .72 : (.15 + rnd(d, 98) * .3); return rnd(d, i) < busy; }
+  function slotOpen(d, t) {
+    var n = diff(d); if (n < 0 || n > AHEAD || d.getDay() === 0 || taken(d, t)) return false;
+    if (n > 0) return true; var c = cnNow(), hm = t.split(':'); return (+hm[0]) * 60 + (+hm[1]) >= c.getHours() * 60 + c.getMinutes() + 120;
   }
-  function dayLabel(x, l) { var d = x.d; return l === 'zh' ? (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + WD.zh[d.getDay()] : WD.en[d.getDay()] + ' ' + d.getDate() + ' ' + MO[d.getMonth()]; }
-  function slotOpen(x, t) {
-    if (x.closed) return false; if (x.i > 0) return true;
-    var n = cnNow(), hm = t.split(':'); return (+hm[0]) * 60 + (+hm[1]) >= n.getHours() * 60 + n.getMinutes() + 120;   // today: at least 2 hours ahead
-  }
-  function anyOpen(x) { return BANDS.some(function (b) { return b.t.some(function (t) { return slotOpen(x, t); }); }); }
+  function freeCount(d) { return ALL.filter(function (t) { return slotOpen(d, t); }).length; }
+  function inRange(d) { var n = diff(d); return n >= 0 && n <= AHEAD && d.getDay() !== 0; }
+  function dayLabel(d, l) { return l === 'zh' ? (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + WD.zh[d.getDay()] : WD.en[d.getDay()] + ' ' + d.getDate() + ' ' + MO[d.getMonth()]; }
+  function makeDays() { today = dayOf(cnNow()); if (!view) view = new Date(today.getFullYear(), today.getMonth(), 1); }
   function render() {
-    var l = L();
-    datesEl.innerHTML = days.map(function (x, k) {
-      var top = x.i === 0 ? (l === 'zh' ? '今天' : 'Today') : x.i === 1 ? (l === 'zh' ? '明天' : 'Tmrw') : WD[l][x.d.getDay()];
-      var off = !anyOpen(x);
-      return '<button type="button" class="day" data-k="' + k + '" aria-pressed="' + (sel.day === k) + '"' + (off ? ' disabled' : '') + ' aria-label="' + dayLabel(x, l) + '"><small>' + top + '</small><b>' + x.d.getDate() + '</b><small>' + (l === 'zh' ? (x.d.getMonth() + 1) + '月' : MO[x.d.getMonth()]) + '</small></button>';
+    var l = L(), y = view.getFullYear(), m = view.getMonth();
+    monthEl.textContent = l === 'zh' ? y + '年' + (m + 1) + '月' : MOL[m] + ' ' + y;
+    wdEl.innerHTML = [1, 2, 3, 4, 5, 6, 0].map(function (i) { return '<span>' + (l === 'zh' ? WD.zh[i].slice(1) : WD.en[i].slice(0, 2)) + '</span>'; }).join('');
+    var first = new Date(y, m, 1), lead = (first.getDay() + 6) % 7, nd = new Date(y, m + 1, 0).getDate(), h = '';
+    for (var i = 0; i < lead; i++) h += '<span></span>';
+    for (var dd = 1; dd <= nd; dd++) {
+      var d = new Date(y, m, dd), ok = inRange(d), fc = ok ? freeCount(d) : 0, cls = 'cd' + (diff(d) === 0 ? ' today' : '') + (ok ? (fc === 0 ? ' full' : fc <= 4 ? ' few' : ' free') : '');
+      var isSel = sel.day && sel.day.getTime() === d.getTime();
+      h += '<button type="button" class="' + cls + '" data-d="' + d.getTime() + '" aria-pressed="' + !!isSel + '"' + (ok && fc ? '' : ' disabled') + ' aria-label="' + dayLabel(d, l) + '">' + dd + '</button>';
+    }
+    datesEl.innerHTML = h;
+    book.querySelector('[data-nav="-1"]').disabled = y === today.getFullYear() && m === today.getMonth();
+    var lim = new Date(today.getTime() + AHEAD * 864e5); book.querySelector('[data-nav="1"]').disabled = y > lim.getFullYear() || (y === lim.getFullYear() && m >= lim.getMonth());
+    var d0 = sel.day;
+    dnEl.innerHTML = d0 ? '<span>' + dayLabel(d0, l) + '</span> <span class="bk-left">' + (l === 'zh' ? '剩余 ' + freeCount(d0) + ' 个时段' : freeCount(d0) + ' times left') + '</span>' : (l === 'zh' ? '时间' : 'Time');
+    slotsEl.innerHTML = !d0 ? '<p class="bk-band" style="margin:0">' + (l === 'zh' ? '请先在日历中选择日期。' : 'Choose a day on the calendar first.') + '</p>' : BANDS.map(function (b) {
+      return '<span class="bk-band">' + b[l] + '</span>' + b.t.map(function (t) { var tk = taken(d0, t), op = slotOpen(d0, t);
+        return '<button type="button" class="slot' + (tk ? ' taken' : '') + '" data-t="' + t + '" aria-pressed="' + (sel.time === t) + '"' + (op ? '' : ' disabled') + (tk ? ' title="' + (l === 'zh' ? '已被预约' : 'Booked') + '"' : '') + '>' + t + '</button>'; }).join('');
     }).join('');
-    var x = sel.day == null ? null : days[sel.day];
-    slotsEl.innerHTML = !x ? '<p class="bk-band" style="margin:0">' + (l === 'zh' ? '请先选择日期。' : 'Choose a day first.') + '</p>' : BANDS.map(function (b) {
-      return '<span class="bk-band">' + b[l] + '</span>' + b.t.map(function (t) { return '<button type="button" class="slot" data-t="' + t + '" aria-pressed="' + (sel.time === t) + '"' + (slotOpen(x, t) ? '' : ' disabled') + '>' + t + '</button>'; }).join('');
-    }).join('');
-    if (x && sel.time) { pickEl.hidden = false; pickEl.textContent = (l === 'zh' ? '你选择的时间：' : 'Your time: ') + dayLabel(x, l) + ', ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'); }
+    if (d0 && sel.time) { pickEl.hidden = false; pickEl.textContent = (l === 'zh' ? '你选择的时间：' : 'Your time: ') + dayLabel(d0, l) + ', ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'); }
     else pickEl.hidden = true;
   }
-  datesEl.addEventListener('click', function (e) { var b = e.target.closest('.day'); if (!b || b.disabled) return; sel.day = +b.dataset.k; if (sel.time && !slotOpen(days[sel.day], sel.time)) sel.time = null; render(); });
+  book.querySelectorAll('.cal-nav').forEach(function (b) { b.addEventListener('click', function () { if (b.disabled) return; view = new Date(view.getFullYear(), view.getMonth() + (+b.dataset.nav), 1); render(); }); });
+  datesEl.addEventListener('click', function (e) { var b = e.target.closest('.cd'); if (!b || b.disabled) return; sel.day = new Date(+b.dataset.d); if (sel.time && !slotOpen(sel.day, sel.time)) sel.time = null; render();
+    setTimeout(function () { slotsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 60); });
   slotsEl.addEventListener('click', function (e) { var b = e.target.closest('.slot'); if (!b || b.disabled) return; sel.time = b.dataset.t; render();
     setTimeout(function () { pickEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); });
   document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { if (!book.hidden) render(); }); });
@@ -1535,20 +1575,20 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   // the chosen time goes into the message (this runs after the form's own handler)
   form.addEventListener('submit', function () {
     var l = L(), err = document.getElementById('err');
-    if (sel.day == null || !sel.time) {
+    if (!sel.day || !sel.time) {
       done.hidden = true; form.hidden = false; err.textContent = l === 'zh' ? '请先在上方选择日期和时间。' : 'Please choose a day and time above first.'; err.hidden = false;
-      datesEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); return;
+      document.getElementById('bk-cal').scrollIntoView({ behavior: 'smooth', block: 'center' }); return;
     }
     if (done.hidden) return;
     var m = document.getElementById('msg'), lines = m.textContent.split('\n');
-    lines.splice(1, 0, (l === 'zh' ? '希望时间：' : 'Preferred time: ') + dayLabel(days[sel.day], l) + ' ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'));
+    lines.splice(1, 0, (l === 'zh' ? '希望时间：' : 'Preferred time: ') + dayLabel(sel.day, l) + ' ' + sel.time + (l === 'zh' ? '（北京时间）' : ' (China time)'));
     m.textContent = lines.join('\n');
   });
 
   var lastFocus = null;
   function open(fromHistory) {
     if (!book.hidden && book.classList.contains('open')) return;
-    makeDays(); if (sel.day == null) { for (var k = 0; k < days.length; k++) if (anyOpen(days[k])) { sel.day = k; break; } }
+    makeDays(); if (!sel.day) { for (var k = 0; k <= AHEAD; k++) { var dk = new Date(today.getFullYear(), today.getMonth(), today.getDate() + k); if (inRange(dk) && freeCount(dk)) { sel.day = dk; view = new Date(dk.getFullYear(), dk.getMonth(), 1); break; } } }
     render(); lastFocus = document.activeElement;
     book.hidden = false; root.style.overflow = 'hidden';
     requestAnimationFrame(function () { requestAnimationFrame(function () { book.classList.add('open'); }); });
