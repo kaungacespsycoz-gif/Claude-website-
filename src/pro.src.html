@@ -1140,7 +1140,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   }
   function draw(now) {
     var L = LEN * t, p = path.getPointAtLength(L), q = path.getPointAtLength(Math.min(LEN, L + 2));
-    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, inCut = t > passA - .03 && t < passB + .03, sc = t > .9 ? 1 - (t - .9) / .1 * .6 : (inCut ? .72 : 1);
+    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, inCut = t > passA - .03 && t < passB + .03, sc = t > .9 ? 1 - (t - .9) / .1 * .6 : (inCut ? .8 : 1);
     var bob = (!busy && !dragging && !reduce && t === 0) ? Math.sin((now || 0) / 420) * 1.6 : 0;
     env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + (ang * .55).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
     env.setAttribute('opacity', t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1');

@@ -10,11 +10,14 @@ letters = re.search(r'<g fill="[^"]*" (?:mask|clip-path)="url\(#[^)]*\)">(.*?)</
 # The wave "cut" is made by clipping the letters to the areas above and below a 7-unit wave band.
 TOP = 'M-10 -20 H220 V110.1 H178 C142.8 120.1 115.2 120.1 86 110.1 C56.8 100.1 29.2 100.1 -6 110.1 H-10 Z'
 BOT = 'M-10 117.1 H-6 C29.2 107.1 56.8 107.1 86 117.1 C115.2 127.1 142.8 127.1 178 117.1 H220 V190 H-10 Z'
+# wider wave gap for the booking button, so the letter's route through WIS is easy to see
+TOPW = 'M-10 -20 H220 V106.6 H178 C142.8 116.6 115.2 116.6 86 106.6 C56.8 96.6 29.2 96.6 -6 106.6 H-10 Z'
+BOTW = 'M-10 120.6 H-6 C29.2 110.6 56.8 110.6 86 120.6 C115.2 130.6 142.8 130.6 178 120.6 H220 V190 H-10 Z'
 def logo(m):
     uid, cls = m.group(1), m.group(2)
     c = f' class="{cls}"' if cls else ''
     return (f'<svg{c} viewBox="-4 -10 208 162" role="img" aria-label="Oriwis">'
-            f'<defs><clipPath id="owc-{uid}"><path d="{TOP}"/><path d="{BOT}"/></clipPath></defs>'
+            f'<defs><clipPath id="owc-{uid}"><path d="{TOPW if uid == "wp" else TOP}"/><path d="{BOTW if uid == "wp" else BOT}"/></clipPath></defs>'
             f'<g fill="currentColor" clip-path="url(#owc-{uid})">{letters}</g>'
             + (BREEZE.format(uid=uid, letters=letters) if uid == 'intro' else '') +
             f'<circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg>')
