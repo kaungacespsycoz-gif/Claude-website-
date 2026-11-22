@@ -398,6 +398,14 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 @media (max-width: 560px) { .hero .actions .wavepost { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .wavepost .wp-lbl small::after { animation: none; } }
 
+
+.wavepost .wp-logo { position: absolute; width: 58px; transform: translate(-50%, -50%); color: #f6efe2; pointer-events: none; z-index: 2; transition: transform .25s ease, filter .25s ease; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+.wavepost .wp-logo svg { display: block; width: 100%; height: auto; }
+.wavepost .wp-logo .ow-sun { fill: #f0b54b; transition: fill .2s ease; }
+.wavepost .wp-logo.pass { transform: translate(-50%, -50%) scale(1.12); filter: drop-shadow(0 0 10px rgba(240,181,75,.75)); }
+.wavepost .wp-logo.pass .ow-sun { fill: #ffe39a; }
+.wavepost { cursor: grab; } .wavepost.dragging { cursor: grabbing; }
+
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--header-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
@@ -611,7 +619,7 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
           <h1><span class="en">Thinking about studying in the UK? Let’s talk it through<i class="sundot" aria-hidden="true"></i><span class="sr">.</span></span><span class="zh">想去英国读书？<br>我们先聊一聊<i class="sundot" aria-hidden="true"></i><span class="sr">。</span></span></h1>
           <p class="lede"><span class="en">We help parents, students and working adults find UK schools and courses that suit them, and introduce them to the right people. The first conversation is free.</span><span class="zh">我们帮助家长、学生和在职人士找到适合的英国学校与课程，并为你对接合适的学校。第一次咨询免费。</span></p>
           <div class="actions">
-            <a class="wavepost" id="wavepost" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="wp-svg" aria-hidden="true"></svg><span class="wp-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Tap, or slide the letter to the UK</span><span class="zh">点击或滑动信封，寄往英国</span></small></span><span class="wp-ok" aria-hidden="true"><span class="en">Sent ✓</span><span class="zh">已寄出 ✓</span></span></a><a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
+            <a class="wavepost" id="wavepost" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="wp-svg" aria-hidden="true"></svg><span class="wp-logo" aria-hidden="true">{{LOGO:wp:}}</span><span class="wp-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Tap, or drag right to send</span><span class="zh">点击或向右滑动，寄往英国</span></small></span><span class="wp-ok" aria-hidden="true"><span class="en">Sent ✓</span><span class="zh">已寄出 ✓</span></span></a><a class="chainlock" id="chainlock" href="#consult" draggable="false" aria-label="Book a free consultation"><svg class="cl-svg" aria-hidden="true"></svg><span class="cl-lbl"><b><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></b><small><span class="en">Slide the chain to open the door</span><span class="zh">滑动门链，打开大门</span></small></span><span class="cl-ok" aria-hidden="true"><span class="en">Door open</span><span class="zh">门已打开</span></span></a><a class="btn slide" id="slide-cta" href="#consult" draggable="false"><span class="fill" aria-hidden="true"></span><span class="ico" aria-hidden="true"><svg class="arr" viewBox="0 0 14 10" aria-hidden="true"><path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ok" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 6.5l4.5 4L14.5 1.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span></span><span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a><a class="cta2" href="#consult"><span class="en">Book a free consultation</span><span class="zh">预约免费咨询</span><i class="go" aria-hidden="true">→</i></a>
             <a class="btn-line" href="#how"><span class="en">How we work</span><span class="zh">了解服务方式</span><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
@@ -1059,9 +1067,10 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
 /* Wave post: the envelope follows a wave shaped like the logo's cut; drag it, or tap and it flies by itself */
 (function () {
   var el = document.getElementById('wavepost'); if (!el) return;
+  var logo = el.querySelector('.wp-logo');
   var svg = el.querySelector('.wp-svg'), NS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 112, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
+  var ex0 = 0, W = 0, H = 112, path, trail, glow, spark, env, envIn, box, bx = 0, by = 0, LEN = 0, t = 0, busy = false, dragging = false, moved = false, sx = 0, table = [], visible = false, burst;
   function mk(tag, a, parent) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); (parent || svg).appendChild(n); return n; }
   function grad(defs, id, stops, attrs) { var g = mk(attrs && attrs.r ? 'radialGradient' : 'linearGradient', Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 1, y2: 0 }), defs); stops.forEach(function (s) { mk('stop', { offset: s[0], 'stop-color': s[1], 'stop-opacity': s[2] == null ? 1 : s[2] }, g); }); }
   function build() {
@@ -1087,13 +1096,13 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       for (var xx = 0; xx <= W; xx += 40) dd += ' q10 -3 20 0 t20 0';
       mk('path', { d: dd, fill: 'none', stroke: 'rgba(143,208,201,' + (.18 - r * .07) + ')', 'stroke-width': 1.2 });
     }
-    mk('path', { d: d, fill: 'none', stroke: 'rgba(240,196,106,.32)', 'stroke-width': 1.6, 'stroke-dasharray': '1.5 6', 'stroke-linecap': 'round' });
     glow = mk('path', { d: d, fill: 'none', stroke: '#f0b54b', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: .45, filter: 'url(#wp-blur)' });
     trail = mk('path', { d: d, fill: 'none', stroke: 'url(#wp-gold)', 'stroke-width': 2.6, 'stroke-linecap': 'round' });
     path = trail; LEN = path.getTotalLength();
     [trail, glow].forEach(function (n) { n.setAttribute('stroke-dasharray', LEN + ' ' + LEN); });
     table = []; for (var i = 0; i <= 160; i++) table.push(path.getPointAtLength(LEN * i / 160).x);
     spark = mk('circle', { r: 6, fill: 'url(#wp-spark)', opacity: 0 });
+    var mid = path.getPointAtLength(LEN * .5); logo.style.left = mid.x + 'px'; logo.style.top = mid.y + 'px';
     // pillar box
     box = mk('g', { filter: 'url(#wp-shadow)' });
     mk('ellipse', { cx: 0, cy: 0, rx: 20, ry: 3.2, fill: 'rgba(0,0,0,.35)' }, box);
@@ -1130,6 +1139,8 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
     env.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y - 2 + bob).toFixed(1) + ') rotate(' + (ang * .55).toFixed(1) + ') scale(' + sc.toFixed(2) + ')');
     env.setAttribute('opacity', t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1');
     trail.setAttribute('stroke-dashoffset', String(LEN - L)); glow.setAttribute('stroke-dashoffset', String(LEN - L));
+    logo.classList.toggle('pass', t > .4 && t < .62);
+    env.setAttribute('opacity', t > .44 && t < .56 ? '0' : (t > .96 ? String(Math.max(0, 1 - (t - .96) / .04)) : '1'));
   }
   // idle: the envelope bobs and a spark runs along the wave to the post box
   var sparkT0 = 0;
@@ -1166,17 +1177,15 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
   }
   svg.addEventListener('pointerdown', function (e) {
     if (busy) return;
-    var r = el.getBoundingClientRect(), p = path.getPointAtLength(LEN * t);
-    if (Math.abs(e.clientX - r.left - p.x) > 36 || Math.abs(e.clientY - r.top - p.y) > 32) return;
-    e.preventDefault(); dragging = true; moved = false; sx = e.clientX; el.classList.add('dragging');
+    e.preventDefault(); dragging = true; moved = false; sx = e.clientX; ex0 = path.getPointAtLength(LEN * t).x; el.classList.add('dragging');
     try { svg.setPointerCapture(e.pointerId); } catch (err) {}
   });
   svg.addEventListener('pointermove', function (e) {
     if (!dragging) return; var r = el.getBoundingClientRect();
     if (Math.abs(e.clientX - sx) > 4) moved = true;
-    if (moved) { t = Math.max(0, Math.min(.95, tFromX(e.clientX - r.left))); draw(); }
+    if (moved) { t = Math.max(0, Math.min(.95, tFromX(ex0 + Math.max(0, e.clientX - sx) * 1.15))); draw(); }
   });
-  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .65) post(); else fly(0, 450); }
+  function end() { if (!dragging) return; dragging = false; el.classList.remove('dragging'); if (!moved) return; if (t > .55) post(); else fly(0, 450); }
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   el.addEventListener('dragstart', function (e) { e.preventDefault(); });
   el.addEventListener('click', function (e) { e.preventDefault(); if (moved) { moved = false; return; } if (!busy) post(); });
