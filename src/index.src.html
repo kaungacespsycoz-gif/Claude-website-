@@ -89,6 +89,8 @@ p { margin: 0; }
 .path .ph { border-radius: 12px; margin-bottom: 18px; }
 .credit { font-size: var(--fs-xs); color: var(--muted); }
 
+.ow-sun { fill: var(--sun-dot); }
+.intro-logo .ow-sun { fill: #e3b061; }
 /* header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--paper) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .3s; }
@@ -261,9 +263,6 @@ footer .wrap { display: grid; gap: 22px; }
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <mask id="ow-cut" maskUnits="userSpaceOnUse" x="-10" y="-20" width="230" height="190"><rect x="-10" y="-20" width="230" height="190" fill="#fff"/><path d="M-6 113.6 C29.2 103.6 56.8 103.6 86.0 113.6 C115.2 123.6 142.8 123.6 178.0 113.6" fill="none" stroke="#000" stroke-width="7"/></mask>
-    <symbol id="ow-logo" viewBox="-4 -10 208 162"><g fill="currentColor" mask="url(#ow-cut)">{{LETTERS}}</g><circle cx="186" cy="6" r="11" fill="var(--sun-dot)"/></symbol>
-    <symbol id="ow-wave" viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0 10 C25 2 50 2 75 10 C100 18 125 18 150 10 C162 6 175 4 200 10" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"/></symbol>
   </defs>
 </svg>
 
@@ -273,14 +272,14 @@ footer .wrap { display: grid; gap: 22px; }
     <button type="button" data-set-lang="zh" aria-pressed="true">中</button>
     <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
   </div>
-  <h1 id="intro-title" style="margin:0"><svg class="intro-logo" viewBox="-4 -10 208 162" role="img" aria-label="Oriwis"><use href="#ow-logo"/></svg></h1>
+  <h1 id="intro-title" style="margin:0">{{LOGO:intro:intro-logo}}</h1>
   <p class="intro-line"><span class="en">Knowledge by the sea</span><span class="zh">海边求知</span></p>
   <a class="intro-cue" href="#hero"><i aria-hidden="true"></i><span class="en">Welcome</span><span class="zh">欢迎</span></a>
 </section>
 
 <header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="#hero" aria-label="Oriwis"><svg viewBox="-4 -10 208 162" aria-hidden="true"><use href="#ow-logo"/></svg></a>
+    <a class="brand" href="#hero" aria-label="Oriwis">{{LOGO:top:}}</a>
     <nav class="nav" aria-label="Sections">
       <a href="#how"><span class="en">How we help</span><span class="zh">如何帮你</span></a>
       <a href="#paths"><span class="en">UK routes</span><span class="zh">升学路径</span></a>
@@ -406,7 +405,7 @@ footer .wrap { display: grid; gap: 22px; }
 
 <footer>
   <div class="wrap">
-    <div class="foot-brand"><svg viewBox="-4 -10 208 162" aria-label="Oriwis"><use href="#ow-logo"/></svg><span class="slogan"><span class="en">Knowledge by the sea</span><span class="zh">海边求知</span></span></div>
+    <div class="foot-brand">{{LOGO:foot:}}<span class="slogan"><span class="en">Knowledge by the sea</span><span class="zh">海边求知</span></span></div>
     <div class="legal">
       <p><strong><span class="en">About our service</span><span class="zh">服务说明</span></strong></p>
       <p><span class="en">Oriwis provides study-abroad information matching, preliminary consultations and referrals only. We are not a study-abroad agency. We do not handle admissions, collect fees from students, or sign admission guarantee agreements. Students register, pay and complete all procedures directly with the school or its overseas partner. Route information on this site is a general guide; always check current requirements with the school.</span><span class="zh">Oriwis 仅提供留学信息匹配、初步咨询与转介服务，不是留学中介机构。我们不代办入学申请，不向学生收取费用，不签署任何录取担保协议。学生最终直接向学校或海外合作方注册、缴费并办理相关手续。本网站的升学路径信息仅供一般参考，具体要求请以学校最新公布为准。</span></p>
