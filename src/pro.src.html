@@ -1490,8 +1490,18 @@ footer .base { margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(2
       // seen through the water: tinted, softened, with moving caustic light
       '    float cau = smoothstep(.86, .99, 1. - abs(noise(p * .11 + vec2(uT * .6, uT * .35)) * 2. - 1.));',
       '    ec = mix(ec, vec3(.32, .60, .62), .2) * (.97 + cau * .07 / max(uEnv.w * .5, 1.) * (1. - uEnvTOn));',
+      // with the photo: cool underwater tint, darker away from the surface light, and a dancing net of caustic light
+      '    if (uEnvTOn > .5) { vec2 cp = p * .055 + g * .8;',
+      '      float c1 = 1. - abs(noise(cp + vec2(uT * .55, uT * .3)) * 2. - 1.), c2 = 1. - abs(noise(cp * 1.7 - vec2(uT * .4, -uT * .5) + 7.) * 2. - 1.);',
+      '      float net = smoothstep(.82, 1., c1) * .7 + smoothstep(.86, 1., c2) * .5;',
+      '      ec = mix(ec, ec * vec3(.62, .86, .9), .55) * (.78 + .22 * smoothstep(-10., 10., -ep.y));',
+      '      ec += vec3(.75, 1., .96) * net * .28; }',
       '    ec *= mix(.45, 1., smoothstep(.06, .7, uEnvSY));',
       '    col = mix(col, ec, eb * uEnvA * .93);',
+      '    if (uEnvTOn > .5) for (int bi = 0; bi < 6; bi++) { float fb = float(bi), life = fract(uT * (.18 + fb * .03) + fb * .37);',
+      '      vec2 bc = uEnv.xy + vec2((fb - 2.5) * 6. * uEnv.w * .5 + sin(uT * 2. + fb * 3.) * 2., -life * 70. - 6.); float br = (1. + fb * .25) * (1. - life * .3);',
+      '      float bd = length(p - bc); float ring = smoothstep(br + .6, br, bd) * smoothstep(br - 1., br - .2, bd); float hi = smoothstep(br * .5, 0., length(p - bc + vec2(br * .35, br * .35)));',
+      '      col += vec3(.85, 1., .98) * (ring * .45 + hi * .5) * uEnvA * (1. - life) * smoothstep(0., .1, life); }',
       '  }',
       // light on the ripples
       '  float s = dot(g, normalize(vec2(-.35, -1.)));',
