@@ -311,7 +311,7 @@ p { margin: 0; }
 
 
 /* Pudding the puppy sits on the pavement by the student from the start; when the journey arrives she hops, then wags and tilts her head */
-.stepimg .pud { position: absolute; width: 7.6%; left: 30.5%; top: 57.5%; pointer-events: none; }
+.stepimg .pud { position: absolute; width: 7.6%; left: 30.5%; top: 55%; pointer-events: none; }
 .stepimg .pudding { display: block; width: 100%; height: auto; transform-origin: 50% 100%; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(0,0,0,.22)); }
 .journey.live li.played .stepimg .pudding { animation: pud-hop .9s steps(1, end) 1.2s 1, pud-wag 2.4s steps(1, end) 2.2s infinite; }
 @keyframes pud-hop { 0%, 100% { transform: none; } 20% { transform: scale(1.06, .9); } 40% { transform: translateY(-24%) scale(.96, 1.06); } 60% { transform: translateY(-8%); } 80% { transform: scale(1.04, .94); } }
@@ -319,11 +319,11 @@ p { margin: 0; }
 /* when the boy stops, Pudding turns, trots over and jumps up to greet him */
 .journey.live li.played .stepimg .pud { animation: pud-greet 1.9s steps(1, end) 2.9s 1 forwards; }
 @keyframes pud-greet {
-  0% { left: 30.5%; top: 57.5%; transform: none; } 12% { left: 30.5%; top: 57.5%; transform: scaleX(-1); }
-  26% { left: 29.5%; top: 58%; transform: scaleX(-1) translateY(-10%); } 40% { left: 28.5%; top: 58.5%; transform: scaleX(-1); }
-  54% { left: 27.5%; top: 59%; transform: scaleX(-1) translateY(-10%); } 66% { left: 27%; top: 59.5%; transform: scaleX(-1); }
-  78% { left: 27%; top: 59.5%; transform: scaleX(-1) translateY(-24%) rotate(-6deg); } 86% { left: 27%; top: 59.5%; transform: scaleX(-1); }
-  94% { left: 27%; top: 59.5%; transform: scaleX(-1) translateY(-16%) rotate(-4deg); } 100% { left: 27%; top: 59.5%; transform: scaleX(-1); } }
+  0% { left: 30.5%; top: 55%; transform: none; } 12% { left: 30.5%; top: 55%; transform: scaleX(-1); }
+  26% { left: 29.5%; top: 55%; transform: scaleX(-1) translateY(-10%); } 40% { left: 28.5%; top: 55%; transform: scaleX(-1); }
+  54% { left: 27.5%; top: 55%; transform: scaleX(-1) translateY(-10%); } 66% { left: 27%; top: 55%; transform: scaleX(-1); }
+  78% { left: 27%; top: 55%; transform: scaleX(-1) translateY(-24%) rotate(-6deg); } 86% { left: 27%; top: 55%; transform: scaleX(-1); }
+  94% { left: 27%; top: 55%; transform: scaleX(-1) translateY(-16%) rotate(-4deg); } 100% { left: 27%; top: 55%; transform: scaleX(-1); } }
 @media (prefers-reduced-motion: reduce) { .stepimg .pudding, .stepimg .pud { animation: none !important; } }
 
 
