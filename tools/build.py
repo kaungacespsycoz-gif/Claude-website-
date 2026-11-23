@@ -1,30 +1,30 @@
-"""Build v2: inline the Outfit font and the logo-10 letters into index.html.
+"""Build v2: inline the Outfit font and the Glostudy logo letters into index.html.
 Also writes an artifact-preview copy (no html/head/body tags) to the path given as argv[1], if any."""
 import base64, re, sys, pathlib
 root = pathlib.Path(__file__).resolve().parent.parent
 src = (root / 'src/index.src.html').read_text()
 font = base64.b64encode((root / 'fonts/outfit-latin-wght-normal.woff2').read_bytes()).decode()
-mark = (root / 'brand/v2/oriwis10-mark.svg').read_text()
+mark = (root / 'brand/v2/glostudy-mark.svg').read_text()
 letters = re.search(r'<g fill="[^"]*" (?:mask|clip-path)="url\(#[^)]*\)">(.*?)</g>', mark).group(1)
-# Logo 10, drawn inline in each place (no <use>/<mask>, which some phone browsers drop).
+# Glostudy logo, drawn inline in each place (no <use>/<mask>, which some phone browsers drop).
 # The wave "cut" is made by clipping the letters to the areas above and below a 7-unit wave band.
-TOP = 'M-10 -20 H220 V110.1 H178 C142.8 120.1 115.2 120.1 86 110.1 C56.8 100.1 29.2 100.1 -6 110.1 H-10 Z'
-BOT = 'M-10 117.1 H-6 C29.2 107.1 56.8 107.1 86 117.1 C115.2 127.1 142.8 127.1 178 117.1 H220 V190 H-10 Z'
+TOP = 'M-10 -20 H220 V112.8 H178 C142.8 116.8 115.2 116.8 86 112.8 C56.8 108.8 29.2 108.8 -6 112.8 H-10 Z'
+BOT = 'M-10 119.2 H-6 C29.2 115.2 56.8 115.2 86 119.2 C115.2 123.2 142.8 123.2 178 119.2 H220 V190 H-10 Z'
 # wider wave gap for the booking button, so the letter's route through WIS is easy to see
-TOPW = 'M-10 -20 H220 V106.6 H178 C142.8 116.6 115.2 116.6 86 106.6 C56.8 96.6 29.2 96.6 -6 106.6 H-10 Z'
-BOTW = 'M-10 120.6 H-6 C29.2 110.6 56.8 110.6 86 120.6 C115.2 130.6 142.8 130.6 178 120.6 H220 V190 H-10 Z'
+TOPW = 'M-10 -20 H220 V109.6 H178 C142.8 113.6 115.2 113.6 86 109.6 C56.8 105.6 29.2 105.6 -6 109.6 H-10 Z'
+BOTW = 'M-10 122.4 H-6 C29.2 118.4 56.8 118.4 86 122.4 C115.2 126.4 142.8 126.4 178 122.4 H220 V190 H-10 Z'
 def logo(m):
     uid, cls = m.group(1), m.group(2)
     c = f' class="{cls}"' if cls else ''
-    return (f'<svg{c} viewBox="-4 -10 208 162" role="img" aria-label="Oriwis">'
+    return (f'<svg{c} viewBox="-4 -10 208 162" role="img" aria-label="Glostudy">'
             f'<defs><clipPath id="owc-{uid}"><path d="{TOPW if uid == "wp" else TOP}"/><path d="{BOTW if uid == "wp" else BOT}"/></clipPath></defs>'
             f'<g fill="currentColor" clip-path="url(#owc-{uid})">{letters}</g>'
             + (BREEZE.format(uid=uid, letters=letters) if uid == 'intro' else '') +
-            f'<circle class="ow-sun" cx="186" cy="6" r="11" fill="#c99a4a"/></svg>')
+            f'<circle class="ow-sun" cx="186" cy="14" r="11" fill="#c99a4a"/></svg>')
 # Opening screen only: the letters start whole; a breeze then sweeps left to right and carves the wave stripe.
 BREEZE = ('<defs><clipPath id="owb-{uid}"><rect class="breeze-wipe" x="-12" y="-20" width="240" height="190"/></clipPath></defs>'
           '<g class="uncut" fill="currentColor" clip-path="url(#owb-{uid})">{letters}</g>'
-          '<path class="breeze" pathLength="100" d="M-30 113.6 C-12 108 0 104 12 105 C29.2 103.6 56.8 103.6 86.0 113.6 C115.2 123.6 142.8 123.6 178.0 113.6 C192 109 204 106 222 107" '
+          '<path class="breeze" pathLength="100" d="M-30 116 C-12 113.5 0 112 12 112.5 C29.2 112 56.8 112 86 116 C115.2 120 142.8 120 178 116 C192 114 204 112.5 222 113" '
           'fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>')
 out = src.replace('{{OUTFIT}}', font)
 out = re.sub(r'\{\{LOGO:(\w+):([\w-]*)\}\}', logo, out)
@@ -38,7 +38,7 @@ print('ok', len(out))
 light = out.replace('<html lang="zh-CN" data-lang="zh">', '<html lang="zh-CN" data-lang="zh" data-look="light">', 1)
 light = re.sub(r'@media \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{.*?\} \}\n', '', light, count=1, flags=re.S)
 light = re.sub(r':root\[data-theme="dark"\] \{.*?\}\n', '', light, count=1, flags=re.S)
-light = light.replace('<title>Oriwis UK Study</title>', '<title>Oriwis UK Study (light)</title>', 1)
+light = light.replace('<title>Glostudy UK Study</title>', '<title>Glostudy UK Study (light)</title>', 1)
 (root / 'index-light.html').write_text(light)
 if len(sys.argv) > 2:
     frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', light)
@@ -47,7 +47,7 @@ if len(sys.argv) > 2:
 print('light ok', len(light))
 
 # Bright tropical-morning variant.
-sky = light.replace('data-look="light"', 'data-look="sky"', 1).replace('Oriwis UK Study (light)', 'Oriwis UK Study (sky)', 1)
+sky = light.replace('data-look="light"', 'data-look="sky"', 1).replace('Glostudy UK Study (light)', 'Glostudy UK Study (sky)', 1)
 (root / 'index-sky.html').write_text(sky)
 if len(sys.argv) > 3:
     frag = re.sub(r'<!doctype html>\s*|</?html[^>]*>\s*|</?head>\s*|</?body>\s*|<meta charset[^>]*>\s*|<meta name="viewport"[^>]*>\s*', '', sky)
