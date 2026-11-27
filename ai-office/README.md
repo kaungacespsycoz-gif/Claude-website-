@@ -50,6 +50,30 @@ python3 ai-office/tools/try_bot.py chat 4 --provider kimi   # 用 Kimi（MOONSHO
 ## 方法 C：Dify（自己部署，数据完全在自己服务器上）
 Dify 开源，可以部署在阿里云 / 腾讯云服务器上，接 DeepSeek API。适合以后客户量大、对数据要求高时再考虑。
 
+## 两个版本：英国版和中国版 · UK version and China version
+同一套设计（agents/、knowledge/、templates/、tests/），换不同的「引擎」运行。改一次提示词，两边同时更新。
+One set of designs, two engines. Edit a prompt once and both versions change.
+
+| | 英国版 UK version | 中国版 China version |
+|---|---|---|
+| 模型 Model | Claude（Anthropic） | DeepSeek / Kimi / 通义千问 |
+| 试用 Try it | `tools/try_bot_claude.py` | `tools/try_bot.py` |
+| 适合 For | 英国团队成员、已经在英国的学生和家长、内部工具 | 国内客户、国内团队 |
+| 客户渠道 Channel | 官网聊天窗口、WhatsApp、邮件（待开发） | 企业微信、公众号（通过扣子 Coze） |
+| 个人信息法规 Data law | UK GDPR | 《个人信息保护法》PIPL |
+
+```bash
+pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...                  # 在 console.anthropic.com 申请
+python3 ai-office/tools/try_bot_claude.py chat 1      # 用 Claude 和客服机器人聊天
+python3 ai-office/tools/try_bot_claude.py test        # 用 Claude 跑同一套测试
+```
+默认模型 claude-opus-5-5；想省钱可加 `--model claude-haiku-5-5`。
+
+⚠️ 国内客户的个人信息（姓名、微信、学生成绩等）不要发给英国版。《个人信息保护法》限制把个人信息传到境外。
+国内客户只用中国版；英国版只处理英国的客户，或不含个人信息的内部工作（例如营销文案、院校资料）。
+Do not send mainland clients' personal data to the UK version: China's PIPL restricts moving it abroad.
+
 ## 分工 · Who does what
 - **Claude（设计）**：写和改提示词、知识库、模板、测试；官网数据变了就重新导出（`node ai-office/tools/export-knowledge.js`）。
 - **你（运营）**：注册平台账号、上线、审核所有输出、对接客户和订单；把机器人答错的对话发给 Claude 修改。
