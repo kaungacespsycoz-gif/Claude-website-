@@ -1142,6 +1142,30 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
   .photo-frame .hs.boss .hs-tag, .photo-frame .room-spot .hs-tag { font-size: 7px !important; padding: 1px 5px !important; }
   .photo-frame .hs.boss .hs-tag i, .photo-frame .room-spot .hs-tag i { width: 5px; height: 5px; }
 }
+
+/* ---------- team list by floor / department ---------- */
+.staff.by-floor { display: flex; flex-direction: column; gap: 8px; }
+.tf { border: 1px solid var(--rule); border-radius: 14px; background: var(--panel-2); overflow: hidden; }
+.tf summary { list-style: none; display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; border-left: 3px solid var(--fc); }
+.tf summary::-webkit-details-marker { display: none; }
+.tf-badge { flex: none; font: 700 .72rem var(--sans); color: #0b0f14; background: var(--fc); border-radius: 8px; padding: 3px 7px; }
+.tf-name { flex: 1; min-width: 0; line-height: 1.2; } .tf-name b { display: block; font-size: .9rem; } .tf-name small { color: var(--muted); font-size: .72rem; }
+.tf-faces { display: flex; } .tf-faces i { width: 22px; height: 22px; border-radius: 50%; background-size: cover; background-position: 50% 22%; margin-left: -7px; box-shadow: 0 0 0 2px var(--panel-2); }
+.tf[open] .tf-faces { display: none; }
+.tf-busy { font-size: .68rem; color: var(--muted); white-space: nowrap; } .tf-busy.on { color: #f0b44a; font-weight: 600; }
+.tf-chev { color: var(--muted); transition: transform .2s; } .tf[open] .tf-chev { transform: rotate(90deg); }
+.tf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; padding: 4px 10px 10px; }
+.tf-grid button { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px 7px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: inherit; cursor: pointer; min-width: 0; text-align: center; }
+.tf-grid button:hover { background: color-mix(in srgb, var(--c) 10%, transparent); border-color: color-mix(in srgb, var(--c) 40%, transparent); }
+.tf-grid button[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 14%, transparent); border-color: var(--c); }
+body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent; border-color: transparent; }
+.tf-ava { position: relative; width: 46px; height: 46px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c); }
+.tf-grid button.busy .tf-ava { box-shadow: 0 0 0 2px var(--c), 0 0 12px var(--c); }
+.tf-ava .status { position: absolute; right: -2px; bottom: -2px; margin: 0; width: 12px; height: 12px; border: 2px solid var(--panel-2); }
+.tf-grid b { font-size: .8rem; } .tf-grid small { font-size: .64rem; color: var(--muted); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.tf-grid button.busy small { color: #f0b44a; }
+@media (max-width: 560px) { .staff.by-floor { grid-template-columns: none; } .tf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tf-faces { display: none; } .tf-name small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
 </style>
 
 <div class="app">
@@ -3196,22 +3220,43 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     $("box").focus({ preventScroll: true });
   }
 
+  var TEAM_FLOORS = [
+    { key: "4", n: "4F", name: "CEO Suite", dept: "Leadership · Spy x Family & friends", color: "#e8c17a", ids: ["5", "21", "22"], open: true },
+    { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "3", "13", "14", "6"], open: false },
+    { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "20", "18", "19"], open: false },
+    { key: "1", n: "1F", name: "Reception", dept: "The Friends team", color: "#3ee8a0", ids: ["1", "7", "8", "9", "10", "11"], open: true }
+  ];
   function drawFloor() {
     if (!$("sceneWrap").children.length) buildPlan();
     var bar = $("staff");
     if (!bar.children.length) {
-      BOTS.forEach(function (b) {
-        var btn = document.createElement("button");
-        btn.type = "button"; btn.id = "pick" + b.id;
-        btn.innerHTML = '<span class="ava photo" style="background-color:var(' + b.color + ');background-image:url(' + imgURL(IMG[b.id]) + ')">' + esc(b.name[0]) + '</span><span class="who-txt"><b>' + esc(b.name) + '</b><small></small><em class="sk">' + esc(b.skills.join(" · ")) + '</em></span><span class="status"></span>';
-        btn.onclick = function () { document.body.classList.add("picked"); selectBot(b); };
-        bar.appendChild(btn);
+      bar.classList.add("by-floor");
+      TEAM_FLOORS.forEach(function (fl) {
+        var sec = document.createElement("details"); sec.className = "tf"; sec.open = lsGet("glostudy-tf-" + fl.key, fl.open ? "1" : "0") === "1";
+        sec.style.setProperty("--fc", fl.color);
+        sec.innerHTML = '<summary><span class="tf-badge">' + fl.n + '</span><span class="tf-name"><b>' + esc(fl.name) + "</b><small>" + esc(fl.dept) + '</small></span><span class="tf-faces"></span><span class="tf-busy" id="tfb' + fl.key + '"></span><span class="tf-chev">›</span></summary><div class="tf-grid"></div>';
+        sec.addEventListener("toggle", function () { lsSet("glostudy-tf-" + fl.key, sec.open ? "1" : "0"); });
+        var grid = sec.querySelector(".tf-grid"), faces = sec.querySelector(".tf-faces");
+        fl.ids.forEach(function (id) {
+          var b = BY_ID[id]; if (!b) return;
+          faces.insertAdjacentHTML("beforeend", '<i style="background-image:url(' + imgURL(IMG[b.id]) + ')"></i>');
+          var btn = document.createElement("button");
+          btn.type = "button"; btn.id = "pick" + b.id; btn.style.setProperty("--c", COLORS[b.color]);
+          btn.innerHTML = '<span class="tf-ava" style="background-image:url(' + imgURL(IMG[b.id]) + ')"><span class="status"></span></span><b>' + esc(b.name) + "</b><small></small>";
+          btn.title = b.title + " · " + b.skills.join(" · ");
+          btn.onclick = function () { document.body.classList.add("picked"); selectBot(b); };
+          grid.appendChild(btn);
+        });
+        bar.appendChild(sec);
       });
     }
+    TEAM_FLOORS.forEach(function (fl) { var n = fl.ids.filter(function (id) { return state.busy[id]; }).length, el = $("tfb" + fl.key); if (el) { el.textContent = n ? n + " busy" : "all idle"; el.classList.toggle("on", !!n); } });
     BOTS.forEach(function (b) {
       var working = !!state.busy[b.id], btn = $("pick" + b.id);
       btn.setAttribute("aria-pressed", String(b === state.bot && state.tab === "chat"));
-      btn.querySelector("small").textContent = working ? busyText(b.id) : state.done[b.id] ? "Done" : b.title;
+      if (!btn) return;
+      btn.querySelector("small").textContent = working ? busyText(b.id) : state.done[b.id] ? "✓ done" : b.title;
+      btn.classList.toggle("busy", working);
       btn.querySelector(".status").className = "status" + (working ? " busy" : state.done[b.id] ? " done" : "");
       if (actors[b.id]) actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
