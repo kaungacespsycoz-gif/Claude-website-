@@ -310,6 +310,40 @@
  "routes": [
   {
    "bot": "1",
+   "match": "孩子12岁，现在准备来得及吗|My child is 12, is it too late",
+   "calls": [
+    {
+     "who": "scout",
+     "task": "Is 12 too late for UK boarding?"
+    }
+   ]
+  },
+  {
+   "bot": "1",
+   "match": "伦敦读硕士一年大概多少钱|How much is a one-year master's in London",
+   "calls": [
+    {
+     "who": "penny",
+     "task": "One-year London master's cost range"
+    }
+   ]
+  },
+  {
+   "bot": "1",
+   "match": "英国留学值得吗|Is studying in the UK worth it",
+   "calls": [
+    {
+     "who": "scout",
+     "task": "Graduate visa and degree length"
+    },
+    {
+     "who": "penny",
+     "task": "Cost vs other countries"
+    }
+   ]
+  },
+  {
+   "bot": "1",
    "match": "lily_mama_12",
    "calls": [
     {

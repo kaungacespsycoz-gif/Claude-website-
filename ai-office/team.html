@@ -1272,14 +1272,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       return Promise.resolve({ text: JSON.stringify({ calls: rt ? rt.calls : [] }) });
     }
     if (rules.indexOf("这次是同事之间的内部请求") >= 0) {
-      var nm = (BY_ID[o.botId] || {}).name || ""; out = ((DEMO_DATA.notes || {})[nm.toLowerCase()] || {})[L] || "- ok";
+      var nm = (BY_ID[o.botId] || {}).name || ""; out = ((DEMO_DATA.notes || {})[nm.toLowerCase()] || {})[L] || "- ok"; o.slow = true;
     } else {
       var hit = (DEMO_DATA.answers || []).filter(function (x) { return x.bot === o.botId && rx(x.match).test(text); })[0];
       out = hit ? hit[L] : DEMO_DATA.fallback[L];
       var ann = (text.match(/whole team: ([^\n]+)|全体同事的公告：([^\n]+)/) || []); out = out.replace("{{ann}}", ann[1] || ann[2] || "");
     }
     return new Promise(function (resolve, reject) {
-      var i = 0, step = Math.max(12, Math.ceil(out.length / 40)), wait = 700 + Math.random() * 700;
+      var i = 0, step = Math.max(12, Math.ceil(out.length / 40)), wait = o.slow ? 2600 + Math.random() * 1800 : 900 + Math.random() * 700;
       function tick() {
         if (o.signal && o.signal.aborted) { reject({ code: "cancelled", text: out.slice(0, i) }); return; }
         i = Math.min(out.length, i + step); if (o.onText) o.onText(out.slice(0, i));
@@ -1317,7 +1317,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     pvCall(fromId, ids); callMap(fromId, ids, true); if (v3) v3.call(fromId, ids);
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
-      var id = ids[i], bot = BY_ID[id], mine = !state.busy[id];
+      var id = ids[i], bot = BY_ID[id], mine = !state.busy[id] || state.busy[id] === "task";
       state.callFrom = state.callFrom || {}; state.callFrom[id] = from.name;
       if (mine) setBusy(id, "call");
       return ask(bot, [{ role: "user", content: (fromId === "5" ? "Task from Monica (the boss's request): " + c.task + "\n\nThe boss's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: fromId === "5" ? NOTE_RULE.replace("前台瑞秋替客户来问你", "秘书莫妮卡替老板来分配任务") : NOTE_RULE })
@@ -2666,7 +2666,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function pvWorking(id, on) {
     if (!pvReady) return; var el = $("hs" + id); if (!el) return;
     el.classList.toggle("working", on);
-    el.querySelector("em").textContent = on ? (state.busy[id] === "job" ? "on a client" : state.busy[id] === "call" ? "helping " + ((state.callFrom || {})[id] || "Rachel") : "working") : "idle";
+    el.querySelector("em").textContent = on ? busyText(id) : "idle";
     pvCardUpdate();
   }
   function pvDone(id) { if (!pvReady) return; var el = $("hs" + id); if (!el) return; el.classList.add("just-done"); setTimeout(function () { el.classList.remove("just-done"); }, 2500); }
@@ -2706,7 +2706,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function pvCallEnd(fromId) {
     var svg = $("callLines"); if (svg) svg.remove();
-    var el = $("hs" + fromId); if (el) el.classList.remove("calling");
+    var el = $("hs" + fromId); if (el) { el.classList.remove("calling"); el.querySelector("em").textContent = state.busy[fromId] ? busyText(fromId) : "idle"; }
   }
   function pvReturn(fromId, toId) {
     if (!pvReady) return;
@@ -3037,6 +3037,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     text = String(text || "").trim();
     if (!text) return;
     var bot = state.bot, turns = chat();
+    if (state.busy[bot.id] === "task") setBusy(bot.id, null);
     if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
     if (needsKey()) { state.settingsOpen = true; drawSettings(); turns.push({ kind: "note", text: COPY.no_key }); drawLog(); return; }
     turns.push({ role: "user", content: text, who: meta && meta.who });
@@ -3265,6 +3266,36 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
 
   // ---------- test customers: walk in, talk to Rachel step by step ----------
+
+  // what an officer is doing right now, for the name tags
+  var DAILY = {
+    "1": ["answering WeChat follow-ups", "tidying the booking list"],
+    "2": ["checking entry requirements", "updating the UK school list", "drafting a shortlist"],
+    "3": ["reviewing a statement draft", "updating the document checklist"],
+    "4": ["scheduling this week's posts", "checking post analytics", "drafting a Moments post"],
+    "5": ["preparing today's brief", "sorting the CEO's inbox", "following up tasks"],
+    "6": ["updating the cost sheet", "checking exchange rates", "checking visa money rules"]
+  };
+  state.taskLabel = {};
+  function busyText(id) {
+    var k = state.busy[id];
+    if (k === "task") return state.taskLabel[id] || "working";
+    if (k === "call") return "helping " + ((state.callFrom || {})[id] || "a colleague");
+    if (k === "job") return "on a client";
+    if (k === "cust") return id === "4" ? "replying to a comment" : "chatting with a customer";
+    return "working";
+  }
+  function freeFor(id) { return !state.busy[id] || state.busy[id] === "task"; }
+  // between customers everyone gets on with their daily work (demo only: in the live versions this is real work)
+  if (DEMO_DATA && !IN_CLAUDE) setInterval(function () {
+    if (document.hidden || REDUCED) return;
+    var idle = BOTS.filter(function (b) { return !state.busy[b.id] && !(b.id === "1" && live.serving) && !(b.id === "4" && live.joey); });
+    if (!idle.length || Math.random() < .25) return;
+    var b = idle[Math.floor(Math.random() * idle.length)], list = DAILY[b.id], label = list[Math.floor(Math.random() * list.length)];
+    state.taskLabel[b.id] = label; setBusy(b.id, "task");
+    if (Math.random() < .35) activity(b.id, b.name + " is " + label);
+    setTimeout(function () { if (state.busy[b.id] === "task") { setBusy(b.id, null); } }, 9000 + Math.random() * 9000);
+  }, 4000);
   // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
   // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Joey, bench by the stairs),
   //       web (website form / phone, lounge sofa), comment (on our posts, 2F comments lounge, Joey replies)
@@ -3316,7 +3347,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   // Rachel serves the reception queues: WeChat line first, then leads from Joey, then the website sofa
   async function serveDirect(c) {
     var rachel = BY_ID["1"];
-    live.serving = c; c.status = "talking"; delete state.chatClient["1"]; drawLive();
+    if (state.busy["1"] === "task") setBusy("1", null);
+    live.serving = c; c.status = "talking"; delete state.chatClient["1"]; setBusy("1", "cust"); drawLive();
     activity("1", "Rachel is chatting with " + c.name.en + (c.kind === "wechat" ? " on WeChat" : c.kind === "lead" ? " (lead from " + PLAT[c.plat].en + ")" : " (website)"));
     try {
       for (; c.step < c.msgs.length; c.step++) {
@@ -3326,14 +3358,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         c.turns.push({ role: "user", content: text, who: liveName(c) }); drawLiveDetail();
         var hist = c.turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; }).slice(-16).map(function (t) { return { role: t.role, content: t.content }; });
         var extra = "";
-        setBusy("1", "cust");
         if (text.length > 12) {
           var calls = await routeQuestion(text, hist, false);
           if (calls.length) { var nt = { kind: "team", from: "Rachel", items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, "1"); }
         }
         var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
         var res = await ask(rachel, hist, { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
-        reply.pending = false; reply.content = res.text; setBusy("1", null); flashDone("1");
+        reply.pending = false; reply.content = res.text; flashDone("1");
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns); }
         if (/【转人工】/.test(res.text)) { c.status = "human"; activity("1", c.name.en + " needs a real consultant"); }
         drawLive(); drawLiveDetail();
@@ -3344,21 +3375,29 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       setBusy("1", null); c.status = "waiting"; live.on = false; c.turns.push({ kind: "note", text: errText(e) }); activity("1", "Auto-reply paused: " + errText(e));
     }
     if (c.status === "booked") live.timers.push(setTimeout(function () { c.status = "done"; drawLive(); }, 45000));
+    if (state.busy["1"] === "cust") setBusy("1", null);
     live.serving = null; drawLive(); drawLiveDetail();
   }
   // Joey answers comments on our posts: questions before praise; people who want advice are sent down to Rachel
   async function serveComment(c) {
     var joey = BY_ID["4"], en = state.lang === "en", pl = PLAT[c.plat];
-    live.joey = c; c.status = "talking"; drawLive();
+    if (state.busy["4"] === "task") setBusy("4", null);
+    live.joey = c; c.status = "talking"; setBusy("4", "cust"); drawLive();
     try {
       await wait(1200);
       c.turns.push({ role: "user", content: c.text[state.lang], who: liveName(c) + " · " + pl[state.lang] }); drawLiveDetail();
       var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[state.lang] +
         (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or something you must not answer, end with 【转人工】."
             : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是投诉、退款或你不能回答的问题，在末尾加【转人工】。");
+      if (state.busy["4"] === "task") setBusy("4", null);
       setBusy("4", "cust");
+      var extra = "";
+      if (c.q === 0) {
+        var calls = await routeQuestion(c.text[state.lang], [], false);
+        if (calls.length) { var nt = { kind: "team", from: "Joey", items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, c.text[state.lang], nt, "4"); }
+      }
       var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
-      var res = await ask(joey, [{ role: "user", content: msg }], { onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
+      var res = await ask(joey, [{ role: "user", content: msg }], { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
       reply.pending = false; reply.content = res.text; setBusy("4", null); flashDone("4");
       if (/【线索】/.test(res.text) && c.lead) { await wait(1500); c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Joey sent " + c.name.en + " down to Rachel as a new lead"); }
       else if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
@@ -3368,11 +3407,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   setInterval(function () {
     if (!live.on || document.hidden) return;
-    if (!live.serving && !state.busy["1"]) {
+    if (!live.serving && freeFor("1")) {
       var pr = { wechat: 0, lead: 1, web: 2 }, next = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment"; }).sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
       if (next) serveDirect(next);
     }
-    if (!live.joey && !state.busy["4"]) {
+    if (!live.joey && freeFor("4")) {
       var nc = live.list.filter(function (c) { return c.status === "waiting" && c.kind === "comment"; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
       if (nc) serveComment(nc);
     }
@@ -3592,7 +3631,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         var el = s.el; if (!el.id || el.id.indexOf("panoBot") !== 0) return;
         var id = el.id.slice(7), busy = state.busy[id];
         el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && st.floor !== 3);
-        el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? (busy === "call" ? "helping " + ((state.callFrom || {})[id] || "a colleague") : "working") : "idle";
+        el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? busyText(id) : "idle";
       });
       var fl = $("panoFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
     }
@@ -3733,7 +3772,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     Object.keys(F.bots).forEach(function (id) {
       var el = $("inBot" + id); if (!el) return; var busy = state.busy[id];
       el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && inS.floor !== 4);
-      el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? (busy === "call" ? "helping " + ((state.callFrom || {})[id] || "a colleague") : "working") : "idle";
+      el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? busyText(id) : "idle";
     });
     var fl = $("inFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
     // the team around the boardroom table during a meeting
@@ -4082,7 +4121,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var src = imgURL(IMG[b.id]);
     if ($("deskImg").getAttribute("src") !== src) { $("deskImg").src = src; $("deskImg").alt = b.name + " at the desk"; $("deskBg").style.backgroundImage = "url(" + src + ")"; }
     $("deskName").innerHTML = '<i></i>' + esc(b.name); $("dcName").textContent = b.name;
-    $("deskRole").textContent = b.title + " · " + (busy ? "working…" : "1-on-1");
+    $("deskRole").textContent = b.title + " · " + (busy ? busyText(b.id) + "…" : "1-on-1");
     $("deskPlate").firstChild.textContent = b.name; $("deskPlate").lastChild.textContent = b.title;
     var voiceOn = lsGet("glostudy-voice", "on") === "on";
     $("deskSound").setAttribute("aria-pressed", String(voiceOn)); $("deskSound").textContent = voiceOn ? "🔊 Voice" : "🔇 Muted"; $("deskSound").hidden = !window.speechSynthesis;

@@ -821,6 +821,9 @@ cust("2", r"lily_mama_12", """
 
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
+  {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}]},
+  {"bot": "1", "match": r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", "calls": [{"who": "penny", "task": "One-year London master's cost range"}]},
+  {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "scout", "task": "Graduate visa and degree length"}, {"who": "penny", "task": "Cost vs other countries"}]},
   {"bot": "1", "match": r"lily_mama_12", "calls": [{"who": "scout", "task": "Boarding schools for 13+ entry"}]},
   {"bot": "1", "match": r"London or Manchester|伦敦还是曼彻斯特", "calls": [{"who": "penny", "task": "London vs Manchester costs"}, {"who": "scout", "task": "Finance master's in both cities"}]},
   {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}]},
