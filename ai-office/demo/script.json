@@ -1,6 +1,54 @@
 {
  "answers": [
   {
+   "bot": "4",
+   "match": "孩子12岁，现在准备来得及吗|My child is 12, is it too late",
+   "en": "Not too late at all 😊 Starting at 12 gives you time to prepare English and entrance tests calmly. Message us on WeChat (GlostudyUK) and we'll go through your child's options for free. 【线索】",
+   "zh": "完全来得及 😊 12 岁开始准备，英语和入学考试都能从容规划。可以微信私信我们（GlostudyUK），免费帮您看看孩子的选择。【线索】"
+  },
+  {
+   "bot": "4",
+   "match": "写得好清楚，收藏了|So clear, saved it",
+   "en": "Thank you so much! 💛 Glad it helps, more practical guides coming soon.",
+   "zh": "谢谢你的喜欢！💛 能帮到你就好，更多实用干货马上更新～"
+  },
+  {
+   "bot": "4",
+   "match": "伦敦读硕士一年大概多少钱|How much is a one-year master's in London",
+   "en": "Roughly £45,000–£60,000 all in for a year in London, depending on the course 💷 Message us on WeChat (GlostudyUK) and we'll work it out for your plan. 【线索】",
+   "zh": "伦敦读一年硕士，总共大约 £45,000–£60,000，主要看专业 💷 欢迎微信私信 GlostudyUK，我们按你的情况帮你算。【线索】"
+  },
+  {
+   "bot": "4",
+   "match": "英国留学值得吗|Is studying in the UK worth it",
+   "en": "For many students yes: shorter degrees, world-class universities and a Graduate visa afterwards. It depends on your goals, happy to talk it through anytime 🇬🇧",
+   "zh": "对很多同学来说值得：学制短、名校多、毕业后还有工作签证。具体看你的目标，随时欢迎来聊 🇬🇧"
+  },
+  {
+   "bot": "4",
+   "match": "你们收钱不办事|You took my money and did nothing",
+   "en": "We're sorry to hear this and want to look into it properly. Please message us on WeChat with your details, a consultant will contact you today. 【转人工】",
+   "zh": "很抱歉给您带来不好的体验，我们一定认真处理。请微信私信我们您的信息，顾问今天会联系您。【转人工】"
+  },
+  {
+   "bot": "1",
+   "match": "lily_mama_12",
+   "en": "Thank you, Ms Chen! 12 is a great age to plan for 13+ entry. I've noted everything and a consultant will add you on WeChat.\n\n【咨询登记】\nWho: parent (Ms Chen)\nStudent: 12, from Xiaohongshu comment\nWants: UK boarding school, from next September\nBudget: about ¥400,000 a year\nName / contact: Ms Chen / WeChat lily_mama_12\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
+   "zh": "谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，顾问会加您微信。\n\n【咨询登记】\n身份：家长（陈女士）\n学生年龄/年级：12 岁（来自小红书评论）\n意向阶段/专业：英国寄宿学校，明年 9 月入学\n预算：每年约 40 万人民币\n称呼/联系方式：陈女士 / 微信 lily_mama_12\n备注：同意使用以上信息安排咨询\n【登记完成】"
+  },
+  {
+   "bot": "1",
+   "match": "London or Manchester|伦敦还是曼彻斯特",
+   "en": "Good question! I checked with Chandler and Ross: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.",
+   "zh": "好问题！我问了 Chandler 和 Ross：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。"
+  },
+  {
+   "bot": "2",
+   "match": "lily_mama_12",
+   "en": "零、一句话总结 / One-line summary: 12-year-old for 13+ boarding entry next September; budget ¥400k fits many good schools.\n\n| School type | Why | Entry |\n|---|---|---|\n| Co-ed boarding school, South East | Strong pastoral care | Own English & maths test |\n| Girls' boarding school | Smaller classes | Test + interview |\n| International boarding college | Many international students | English test |\n**Next steps:** register by early spring; prepare English and maths tests.",
+   "zh": "零、一句话总结：12 岁，明年 9 月 13+ 入读寄宿学校；每年 40 万预算可以选很多好学校。\n\n| 学校类型 | 理由 | 入学 |\n|---|---|---|\n| 东南部男女混校寄宿 | 生活照顾好 | 学校自己的英语和数学测试 |\n| 女子寄宿学校 | 小班教学 | 测试 + 面试 |\n| 国际寄宿学院 | 国际生多 | 英语测试 |\n**下一步：** 春季前报名；准备英语和数学测试。"
+  },
+  {
    "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
    "en": "Hello! Happy to help 😊 I just checked with Ross, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",
@@ -260,6 +308,30 @@
   }
  ],
  "routes": [
+  {
+   "bot": "1",
+   "match": "lily_mama_12",
+   "calls": [
+    {
+     "who": "scout",
+     "task": "Boarding schools for 13+ entry"
+    }
+   ]
+  },
+  {
+   "bot": "1",
+   "match": "London or Manchester|伦敦还是曼彻斯特",
+   "calls": [
+    {
+     "who": "penny",
+     "task": "London vs Manchester costs"
+    },
+    {
+     "who": "scout",
+     "task": "Finance master's in both cities"
+    }
+   ]
+  },
   {
    "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",

@@ -863,6 +863,50 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .dt-flow li.now { background: rgba(61,220,132,.12); color: #fff; }
 .dt-acts { display: flex; gap: 8px; margin-top: auto; }
 @media (max-width: 760px) { .cust-list { grid-template-columns: minmax(0, 1fr); } .ib-tk { grid-template-columns: 36px minmax(0, 1fr); } .ib-tk .tk-st { grid-column: 2; justify-self: start; } }
+
+/* ---------- live customers: small chat pins and comment bubbles ---------- */
+.live-pin, .live-bub { position: absolute; padding: 0; border: 0; cursor: pointer; z-index: 4; background: var(--c); color: #fff; transition: left 1.2s ease, top 1.2s ease; }
+.live-pin { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50% 50% 50% 3px; transform: rotate(-45deg); box-shadow: 0 0 0 2px #fff, 0 4px 10px rgba(0,0,0,.5); }
+.live-pin > i { position: absolute; inset: 0; transform: rotate(45deg); font-style: normal; font-size: 10px; line-height: 18px; text-align: center; }
+.live-bub { width: 20px; height: 16px; margin: -8px 0 0 -10px; border-radius: 5px; box-shadow: 0 0 0 2px #fff, 0 4px 10px rgba(0,0,0,.5); }
+.live-bub::after { content: ""; position: absolute; left: 3px; bottom: -5px; border: 5px solid transparent; border-top-color: var(--c); border-left-width: 0; }
+.live-bub > i { position: absolute; inset: 0; font-style: normal; font: 700 9px/16px var(--sans); text-align: center; }
+.live-pin.talking, .live-bub.talking { box-shadow: 0 0 0 2px #fff, 0 0 0 5px #3ddc84, 0 0 14px #3ddc84; z-index: 5; }
+.live-pin.waiting, .live-bub.waiting { animation: pinBob 2.2s ease-in-out infinite; }
+.live-pin.human, .live-bub.human { box-shadow: 0 0 0 2px #fff, 0 0 0 5px #9ca3af; }
+.live-pin.booked { box-shadow: 0 0 0 2px #fff, 0 0 0 5px #e8c17a, 0 0 12px #e8c17a; }
+.live-pin .ct-dots, .live-bub .ct-dots { transform: rotate(45deg); left: 14px; top: -16px; }
+.live-bub .ct-dots { transform: none; }
+.live-pin.mini, .live-bub.mini { position: relative; margin: 0 6px; animation: none; display: inline-block; }
+.live-pin.big { position: relative; margin: 6px; width: 30px; height: 30px; animation: none; } .live-pin.big > i { font-size: 15px; line-height: 30px; }
+.live-bub.big { position: relative; margin: 4px; width: 34px; height: 26px; animation: none; } .live-bub.big > i { font-size: 13px; line-height: 26px; }
+@keyframes pinBob { 50% { translate: 0 -3px; } }
+.live-lab { position: absolute; transform: translate(0, -50%); z-index: 3; border: 1px solid rgba(255,255,255,.25); background: rgba(12,14,18,.78); color: #eef3f7; font: 600 .62rem var(--sans); padding: 2px 7px; border-radius: 999px; white-space: nowrap; cursor: pointer; backdrop-filter: blur(4px); }
+.live-lab.empty { opacity: .5; }
+.live-lab.wechat { border-color: #07c160; } .live-lab.lead { border-color: #ff2442; } .live-lab.web { border-color: #3b82f6; } .live-lab.booked { border-color: #e8c17a; } .live-lab.comments { border-color: #ff7a8a; }
+.live-more { position: absolute; transform: translate(-50%, -50%); z-index: 4; border: 1px solid rgba(255,255,255,.4); background: rgba(12,14,18,.85); color: #fff; font: 700 .62rem var(--sans); padding: 2px 6px; border-radius: 999px; cursor: pointer; }
+.in-spots .live-lab, .pano-spots .live-lab { font-size: .72rem; padding: 3px 9px; }
+.in-spots .live-pin, .pano-spots .live-pin { width: 24px; height: 24px; margin: -12px 0 0 -12px; } .in-spots .live-pin > i, .pano-spots .live-pin > i { font-size: 13px; line-height: 24px; }
+.in-spots .live-bub, .pano-spots .live-bub { width: 26px; height: 20px; margin: -10px 0 0 -13px; } .in-spots .live-bub > i, .pano-spots .live-bub > i { line-height: 20px; font-size: 11px; }
+.pano-spots .live-pin, .pano-spots .live-bub, .pano-spots .live-lab, .pano-spots .live-more { margin: 0; transition: none; }
+.pano-spots .live-pin { transform: translate(-50%, -50%) rotate(-45deg); } .pano-spots .live-bub, .pano-spots .live-more { transform: translate(-50%, -50%); }
+.live-ticker { position: absolute; left: 10px; right: 30%; top: 10px; z-index: 5; display: flex; gap: 6px; overflow: hidden; pointer-events: none; }
+.tk-chip { pointer-events: auto; cursor: pointer; flex: none; display: flex; align-items: center; gap: 6px; background: rgba(12,14,18,.84); border: 1px solid rgba(255,255,255,.18); color: #eef3f7; border-radius: 999px; padding: 3px 10px 3px 4px; font-size: .7rem; white-space: nowrap; max-width: 46%; overflow: hidden; }
+.tk-chip .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; } .tk-chip em { font-style: normal; color: #9fb6c8; overflow: hidden; text-overflow: ellipsis; }
+.live-btn i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #9ca3af; margin-right: 6px; vertical-align: 0; }
+.live-btn i.on { background: #3ddc84; box-shadow: 0 0 8px #3ddc84; animation: breathe 1.6s ease-in-out infinite; }
+.lv-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+.lv-tabs button, .lv-auto { border: 1px solid rgba(var(--holo), .35); background: rgba(8,20,32,.55); color: #eaf6ff; border-radius: 999px; padding: 4px 10px; font: 600 .72rem var(--sans); cursor: pointer; }
+.lv-tabs button[aria-pressed="true"] { background: #eaf6ff; color: #0b1620; }
+.lv-auto { margin-top: 6px; }
+.tk-ch { font-weight: 500; color: #8fb3cc; font-size: .7rem; }
+.lv-conv { flex: 1; min-height: 160px; max-height: 46vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+.lv-msg { max-width: 88%; border-radius: 12px; padding: 7px 10px; font-size: .84rem; line-height: 1.45; white-space: pre-wrap; }
+.lv-msg small { display: block; font: 600 .66rem var(--sans); opacity: .7; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .05em; }
+.lv-msg.cust { align-self: flex-start; background: rgba(255,255,255,.08); }
+.lv-msg.ai { align-self: flex-end; background: rgba(61,140,220,.22); border: 1px solid rgba(var(--holo), .3); }
+@media (max-width: 899px) { .live-ticker { display: none; } .live-lab { font-size: .55rem; padding: 1px 5px; } }
+.pv-card { transition: opacity .5s, transform .5s; } .pv-card.fade { opacity: 0; transform: translateY(10px); pointer-events: none; }
 </style>
 
 <div class="app">
@@ -890,7 +934,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         <div class="stage-head">
           <span class="label">Glostudy office</span>
           <span class="stage-tools">
-            <button class="icon-btn" type="button" id="custBtn">👥 Test customers</button>
+            <button class="icon-btn live-btn" type="button" id="liveBtn"><i></i>Live</button>
             <button class="icon-btn" type="button" id="vReset">Reset view</button>
             <span class="seg" role="group" aria-label="Office view"><button type="button" id="vPhoto">Photo</button><button type="button" id="vInside">Inside</button><button type="button" id="v3d">3D</button><button type="button" id="vPlan">Floor plan</button></span>
           </span>
@@ -899,6 +943,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           <div class="photo-frame" id="photoFrame">
             <img id="officeImg" alt="The Glostudy office building: executive floor with your office, the secretary and the boardroom; research and finance floor; front office with reception, lounge, marketing studio and consult room" width="1280" height="960">
             <div class="hotspots" id="hotspots"></div>
+            <div class="live-ticker" id="liveTicker"></div>
             <div class="pv-card" id="pvCard" hidden><img id="pvCardImg" alt=""><div><b id="pvCardName"></b><small id="pvCardRole"></small></div><button type="button" class="one" id="pvOne">1-on-1 ›</button></div>
           </div>
         </div>
@@ -2561,9 +2606,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       paths: { "1>scout": [[23.5, 76], [60, 93], [93, 87], [88, 61], [60, 64], [26, 56]], "2>boss": [[26, 56], [60, 64], [90, 62], [88, 33], [60, 33], [47, 28]], "5>boss": [[14, 26], [30, 31], [45, 28]] } }
   };
   LAYOUTS.f4 = { img: "images/office-4f.jpg", aspect: "1024 / 1280", maxW: 760,
-    spots: { "5": [7.4, 12.4, 5.2, 9], "2": [17.6, 33.6, 5.6, 9.6], "3": [40.6, 33.6, 5.8, 11], "6": [68.4, 34, 5.6, 12.6], "4": [11.6, 57.4, 5.8, 8.6], "1": [20.2, 78.4, 5.2, 6.4] },
+    spots: { "5": [7.4, 12.4, 5.2, 9], "2": [17.6, 33.6, 5.6, 9.6], "3": [40.6, 33.6, 5.8, 11], "6": [68.4, 34, 5.6, 12.6], "4": [11.6, 57.4, 5.8, 8.6], "1": [22.4, 80.4, 4, 5.4] },
     boss: [34, 10.6, 26, 14.6], ceoPlate: [46.9, 22.6], glow: [47, 17, 36, 18], room: [76, 19], meet: [60, 6.5],
-    plates: { "5": [12.6, 23.4], "2": [20.2, 45], "3": [45.8, 45.4], "6": [74.2, 46.2], "4": [17.8, 67.8], "1": [24.4, 88.8] },
+    plates: { "5": [12.6, 23.4], "2": [20.2, 45], "3": [45.8, 45.4], "6": [74.2, 46.2], "4": [17.8, 67.8], "1": [24.2, 88.4] },
     floorTags: [["4F · CEO Suite & Boardroom", 5.4], ["3F · Research & Finance", 29.2], ["2F · Marketing", 51.6], ["1F · Reception & Consult rooms", 73.6]],
     paths: { "1>scout": [[23, 82], [50, 94], [90, 93], [92, 72], [90, 50], [60, 49], [21, 44]], "2>boss": [[21, 44], [60, 49], [90, 48], [90, 26], [60, 25], [47, 22]], "5>boss": [[11, 19], [30, 24], [45, 22]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
@@ -2637,7 +2682,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function pvCardUpdate() {
     var b = state.bot, card = $("pvCard");
-    card.hidden = false;
+    card.hidden = false; card.classList.remove("fade"); clearTimeout(pvCardUpdate.t); pvCardUpdate.t = setTimeout(function () { if (!card.matches(":hover")) card.classList.add("fade"); }, 6000);
     $("pvCardImg").src = imgURL(IMG[b.id]);
     $("pvCardName").textContent = b.name;
     $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
@@ -2877,7 +2922,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     });
     flush();
     return out.join("\n")
-      .replace(/【简要】\s*/g, "").replace(/\n*【完整报告】\n*/g, "\n\n<strong>Full report</strong>\n")
+      .replace(/【简要】\s*/g, "").replace(/【线索】/g, "").replace(/【评论回复】/g, "").replace(/\n*【完整报告】\n*/g, "\n\n<strong>Full report</strong>\n")
       .replace(/\n?【转人工】/g, '\n<span class="flag">Handed to a person</span>')
       .replace(/【咨询登记】/g, '<span class="flag book">Booking summary</span>')
       .replace(/\n?【登记完成】/g, "");
@@ -3073,7 +3118,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         state.chatClient["1"] = id;
         turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Rachel is taking the folder to Ross." });
         activity("1", "Rachel booked " + name + " and took the folder to Ross");
-        if (state.customer) custBooked();
+        custBooked();
         deliver("1", "scout");
         setTimeout(function () { queueJob(id); }, REDUCED ? 0 : 1800);
       }
@@ -3220,136 +3265,242 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
 
   // ---------- test customers: walk in, talk to Rachel step by step ----------
-  // flow: who handles the customer, in order ("boss" = the CEO desk); icon floats over their head in the queue
-  var CUSTOMERS = [
-    { id: "chen", c: "#2bb3a3", icon: "💷", star: true, name: { en: "Mr Chen", zh: "陈先生" }, who: { en: "Working adult · Shenzhen", zh: "在职 · 深圳" }, need: { en: "One-year master's: how much will it cost?", zh: "一年制硕士：总共要多少钱？" },
-      flow: [["1"], ["6", "2"], ["1"], ["6"], ["1"], ["2"], ["boss"]],
-      steps: [{ en: "Hi, I'm 28 and work in finance in Shenzhen. I'm thinking about a one-year master's in the UK. How much would it cost in total?", zh: "你好，我28岁，在深圳做金融。想去英国读一年硕士，总共大概要多少钱？" },
-        { en: "Is London much more expensive than other cities?", zh: "伦敦是不是比其他城市贵很多？" },
-        { en: "OK, I'd like to book the free consultation. I'm Chen Hao, WeChat chenhao_sz, IELTS 6.5, finance master's, starting September 2027, budget around ¥450,000. You can use my details.", zh: "好的，我想约免费咨询。我叫陈浩，微信 chenhao_sz，雅思 6.5，读金融硕士，2027 年 9 月入学，预算 45 万左右。同意你们使用我的信息。" }] },
-    { id: "wang", c: "#e58fa6", icon: "🎓", name: { en: "Mrs Wang", zh: "王女士" }, who: { en: "Parent · Shanghai", zh: "家长 · 上海" }, need: { en: "A-levels for her 16-year-old daughter", zh: "16 岁女儿读 A-Level" },
-      flow: [["1"], ["2"], ["1"], ["2"], ["boss"]],
-      steps: [{ en: "Hello, I'm looking into UK A-levels for my daughter.", zh: "你好，我想了解一下女儿去英国读A-Level。" }, "DEMO"] },
-    { id: "mei", c: "#6c6fe0", icon: "✍️", name: { en: "Xiaomei", zh: "小美" }, who: { en: "Student, 17 · Chengdu", zh: "学生 17 岁 · 成都" }, need: { en: "Wants her personal statement written for her", zh: "想让我们代写个人陈述" },
-      flow: [["1"], ["3"], ["1"], ["3"], ["1"]],
-      steps: [{ en: "Hi! I'm 17 and applying for psychology. Can you just write my personal statement for me?", zh: "你好！我17岁，申请心理学。你们能直接帮我写个人陈述吗？" },
-        { en: "OK, then can someone help me improve my own draft?", zh: "好吧，那可以有人帮我改我自己写的初稿吗？" }] },
-    { id: "zhang", c: "#f0a030", icon: "🏛️", name: { en: "Mr Zhang", zh: "张先生" }, who: { en: "Parent · Beijing", zh: "家长 · 北京" }, need: { en: "Wants a guaranteed Oxford place, asks our price", zh: "要求保证上牛津，问价格" },
-      flow: [["1"], ["2"], ["1"], ["person"]],
-      steps: [{ en: "My son's grades are average but money is no problem. Can you guarantee him a place at Oxford?", zh: "我儿子成绩一般，但钱不是问题。你们能保证他上牛津吗？" },
-        { en: "Then what's your fee? Just tell me the price.", zh: "那你们收费多少？直接报个价。" }] }
+  // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
+  // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Joey, bench by the stairs),
+  //       web (website form / phone, lounge sofa), comment (on our posts, 2F comments lounge, Joey replies)
+  var LIVE_TPL = [
+    { key: "chen", kind: "wechat", icon: "💷", name: { en: "Mr Chen", zh: "陈先生" }, msgs: [
+      { en: "Hi, I'm 28 and work in finance in Shenzhen. I'm thinking about a one-year master's in the UK. How much would it cost in total?", zh: "你好，我28岁，在深圳做金融。想去英国读一年硕士，总共大概要多少钱？" },
+      { en: "Is London much more expensive than other cities?", zh: "伦敦是不是比其他城市贵很多？" },
+      { en: "OK, I'd like to book the free consultation. I'm Chen Hao, WeChat chenhao_sz, IELTS 6.5, finance master's, starting September 2027, budget around ¥450,000. You can use my details.", zh: "好的，我想约免费咨询。我叫陈浩，微信 chenhao_sz，雅思 6.5，读金融硕士，2027 年 9 月入学，预算 45 万左右。同意你们使用我的信息。" }] },
+    { key: "wang", kind: "wechat", icon: "🎓", name: { en: "Mrs Wang", zh: "王女士" }, msgs: [{ en: "Hello, I'm looking into UK A-levels for my daughter.", zh: "你好，我想了解一下女儿去英国读A-Level。" }, "DEMO"] },
+    { key: "mei", kind: "web", icon: "✍️", name: { en: "Xiaomei", zh: "小美" }, msgs: [
+      { en: "Hi! I'm 17 and applying for psychology. Can you just write my personal statement for me?", zh: "你好！我17岁，申请心理学。你们能直接帮我写个人陈述吗？" },
+      { en: "OK, then can someone help me improve my own draft?", zh: "好吧，那可以有人帮我改我自己写的初稿吗？" }] },
+    { key: "zhang", kind: "web", icon: "🏛️", name: { en: "Mr Zhang", zh: "张先生" }, msgs: [
+      { en: "My son's grades are average but money is no problem. Can you guarantee him a place at Oxford?", zh: "我儿子成绩一般，但钱不是问题。你们能保证他上牛津吗？" },
+      { en: "Then what's your fee? Just tell me the price.", zh: "那你们收费多少？直接报个价。" }] },
+    { key: "lilymama", kind: "comment", plat: "xhs", q: 0, icon: "?", name: { en: "Lily's mum", zh: "Lily妈妈" }, post: { en: "13-year-olds and UK boarding schools: 5 things to prepare", zh: "孩子13岁去英国寄宿，家长要提前准备的5件事" },
+      text: { en: "My child is 12, is it too late to start? I'd like some advice.", zh: "孩子12岁，现在准备来得及吗？想咨询一下" },
+      lead: [{ en: "Hi, I saw your Xiaohongshu post. My child is 12 and we'd like a UK boarding school from next September. I'm Ms Chen, WeChat lily_mama_12, budget about ¥400,000 a year. Happy for you to use these details to arrange a consultation.", zh: "你好，我在小红书看到你们的帖子。孩子12岁，想明年9月去英国读寄宿学校。我姓陈，微信 lily_mama_12，预算每年40万左右，同意你们用这些信息安排咨询。" }] },
+    { key: "xiaolu", kind: "comment", plat: "xhs", q: 1, icon: "♥", name: { en: "Xiaolu", zh: "小鹿" }, post: { en: "13-year-olds and UK boarding schools: 5 things to prepare", zh: "孩子13岁去英国寄宿，家长要提前准备的5件事" }, text: { en: "So clear, saved it!", zh: "写得好清楚，收藏了！" } },
+    { key: "kevin", kind: "comment", plat: "wc", q: 0, icon: "?", name: { en: "Kevin", zh: "Kevin" }, post: { en: "London or another city?", zh: "去英国读书，选伦敦还是其他城市？" }, text: { en: "How much is a one-year master's in London?", zh: "伦敦读硕士一年大概多少钱？" },
+      lead: [{ en: "Hi, I came from your WeChat article. For a finance master's, should I choose London or Manchester?", zh: "你好，我从你们公众号文章过来的。读金融硕士，选伦敦还是曼彻斯特？" }] },
+    { key: "mao", kind: "comment", plat: "dy", q: 0, icon: "?", name: { en: "Travel Cat", zh: "旅行的猫" }, post: { en: "A day studying in the UK (vlog)", zh: "英国留学的一天 vlog" }, text: { en: "Is studying in the UK worth it?", zh: "英国留学值得吗？" } },
+    { key: "amy", kind: "comment", plat: "xhs", q: 0, icon: "!", name: { en: "Amy", zh: "Amy" }, post: { en: "UK campus life, honestly", zh: "在英国读大学，真实的校园生活" }, text: { en: "You took my money and did nothing!", zh: "你们收钱不办事！" } }
   ];
-  var CUST_BY = {}; CUSTOMERS.forEach(function (c) { CUST_BY[c.id] = c; });
-  state.cust = {}; CUSTOMERS.forEach(function (c) { state.cust[c.id] = { status: "waiting", step: 0, met: { "1": 0 }, booked: false, handover: false }; });
-  function custText(c, i) { var st = c.steps[i]; return st === "DEMO" ? DEMO[state.lang] : st[state.lang]; }
-  function custStatusText(id) {
-    var k = state.cust[id], en = state.lang === "en";
-    if (k.status === "done") return k.booked ? (en ? "Booked · on the CEO desk" : "已登记 · 在 CEO 桌上") : k.handover ? (en ? "Handed to a person" : "已转人工") : (en ? "Served" : "已接待");
-    if (k.status === "talking") return en ? "Talking with Rachel" : "正在和瑞秋聊";
-    return en ? "Waiting" : "等候中";
+  var LIVE_FIRST = [["chen", 3], ["lilymama", 9], ["wang", 18], ["mei", 28], ["xiaolu", 36], ["kevin", 46], ["zhang", 60], ["amy", 74], ["mao", 88]];
+  var PLAT = { xhs: { c: "#ff2442", en: "Xiaohongshu", zh: "小红书" }, wc: { c: "#07c160", en: "WeChat post", zh: "公众号" }, dy: { c: "#111", en: "Douyin", zh: "抖音" } };
+  var KIND = { wechat: { c: "#07c160", en: "WeChat chat", zh: "微信咨询" }, web: { c: "#3b82f6", en: "Website", zh: "官网表单" }, lead: { c: "#ff2442", en: "Lead from a comment", zh: "评论线索" } };
+  var live = { on: !IN_CLAUDE && !!DEMO_DATA, list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
+  function liveName(c) { return c.name[state.lang]; }
+  function liveZone(c) {
+    if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null;
+    if (c.status === "talking") return c.kind === "comment" ? "joey" : "rachel";
+    return { wechat: "wechat", web: "web", lead: "lead", comment: "comments" }[c.kind];
   }
-  // which flow stages are reached so far
-  function custProgress(c) {
-    var k = state.cust[c.id], met = k.met, done = 0;
-    c.flow.forEach(function (stage, i) {
-      var hit = stage.every(function (x) { return x === "boss" ? k.booked : x === "person" ? k.handover : met[x] != null; });
-      if (hit && done === i) done = i + 1;
-    });
-    if (k.status === "done") done = c.flow.length;
-    return done;
+  function liveColor(c) { return c.kind === "comment" ? PLAT[c.plat].c : KIND[c.kind].c; }
+  function liveArrive(key) {
+    var t = LIVE_TPL.filter(function (x) { return x.key === key; })[0]; if (!t) return;
+    var c = Object.assign({}, t, { id: "c" + (++live.seq), step: 0, status: "waiting", turns: [], met: {}, t: Date.now(), msgs: (t.msgs || []).slice() });
+    live.list.push(c);
+    activity(c.kind === "comment" ? "4" : "1", (c.kind === "comment" ? "New " + PLAT[c.plat].en + " comment from " : "New " + KIND[c.kind].en + " from ") + c.name.en);
+    drawLive();
   }
-  // ----- the queue of customers standing near reception (photo, inside and 360° views) -----
-  var QUEUE_POS = {
-    photo: { wait: [[30, 86.5], [34, 87.5], [38, 86.5], [42, 87.5]], talk: [26.5, 84.5] },
-    inside: { wait: [[30, 80], [35, 82], [40, 80], [45, 82]], talk: [25, 74] },
-    pano: { wait: [[50, 72], [55, 74], [60, 72], [65, 74]], talk: [46, 64] }
-  };
-  function queueTokens(kind) {
-    var P = QUEUE_POS[kind], wi = 0;
-    return CUSTOMERS.map(function (c) {
-      var k = state.cust[c.id], pos = k.status === "talking" ? P.talk : P.wait[wi++] || P.wait[3];
-      var el = document.createElement("button"); el.type = "button"; el.className = "cust-tok " + k.status + (c.star ? " star" : ""); el.dataset.cust = c.id;
-      el.style.setProperty("--c", c.c); el.setAttribute("aria-label", c.name.en + ": " + c.need.en + ". Open the reception inbox");
-      el.innerHTML = '<span class="ct-ico">' + c.icon + '</span><b>' + esc(c.name[state.lang][0]) + '</b><span class="ct-tag">' + esc(c.name[state.lang]) + (k.status === "done" ? " ✓" : "") + "</span>" + (k.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
-      el.onclick = function (e) { e.stopPropagation(); openCustomers(c.id); };
-      return { el: el, x: pos[0], y: pos[1] };
-    });
+  function liveStartArrivals() {
+    LIVE_FIRST.forEach(function (p) { live.timers.push(setTimeout(function () { liveArrive(p[0]); }, p[1] * 1000)); });
+    (function more() { live.timers.push(setTimeout(function () { var t = LIVE_TPL[Math.floor(Math.random() * LIVE_TPL.length)]; if (live.list.filter(function (c) { return c.status === "waiting"; }).length < 9) liveArrive(t.key); more(); }, 95000 + Math.random() * 40000)); })();
   }
-  function drawQueues() {
-    if (pvReady) { Array.prototype.forEach.call(document.querySelectorAll("#hotspots .cust-tok"), function (t) { t.remove(); }); queueTokens("photo").forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; $("hotspots").appendChild(q.el); }); }
-    if (typeof inS !== "undefined" && inS.floor === 1 && $("inSpots").children.length) { Array.prototype.forEach.call(document.querySelectorAll("#inSpots .cust-tok"), function (t) { t.remove(); }); queueTokens("inside").forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; $("inSpots").appendChild(q.el); }); }
-    if (pano) pano.queue(queueTokens("pano"));
-  }
-  // ----- reception inbox: tickets, the team each request needs, progress -----
-  var inboxSel = null;
-  function flowChip(stage, reached) {
-    return '<span class="fl-st' + (reached ? " ok" : "") + '">' + stage.map(function (x) {
-      if (x === "boss") return '<i class="fl-av boss" title="CEO desk">👑</i>';
-      if (x === "person") return '<i class="fl-av boss" title="A real consultant">🙋</i>';
-      var b = BY_ID[x]; return '<i class="fl-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')" title="' + esc(b.name) + '"></i>';
-    }).join("") + "</span>";
-  }
-  function openCustomers(selId) {
-    var L = state.lang, en = L === "en", list = $("custList");
-    inboxSel = selId || inboxSel || CUSTOMERS[0].id;
-    var waiting = CUSTOMERS.filter(function (c) { return state.cust[c.id].status !== "done"; }).length;
-    $("custTitle").textContent = (en ? "📥 Reception inbox · " : "📥 前台收件箱 · ") + waiting + (en ? " waiting" : " 位等候");
-    $("custSub").textContent = en ? "Customers queue by Rachel's desk. Each one needs a different part of the team: pick one and press Serve, then tap their next message." : "客户在瑞秋的前台排队，每位需要不同的同事配合。选一位，点“开始接待”，再点他们的下一句话。";
-    list.innerHTML = '<div class="ib-list" role="listbox"></div><div class="ib-detail" id="ibDetail"></div>';
-    var lb = list.firstChild;
-    CUSTOMERS.forEach(function (c) {
-      var k = state.cust[c.id], it = document.createElement("button"); it.type = "button"; it.className = "ib-tk" + (c.id === inboxSel ? " sel" : "") + " " + k.status; it.setAttribute("role", "option"); it.setAttribute("aria-selected", String(c.id === inboxSel));
-      it.innerHTML = '<span class="cust-av" style="--c:' + c.c + '">' + c.icon + "</span><span class=\"tk-main\"><b>" + esc(c.name[L]) + (c.star ? ' <em class="tk-star">' + (en ? "best demo" : "推荐演示") + "</em>" : "") + "</b><small>" + esc(c.need[L]) + '</small><span class="tk-flow">' + c.flow.map(function (st, i) { return flowChip(st, i < custProgress(c)); }).join('<i class="fl-arrow">›</i>') + '</span></span><span class="tk-st">' + esc(custStatusText(c.id)) + "</span>";
-      it.onclick = function () { inboxSel = c.id; openCustomers(c.id); };
-      lb.appendChild(it);
-    });
-    var c = CUST_BY[inboxSel], k = state.cust[c.id], prog = custProgress(c), d = $("ibDetail");
-    var STAGE = { "1": en ? "Rachel talks to them" : "瑞秋接待", "2": en ? "Ross researches schools" : "Ross 查学校", "3": en ? "Phoebe advises on documents" : "Phoebe 文书建议", "6": en ? "Chandler checks the money" : "Chandler 算费用", "4": "Joey", "5": "Monica", boss: en ? "Lands on your CEO desk" : "放到您的 CEO 桌上", person: en ? "Handed to a real consultant" : "转给真人顾问" };
-    d.innerHTML = '<div class="dt-head"><span class="cust-av big" style="--c:' + c.c + '">' + c.icon + '</span><div><b>' + esc(c.name[L]) + "</b><small>" + esc(c.who[L]) + '</small></div><span class="tk-st">' + esc(custStatusText(c.id)) + "</span></div>" +
-      '<blockquote>“' + esc(custText(c, 0)) + '”</blockquote>' +
-      '<div class="dt-sec">' + (en ? "What the team will do" : "团队会怎么做") + '</div><ol class="dt-flow">' + c.flow.map(function (st, i) { return '<li class="' + (i < prog ? "ok" : i === prog && k.status === "talking" ? "now" : "") + '">' + flowChip(st, i < prog) + "<span>" + st.map(function (x) { return STAGE[x]; }).join(" + ") + "</span></li>"; }).join("") + "</ol>" +
-      '<div class="dt-acts"></div>';
-    var acts = d.querySelector(".dt-acts"), btn = document.createElement("button"); btn.type = "button"; btn.className = "ib-btn";
-    if (k.status === "waiting") { btn.textContent = en ? "▶ Serve now" : "▶ 开始接待"; btn.onclick = function () { $("custModal").hidden = true; startCustomer(c); }; }
-    else if (k.status === "talking") { btn.textContent = en ? "Continue the conversation" : "继续对话"; btn.onclick = function () { $("custModal").hidden = true; startCustomer(c, true); }; }
-    else if (k.booked) { btn.textContent = en ? "📁 Open the CEO desk" : "📁 打开 CEO 桌面"; btn.onclick = function () { $("custModal").hidden = true; openInbox(); }; }
-    else { btn.textContent = en ? "Serve again" : "重新接待"; btn.onclick = function () { $("custModal").hidden = true; state.cust[c.id] = { status: "waiting", step: 0, met: { "1": 0 }, booked: false, handover: false }; startCustomer(c); }; }
-    acts.appendChild(btn);
-    $("custModal").hidden = false;
-  }
-  function startCustomer(c, resume) {
-    var huan = BY_ID["1"];
-    if (state.busy["1"]) return;
-    var cur = state.customer;
-    if (!resume || !cur || cur.c !== c) {
-      if (cur && cur.c !== c && state.cust[cur.c.id].status === "talking") state.cust[cur.c.id].status = "waiting";
-      state.chats["1"] = []; delete state.chatClient["1"];
-      state.cust[c.id].step = 0; state.cust[c.id].met = { "1": 0 };
-      state.customer = { c: c, step: 0 };
+  function liveText(m) { return m === "DEMO" ? DEMO[state.lang] : m[state.lang]; }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
+  // Rachel serves the reception queues: WeChat line first, then leads from Joey, then the website sofa
+  async function serveDirect(c) {
+    var rachel = BY_ID["1"];
+    live.serving = c; c.status = "talking"; delete state.chatClient["1"]; drawLive();
+    activity("1", "Rachel is chatting with " + c.name.en + (c.kind === "wechat" ? " on WeChat" : c.kind === "lead" ? " (lead from " + PLAT[c.plat].en + ")" : " (website)"));
+    try {
+      for (; c.step < c.msgs.length; c.step++) {
+        if (!live.on || c.status !== "talking") break;
+        await wait(1400);
+        var text = liveText(c.msgs[c.step]);
+        c.turns.push({ role: "user", content: text, who: liveName(c) }); drawLiveDetail();
+        var hist = c.turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; }).slice(-16).map(function (t) { return { role: t.role, content: t.content }; });
+        var extra = "";
+        setBusy("1", "cust");
+        if (text.length > 12) {
+          var calls = await routeQuestion(text, hist, false);
+          if (calls.length) { var nt = { kind: "team", from: "Rachel", items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, "1"); }
+        }
+        var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
+        var res = await ask(rachel, hist, { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
+        reply.pending = false; reply.content = res.text; setBusy("1", null); flashDone("1");
+        if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns); }
+        if (/【转人工】/.test(res.text)) { c.status = "human"; activity("1", c.name.en + " needs a real consultant"); }
+        drawLive(); drawLiveDetail();
+        await wait(1800);
+      }
+      if (c.status === "talking") c.status = c.booked ? "booked" : "done";
+    } catch (e) {
+      setBusy("1", null); c.status = "waiting"; live.on = false; c.turns.push({ kind: "note", text: errText(e) }); activity("1", "Auto-reply paused: " + errText(e));
     }
-    state.cust[c.id].status = "talking";
-    activity("1", c.name.en + " walked up to Rachel's desk");
-    drawQueues();
-    if (state.view === "inside") { var go = function () { var p = INSIDE[1].bots["1"]; inZoomTo(p[0] + p[2] / 2, p[1] + p[3] * .45, 1.55, window.matchMedia("(max-width: 899px)").matches ? null : ($("inStage").clientWidth - 430) / 2); selectBot(huan); openDesk(huan, $("insideView")); };
-      if (inS.floor !== 1) { inGoFloor(1); setTimeout(go, 700); } else go(); }
-    else if (state.view === "3d" && v3mode === "photo" && pano) { if (pano.floor() !== 0) pano.go(0); setTimeout(function () { var p = PANO[0].bots["1"]; pano.look(p[0] + p[2] / 2 + 7, p[1] + p[3] / 2, 40); selectBot(huan); openDesk(huan, $("view3d")); }, pano.floor() !== 0 ? 800 : 0); }
-    else { selectBot(huan); openDesk(huan); }
+    if (c.status === "booked") live.timers.push(setTimeout(function () { c.status = "done"; drawLive(); }, 45000));
+    live.serving = null; drawLive(); drawLiveDetail();
   }
-  function custNext() {
-    var cs = state.customer; if (!cs || cs.step >= cs.c.steps.length || state.busy["1"]) return;
-    var t = custText(cs.c, cs.step); cs.step++; state.cust[cs.c.id].step = cs.step;
-    state.cust[cs.c.id].met["1"] = cs.step;
-    send(t, null, { who: cs.c.name[state.lang] + (state.lang === "en" ? " · customer" : " · 客户") }).then(function () {
-      var k = state.cust[cs.c.id], last = (chat().filter(function (x) { return x.role === "assistant"; }).slice(-1)[0] || {}).content || "";
-      if (/【转人工】/.test(last)) k.handover = true;
-      if (cs.step >= cs.c.steps.length) k.status = "done";
-      drawQueues(); if (state.desk) drawDesk();
+  // Joey answers comments on our posts: questions before praise; people who want advice are sent down to Rachel
+  async function serveComment(c) {
+    var joey = BY_ID["4"], en = state.lang === "en", pl = PLAT[c.plat];
+    live.joey = c; c.status = "talking"; drawLive();
+    try {
+      await wait(1200);
+      c.turns.push({ role: "user", content: c.text[state.lang], who: liveName(c) + " · " + pl[state.lang] }); drawLiveDetail();
+      var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[state.lang] +
+        (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or something you must not answer, end with 【转人工】."
+            : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是投诉、退款或你不能回答的问题，在末尾加【转人工】。");
+      setBusy("4", "cust");
+      var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
+      var res = await ask(joey, [{ role: "user", content: msg }], { onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
+      reply.pending = false; reply.content = res.text; setBusy("4", null); flashDone("4");
+      if (/【线索】/.test(res.text) && c.lead) { await wait(1500); c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Joey sent " + c.name.en + " down to Rachel as a new lead"); }
+      else if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
+      else c.status = "done";
+    } catch (e) { setBusy("4", null); c.status = "waiting"; live.on = false; activity("4", "Auto-reply paused: " + errText(e)); }
+    live.joey = null; drawLive(); drawLiveDetail();
+  }
+  setInterval(function () {
+    if (!live.on || document.hidden) return;
+    if (!live.serving && !state.busy["1"]) {
+      var pr = { wechat: 0, lead: 1, web: 2 }, next = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment"; }).sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
+      if (next) serveDirect(next);
+    }
+    if (!live.joey && !state.busy["4"]) {
+      var nc = live.list.filter(function (c) { return c.status === "waiting" && c.kind === "comment"; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
+      if (nc) serveComment(nc);
+    }
+  }, 1500);
+  // the hooks the rest of the office calls
+  function custMet(ids) { var c = live.serving; if (c) ids.forEach(function (id) { c.met[id] = 1; }); }
+  function custBooked() { var c = live.serving; if (c) { c.booked = true; c.status = "booked"; activity("1", c.name.en + " is booked and waiting in the booked nook"); drawLive(); } }
+  function openCustomers() { openLive("all"); }
+
+  // ----- where pins sit, per view (percent of each picture) -----
+  var LIVE_POS = {
+    photo: {
+      wechat: { pts: [[17, 92.4], [20, 93], [23, 92.4], [26, 93], [29, 92.4]], label: [20, 95.3], n: "①" },
+      lead: { pts: [[86, 89.3], [88.6, 89.8], [91.2, 89.3]], label: [86, 92.2], n: "②" },
+      web: { pts: [[48, 89.2], [52, 89.8], [56, 89.2], [60, 89.8]], label: [50, 92.6], n: "③" },
+      booked: { pts: [[66, 91.2], [70, 91.8], [74, 91.2]], label: [66, 94.4], n: "④" },
+      human: { pts: [[37.5, 89.5], [41, 90]], label: [36, 92.6], n: "⑤" },
+      comments: { pts: [[47, 64], [51, 65.4], [55, 64], [59, 65.4], [63, 64]], label: [47, 61], n: "🗨" },
+      rachel: { pts: [[26.6, 86.2]] }, joey: { pts: [[17, 62.8]] }
+    },
+    in1: {
+      wechat: { pts: [[30, 52], [34, 54], [38, 52], [42, 54], [46, 52]], label: [30, 46], n: "①" },
+      lead: { pts: [[86, 52], [87.5, 58], [89, 64]], label: [80, 46], n: "②" },
+      web: { pts: [[53, 41], [58, 42], [63, 41], [68, 42]], label: [55, 34], n: "③" },
+      booked: { pts: [[57, 80], [64, 82], [71, 80]], label: [58, 73], n: "④" },
+      human: { pts: [[12, 66], [18, 68]], label: [6, 60], n: "⑤" },
+      rachel: { pts: [[30, 40]] }
+    },
+    in2: { comments: { pts: [[54, 64], [58, 66], [62, 64], [66, 66], [70, 64]], label: [53, 58], n: "🗨" }, joey: { pts: [[17, 60]] } },
+    pano2: { comments: { pts: [[62, 66], [66, 68], [70, 66], [74, 68]], label: [60, 60], n: "🗨" }, joey: { pts: [[17, 64]] } }
+  };
+  LIVE_POS.pano1 = LIVE_POS.in1;
+  var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Joey", zh: "评论区 · Joey" } };
+  function liveTokens(view) {
+    var P = LIVE_POS[view], out = [], groups = {};
+    live.list.forEach(function (c) { var z = liveZone(c); if (z && P[z]) (groups[z] = groups[z] || []).push(c); });
+    Object.keys(P).forEach(function (z) {
+      var zone = P[z], cs = groups[z] || [];
+      if (zone.label) {
+        var lb = document.createElement("button"); lb.type = "button"; lb.className = "live-lab " + z + (cs.length ? "" : " empty");
+        lb.innerHTML = zone.n + " " + esc(ZONE_NAME[z][state.lang]) + (cs.length ? " · " + cs.length : "");
+        lb.onclick = function (e) { e.stopPropagation(); openLive(z); };
+        out.push({ el: lb, x: zone.label[0], y: zone.label[1] });
+      }
+      cs.slice(0, zone.pts.length).forEach(function (c, i) {
+        var last = i === zone.pts.length - 1 && cs.length > zone.pts.length;
+        var el = document.createElement("button"); el.type = "button";
+        if (last) { el.className = "live-more"; el.textContent = "+" + (cs.length - i); el.onclick = function (e) { e.stopPropagation(); openLive(z); }; }
+        else {
+          el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", liveColor(c));
+          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+          el.setAttribute("aria-label", liveName(c) + " · " + (c.kind === "comment" ? PLAT[c.plat].en : KIND[c.kind].en)); el.title = liveName(c);
+          el.onclick = function (e) { e.stopPropagation(); openLive(z, c.id); };
+        }
+        out.push({ el: el, x: zone.pts[i][0], y: zone.pts[i][1] });
+      });
     });
+    return out;
   }
-  // remember which colleagues each customer's request reached
-  function custMet(ids) { var cs = state.customer; if (!cs || state.bot.id !== "1") return; ids.forEach(function (id) { state.cust[cs.c.id].met[id] = 1; }); }
-  function custBooked() { var cs = state.customer; if (!cs) return; state.cust[cs.c.id].booked = true; state.cust[cs.c.id].met["2"] = 1; drawQueues(); }
-  $("custBtn").onclick = function () { openCustomers(); };
+  function placeTokens(box, toks) { Array.prototype.forEach.call(box.querySelectorAll(".live-pin,.live-bub,.live-lab,.live-more"), function (t) { t.remove(); }); toks.forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; box.appendChild(q.el); }); }
+  function drawLive() {
+    if (pvReady) { placeTokens($("hotspots"), liveTokens("photo")); drawTicker(); }
+    if (typeof inS !== "undefined" && $("inSpots").children.length) { if (inS.floor === 1) placeTokens($("inSpots"), liveTokens("in1")); else if (inS.floor === 2) placeTokens($("inSpots"), liveTokens("in2")); }
+    if (pano) pano.queue(pano.floor() === 0 ? liveTokens("pano1") : pano.floor() === 1 ? liveTokens("pano2") : []);
+    var chats = live.list.filter(function (c) { return c.kind !== "comment" || c.lead; }).length, comments = live.list.filter(function (c) { return c.plat; }).length;
+    $("liveBtn").innerHTML = '<i class="' + (live.on ? "on" : "") + '"></i>' + (live.on ? (state.lang === "en" ? "Live · auto-reply on" : "直播中 · 自动回复") : (state.lang === "en" ? "Auto-reply paused" : "自动回复已暂停")) + " · 💬 " + chats + " · 🗨 " + comments;
+    if (!$("custModal").hidden) openLive(liveSel.zone, liveSel.id, true);
+  }
+  var drawQueues = drawLive;
+  function drawTicker() {
+    var tk = $("liveTicker"); if (!tk) return;
+    var items = live.list.filter(function (c) { return c.status === "talking" || c.status === "waiting"; }).slice(-3).reverse();
+    tk.innerHTML = items.map(function (c) {
+      var last = c.turns.filter(function (t) { return t.role === "user"; }).slice(-1)[0], txt = last ? last.content : (c.kind === "comment" ? c.text[state.lang] : liveText(c.msgs[0] || ""));
+      return '<span class="tk-chip" data-id="' + c.id + '"><span class="dot" style="background:' + liveColor(c) + '"></span><b>' + esc((c.kind === "comment" ? PLAT[c.plat][state.lang] : KIND[c.kind][state.lang]) + " · " + liveName(c)) + "</b><em>" + esc(String(txt).slice(0, 26)) + "…</em>" + esc(c.status === "talking" ? (c.kind === "comment" ? " · Joey replying" : " · Rachel replying") : " · waiting") + "</span>";
+    }).join("");
+    Array.prototype.forEach.call(tk.children, function (el) { el.onclick = function () { openLive("all", el.dataset.id); }; });
+  }
+  // ----- live inbox: every chat and comment, with the conversation -----
+  var liveSel = { zone: "all", id: null };
+  function liveStatusText(c) {
+    var en = state.lang === "en";
+    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
+  }
+  function openLive(zone, id, refresh) {
+    var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
+    var rows = live.list.filter(function (c) { var z = liveZone(c); return liveSel.zone === "all" || z === liveSel.zone || (liveSel.zone === "comments" && (z === "joey")) || ((liveSel.zone === "wechat" || liveSel.zone === "web" || liveSel.zone === "lead") && z === "rachel" && c.kind === liveSel.zone); }).slice().reverse();
+    if (!rows.length) rows = live.list.slice().reverse();
+    var sel = live.list.filter(function (c) { return c.id === liveSel.id; })[0] || rows[0];
+    $("custTitle").textContent = (en ? "📥 Live chats & comments" : "📥 实时咨询与评论") + " · " + live.list.filter(function (c) { return c.status === "waiting" || c.status === "talking"; }).length + (en ? " open" : " 进行中");
+    $("custSub").innerHTML = '<span class="lv-tabs">' + ["all", "wechat", "lead", "web", "comments", "booked", "human"].map(function (z) { return '<button type="button" data-z="' + z + '" aria-pressed="' + (liveSel.zone === z) + '">' + (z === "all" ? (en ? "All" : "全部") : esc(ZONE_NAME[z][L])) + "</button>"; }).join("") + '</span><button type="button" class="lv-auto" id="lvAuto">' + (live.on ? (en ? "⏸ Pause auto-reply" : "⏸ 暂停自动回复") : (en ? "▶ Turn on auto-reply" : "▶ 开启自动回复")) + "</button>";
+    var list = $("custList");
+    list.innerHTML = '<div class="ib-list"></div><div class="ib-detail" id="ibDetail"></div>';
+    if (!live.list.length) list.firstChild.innerHTML = '<p class="ib-empty">' + (en ? "No chats yet. New customers arrive by themselves every minute or so." : "还没有咨询，新客户会陆续自动到来。") + "</p>";
+    rows.forEach(function (c) {
+      var it = document.createElement("button"); it.type = "button"; it.className = "ib-tk " + c.status + (sel && c.id === sel.id ? " sel" : "");
+      var last = c.turns.filter(function (t) { return t.role; }).slice(-1)[0], snip = last ? (last.role === "assistant" ? (c.kind === "comment" ? "Joey: " : "Rachel: ") : "") + String(last.content).replace(/【[^】]*】/g, "").replace(/\s+/g, " ").slice(0, 60) : (c.kind === "comment" ? c.text[L] : liveText(c.msgs[0]));
+      it.innerHTML = '<span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' mini" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><span class="tk-main"><b>' + esc(liveName(c)) + ' <small class="tk-ch">' + esc(c.kind === "comment" ? PLAT[c.plat][L] : KIND[c.kind][L]) + "</small></b><small>" + esc(snip) + '</small></span><span class="tk-st">' + esc(liveStatusText(c)) + "</span>";
+      it.onclick = function () { openLive(liveSel.zone, c.id); };
+      list.firstChild.appendChild(it);
+    });
+    if (sel) liveSel.id = sel.id;
+    drawLiveDetail();
+    Array.prototype.forEach.call($("custSub").querySelectorAll("[data-z]"), function (b) { b.onclick = function () { liveSel.id = null; openLive(b.dataset.z); }; });
+    $("lvAuto").onclick = function () { live.on = !live.on; drawLive(); openLive(liveSel.zone, liveSel.id); };
+    if (!refresh) $("custModal").hidden = false;
+  }
+  function drawLiveDetail() {
+    var d = $("ibDetail"); if (!d || $("custModal").hidden && !d) return;
+    var c = live.list.filter(function (x) { return x.id === liveSel.id; })[0]; if (!c) { if (d) d.innerHTML = ""; return; }
+    var en = state.lang === "en", L = state.lang;
+    var head = '<div class="dt-head"><span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' big" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><div><b>' + esc(liveName(c)) + "</b><small>" + esc(c.kind === "comment" ? PLAT[c.plat][L] + " · " + c.post[L] : KIND[c.kind][L]) + '</small></div><span class="tk-st">' + esc(liveStatusText(c)) + "</span></div>";
+    var conv = c.turns.map(function (t) {
+      if (t.kind === "team") return '<div class="dl-team">' + (t.items.some(function (it) { return it.note === null; }) ? "📞 Asking " : "✓ Checked with ") + t.items.map(function (it) { var b = BY_ID[it.id]; return '<b style="color:' + COLORS[b.color] + '">' + esc(b.name) + "</b>"; }).join(" & ") + "</div>";
+      if (t.kind === "note") return '<div class="dl-note' + (t.good ? " good" : "") + '">' + esc(t.text) + "</div>";
+      if (t.role === "user") return '<div class="lv-msg cust"><small>' + esc(t.who || "") + "</small>" + esc(t.content) + "</div>";
+      if (t.role === "assistant") return '<div class="lv-msg ai"><small>' + (c.kind === "comment" && !c.lead || c.turns.indexOf(t) < 3 && c.kind !== "wechat" && c.kind !== "web" && c.plat ? "Joey" : "Rachel") + "</small>" + (t.pending ? '<span class="typing"><i></i><i></i><i></i></span>' : renderRich(t.content.replace(/【线索】/g, en ? "\n→ sent to Rachel as a lead" : "\n→ 转给瑞秋作为线索"))) + "</div>";
+      return "";
+    }).join("") || '<p class="ib-empty">' + (en ? "Waiting for an officer to pick this up." : "等待同事接待。") + "</p>";
+    d.innerHTML = head + '<div class="lv-conv">' + conv + '</div><div class="dt-acts"></div>';
+    var cv = d.querySelector(".lv-conv"); cv.scrollTop = cv.scrollHeight;
+    var acts = d.querySelector(".dt-acts");
+    if (c.status === "waiting" || c.status === "talking") { var tb = document.createElement("button"); tb.type = "button"; tb.className = "ib-btn"; tb.textContent = en ? "🙋 Take over (a person replies)" : "🙋 人工接管"; tb.onclick = function () { c.status = "human"; activity("1", "You took over " + c.name.en + "'s chat"); drawLive(); }; acts.appendChild(tb); }
+    if (c.status === "booked") { var bb = document.createElement("button"); bb.type = "button"; bb.className = "ib-btn"; bb.textContent = en ? "📁 Open the CEO desk" : "📁 打开 CEO 桌面"; bb.onclick = function () { $("custModal").hidden = true; openInbox(); }; acts.appendChild(bb); }
+    if (c.status === "human") { var hb = document.createElement("button"); hb.type = "button"; hb.className = "ib-btn"; hb.textContent = en ? "✓ Mark as handled" : "✓ 已处理"; hb.onclick = function () { c.status = "done"; drawLive(); }; acts.appendChild(hb); }
+  }
+  $("liveBtn").onclick = function () { openLive("all"); };
+
   $("custX").onclick = function () { $("custModal").hidden = true; };
   $("custModal").onclick = function (e) { if (e.target === $("custModal")) $("custModal").hidden = true; };
 
@@ -3380,7 +3531,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
   // ---------- 360° photo: look around each floor like Street View ----------
   var PANO = {
-    0: { img: "images/pano-1f.jpg", bots: { "1": [37, 34, 8, 17] }, dots: [[17, 66, "Lounge"], [62, 63, "Consult rooms"], [8, 84, "Entrance · customers", 0, "cust"], [90, 62, "↑ 2F", 1]] },
+    0: { img: "images/pano-1f.jpg", bots: { "1": [23, 21, 6, 15] }, dots: [[66, 36, "Consult rooms"], [8, 56, "Entrance · live chats", 0, "cust"], [93, 34, "↑ 2F", 1]] },
     1: { img: "images/pano-2f.jpg", bots: { "4": [4, 34, 11, 46] }, dots: [[45, 72, "Studio"], [70, 76, "Podcast table"], [90, 60, "Hot desks"], [96, 30, "↑ 3F", 2], [60, 90, "↓ 1F", 0]] },
     2: { img: "images/pano-3f.jpg", bots: { "2": [8, 32, 10, 30], "3": [41, 39, 9, 18], "6": [75, 36, 11, 36] }, dots: [[45, 82, "Aisle"], [94, 32, "↑ 4F", 3], [94, 80, "↓ 2F", 1]] },
     3: { img: "images/pano-4f.jpg", boss: [33, 36, 25, 22], room: [60, 9, 39, 42], bots: { "5": [5, 30, 8, 20] }, dots: [[40, 82, "Lounge"], [62, 70, "Boardroom"], [92, 82, "↓ 3F", 2]] }
@@ -3415,7 +3566,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         el.onclick = function () { look(p[0] + p[2] / 2 + (window.matchMedia("(max-width: 899px)").matches ? 0 : 7), p[1] + p[3] * .5, 40); setTimeout(function () { pickOfficer(b, "pano"); }, 450); };
         add(el, p[0] + p[2] / 2, p[1] + p[3] / 2); spots[spots.length - 1].size = [p[2], p[3]];
       });
-      if (f === 0) setTimeout(drawQueues, 0);
+      setTimeout(drawLive, 0);
       P.dots.forEach(function (d) {
         var el = document.createElement("button"); el.type = "button"; el.className = "in-dot" + (d[3] != null && d[4] !== "cust" ? " stairs" : ""); el.innerHTML = "<span>" + esc(d[2]) + "</span>";
         el.onclick = function () { if (d[4] === "cust") { openCustomers(); return; } if (d[3] != null) { go(d[3], d[0]); return; } look(d[0], d[1] - 12, 38); };
@@ -3510,8 +3661,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       dots: [[46, 84, "Aisle"], [30, 66, "Library"], [62, 74, "Finance"], [94, 30, "↑ 4F", 4], [92, 78, "↓ 2F", 2]] },
     2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Marketing", bots: { "4": [0.5, 33, 15, 39] },
       dots: [[42, 64, "Studio"], [62, 72, "Podcast table"], [80, 58, "Hot desks"], [93, 34, "↑ 3F", 3], [86, 90, "↓ 1F", 1]] },
-    1: { img: "images/inside-1f.jpg", ar: 1024 / 572, name: "1F · Reception", bots: { "1": [14, 40, 9.5, 22] },
-      dots: [[7.4, 89.5, "Entrance · customers", 0, "cust"], [54.7, 68.2, "Lounge"], [70.5, 64, "Consult rooms"], [91.6, 91, "↑ 2F", 2]] }
+    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: { "1": [23, 21, 6, 15] },
+      dots: [[8, 56, "Entrance · live chats", 0, "cust"], [66, 36, "Consult rooms"], [93, 34, "↑ 2F", 2]] }
   };
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
   function inLayout() {
@@ -3530,7 +3681,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight;
     inS.s = s; inS.tx = (screenX == null ? Wv / 2 : screenX) - px / 100 * inS.W * s; inS.ty = Hv * .55 - py / 100 * inS.H * s; inApply();
   }
-  var IN_FOCUS = { 4: 38, 3: 45, 2: 32, 1: 30 };
+  var IN_FOCUS = { 4: 38, 3: 45, 2: 32, 1: 42 };
   function inHomeX() { var Wv = $("inStage").clientWidth; return Wv / 2 - IN_FOCUS[inS.floor] / 100 * inS.W; }
   function inZoomHome() { inS.s = 1; inS.tx = inHomeX(); inS.ty = 0; inApply(); }
   function inBuild(floor) {
@@ -3969,16 +4120,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     log.scrollTop = log.scrollHeight;
     // ready questions
     var chips = $("deskChips"); chips.textContent = "";
-    var cs = state.customer;
-    if (b.id === "1" && cs) {
-      var more = cs.step < cs.c.steps.length, nb = document.createElement("button"); nb.type = "button"; nb.className = "next";
-      nb.innerHTML = DESK_ICONS[4] + "<span>" + (more ? "▶ " + esc(cs.c.name[state.lang]) + ": " + esc(custText(cs.c, cs.step).split("\n")[0].slice(0, 90)) : "✓ " + esc(cs.c.name[state.lang]) + (state.lang === "en" ? " has finished. End the visit" : " 已经说完了，结束接待")) + "</span>";
-      nb.onclick = function () { if (more) custNext(); else { state.customer = null; drawDesk(); } };
-      chips.appendChild(nb);
-      var eb = document.createElement("button"); eb.type = "button"; eb.innerHTML = "<span>" + (state.lang === "en" ? "Another customer…" : "换一位客户…") + "</span>"; eb.onclick = function () { openCustomers(); }; chips.appendChild(eb);
-    } else if (b.id === "1") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "👥 Bring in a test customer" : "👥 接待一位测试客户") + "</span>"; cb2.onclick = function () { openCustomers(); }; chips.appendChild(cb2); }
+    if (b.id === "1" || b.id === "4") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "📥 Live chats & comments" : "📥 实时咨询与评论") + "</span>"; cb2.onclick = function () { openLive(b.id === "4" ? "comments" : "all"); }; chips.appendChild(cb2); }
     if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
-    if (!(b.id === "1" && cs)) tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
+    tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";
       var first = q.ask.split("\n")[0]; btn.innerHTML = DESK_ICONS[k % DESK_ICONS.length] + "<span>[" + esc(q.demo ? "Demo booking" : first) + "]</span>"; btn.title = q.ask;
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
@@ -4069,6 +4213,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   drawFeed();
   drawAll();
   buildPhoto();
+  liveStartArrivals();
   var savedView = lsGet("glostudy-view", "photo");
   setView(savedView === "plan" || savedView === "3d" || savedView === "inside" ? savedView : "photo", true);
 })();

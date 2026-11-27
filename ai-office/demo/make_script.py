@@ -745,7 +745,84 @@ photo_posts("london", """
 """))
 A[:0] = C
 
+# ---------- live comments (Joey) and leads (Rachel) ----------
+cust("4", r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", """
+Not too late at all 😊 Starting at 12 gives you time to prepare English and entrance tests calmly. Message us on WeChat (GlostudyUK) and we'll go through your child's options for free. 【线索】
+""", """
+完全来得及 😊 12 岁开始准备，英语和入学考试都能从容规划。可以微信私信我们（GlostudyUK），免费帮您看看孩子的选择。【线索】
+""")
+cust("4", r"写得好清楚，收藏了|So clear, saved it", """
+Thank you so much! 💛 Glad it helps, more practical guides coming soon.
+""", """
+谢谢你的喜欢！💛 能帮到你就好，更多实用干货马上更新～
+""")
+cust("4", r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", """
+Roughly £45,000–£60,000 all in for a year in London, depending on the course 💷 Message us on WeChat (GlostudyUK) and we'll work it out for your plan. 【线索】
+""", """
+伦敦读一年硕士，总共大约 £45,000–£60,000，主要看专业 💷 欢迎微信私信 GlostudyUK，我们按你的情况帮你算。【线索】
+""")
+cust("4", r"英国留学值得吗|Is studying in the UK worth it", """
+For many students yes: shorter degrees, world-class universities and a Graduate visa afterwards. It depends on your goals, happy to talk it through anytime 🇬🇧
+""", """
+对很多同学来说值得：学制短、名校多、毕业后还有工作签证。具体看你的目标，随时欢迎来聊 🇬🇧
+""")
+cust("4", r"你们收钱不办事|You took my money and did nothing", """
+We're sorry to hear this and want to look into it properly. Please message us on WeChat with your details, a consultant will contact you today. 【转人工】
+""", """
+很抱歉给您带来不好的体验，我们一定认真处理。请微信私信我们您的信息，顾问今天会联系您。【转人工】
+""")
+cust("1", r"lily_mama_12", """
+Thank you, Ms Chen! 12 is a great age to plan for 13+ entry. I've noted everything and a consultant will add you on WeChat.
+
+【咨询登记】
+Who: parent (Ms Chen)
+Student: 12, from Xiaohongshu comment
+Wants: UK boarding school, from next September
+Budget: about ¥400,000 a year
+Name / contact: Ms Chen / WeChat lily_mama_12
+Notes: agreed to use these details to arrange a consultation
+【登记完成】
+""", """
+谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，顾问会加您微信。
+
+【咨询登记】
+身份：家长（陈女士）
+学生年龄/年级：12 岁（来自小红书评论）
+意向阶段/专业：英国寄宿学校，明年 9 月入学
+预算：每年约 40 万人民币
+称呼/联系方式：陈女士 / 微信 lily_mama_12
+备注：同意使用以上信息安排咨询
+【登记完成】
+""")
+cust("1", r"London or Manchester|伦敦还是曼彻斯特", """
+Good question! I checked with Chandler and Ross: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.
+""", """
+好问题！我问了 Chandler 和 Ross：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。
+""")
+cust("2", r"lily_mama_12", """
+零、一句话总结 / One-line summary: 12-year-old for 13+ boarding entry next September; budget ¥400k fits many good schools.
+
+| School type | Why | Entry |
+|---|---|---|
+| Co-ed boarding school, South East | Strong pastoral care | Own English & maths test |
+| Girls' boarding school | Smaller classes | Test + interview |
+| International boarding college | Many international students | English test |
+**Next steps:** register by early spring; prepare English and maths tests.
+""", """
+零、一句话总结：12 岁，明年 9 月 13+ 入读寄宿学校；每年 40 万预算可以选很多好学校。
+
+| 学校类型 | 理由 | 入学 |
+|---|---|---|
+| 东南部男女混校寄宿 | 生活照顾好 | 学校自己的英语和数学测试 |
+| 女子寄宿学校 | 小班教学 | 测试 + 面试 |
+| 国际寄宿学院 | 国际生多 | 英语测试 |
+**下一步：** 春季前报名；准备英语和数学测试。
+""")
+
+A[:0] = [x for x in C if x not in A]
 ROUTES = [
+  {"bot": "1", "match": r"lily_mama_12", "calls": [{"who": "scout", "task": "Boarding schools for 13+ entry"}]},
+  {"bot": "1", "match": r"London or Manchester|伦敦还是曼彻斯特", "calls": [{"who": "penny", "task": "London vs Manchester costs"}, {"who": "scout", "task": "Finance master's in both cities"}]},
   {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}]},
   {"bot": "1", "match": r"guarantee him a place at Oxford|保证他上牛津", "calls": [{"who": "scout", "task": "Oxford entry route and realistic alternatives"}]},
   {"bot": "1", "match": r"write my personal statement for me|帮我写个人陈述", "calls": [{"who": "quill", "task": "Can we coach a psychology statement?"}]},
