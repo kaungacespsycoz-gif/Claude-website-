@@ -1166,6 +1166,32 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .tf-grid button.busy small { color: #f0b44a; }
 @media (max-width: 560px) { .staff.by-floor { grid-template-columns: none; } .tf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .tf-faces { display: none; } .tf-name small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+
+/* ---------- customer records ---------- */
+.cr-wrap { grid-column: 1 / -1; }
+.cr-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.cr-stats { font-size: .74rem; color: var(--muted); }
+.cr-filter { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+.cr-filter button { border: 1px solid var(--rule); background: var(--panel-2); color: inherit; border-radius: 999px; padding: 4px 10px; font: 600 .72rem var(--sans); cursor: pointer; }
+.cr-filter button[aria-pressed="true"] { background: var(--ink, #f2f5f7); color: var(--bg, #0d1014); border-color: transparent; }
+.cr-list { display: flex; flex-direction: column; gap: 6px; max-height: 520px; overflow-y: auto; }
+.cr-card { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left; border: 1px solid var(--rule); border-left: 3px solid var(--c); background: var(--panel-2); color: inherit; border-radius: 12px; padding: 9px 11px; cursor: pointer; font: inherit; }
+.cr-card:hover { border-color: var(--c); }
+.cr-ico .live-pin.mini { margin: 0; position: relative; display: inline-block; filter: none !important; }
+.cr-main { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cr-main b { font-size: .88rem; } .cr-main b small { font-weight: 500; color: var(--muted); font-size: .7rem; }
+.cr-q { font-size: .78rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cr-mood { font-size: .7rem; color: #c59bff; }
+.cr-team { display: flex; align-items: center; gap: 2px; min-width: 0; }
+.cr-team i { flex: none; width: 18px; height: 18px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 1.5px var(--c); margin-right: 2px; }
+.cr-team em { font-style: normal; font-size: .68rem; color: var(--muted); margin-left: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cr-out { font-size: .7rem; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; background: rgba(255,255,255,.06); }
+.cr-card.booked .cr-out { background: rgba(232,193,122,.18); color: #e8c17a; }
+.cr-card.human .cr-out { background: rgba(181,188,198,.18); color: #c9cfd6; }
+.cr-card.done .cr-out { background: rgba(61,220,132,.15); color: #6fe3a3; }
+.cr-card.active .cr-out { background: rgba(240,180,74,.15); color: #f0b44a; }
+.cr-empty { font-size: .8rem; color: var(--muted); }
+@media (max-width: 560px) { .cr-card { grid-template-columns: 28px minmax(0, 1fr); } .cr-out { grid-column: 2; justify-self: start; } }
 </style>
 
 <div class="app">
@@ -1224,6 +1250,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         <div class="stage-foot">
           <div><span class="label">Team</span><div class="staff" id="staff"></div></div>
           <div><span class="label">Activity</span><ul class="feed" id="feed"></ul></div>
+          <div class="cr-wrap"><div class="cr-head"><span class="label">Customer records</span><span class="cr-stats" id="crStats"></span></div><div class="cr-filter" id="crFilter"></div><div class="cr-list" id="crList"></div></div>
         </div>
       </section>
       <p class="foot" id="foot"></p>
@@ -4023,7 +4050,38 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     comments: ZI('<path d="M4 5h16v11H9l-5 4z"/><path d="M12 13s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z" fill="currentColor"/>')
   };
   function placeTokens(box, toks) { Array.prototype.forEach.call(box.querySelectorAll(".live-pin,.live-bub,.live-lab,.live-more,.zone-rug"), function (t) { t.remove(); }); toks.forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; box.appendChild(q.el); }); }
+  // ---------- customer records: one card per customer, how they were handled ----------
+  var crFilter = "all";
+  function drawRecords() {
+    var list = $("crList"); if (!list) return;
+    var en = state.lang === "en", all = live.list.slice().reverse();
+    var F = { all: en ? "All" : "全部", active: en ? "In progress" : "进行中", booked: en ? "Booked" : "已登记", human: en ? "Needs a person" : "转人工", done: en ? "Done" : "已完成" };
+    function grp(c) { return c.status === "booked" ? "booked" : c.status === "human" ? "human" : c.status === "done" ? "done" : "active"; }
+    var cnt = { all: all.length }; all.forEach(function (c) { var g = grp(c); cnt[g] = (cnt[g] || 0) + 1; });
+    $("crStats").textContent = all.length ? (cnt.booked || 0) + (en ? " booked · " : " 已登记 · ") + all.length + (en ? " total" : " 位") : "";
+    $("crFilter").innerHTML = Object.keys(F).map(function (k) { return '<button type="button" data-f="' + k + '" aria-pressed="' + (crFilter === k) + '">' + F[k] + (cnt[k] ? " " + cnt[k] : "") + "</button>"; }).join("");
+    Array.prototype.forEach.call($("crFilter").children, function (b) { b.onclick = function () { crFilter = b.dataset.f; drawRecords(); }; });
+    var rows = all.filter(function (c) { return crFilter === "all" || grp(c) === crFilter; });
+    if (!rows.length) { list.innerHTML = '<p class="cr-empty">' + (en ? "Customers appear here as they arrive." : "客户到来后会显示在这里。") + "</p>"; return; }
+    list.innerHTML = rows.map(function (c) {
+      var ch = c.plat ? PLAT[c.plat][state.lang] + (c.kind === "lead" ? " → " + KIND.lead[state.lang] : "") : KIND[c.kind][state.lang];
+      var team = [c.agent].concat(Object.keys(c.met || {})).filter(function (id, i, a) { return id && BY_ID[id] && a.indexOf(id) === i; });
+      var g = grp(c), out = { active: liveStatusText(c), booked: en ? "✓ Booked" : "✓ 已登记", human: en ? "🙋 Needs a person" : "🙋 转人工", done: en ? "✓ Done" : "✓ 已完成" }[g];
+      var first = c.kind === "comment" || c.plat ? (c.text ? c.text[state.lang] : "") : liveText(c.msgs[0] || "");
+      var t = new Date(c.t);
+      return '<button type="button" class="cr-card ' + g + '" data-id="' + c.id + '" style="--c:' + liveColor(c) + '">' +
+        '<span class="cr-ico"><span class="live-pin mini" style="--c:' + liveColor(c) + '"><span class="hx"></span><i>' + c.icon + '</i></span></span>' +
+        '<span class="cr-main"><b>' + esc(liveName(c)) + ' <small>' + esc(ch) + " · " + t.toLocaleTimeString(en ? "en-GB" : "zh-CN", { hour: "2-digit", minute: "2-digit" }) + "</small></b>" +
+        '<span class="cr-q">“' + esc(String(first).slice(0, 70)) + (String(first).length > 70 ? "…" : "") + "”</span>" +
+        (c.insight ? '<span class="cr-mood">🔮 ' + esc(c.insight[state.lang]) + "</span>" : "") +
+        '<span class="cr-team">' + team.map(function (id) { var b = BY_ID[id]; return '<i title="' + esc(b.name + " · " + b.title) + '" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[id]) + ')"></i>'; }).join("") +
+        (team.length ? '<em>' + esc(team.map(function (id) { return BY_ID[id].name; }).join(" → ")) + "</em>" : "") + "</span></span>" +
+        '<span class="cr-out">' + esc(out) + "</span></button>";
+    }).join("");
+    Array.prototype.forEach.call(list.querySelectorAll(".cr-card"), function (b) { b.onclick = function () { openLive("all", b.dataset.id); }; });
+  }
   function drawLive() {
+    drawRecords();
     if (pvReady) { placeTokens($("hotspots"), liveTokens("photo")); drawTicker(); }
     if (typeof inS !== "undefined" && $("inSpots").children.length) { if (inS.floor === 1) placeTokens($("inSpots"), liveTokens("in1")); else if (inS.floor === 2) placeTokens($("inSpots"), liveTokens("in2")); }
     if (pano) pano.queue(pano.floor() === 0 ? liveTokens("pano1") : pano.floor() === 1 ? liveTokens("pano2") : []);
