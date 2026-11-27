@@ -86,7 +86,7 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .card { background: var(--panel); border: 1px solid var(--rule); border-radius: 20px; box-shadow: var(--shadow); min-width: 0; }
 .stage { overflow: hidden; }
 .scene-wrap { overflow-x: auto; overflow-y: hidden; background: #22262a; border-bottom: 1px solid var(--rule); }
-.scene { display: block; width: 100%; min-width: 740px; height: auto; user-select: none; }
+.scene { display: block; width: 100%; min-width: 760px; height: auto; user-select: none; }
 .stage-foot { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; padding: 14px 16px 16px; }
 @media (max-width: 760px) { .stage-foot { grid-template-columns: minmax(0, 1fr); } }
 .label { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
@@ -186,6 +186,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .happy { opacity: 0; transition: opacity .15s; }
 .actor.just-done .happy { opacity: 1; }
 .actor.just-done .eyes { opacity: 0; }
+.room { font-size: 7.5px; font-weight: 700; letter-spacing: .12em; fill: #ffffff; opacity: .45; }
+.lift-ind { font: 700 9px var(--display); fill: #ff7a59; }
+.liftdoors rect { transition: transform .3s ease; }
+.liftdoors.open rect:first-child { transform: translateX(-26px); }
+.liftdoors.open rect:last-child { transform: translateX(26px); }
+.actor { transition: opacity .3s; }
+.actor.in-lift { opacity: 0; pointer-events: none; }
+.mglow { opacity: .3; transition: opacity .3s; }
+.station.working .mglow { opacity: .85; }
+.scene { --glass-line: rgba(150,215,230,.7); }
 .scene text { font-family: var(--sans); }
 .actor, .bossdesk { cursor: pointer; }
 .actor:focus, .bossdesk:focus { outline: none; }
@@ -505,191 +515,219 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   };
   function errText(e) { return (e && COPY[e.code]) || "Something went wrong. Try again." + (e && e.code ? " (" + e.code + ")" : ""); }
 
-  // ---------- the office: a two-storey glass building, industrial loft inside ----------
-  // 1000 x 650. Roof slab y 40-52, 2F floor at y 318, 1F floor at y 596, street below.
-  // Each floor has a walking lane (aisle); a glass lift at x 902 joins the floors.
-  var AISLES = { 2: 305, 1: 583 }, LIFT_X = 902;
-  var SEATS = { "1": { x: 210, y: 558 }, "2": { x: 170, y: 280 }, "3": { x: 390, y: 280 }, "4": { x: 610, y: 280 } };
-  var SPOTS = { coffee: { x: 780, y: 305 }, water: { x: 362, y: 583 }, scoutDrop: { x: 268, y: 305 }, inbox: { x: 655, y: 583 } };
-  var BOSS = { x: 745, y: 558 };
+  // ---------- the office: two floor plans, seen from above at an angle ----------
+  // Scene 1000 x 720. Each floor is a plate in local coordinates: north wall face y 0-34, floor y 34-290, x 40-960.
+  // 2F plate starts at y 26, 1F plate at y 368. Robots find their way with A* on a 10px grid and change floors by lift.
+  var OY = { 2: 26, 1: 368 };
+  var LIFT_IN = { x: 917, y: 168 }, LIFT_DOOR = { x: 917, y: 220 };
+  function G(f, x, y) { return { x: x, y: y + OY[f], f: f }; }
+  var SEATS = { "1": G(1, 470, 142), "2": G(2, 160, 112), "3": G(2, 250, 112), "4": G(2, 340, 112) };
+  var SPOTS = { coffee: G(2, 792, 244), water: G(1, 600, 92), scoutDrop: G(2, 160, 156), inbox: G(1, 722, 172) };
   var NS = "http://www.w3.org/2000/svg";
-  var actors = {}, sceneReady = false, liftY = AISLES[1], liftOwner = null;
-  function floorOf(y) { return y < 324 ? 2 : 1; }
+  var actors = {}, sceneReady = false, liftOwner = null;
+  var COLORS = { "--c1": "#f0a030", "--c2": "#13a3b0", "--c3": "#6c7ee0", "--c4": "#ec6d5a" };
 
+  // Obstacles per floor in local coordinates [x1, y1, x2, y2]
+  var COMMON = [[862, 34, 880, 170], [862, 240, 880, 290], [880, 34, 958, 130], [884, 140, 950, 200], [880, 248, 958, 290]];
+  var OBST = {
+    2: COMMON.concat([
+      [120, 104, 380, 134], [120, 194, 380, 224],                 // desk benches
+      [42, 60, 62, 282],                                         // bookshelf
+      [440, 40, 600, 100],                                       // phone booths
+      [450, 240, 590, 272], [490, 205, 550, 225],                // sofa, coffee table
+      [620, 140, 648, 166],                                      // printer
+      [650, 34, 654, 156], [654, 152, 690, 156], [730, 152, 862, 156], [690, 78, 822, 124], // meeting room
+      [820, 205, 858, 286], [704, 235, 736, 262]                 // pantry
+    ]),
+    1: COMMON.concat([
+      [150, 34, 154, 150], [264, 34, 268, 150], [40, 146, 80, 150], [115, 146, 195, 150], [230, 146, 268, 150], // consult rooms
+      [72, 70, 120, 110], [186, 70, 234, 110],                   // round tables
+      [400, 150, 540, 178],                                      // reception counter
+      [110, 240, 220, 272], [236, 240, 330, 272], [180, 205, 250, 224], [350, 222, 374, 262], // waiting area
+      [588, 40, 612, 70],                                        // water cooler
+      [650, 34, 654, 200], [654, 196, 700, 200], [740, 196, 862, 200], [700, 112, 812, 140], [662, 40, 690, 120] // your office
+    ])
+  };
+
+  // ----- path finding -----
+  var CELL = 10, GW = 92, GH = 26, GX0 = 40, GY0 = 34, grids = {};
+  function buildGrid(f) {
+    var g = new Uint8Array(GW * GH), R = 9;
+    for (var j = 0; j < GH; j++) for (var i = 0; i < GW; i++) {
+      var cx = GX0 + i * CELL + 5, cy = GY0 + j * CELL + 5, free = cx > 48 && cx < 958 && cy > 40 && cy < 288;
+      for (var k = 0; free && k < OBST[f].length; k++) { var o = OBST[f][k]; if (cx > o[0] - R && cx < o[2] + R && cy > o[1] - R && cy < o[3] + R) free = false; }
+      g[j * GW + i] = free ? 1 : 0;
+    }
+    grids[f] = g;
+  }
+  function cellOf(x, y) { return [Math.max(0, Math.min(GW - 1, Math.floor((x - GX0) / CELL))), Math.max(0, Math.min(GH - 1, Math.floor((y - GY0) / CELL)))]; }
+  function nearestFree(f, c) {
+    var g = grids[f];
+    for (var r = 0; r < 12; r++) for (var dj = -r; dj <= r; dj++) for (var di = -r; di <= r; di++) {
+      var i = c[0] + di, j = c[1] + dj;
+      if (i >= 0 && j >= 0 && i < GW && j < GH && g[j * GW + i]) return [i, j];
+    }
+    return c;
+  }
+  function center(c) { return { x: GX0 + c[0] * CELL + 5, y: GY0 + c[1] * CELL + 5 }; }
+  function free(f, x, y) { var c = cellOf(x, y); return grids[f][c[1] * GW + c[0]] === 1; }
+  function lineFree(f, a, b) {
+    var d = Math.hypot(b.x - a.x, b.y - a.y), n = Math.ceil(d / 5);
+    for (var s = 1; s < n; s++) if (!free(f, a.x + (b.x - a.x) * s / n, a.y + (b.y - a.y) * s / n)) return false;
+    return true;
+  }
+  // A* from local point a to local point b on floor f; returns local points ending exactly at b
+  function findPath(f, a, b) {
+    var g = grids[f], s = nearestFree(f, cellOf(a.x, a.y)), t = nearestFree(f, cellOf(b.x, b.y));
+    var si = s[1] * GW + s[0], ti = t[1] * GW + t[0];
+    var open = [si], came = new Int32Array(GW * GH).fill(-1), gs = new Float32Array(GW * GH).fill(1e9), closed = new Uint8Array(GW * GH);
+    gs[si] = 0;
+    function h(i) { return Math.hypot(i % GW - t[0], Math.floor(i / GW) - t[1]); }
+    while (open.length) {
+      var bi = 0; for (var q = 1; q < open.length; q++) if (gs[open[q]] + h(open[q]) < gs[open[bi]] + h(open[bi])) bi = q;
+      var cur = open.splice(bi, 1)[0];
+      if (cur === ti) break;
+      closed[cur] = 1;
+      var cx = cur % GW, cy = Math.floor(cur / GW);
+      for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) {
+        if (!dx && !dy) continue;
+        var nx = cx + dx, ny = cy + dy; if (nx < 0 || ny < 0 || nx >= GW || ny >= GH) continue;
+        var ni = ny * GW + nx; if (!g[ni] || closed[ni]) continue;
+        if (dx && dy && (!g[cy * GW + nx] || !g[ny * GW + cx])) continue;
+        var ng = gs[cur] + (dx && dy ? 1.414 : 1);
+        if (ng < gs[ni]) { gs[ni] = ng; came[ni] = cur; if (open.indexOf(ni) < 0) open.push(ni); }
+      }
+    }
+    var cells = [], c = ti;
+    if (c !== si && came[c] < 0) return [b];
+    while (c !== -1 && c !== si) { cells.unshift(c); c = came[c]; }
+    var pts = [a, center(s)].concat(cells.map(function (i) { return center([i % GW, Math.floor(i / GW)]); }), [b]);
+    // pull the string: keep only the turns we need
+    var out = [pts[0]], k = 0;
+    while (k < pts.length - 1) {
+      var far = k + 1;
+      for (var m = pts.length - 1; m > k + 1; m--) if (lineFree(f, pts[k], pts[m])) { far = m; break; }
+      out.push(pts[far]); k = far;
+    }
+    return out.slice(1);
+  }
+
+  // ----- drawing helpers -----
   function rect(x, y, w, h, fill, extra) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '"' + (extra || "") + "/>"; }
-  function monitor(x, y, id, glow) {
-    var lines = [4, 10, 16, 22, 28, 34, 40, 46, 52].map(function (yy, i) {
-      return '<line x1="' + (x + 5) + '" y1="' + (y + yy) + '" x2="' + (x + 14 + (i * 7) % 22) + '" y2="' + (y + yy) + '" opacity="' + (i % 3 ? .5 : .95) + '"/>';
-    }).join("");
-    return (glow ? '<ellipse cx="' + (x + 21) + '" cy="' + (y + 13) + '" rx="30" ry="20" fill="' + glow + '" opacity=".35" filter="url(#fBlur)"/>' : "") +
-      rect(x + 19, y + 26, 4, 8, "var(--leg)") + '<ellipse cx="' + (x + 21) + '" cy="' + (y + 34) + '" rx="10" ry="2.2" fill="var(--leg)"/>' +
-      rect(x - 2, y - 2, 46, 30, "#0a0c0e", ' rx="3"') +
-      '<clipPath id="' + id + '"><rect x="' + x + '" y="' + y + '" width="42" height="26" rx="1.5"/></clipPath>' +
-      rect(x, y, 42, 26, "var(--screen)", ' rx="1.5"') +
-      '<g clip-path="url(#' + id + ')"><g class="lines" stroke="' + (glow || "var(--screen-line)") + '" stroke-width="2" stroke-linecap="round">' + lines + "</g></g>";
-  }
-  // Gaming chair in the robot's colour
-  function chair(x, y, c) {
-    return rect(x - 17, y - 56, 34, 40, "#121518", ' rx="11"') + rect(x - 5, y - 54, 10, 36, c || "var(--neon-a)", ' rx="4" opacity=".9"') +
-      rect(x - 13, y - 52, 6, 30, "#1e2328", ' rx="3"') + rect(x + 7, y - 52, 6, 30, "#1e2328", ' rx="3"');
-  }
-  function deskTop(x, y, w, c) {
-    return rect(x - w / 2, y - 31, w, 12, "var(--desk-top)", ' rx="3"') + rect(x - w / 2 + 6, y - 20, w - 12, 2, c || "var(--neon-a)", ' opacity=".9"');
-  }
-  function deskFrontSvg(x, y, w) {
-    return rect(x - w / 2 + 4, y - 18, 5, 28, "var(--leg)") + rect(x + w / 2 - 9, y - 18, 5, 28, "var(--leg)") +
-      rect(x - w / 2 + 14, y - 16, w - 28, 18, "var(--side)", ' rx="2"');
-  }
-  function plant(x, y, s) {
+  function box(x, y, w, h, d, top, side, extra) { return rect(x, y + h - d, w, d, side, ' rx="2"') + rect(x, y, w, h - d, top, ' rx="3"' + (extra || "")); }
+  function label(x, y, t, anchor) { return '<text class="room" x="' + x + '" y="' + y + '" text-anchor="' + (anchor || "middle") + '">' + t + "</text>"; }
+  function glassLine(x1, y1, x2, y2) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="var(--glass-line)" stroke-width="3" stroke-linecap="round"/>'; }
+  function plantTop(x, y, s) {
     s = s || 1;
-    return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' +
-      '<path d="M0 -20 C-2 -40 -6 -60 -2 -84" stroke="#2f6b46" stroke-width="2" fill="none"/>' +
-      '<ellipse cx="-12" cy="-44" rx="11" ry="7" fill="#2f7d52" transform="rotate(-30 -12 -44)"/><ellipse cx="10" cy="-56" rx="12" ry="7" fill="#3f9a65" transform="rotate(25 10 -56)"/>' +
-      '<ellipse cx="-10" cy="-70" rx="11" ry="7" fill="#3f9a65" transform="rotate(-25 -10 -70)"/><ellipse cx="6" cy="-82" rx="10" ry="6" fill="#2f7d52" transform="rotate(20 6 -82)"/>' +
-      '<ellipse cx="12" cy="-36" rx="9" ry="6" fill="#4caf73" transform="rotate(30 12 -36)"/>' +
-      rect(-12, -22, 24, 24, "#20262b", ' rx="4"') + rect(-12, -22, 24, 4, "var(--timber)", ' rx="2"') + "</g>";
+    return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' + '<ellipse cx="0" cy="4" rx="11" ry="4" fill="#000" opacity=".25"/>' + rect(-9, -8, 18, 12, "#20262b", ' rx="3"') +
+      '<circle cx="-6" cy="-14" r="8" fill="#2f7d52"/><circle cx="6" cy="-15" r="8" fill="#3f9a65"/><circle cx="0" cy="-22" r="8" fill="#4caf73"/><circle cx="-2" cy="-10" r="6" fill="#3f9a65"/></g>';
   }
-  function tree(x, y) {
-    return '<g>' + rect(x - 4, y - 60, 8, 60, "#5a3d29") + '<circle cx="' + x + '" cy="' + (y - 78) + '" r="30" fill="#2f7d52"/><circle cx="' + (x - 18) + '" cy="' + (y - 62) + '" r="18" fill="#3f9a65"/><circle cx="' + (x + 18) + '" cy="' + (y - 66) + '" r="20" fill="#3f9a65"/></g>';
-  }
-  function lamp(x, top, len) {
-    len = len || 26;
-    return '<line x1="' + x + '" y1="' + top + '" x2="' + x + '" y2="' + (top + len) + '" stroke="#0c0e10" stroke-width="1.5"/>' +
-      '<path d="M' + (x - 11) + " " + (top + len + 12) + " L" + (x - 4) + " " + (top + len) + " h8 L" + (x + 11) + " " + (top + len + 12) + ' Z" fill="#0c0e10"/>' +
-      '<circle cx="' + x + '" cy="' + (top + len + 12) + '" r="3.5" fill="#ffd98c"/>' +
-      '<ellipse class="lamp-glow" cx="' + x + '" cy="' + (top + len + 20) + '" rx="30" ry="12" fill="var(--lamp)" filter="url(#fBlur)"/>';
-  }
-  // A black steel window cut into the brick, showing the sky behind
+  function chairTop(x, y, c) { return '<circle cx="' + x + '" cy="' + y + '" r="7" fill="' + (c || "#2a3036") + '"/><circle cx="' + x + '" cy="' + y + '" r="4" fill="#000" opacity=".2"/>'; }
   var winN = 0;
-  function skyPane(x, y, w, h) {
-    var id = "win" + (++winN), off = y > 330 ? 278 : 0;
-    return '<clipPath id="' + id + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"/></clipPath>' +
-      '<g clip-path="url(#' + id + ')">' + rect(x, y, w, h, "url(#sky)") + '<use href="#skyline" transform="translate(0 ' + off + ')"/>' +
-      '<use href="#cityLights" transform="translate(0 ' + off + ')"/></g>' + rect(x, y, w, h, "var(--glass-tint)");
+  function windowPane(x, y, w, h) {
+    var id = "win" + (++winN);
+    var g = '<clipPath id="' + id + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"/></clipPath>' +
+      '<g clip-path="url(#' + id + ')">' + rect(x, y, w, h, "url(#sky)") + '<use href="#skyline" transform="translate(' + (-(x % 160) * .35) + ' ' + (y + h - 23) + ') scale(.35)"/><use href="#cityLights" transform="translate(' + (-(x % 160) * .35) + ' ' + (y + h - 23) + ') scale(.35)"/></g>';
+    for (var i = 1; i < 3; i++) g += rect(x + w * i / 3 - 1, y, 2, h, "var(--steel)");
+    return g + '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="var(--steel)" stroke-width="3"/>';
   }
-  function steelWindow(x, y, w, h) {
-    var g = skyPane(x, y, w, h);
-    for (var i = 1; i < 4; i++) g += rect(x + w * i / 4 - 1.5, y, 3, h, "var(--steel)");
-    g += rect(x, y + h * .45 - 1.5, w, 3, "var(--steel)");
-    return g + '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="var(--steel)" stroke-width="5"/>';
-  }
-  function brickWall(x, y, w, h) { return rect(x, y, w, h, "url(#pBrick)"); }
   function neon(text, x, y, size, color) {
     var t = '<text x="' + x + '" y="' + y + '" text-anchor="middle" style="font:700 ' + size + 'px var(--display)" fill="' + color + '"';
     return t + ' filter="url(#fGlow)" opacity=".9">' + text + "</text>" + t + ">" + text + "</text>";
   }
-  function strip(x, y, w, color) { return rect(x, y - 1, w, 2, color) + rect(x, y - 3, w, 6, color, ' opacity=".5" filter="url(#fBlur)"'); }
+  // A desk seen from above: top, front face, monitor (back side) with a coloured backlight
+  function deskSvg(x, y, color, on, id) {
+    return (on ? '<g class="station" id="' + id + '"><ellipse class="mglow" cx="' + (x + 40) + '" cy="' + (y + 2) + '" rx="26" ry="10" fill="' + color + '" filter="url(#fBlur)"/></g>' : "") +
+      box(x, y, 80, 30, 8, "var(--desk-top)", "var(--side)") + rect(x + 4, y + 20, 72, 2, on ? color : "#3a4249", ' opacity=".9"') +
+      rect(x + 22, y - 6, 36, 12, "#0b0d0f", ' rx="2"') + rect(x + 37, y + 5, 6, 5, "#0b0d0f") +
+      rect(x + 26, y + 12, 22, 6, "#2a3036", ' rx="1.5"') + (on ? "" : rect(x + 56, y + 9, 12, 9, "#3a4249", ' rx="1.5"'));
+  }
+  function gamingChair(x, y, c) {
+    return rect(x - 13, y - 34, 26, 30, "#121518", ' rx="9"') + rect(x - 4, y - 32, 8, 26, c, ' rx="3" opacity=".9"');
+  }
+
+  function plate(f) {
+    var o = OY[f], s = '<g transform="translate(0 ' + o + ')">';
+    // north wall face: brick with steel windows; floor
+    s += rect(40, 0, 920, 34, "url(#pBrick)") + rect(40, 34, 920, 256, f === 2 ? "url(#pWood)" : "var(--concrete)");
+    s += rect(40, 34, 920, 10, "#000", ' opacity=".18"');
+    s += '<rect x="40" y="0" width="920" height="290" fill="none" stroke="var(--steel)" stroke-width="6"/>';
+    if (f === 2) {
+      s += windowPane(80, 5, 120, 24) + windowPane(240, 5, 150, 24) + windowPane(450, 5, 140, 24) + windowPane(680, 5, 150, 24);
+      // meeting room
+      s += rect(654, 34, 208, 118, "var(--glass)") + '<ellipse cx="756" cy="108" rx="84" ry="34" fill="#000" opacity=".12"/>';
+      [[700, 72], [740, 66], [780, 66], [820, 72], [700, 132], [740, 136], [780, 136], [820, 132]].forEach(function (p) { s += chairTop(p[0], p[1], "#2a3036"); });
+      s += label(756, 148, "MEETING ROOM");
+      // pantry
+      s += rect(654, 200, 208, 90, "#000", ' opacity=".1"') + label(700, 284, "PANTRY") + chairTop(704, 272) + chairTop(738, 234);
+      // phone booths + lounge rug
+      s += label(520, 112, "PHONE BOOTHS") + '<ellipse cx="520" cy="240" rx="96" ry="38" fill="#2a3a8c" opacity=".55"/><ellipse cx="520" cy="240" rx="80" ry="28" fill="none" stroke="var(--neon-c)" stroke-width="2" opacity=".6"/>' + label(520, 196, "LOUNGE");
+      s += label(250, 286, "HOT DESKS");
+      s += plantTop(400, 70) + plantTop(400, 280) + plantTop(630, 280, .9) + plantTop(90, 286, .8);
+      s += rect(612, 118, 4, 4, "transparent");
+    } else {
+      s += windowPane(290, 5, 90, 24) + windowPane(580, 5, 60, 24);
+      s += neon("寰学 Glostudy", 470, 24, 15, "var(--neon-b)");
+      s += '<g>' + rect(84, 4, 160, 26, "#06090b", ' rx="3" stroke="#1f2a30"') +
+        '<text class="ws-small" x="94" y="15">LONDON</text><text class="ws-big" id="wsLdn" x="94" y="27">--:--</text>' +
+        '<text class="ws-small" x="146" y="15">BEIJING</text><text class="ws-big" id="wsBjs" x="146" y="27">--:--</text>' +
+        '<text class="ws-small" x="198" y="21" id="wsReview">0 REVIEW</text></g>';
+      s += windowPane(690, 5, 150, 24);
+      // consult rooms
+      s += rect(40, 34, 110, 112, "var(--glass)") + rect(154, 34, 110, 112, "var(--glass)");
+      s += label(95, 140, "CONSULT A") + label(210, 140, "CONSULT B");
+      [[72, 66], [120, 66], [96, 122], [186, 66], [234, 66], [210, 122]].forEach(function (p) { s += chairTop(p[0], p[1], "#7a4a2c"); });
+      // waiting area rug
+      s += '<path d="M120 230 l30 -30 h120 l30 30 l-30 54 h-120 z" fill="#14a39a" opacity=".35"/>' + label(220, 196, "WAITING AREA");
+      // your office
+      s += rect(654, 34, 208, 162, "var(--glass)") + label(758, 192, "YOUR OFFICE");
+      // entrance and street
+      s += rect(436, 286, 68, 8, "#bfe3ee") + label(470, 282, "ENTRANCE");
+      s += plantTop(380, 90) + plantTop(560, 280, .9) + plantTop(610, 280, .9) + plantTop(840, 70, .7);
+      s += label(470, 196, "RECEPTION");
+    }
+    // core: WC, lift and stairs (the core opens to the floor between y 170 and 240)
+    s += rect(862, 34, 98, 256, "#1a1e22") + rect(862, 170, 18, 70, "#1f2428") + rect(880, 34, 78, 96, "#22282d", ' rx="2"') + label(919, 86, "WC") +
+      rect(884, 140, 66, 60, "#0c0f12", ' rx="3"') + rect(888, 144, 58, 52, "#20262c", ' rx="2"') +
+      '<g class="liftdoors" id="lift' + f + '">' + rect(888, 186, 29, 10, "#7d8a94") + rect(917, 186, 29, 10, "#7d8a94") + "</g>" +
+      rect(904, 148, 26, 12, "#05080a", ' rx="2"') + '<text class="lift-ind" id="liftInd' + f + '" x="917" y="157.5" text-anchor="middle">' + f + "</text>" + label(917, 234, "LIFT");
+    for (var st = 0; st < 4; st++) s += rect(884, 250 + st * 10, 70, 7, st % 2 ? "#2a3036" : "#323940");
+    s += label(919, 288, "STAIRS");
+    s += "</g>";
+    return s;
+  }
 
   function sceneSvg() {
     var lights = "";
     [[40, 138], [70, 124], [150, 142], [250, 132], [290, 118], [420, 134], [520, 130], [760, 138], [840, 122], [900, 136], [950, 128]].forEach(function (p) { lights += rect(p[0], p[1], 3, 3, "#ffd88f"); lights += rect(p[0] + 8, p[1] + 9, 3, 3, "#ffd88f"); });
-    var skyline = '<path id="skyline" d="M0 175 V140 h30 v-10 h26 v14 h20 V118 h24 v57 z M100 175 V134 h34 v-14 h22 v55 z M160 175 V144 h40 v-26 h18 v57 z M228 175 V126 h28 v-16 h6 l4 -26 l4 26 h6 v16 h4 v65 z M270 175 V138 h46 v37 z M330 175 V122 h30 v53 z M372 175 V142 h54 v33 z M436 175 V130 l26 -64 l26 64 v45 z M500 175 V136 h44 v39 z M556 175 V118 c18 -30 40 -30 54 0 v57 z M620 175 V140 h40 v35 z M672 175 V126 h36 v49 z M720 175 V144 h48 v31 z M780 175 V130 h22 v-12 h22 v57 z M836 175 V140 h50 v35 z M896 175 V122 h30 v53 z M936 175 V136 h64 v39 z" fill="#9db4c4" opacity=".9"/>';
-    var skyline1 = '<use href="#skyline" transform="translate(0 278)" opacity=".8"/>';
-    // timber trusses under the 2F ceiling
-    var truss = rect(66, 52, 806, 6, "var(--timber-2)") + rect(66, 70, 806, 5, "var(--timber)");
-    for (var tx = 66; tx < 860; tx += 62) truss += '<line x1="' + tx + '" y1="56" x2="' + (tx + 31) + '" y2="72" stroke="var(--timber)" stroke-width="4"/><line x1="' + (tx + 31) + '" y1="72" x2="' + (tx + 62) + '" y2="56" stroke="var(--timber)" stroke-width="4"/>';
-    // hanging plants along the truss
-    var vines = "";
-    [90, 128, 205, 262, 330, 470, 515, 560, 700, 745, 822].forEach(function (vx, i) {
-      var len = 18 + (i * 13) % 26;
-      vines += '<line x1="' + vx + '" y1="74" x2="' + (vx + (i % 2 ? 3 : -3)) + '" y2="' + (74 + len) + '" stroke="#2f6b46" stroke-width="1.2"/>';
-      for (var k = 0; k < len; k += 7) vines += '<ellipse cx="' + (vx + (k % 14 ? 3 : -3)) + '" cy="' + (78 + k) + '" rx="4" ry="2.6" fill="' + (k % 14 ? "#3f9a65" : "#2f7d52") + '"/>';
-    });
-    // 2F wooden floor planks, 1F concrete
-    var planks = rect(66, 250, 806, 68, "var(--wood-floor)");
-    for (var py = 258; py < 318; py += 9) planks += rect(66, py, 806, 1, "#000", ' opacity=".18"');
-    var concrete = rect(66, 528, 806, 68, "var(--concrete)") + rect(66, 528, 806, 22, "#000", ' opacity=".08"');
-    // geometric rug in the lounge
-    var rug = '<g opacity=".95">' +
-      '<path d="M398 566 l20 -22 h100 l20 22 z" fill="#2a3a8c"/><path d="M418 544 l25 22 l25 -22 z" fill="var(--neon-c)"/><path d="M468 544 l25 22 l25 -22 z" fill="#e0463c"/>' +
-      '<path d="M443 566 l25 -22 l25 22 z" fill="#14a39a"/></g>';
-
-    var back =
+    var defs =
       '<defs>' +
         '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="sky0" offset="0" stop-color="#8fc7ec"/><stop id="sky1" offset="1" stop-color="#dcf0f8"/></linearGradient>' +
         '<pattern id="pBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--mortar)"/><rect x=".8" y=".8" width="22.4" height="4.6" rx=".8" fill="var(--brick)"/><rect x="-11.2" y="6.8" width="22.4" height="4.6" rx=".8" fill="var(--brick-2)"/><rect x="12.8" y="6.8" width="22.4" height="4.6" rx=".8" fill="var(--brick)"/></pattern>' +
+        '<pattern id="pWood" width="60" height="12" patternUnits="userSpaceOnUse"><rect width="60" height="12" fill="var(--wood-floor)"/><rect y="11" width="60" height="1" fill="#000" opacity=".22"/><rect x="38" width="1" height="12" fill="#000" opacity=".18"/></pattern>' +
+        '<pattern id="pGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity=".04"/></pattern>' +
         '<filter id="fBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>' +
         '<filter id="fGlow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="2.5"/></filter>' +
         '<filter id="fEye" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.6"/></filter>' +
         '<linearGradient id="gShell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#eef2f5"/><stop offset="1" stop-color="#c7d0d7"/></linearGradient>' +
         '<linearGradient id="gVisor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2836"/><stop offset="1" stop-color="#070b10"/></linearGradient>' +
         '<linearGradient id="gLimb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a545e"/><stop offset="1" stop-color="#2a3138"/></linearGradient>' +
-      '</defs>' +
-      rect(0, 0, 1000, 650, "url(#sky)") + skyline + skyline1 + '<g class="city-lights" id="cityLights">' + lights + "</g>" +
-      // street
-      rect(0, 608, 1000, 42, "var(--ground)") + rect(0, 632, 1000, 18, "var(--road)") +
-      [40, 160, 280, 400, 520, 640, 760, 880].map(function (x) { return rect(x, 640, 50, 3, "#e8ecef", ' opacity=".45"'); }).join("") +
-      tree(28, 608) + tree(972, 608) +
-      // roof with neon sign
-      rect(52, 40, 896, 12, "var(--slab)") + rect(390, 8, 220, 30, "#0d1013", ' rx="4"') + neon("Glostudy 寰学", 500, 30, 17, "var(--neon-a)") +
-      rect(404, 36, 3, 6, "#0d1013") + rect(593, 36, 3, 6, "#0d1013") + plant(110, 40, .55) + plant(150, 40, .45) + plant(860, 40, .55) +
-
-      // ---- 2F: brick with big steel windows, timber trusses, vines ----
-      brickWall(66, 52, 806, 198) + steelWindow(96, 96, 230, 132) + steelWindow(344, 96, 236, 132) + steelWindow(598, 96, 70, 132) +
-      truss + vines + planks + strip(66, 316, 806, "var(--neon-a)") +
-      rect(52, 318, 896, 12, "var(--slab)") +
-      // ---- 1F: brick on the left with neon sign, glass on the right ----
-      brickWall(66, 330, 806, 198) + skyPane(620, 384, 248, 144) +
-      rect(66, 330, 806, 8, "var(--steel-2)") + strip(66, 340, 806, "var(--neon-b)") +
-      concrete + rug +
-      rect(52, 596, 896, 12, "var(--slab)") +
-      // building frame (black steel)
-      rect(52, 40, 14, 568, "var(--steel)") + rect(934, 40, 14, 568, "var(--steel)") +
-      // floor tags
-      '<g>' + rect(76, 82, 100, 18, "#0d1013", ' rx="9" opacity=".9"') + '<text class="label-sm" x="126" y="94.5" text-anchor="middle">2F · TEAM FLOOR</text></g>' +
-      '<g>' + rect(76, 350, 100, 18, "#0d1013", ' rx="9" opacity=".9"') + '<text class="label-sm" x="126" y="362.5" text-anchor="middle">1F · RECEPTION</text></g>' +
-      // lamps
-      lamp(170, 75, 22) + lamp(390, 75, 22) + lamp(610, 75, 22) + lamp(780, 75, 22) + lamp(210, 342, 22) + lamp(460, 342, 22) + lamp(745, 342, 22) +
-      // neon sign on the brick, wall screen
-      neon("寰学", 168, 404, 34, "var(--neon-b)") + neon("GLOSTUDY · UK", 168, 424, 11, "var(--neon-a)") +
-      '<g>' + rect(396, 380, 128, 68, "#06090b", ' rx="5" stroke="#1f2a30"') +
-        '<text class="ws-small" x="408" y="396">LONDON</text><text class="ws-big" id="wsLdn" x="408" y="414">--:--</text>' +
-        '<text class="ws-small" x="466" y="396">BEIJING</text><text class="ws-big" id="wsBjs" x="466" y="414">--:--</text>' +
-        '<line x1="408" y1="423" x2="512" y2="423" stroke="#1f3a44"/><text class="ws-small" x="408" y="438" id="wsReview">0 TO REVIEW</text></g>' +
-
-      // ---- 2F furniture ----
-      '<g>' + rect(76, 206, 6, 74, "var(--steel)") + rect(122, 206, 6, 74, "var(--steel)") + [212, 240].map(function (yy, r) {
-        return [0, 1, 2, 3].map(function (i) { return rect(85 + i * 9, yy + (i % 2 ? 3 : 0), 7, i % 2 ? 22 : 25, ["#f0a030", "#6c7ee0", "#ec6d5a", "#13a3b0"][(i + r) % 4], ' rx="1.5"'); }).join("") + rect(76, yy + 25, 52, 3, "var(--steel)");
-      }).join("") + "</g>" +
-      '<g class="station" id="st2">' + chair(170, 280, "#13a3b0") + deskTop(170, 280, 150, "#13a3b0") + monitor(194, 222, "m2", "#13a3b0") + rect(102, 240, 26, 6, "#6c7ee0", ' rx="1.5"') + rect(100, 234, 30, 6, "#ec6d5a", ' rx="1.5"') + "</g>" +
-      plant(282, 300, .7) +
-      '<g class="station" id="st3">' + chair(390, 280, "#6c7ee0") + deskTop(390, 280, 150, "#6c7ee0") + monitor(414, 222, "m3", "#6c7ee0") + rect(326, 241, 28, 7, "#e9edf0") + rect(329, 237, 28, 7, "#ffffff") + "</g>" +
-      '<g>' + rect(676, 150, 56, 56, "#e9edf0", ' rx="3"') + rect(681, 155, 18, 15, "#f0a030", ' rx="2"') + rect(703, 155, 24, 11, "#ec6d5a", ' rx="2"') + rect(681, 174, 22, 26, "#6c7ee0", ' rx="2" opacity=".9"') + rect(707, 170, 20, 30, "#13a3b0", ' rx="2" opacity=".85"') + "</g>" +
-      '<g class="station" id="st4">' + chair(610, 280, "#ec6d5a") + deskTop(610, 280, 150, "#ec6d5a") + monitor(634, 222, "m4", "#ec6d5a") + '<path d="M546 242 l14 -7 v18 l-14 -7 z" fill="#f0a030"/>' + rect(541, 239, 6, 6, "var(--leg)", ' rx="1"') + "</g>" +
-      // kitchen bar: black cabinets, timber top, espresso
-      '<g>' + rect(742, 230, 82, 52, "#121518", ' rx="3"') + [750, 776, 802].map(function (xx) { return rect(xx, 238, 18, 38, "#1c2126", ' rx="2"') + rect(xx + 7, 254, 4, 8, "var(--timber)", ' rx="1"'); }).join("") +
-        rect(736, 224, 94, 8, "var(--timber)", ' rx="2"') +
-        rect(752, 194, 32, 30, "#0b0d0f", ' rx="5"') + rect(757, 199, 22, 4, "var(--neon-a)", ' rx="2"') + rect(762, 210, 12, 9, "#d6dde2", ' rx="1"') +
-        rect(794, 214, 8, 10, "#ffffff", ' rx="2"') + rect(806, 214, 8, 10, "#ffffff", ' rx="2"') +
-        '<text class="label-xs" x="783" y="296" text-anchor="middle">KITCHEN</text></g>' +
-
-      // ---- 1F furniture ----
-      '<g>' + rect(66, 450, 34, 146, "var(--glass-tint)", ' stroke="var(--steel)" stroke-width="3"') + '<line x1="94" y1="515" x2="94" y2="535" stroke="#d6dde2" stroke-width="2"/>' + rect(16, 446, 50, 6, "var(--steel)") + '<text class="label-xs" x="84" y="524" text-anchor="middle" transform="rotate(-90 84 524)" style="fill:#e8ecef">ENTRANCE</text></g>' +
-      '<g class="station" id="st1">' + chair(210, 558, "#f0a030") + rect(104, 520, 212, 14, "var(--timber)", ' rx="4"') + monitor(246, 486, "m1", "#f0a030") + '<circle cx="128" cy="516" r="5" fill="#f0a030"/>' + rect(123, 516, 10, 3, "var(--leg)") + "</g>" +
-      '<g>' + rect(348, 500, 26, 66, "#e9edf0", ' rx="6"') + '<path d="M352 500 v-22 q9 -7 18 0 v22 z" fill="#bfe3ee"/>' + rect(356, 522, 10, 5, "var(--neon-a)", ' rx="2"') + "</g>" +
-      // lounge: leather sofa, arcade machine
-      '<g>' + rect(408, 520, 112, 22, "#7a4a2c", ' rx="8"') + rect(404, 534, 120, 26, "#8d5733", ' rx="10"') + rect(400, 528, 14, 32, "#7a4a2c", ' rx="6"') + rect(514, 528, 14, 32, "#7a4a2c", ' rx="6"') + rect(412, 560, 4, 6, "var(--leg)") + rect(512, 560, 4, 6, "var(--leg)") + "</g>" +
-      '<g>' + '<path d="M540 588 v-92 l8 -10 h28 v102 z" fill="#1c1f3a"/>' + rect(546, 498, 24, 20, "#05070a", ' rx="2"') + rect(548, 500, 20, 16, "var(--neon-b)", ' opacity=".55"') + rect(552, 504, 4, 4, "var(--neon-c)") + rect(560, 508, 4, 4, "var(--neon-a)") +
-        rect(544, 524, 30, 8, "#2a2f55", ' rx="1"') + '<circle cx="552" cy="527" r="2.5" fill="#e0463c"/><circle cx="560" cy="528" r="2" fill="var(--neon-c)"/><circle cx="566" cy="528" r="2" fill="var(--neon-a)"/>' +
-        rect(540, 486, 36, 6, "var(--neon-b)", ' opacity=".9"') + "</g>" +
-      // your office: black steel-framed glass box
-      '<g>' + rect(616, 384, 256, 212, "var(--glass)") +
-        [616, 680, 744, 808, 868].map(function (xx) { return rect(xx, 384, 4, 212, "var(--steel)"); }).join("") +
-        rect(616, 382, 256, 5, "var(--steel)") + rect(616, 470, 256, 3, "var(--steel)") +
-        '<text class="label-xs" x="776" y="400" text-anchor="middle" style="fill:#e8ecef">YOUR OFFICE</text>' +
-        rect(BOSS.x - 19, BOSS.y - 54, 38, 40, "#121518", ' rx="11"') + rect(BOSS.x - 4, BOSS.y - 52, 8, 34, "var(--neon-a)", ' rx="3" opacity=".8"') +
-        rect(BOSS.x - 100, BOSS.y - 31, 200, 12, "var(--timber)", ' rx="3"') + monitor(BOSS.x + 28, BOSS.y - 64, "m5", "#35e0f0") + plant(850, 596, .6) + "</g>" +
-      // lift
-      '<g>' + rect(874, 52, 56, 544, "var(--glass)") + rect(872, 52, 4, 544, "var(--steel)") + rect(928, 52, 4, 544, "var(--steel)") +
-        '<line x1="902" y1="52" x2="902" y2="596" stroke="#5b6670" stroke-dasharray="2 4"/></g>' +
-      '<g id="liftCar"><line id="liftCable" x1="902" y1="-122" x2="902" y2="0" stroke="#0c0e10" stroke-width="1.5"/>' + rect(876, -122, 52, 126, "rgba(53,224,240,.08)", ' rx="3" stroke="#0c0e10" stroke-width="2.5"') + rect(876, -122, 52, 6, "#0c0e10", ' rx="2"') + rect(880, -114, 44, 2, "var(--neon-a)") + "</g>";
-
-    var facade = '<g pointer-events="none">' + [120, 360, 600].map(function (x) { return '<path d="M' + x + ' 52 h90 l-120 544 h-90 z" fill="#ffffff" opacity=".035"/>'; }).join("") + "</g>";
-
-    return '<svg class="scene" id="sceneSvg" viewBox="0 0 1000 650" role="group" aria-label="Glostudy office building. Click a robot to chat, or your desk to review.">' +
-      back + '<g id="layer"></g>' + facade + "</svg>";
+        '<g id="skylineSrc"><path id="skyline" d="M0 175 V140 h30 v-10 h26 v14 h20 V118 h24 v57 z M100 175 V134 h34 v-14 h22 v55 z M160 175 V144 h40 v-26 h18 v57 z M228 175 V126 h28 v-16 h6 l4 -26 l4 26 h6 v16 h4 v65 z M270 175 V138 h46 v37 z M330 175 V122 h30 v53 z M372 175 V142 h54 v33 z M436 175 V130 l26 -64 l26 64 v45 z M500 175 V136 h44 v39 z M556 175 V118 c18 -30 40 -30 54 0 v57 z" fill="#9db4c4" transform="translate(0 -110)"/>' +
+        '<g class="city-lights" id="cityLights" transform="translate(0 -110)">' + lights + "</g></g>" +
+      '</defs>';
+    var back = rect(0, 0, 1000, 720, "#15191d") + rect(0, 0, 1000, 720, "url(#pGrid)") +
+      '<g><rect x="40" y="6" width="96" height="16" rx="8" fill="#0d1013"/><text class="label-sm" x="88" y="17.5" text-anchor="middle">2F · TEAM FLOOR</text></g>' +
+      '<g><rect x="40" y="346" width="150" height="16" rx="8" fill="#0d1013"/><text class="label-sm" x="115" y="357.5" text-anchor="middle">1F · RECEPTION &amp; CONSULTING</text></g>' +
+      '<g>' + rect(780, 4, 180, 20, "#0d1013", ' rx="4"') + neon("Glostudy 寰学 · UK Study", 870, 18.5, 11, "var(--neon-a)") + "</g>" +
+      plate(2) + plate(1) +
+      // street outside the entrance
+      rect(0, 664, 1000, 56, "#22262a") + rect(0, 664, 1000, 8, "#3a3f43") + [40, 160, 280, 400, 520, 640, 760, 880].map(function (x) { return rect(x, 696, 50, 3, "#e8ecef", ' opacity=".35"'); }).join("") +
+      '<path d="M436 662 h68 l10 10 h-88 z" fill="#3a3f43"/>';
+    return '<svg class="scene" id="sceneSvg" viewBox="0 0 1000 720" role="group" aria-label="Glostudy office floor plans. Click a robot to chat, or your desk to review.">' +
+      defs + back + '<g id="layer"></g></svg>';
   }
 
+  // Furniture that robots can walk in front of or behind: sorted with the robots by the y of its front edge
   function frontItem(y, html, extra) {
     var g = document.createElementNS(NS, "g");
     g.setAttribute("pointer-events", "none");
@@ -698,24 +736,58 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("layer").appendChild(g);
     return g;
   }
+  function furnish() {
+    var o2 = OY[2], o1 = OY[1];
+    function T(f, html) { return '<g transform="translate(0 ' + OY[f] + ')">' + html + "</g>"; }
+    // 2F desks: front row Scout, Quill, Spark; back row hot desks
+    var team = [["2", 120, "#13a3b0"], ["3", 210, "#6c7ee0"], ["4", 300, "#ec6d5a"]];
+    team.forEach(function (d) { frontItem(o2 + 111, T(2, gamingChair(d[1] + 40, 112, d[2]))); frontItem(o2 + 134, T(2, deskSvg(d[1], 104, d[2], true, "st" + d[0]))); });
+    [120, 210, 300].forEach(function (x) { frontItem(o2 + 201, T(2, gamingChair(x + 40, 202, "#3a4249"))); frontItem(o2 + 224, T(2, deskSvg(x, 194, "#3a4249", false))); });
+    frontItem(o2 + 282, T(2, box(42, 60, 20, 222, 6, "#1c2126", "#121518") + [70, 100, 130, 160, 190, 220, 250].map(function (yy, i) { return rect(45, yy, 14, 22, ["#f0a030", "#6c7ee0", "#ec6d5a", "#13a3b0"][i % 4], ' rx="1.5"'); }).join("")));
+    frontItem(o2 + 100, T(2, box(440, 40, 75, 60, 10, "rgba(150,210,225,.18)", "#1c2126", ' stroke="var(--glass-line)"') + box(525, 40, 75, 60, 10, "rgba(150,210,225,.18)", "#1c2126", ' stroke="var(--glass-line)"') + chairTop(477, 66, "#ec6d5a") + chairTop(562, 66, "#6c7ee0")));
+    frontItem(o2 + 225, T(2, box(490, 205, 60, 20, 6, "var(--timber)", "var(--timber-2)")));
+    frontItem(o2 + 272, T(2, box(450, 240, 140, 32, 10, "#8d5733", "#6e4226") + rect(450, 236, 140, 10, "#7a4a2c", ' rx="5"')));
+    frontItem(o2 + 166, T(2, box(620, 140, 28, 26, 8, "#d6dde2", "#9aa6ae") + rect(626, 143, 16, 4, "#0b0d0f")));
+    frontItem(o2 + 124, T(2, '<ellipse cx="756" cy="104" rx="66" ry="22" fill="var(--timber)"/><ellipse cx="756" cy="108" rx="66" ry="22" fill="var(--timber-2)" opacity=".5"/><ellipse cx="756" cy="101" rx="66" ry="20" fill="var(--timber)"/>'));
+    frontItem(o2 + 156, T(2, glassLine(652, 34, 652, 154) + glassLine(652, 154, 690, 154) + glassLine(730, 154, 862, 154)));
+    frontItem(o2 + 286, T(2, box(820, 205, 38, 81, 8, "#121518", "#0b0d0f") + rect(820, 205, 38, 28, "#d6dde2", ' rx="2"') + rect(826, 244, 26, 18, "#0b0d0f", ' rx="3"') + rect(830, 248, 18, 3, "var(--neon-a)")));
+    frontItem(o2 + 262, T(2, '<circle cx="720" cy="249" r="16" fill="var(--timber)"/>'));
+    // 1F
+    frontItem(o1 + 150, T(1, glassLine(152, 34, 152, 148) + glassLine(266, 34, 266, 148) + glassLine(42, 148, 80, 148) + glassLine(115, 148, 195, 148) + glassLine(230, 148, 266, 148)));
+    frontItem(o1 + 110, T(1, '<circle cx="96" cy="92" r="22" fill="var(--timber)"/><circle cx="210" cy="92" r="22" fill="var(--timber)"/>' + rect(84, 84, 16, 11, "#ffffff", ' rx="1" transform="rotate(-8 92 90)"') + rect(200, 86, 16, 11, "#ffffff", ' rx="1" transform="rotate(6 208 92)"')));
+    frontItem(o1 + 141, T(1, gamingChair(470, 142, "#f0a030")));
+    frontItem(o1 + 178, T(1, '<ellipse class="mglow" cx="470" cy="150" rx="30" ry="10" fill="#f0a030" filter="url(#fBlur)" opacity=".35"/>' + box(400, 150, 140, 28, 12, "var(--timber)", "#15191d") +
+      [410, 422, 434, 446, 494, 506, 518, 530].map(function (xx) { return rect(xx, 168, 5, 9, "var(--timber)", ' opacity=".8"'); }).join("") + rect(452, 144, 36, 12, "#0b0d0f", ' rx="2"') + '<circle cx="414" cy="156" r="4" fill="#f0a030"/>'));
+    frontItem(o1 + 272, T(1, box(110, 240, 110, 32, 10, "#8d5733", "#6e4226") + rect(110, 236, 110, 10, "#7a4a2c", ' rx="5"') + box(236, 240, 94, 32, 10, "#8d5733", "#6e4226") + rect(236, 236, 94, 10, "#7a4a2c", ' rx="5"')));
+    frontItem(o1 + 224, T(1, box(180, 205, 70, 19, 6, "var(--timber)", "var(--timber-2)") + rect(196, 208, 14, 9, "#ffffff", ' rx="1"')));
+    frontItem(o1 + 262, T(1, box(350, 222, 24, 40, 6, "#121518", "#0b0d0f") + rect(353, 226, 8, 11, "#e0463c") + rect(363, 226, 8, 11, "#13a3b0") + rect(353, 240, 8, 11, "#6c7ee0") + rect(363, 240, 8, 11, "#f0a030") + label(362, 274, "UK UNIS")));
+    frontItem(o1 + 70, T(1, box(588, 40, 24, 30, 6, "#e9edf0", "#b9c3ca") + '<circle cx="600" cy="44" r="8" fill="#bfe3ee"/>'));
+    frontItem(o1 + 200, T(1, glassLine(652, 34, 652, 198) + glassLine(652, 198, 700, 198) + glassLine(740, 198, 862, 198)));
+    frontItem(o1 + 120, T(1, box(662, 40, 28, 80, 6, "#1c2126", "#121518") + [48, 66, 84, 102].map(function (yy, i) { return rect(665, yy, 22, 12, ["#6c7ee0", "#ec6d5a", "#13a3b0", "#f0a030"][i], ' rx="1.5"'); }).join("")));
+    frontItem(o1 + 105, T(1, gamingChair(756, 106, "#35e0f0")));
+    var boss = frontItem(o1 + 140, T(1,
+      '<ellipse class="ring" cx="756" cy="150" rx="70" ry="10"/>' +
+      '<ellipse class="mglow" cx="770" cy="110" rx="26" ry="10" fill="#35e0f0" filter="url(#fBlur)" opacity=".35"/>' +
+      box(700, 112, 112, 28, 9, "var(--timber)", "var(--timber-2)") + rect(752, 104, 36, 12, "#0b0d0f", ' rx="2"') +
+      rect(708, 116, 34, 5, "#0b0d0f", ' rx="1"') + '<g id="trayFolders"></g>' +
+      '<g class="badge" id="badge" style="display:none"><circle cx="724" cy="96" r="9" fill="var(--bad)"/><text id="badgeN" x="724" y="99.8" text-anchor="middle"></text></g>' +
+      rect(738, 126, 36, 11, "#14181c", ' rx="3"') + '<text class="label-sm" x="756" y="134.5" text-anchor="middle">YOU</text>' +
+      rect(690, 84, 132, 70, "transparent", ' class="hit"')),
+      function (g) { g.removeAttribute("pointer-events"); g.setAttribute("class", "bossdesk"); g.id = "bossdesk"; g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", "Your desk: open the clients waiting for review"); });
+    return boss;
+  }
 
-  var COLORS = { "--c1": "#f0a030", "--c2": "#13a3b0", "--c3": "#6c7ee0", "--c4": "#ec6d5a" };
   function actorSvg(b) {
     var c = COLORS[b.color], hat = "", front = "";
     if (b.prop === "headset") {
       hat = '<path d="M-22 -60 Q0 -92 22 -60" fill="none" stroke="#1a1f24" stroke-width="3" stroke-linecap="round"/>';
       front = '<path d="M-24 -54 Q-23 -44 -12 -45" fill="none" stroke="#1a1f24" stroke-width="2"/><circle cx="-11" cy="-45" r="2.6" fill="' + c + '"/>';
     }
-    if (b.prop === "books") hat = // graduation cap
-      '<path d="M-24 -79 L0 -89 L24 -79 L0 -70 Z" fill="#1a1f24"/><rect x="-12" y="-79" width="24" height="7" rx="2" fill="#262c33"/>' +
-      '<path d="M15 -80 v13" stroke="' + c + '" stroke-width="2"/><circle cx="15" cy="-66" r="2.6" fill="' + c + '"/><circle cx="0" cy="-81" r="1.8" fill="' + c + '"/>';
-    if (b.prop === "paper") hat = // beret and pencil
-      '<path d="M-20 -72 Q-18 -88 4 -87 Q22 -86 20 -74 Q2 -79 -20 -72 Z" fill="' + c + '"/><circle cx="2" cy="-88" r="2.4" fill="' + c + '"/>' +
-      '<path d="M21 -66 l9 -12" stroke="#f0c040" stroke-width="3.5" stroke-linecap="round"/><path d="M29.5 -77.3 l1.6 -2.2" stroke="#e9a0a0" stroke-width="3.5"/>';
-    if (b.prop === "megaphone") hat = // backwards cap
-      '<path d="M-19 -71 Q-18 -88 0 -88 Q18 -88 19 -71 Z" fill="' + c + '"/><path d="M-19 -72 h-10 q-3 0 -2 3 h12 z" fill="' + c + '" opacity=".85"/><circle cx="0" cy="-88" r="2" fill="#1a1f24"/>';
-    return '<ellipse class="ring" cx="0" cy="0" rx="26" ry="7"/>' +
-      '<ellipse cx="0" cy="0" rx="17" ry="4.5" fill="#000" opacity=".28"/>' +
+    if (b.prop === "books") hat = '<path d="M-24 -79 L0 -89 L24 -79 L0 -70 Z" fill="#1a1f24"/><rect x="-12" y="-79" width="24" height="7" rx="2" fill="#262c33"/><path d="M15 -80 v13" stroke="' + c + '" stroke-width="2"/><circle cx="15" cy="-66" r="2.6" fill="' + c + '"/><circle cx="0" cy="-81" r="1.8" fill="' + c + '"/>';
+    if (b.prop === "paper") hat = '<path d="M-20 -72 Q-18 -88 4 -87 Q22 -86 20 -74 Q2 -79 -20 -72 Z" fill="' + c + '"/><circle cx="2" cy="-88" r="2.4" fill="' + c + '"/><path d="M21 -66 l9 -12" stroke="#f0c040" stroke-width="3.5" stroke-linecap="round"/><path d="M29.5 -77.3 l1.6 -2.2" stroke="#e9a0a0" stroke-width="3.5"/>';
+    if (b.prop === "megaphone") hat = '<path d="M-19 -71 Q-18 -88 0 -88 Q18 -88 19 -71 Z" fill="' + c + '"/><path d="M-19 -72 h-10 q-3 0 -2 3 h12 z" fill="' + c + '" opacity=".85"/><circle cx="0" cy="-88" r="2" fill="#1a1f24"/>';
+    var body =
+      '<ellipse cx="0" cy="0" rx="17" ry="4.5" fill="#000" opacity=".3"/>' +
       '<g class="leg leg-l"><rect x="-9" y="-15" width="7" height="11" rx="3" fill="url(#gLimb)"/><rect x="-12" y="-6" width="11" height="6" rx="3" fill="#1a1f24"/></g>' +
       '<g class="leg leg-r"><rect x="2" y="-15" width="7" height="11" rx="3" fill="url(#gLimb)"/><rect x="1" y="-6" width="11" height="6" rx="3" fill="#1a1f24"/></g>' +
       '<g class="robot-part">' +
@@ -741,27 +813,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       "</g>" +
       '<g class="bubble"><rect x="17" y="-104" width="32" height="15" rx="7.5" fill="#ffffff"/><circle cx="26" cy="-96.5" r="2" fill="' + c + '"/><circle cx="33" cy="-96.5" r="2" fill="' + c + '"/><circle cx="40" cy="-96.5" r="2" fill="' + c + '"/></g>' +
       '<g class="check-mark"><circle cx="28" cy="-96" r="8" fill="#2fbf71"/><path d="M24 -96 l3 3 5-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>' +
-      '<g class="hi"><rect x="17" y="-104" width="26" height="15" rx="7.5" fill="#ffffff"/><text x="30" y="-93" text-anchor="middle" style="fill:#10161b">Hi!</text></g>' +
-      '<g class="nametag"><rect x="-30" y="-122" width="60" height="17" rx="8.5"/><circle cx="-20" cy="-113.5" r="3" fill="' + c + '"/><text x="4" y="-109.8" text-anchor="middle">' + esc(b.name) + "</text></g>" +
-      '<rect class="hit" x="-32" y="-124" width="64" height="130"/>';
+      '<g class="hi"><rect x="17" y="-104" width="26" height="15" rx="7.5" fill="#ffffff"/><text x="30" y="-93" text-anchor="middle" style="fill:#10161b">Hi!</text></g>';
+    return '<ellipse class="ring" cx="0" cy="0" rx="20" ry="6"/>' +
+      '<g transform="scale(.7)">' + body + "</g>" +
+      '<g class="nametag"><rect x="-26" y="-88" width="52" height="15" rx="7.5"/><circle cx="-17" cy="-80.5" r="2.6" fill="' + c + '"/><text x="4" y="-77" text-anchor="middle">' + esc(b.name) + "</text></g>" +
+      '<rect class="hit" x="-24" y="-90" width="48" height="94"/>';
   }
 
   function buildScene() {
     $("sceneWrap").innerHTML = sceneSvg();
-    var layer = $("layer");
-    // desk fronts sit in the same layer as the robots, sorted by depth, so a robot walks in front of a desk but sits behind it
-    frontItem(280.5, deskFrontSvg(170, 280, 150)); frontItem(280.5, deskFrontSvg(390, 280, 150)); frontItem(280.5, deskFrontSvg(610, 280, 150));
-    frontItem(558.5, rect(104, 532, 212, 44, "#15191d", ' rx="6"') +
-      [118, 130, 142, 154, 266, 278, 290, 302].map(function (xx) { return rect(xx, 537, 6, 34, "var(--timber)", ' rx="2" opacity=".85"'); }).join("") +
-      rect(108, 573, 204, 2, "var(--neon-c)", ' opacity=".9"') +
-      '<text class="logo-txt" x="210" y="557" text-anchor="middle" style="fill:#f1f4f6">寰学</text><text class="label-xs" x="210" y="568" text-anchor="middle">RECEPTION</text>');
-    var boss = frontItem(558.5,
-      '<ellipse class="ring" cx="' + BOSS.x + '" cy="' + (BOSS.y + 24) + '" rx="110" ry="10"/>' + deskFrontSvg(BOSS.x, BOSS.y, 200) +
-      rect(BOSS.x - 92, BOSS.y - 37, 42, 6, "var(--leg)", ' rx="1.5"') + '<g id="trayFolders"></g>' +
-      '<g class="badge" id="badge" style="display:none"><circle cx="' + (BOSS.x - 52) + '" cy="' + (BOSS.y - 62) + '" r="10" fill="var(--bad)"/><text id="badgeN" x="' + (BOSS.x - 52) + '" y="' + (BOSS.y - 58) + '" text-anchor="middle"></text></g>' +
-      rect(BOSS.x - 24, BOSS.y - 10, 48, 14, "var(--panel)", ' rx="4" stroke="var(--desk-edge)"') + '<text class="label-sm" x="' + BOSS.x + '" y="' + (BOSS.y + 0.5) + '" text-anchor="middle">YOU</text>' +
-      rect(BOSS.x - 108, BOSS.y - 86, 216, 112, "transparent", ' class="hit"'),
-      function (g) { g.removeAttribute("pointer-events"); g.setAttribute("class", "bossdesk"); g.id = "bossdesk"; g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", "Your desk: open the clients waiting for review"); });
+    buildGrid(1); buildGrid(2);
+    var layer = $("layer"), boss = furnish();
     BOTS.forEach(function (b) {
       var g = document.createElementNS(NS, "g");
       g.setAttribute("class", "actor"); g.setAttribute("tabindex", "0"); g.setAttribute("role", "button");
@@ -769,7 +831,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       g.innerHTML = actorSvg(b);
       layer.appendChild(g);
       var seat = SEATS[b.id];
-      var a = actors[b.id] = { id: b.id, el: g, x: seat.x, y: seat.y, home: seat, path: [], token: 0, resolve: null };
+      var a = actors[b.id] = { id: b.id, el: g, x: seat.x, y: seat.y, f: seat.f, home: seat, path: [], token: 0, resolve: null, riding: false };
       place(a);
       function pick() { selectBot(b); a.el.classList.add("greet"); setTimeout(function () { a.el.classList.remove("greet"); }, 1400); }
       g.addEventListener("click", pick);
@@ -780,42 +842,57 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     boss.addEventListener("click", openReview);
     boss.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openReview(); } });
     sceneReady = true;
-    placeLift();
     tickClocks(); setInterval(tickClocks, 20000);
     requestAnimationFrame(loop);
     setInterval(wander, 4000);
   }
 
   function place(a) { a.el.setAttribute("transform", "translate(" + a.x.toFixed(1) + " " + a.y.toFixed(1) + ")"); a.el.dataset.y = String(a.y); }
-  function placeLift() { $("liftCar").setAttribute("transform", "translate(0 " + liftY.toFixed(1) + ")"); $("liftCable").setAttribute("y2", String(52 - liftY)); }
   function sortLayer() {
     var layer = $("layer"), kids = Array.prototype.slice.call(layer.children);
     kids.sort(function (p, q) { return (+p.dataset.y) - (+q.dataset.y); });
     kids.forEach(function (k, i) { if (layer.children[i] !== k) layer.appendChild(k); });
   }
-  function atHome(a) { return !a.path.length && Math.abs(a.x - a.home.x) < 1 && Math.abs(a.y - a.home.y) < 1; }
+  function atHome(a) { return !a.path.length && !a.riding && a.f === a.home.f && Math.abs(a.x - a.home.x) < 1 && Math.abs(a.y - a.home.y) < 1; }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
-  // Walk to (tx, ty): along this floor's lane, through the lift if the target is on the other floor.
-  function goto(a, tx, ty) {
-    a.token++;
+  // Walk on the current floor to a local point; resolves false if a newer walk replaced it
+  function walkLocal(a, lx, ly, tok) {
+    if (a.token !== tok) return Promise.resolve(false);
+    var o = OY[a.f], pts = findPath(a.f, { x: a.x, y: a.y - o }, { x: lx, y: ly }).map(function (p) { return { x: p.x, y: p.y + o }; });
+    if (REDUCED) { a.x = lx; a.y = ly + o; place(a); sortLayer(); return Promise.resolve(true); }
     if (a.resolve) { a.resolve(false); a.resolve = null; }
-    if (liftOwner === a.id) liftOwner = null;
-    var inShaft = Math.abs(a.x - LIFT_X) < 1;
-    var pts = [], f0 = floorOf(a.y), f1 = floorOf(ty), lane0 = AISLES[f0], lane1 = AISLES[f1];
-    function push(x, y, ride) { var l = pts.length ? pts[pts.length - 1] : { x: a.x, y: a.y }; if (Math.abs(l.x - x) > .5 || Math.abs(l.y - y) > .5) pts.push({ x: x, y: y, ride: !!ride }); }
-    if (Math.abs(a.y - ty) > 1 || Math.abs(a.x - tx) > 1) {
-      push(a.x, lane0, inShaft);
-      if (f0 !== f1) { push(LIFT_X, lane0); push(LIFT_X, lane1, true); }
-      push(tx, lane1);
-      push(tx, ty);
-    }
-    if (REDUCED || !pts.length) {
-      a.x = tx; a.y = ty; a.path = []; place(a); sortLayer();
-      if (f0 !== f1) { liftY = lane1; placeLift(); }
-      return new Promise(function (res) { setTimeout(function () { res(true); }, REDUCED ? 300 : 0); });
-    }
     a.path = pts; a.el.classList.add("walking");
     return new Promise(function (res) { a.resolve = res; });
+  }
+  async function ride(a, to) {
+    while (liftOwner && liftOwner !== a.id) await sleep(200);
+    liftOwner = a.id; a.riding = true;
+    var from = a.f;
+    $("lift" + from).classList.add("open"); await sleep(REDUCED ? 0 : 350);
+    a.el.classList.add("in-lift"); await sleep(REDUCED ? 0 : 350);
+    $("lift" + from).classList.remove("open");
+    for (var k = 0; k < 2; k++) { $("liftInd1").textContent = $("liftInd2").textContent = from === 2 ? "▼" : "▲"; await sleep(REDUCED ? 0 : 450); }
+    a.f = to; a.x = LIFT_IN.x; a.y = LIFT_IN.y + OY[to]; place(a); sortLayer();
+    $("liftInd1").textContent = "1"; $("liftInd2").textContent = "2";
+    $("lift" + to).classList.add("open"); await sleep(REDUCED ? 0 : 300);
+    a.el.classList.remove("in-lift");
+    setTimeout(function () { $("lift" + to).classList.remove("open"); }, 900);
+    a.riding = false; liftOwner = null;
+  }
+  // Go to a global target (with floor). Resolves true on arrival, false if replaced by a newer errand.
+  async function goto(a, target) {
+    var tok = ++a.token;
+    while (a.riding) await sleep(150);
+    if (a.token !== tok) return false;
+    if (a.f !== target.f) {
+      if (!(await walkLocal(a, LIFT_DOOR.x, LIFT_DOOR.y, tok))) return false;
+      if (!(await walkLocal(a, LIFT_IN.x, LIFT_IN.y, tok))) return false;
+      await ride(a, target.f);
+      if (a.token !== tok) return false;
+      if (!(await walkLocal(a, LIFT_DOOR.x, LIFT_DOOR.y, tok))) return false;
+    }
+    return walkLocal(a, target.x, target.y - OY[target.f], tok);
   }
   var last = 0;
   function loop(ts) {
@@ -824,33 +901,23 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     Object.keys(actors).forEach(function (k) {
       var a = actors[k]; if (!a.path.length) return;
       moved = true;
-      var t = a.path[0];
-      if (t.ride && liftOwner && liftOwner !== a.id) return; // someone else is in the lift: wait
-      if (t.ride) liftOwner = a.id;
-      if (t.ride && Math.abs(liftY - a.y) > 1) {
-        // call the lift to this floor first
-        var dl = a.y - liftY, sl = 260 * dt;
-        liftY = Math.abs(dl) <= sl ? a.y : liftY + Math.sign(dl) * sl; placeLift(); return;
-      }
-      var dx = t.x - a.x, dy = t.y - a.y, d = Math.sqrt(dx * dx + dy * dy), step = (t.ride ? 130 : 160) * dt;
-      if (d <= step) { a.x = t.x; a.y = t.y; a.path.shift(); if (t.ride) liftOwner = null; } else { a.x += dx / d * step; a.y += dy / d * step; }
-      if (t.ride) { liftY = a.y; placeLift(); }
+      var t = a.path[0], dx = t.x - a.x, dy = t.y - a.y, d = Math.sqrt(dx * dx + dy * dy), step = 110 * dt;
+      if (d <= step) { a.x = t.x; a.y = t.y; a.path.shift(); } else { a.x += dx / d * step; a.y += dy / d * step; }
       place(a);
       if (!a.path.length) { a.el.classList.remove("walking"); if (a.resolve) { var r = a.resolve; a.resolve = null; r(true); } }
     });
     if (moved) sortLayer();
     requestAnimationFrame(loop);
   }
-  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
   async function errandCoffee(a) {
     var spot = Math.random() < .6 ? SPOTS.coffee : SPOTS.water;
-    if (!(await goto(a, spot.x + (Math.random() * 16 - 8), spot.y))) return;
+    if (!(await goto(a, { x: spot.x + (Math.random() * 14 - 7), y: spot.y, f: spot.f }))) return;
     var tok = a.token;
     a.el.classList.add("coffee");
     await sleep(2600);
     if (a.token !== tok) return;
-    if (await goto(a, a.home.x, a.home.y)) setTimeout(function () { a.el.classList.remove("coffee"); }, 3000);
+    if (await goto(a, a.home)) setTimeout(function () { a.el.classList.remove("coffee"); }, 3000);
   }
   function wander() {
     if (document.hidden || REDUCED) return;
@@ -865,18 +932,18 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var a = actors[fromId], spot = to === "boss" ? SPOTS.inbox : SPOTS.scoutDrop;
     a.el.classList.remove("coffee");
     a.el.classList.add("carrying");
-    var ok = await goto(a, spot.x, spot.y);
+    var ok = await goto(a, spot);
     if (ok) await sleep(500);
     a.el.classList.remove("carrying");
     if (ok && to === "boss") drawTray(pendingReview());
-    if (ok && !state.busy[fromId]) goto(a, a.home.x, a.home.y);
+    if (ok && !state.busy[fromId]) goto(a, a.home);
   }
   function sceneWorking(id, on) {
     if (!sceneReady) return;
     var a = actors[id];
     a.el.classList.toggle("working", on);
-    $("st" + id).classList.toggle("working", on);
-    if (on && !atHome(a)) { a.el.classList.remove("coffee"); a.el.classList.remove("carrying"); goto(a, a.home.x, a.home.y); }
+    var st = $("st" + id); if (st) st.classList.toggle("working", on);
+    if (on && !atHome(a)) { a.el.classList.remove("coffee"); a.el.classList.remove("carrying"); goto(a, a.home); }
   }
   function sceneDone(id) {
     if (!sceneReady) return;
@@ -887,11 +954,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function drawTray(n) {
     if (!sceneReady) return;
     var f = "";
-    for (var i = 0; i < Math.min(n, 5); i++) f += rect(BOSS.x - 90 + (i % 2), BOSS.y - 43 - i * 5, 38, 6, "var(--sun-soft)", ' rx="1" stroke="var(--sun)"');
+    for (var i = 0; i < Math.min(n, 5); i++) f += rect(709 + (i % 2), 112 - i * 3, 32, 4, "#f6d99b", ' rx="1" stroke="#c9902f" stroke-width=".8"');
     $("trayFolders").innerHTML = f;
     $("badge").style.display = n ? "" : "none";
     $("badgeN").textContent = String(n);
-    $("wsReview").textContent = n + " TO REVIEW";
+    $("wsReview").textContent = n + " REVIEW";
   }
   function zoneTime(tz) {
     var parts = {};
