@@ -11,6 +11,10 @@ for (const dir of ['agents', 'knowledge', 'templates']) {
   }
 }
 files['tests/customer-service-tests.json'] = fs.readFileSync(path.join(base, 'tests', 'customer-service-tests.json'), 'utf8');
+// office pictures, inlined as data URLs so the file works on its own
+for (const f of fs.readdirSync(path.join(base, 'images')).sort()) {
+  if (f.endsWith('.jpg')) files['images/' + f] = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(base, 'images', f)).toString('base64');
+}
 
 const page = fs.readFileSync(path.join(base, 'team.html'), 'utf8');
 const bundle = '<script type="application/json" id="bundle">' + JSON.stringify(files).replace(/</g, '\\u003c') + '</script>\n';
