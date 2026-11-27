@@ -1026,6 +1026,18 @@ body:not(.picked) .hs.selected::after, body:not(.picked) .in-bot.selected::after
 body:not(.picked) .hs.selected .hs-tag { background: rgba(12,14,18,.78); color: #f2f5f7; }
 body:not(.picked) .photo-frame .hs.selected:not(.working):not(.calling):not(:hover) .hs-tag { opacity: 0; }
 body:not(.picked) .staff button[aria-pressed="true"] { border-color: var(--rule); background: inherit; }
+
+/* ---------- quiet office: names live on the desk plates; floating tags only on hover or while working ---------- */
+.photo-frame .hs:not(.boss):not(.room-spot) .hs-tag { opacity: 0 !important; transform: translate(-50%, -2px) scale(.9); transition: opacity .2s, transform .2s; pointer-events: none; }
+.photo-frame .hs:not(.boss):not(.room-spot):hover .hs-tag, .photo-frame .hs:not(.boss):not(.room-spot):focus-visible .hs-tag,
+body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform: translate(-50%, -6px); }
+.photo-frame .hs:not(.boss):not(.room-spot)::before { content: ""; position: absolute; left: 50%; top: -4px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px rgba(12,14,18,.6); opacity: 0; transition: opacity .2s; }
+.photo-frame .hs.working::before, .photo-frame .hs.calling::before { opacity: 1; animation: tagPulse 1s ease-in-out infinite; box-shadow: 0 0 0 2px rgba(12,14,18,.6), 0 0 10px var(--c); }
+.photo-frame .hs:hover::before { opacity: 0; }
+.in-bot .hs-tag, .pl-bot .hs-tag { opacity: 0; transition: opacity .2s; pointer-events: none; }
+.in-bot:hover .hs-tag, .in-bot:focus-visible .hs-tag, .in-bot.working .hs-tag, .pl-bot:hover .hs-tag, .pl-bot.working .hs-tag, body.picked .in-bot.selected .hs-tag { opacity: 1; }
+.in-bot.working .hs-tag, .pl-bot.working .hs-tag { font-size: .62rem; padding: 1px 6px 1px 4px; }
+.photo-frame .hs-bubble, .photo-frame .hs-holo { display: none !important; }
 </style>
 
 <div class="app">
