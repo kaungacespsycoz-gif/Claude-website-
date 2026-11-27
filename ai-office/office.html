@@ -8,7 +8,7 @@
 :root {
   --bg: #f3f7f7; --panel: #ffffff; --ink: #0c2f3a; --text: #1d3a43; --muted: #5d7279; --rule: #d9e3e4;
   --accent: #0f7f8c; --accent-soft: #e3f1f2; --sun: #b9741a; --sun-soft: #fbefdc;
-  --wall: #e6efef; --floor: #d7e3e3; --wood: #c9a77c; --wood-dark: #a9865b; --metal: #9fb1b4; --face: #12333b; --eye: #7ff0e8; --screen: #173c45; --screen-line: #5fc3c4;
+  --wall: #e6efef; --floor: #d7e3e3; --wood: #c9a77c; --wood-dark: #a9865b; --metal: #9fb1b4; --face: #12333b; --eye: #7ff0e8; --screen: #173c45; --screen-line: #5fc3c4; --sky: #cfe6ea; --skyline: #8fb3ba;
   --c1: #f0a93b; --c2: #0f7f8c; --c3: #6a7fc1; --c4: #d4705c;
   --you: #0c2f3a; --on-you: #ffffff; --ok: #2f7d4f; --ok-soft: #e4f2e9; --bad: #b3412e; --bad-soft: #f8e5e1;
   --sans: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
@@ -18,14 +18,14 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0b2226; --panel: #102c31; --ink: #f1ebe0; --text: #d3dedf; --muted: #96acae; --rule: rgba(241,235,224,.14);
   --accent: #5fc3c4; --accent-soft: rgba(95,195,196,.14); --sun: #e3b061; --sun-soft: rgba(227,176,97,.15);
-  --wall: #12333a; --floor: #0e2a30; --wood: #8a6c4a; --wood-dark: #6d5438; --metal: #58707a; --face: #08191d; --eye: #8ff5ec; --screen: #061619; --screen-line: #5fc3c4;
+  --wall: #12333a; --floor: #0e2a30; --wood: #8a6c4a; --wood-dark: #6d5438; --metal: #58707a; --face: #08191d; --eye: #8ff5ec; --screen: #061619; --screen-line: #5fc3c4; --sky: #1d4a55; --skyline: #0d2a31;
   --c1: #e3b061; --c2: #3fa9b0; --c3: #8597d6; --c4: #e08a77;
   --you: #e9d9b8; --on-you: #0b2226; --ok: #7fcf9c; --ok-soft: rgba(127,207,156,.13); --bad: #f0907d; --bad-soft: rgba(240,144,125,.13);
   color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #0b2226; --panel: #102c31; --ink: #f1ebe0; --text: #d3dedf; --muted: #96acae; --rule: rgba(241,235,224,.14);
   --accent: #5fc3c4; --accent-soft: rgba(95,195,196,.14); --sun: #e3b061; --sun-soft: rgba(227,176,97,.15);
-  --wall: #12333a; --floor: #0e2a30; --wood: #8a6c4a; --wood-dark: #6d5438; --metal: #58707a; --face: #08191d; --eye: #8ff5ec; --screen: #061619; --screen-line: #5fc3c4;
+  --wall: #12333a; --floor: #0e2a30; --wood: #8a6c4a; --wood-dark: #6d5438; --metal: #58707a; --face: #08191d; --eye: #8ff5ec; --screen: #061619; --screen-line: #5fc3c4; --sky: #1d4a55; --skyline: #0d2a31;
   --c1: #e3b061; --c2: #3fa9b0; --c3: #8597d6; --c4: #e08a77;
   --you: #e9d9b8; --on-you: #0b2226; --ok: #7fcf9c; --ok-soft: rgba(127,207,156,.13); --bad: #f0907d; --bad-soft: rgba(240,144,125,.13);
   color-scheme: dark; }
@@ -64,17 +64,37 @@ h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); m
 .ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .ghost.danger:hover:not(:disabled) { border-color: var(--bad); color: var(--bad); }
 
-/* Office floor */
-.floor { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
-@media (max-width: 860px) { .floor { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.desk { position: relative; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; background: var(--wall); padding: 0; text-align: left; display: flex; flex-direction: column; }
-.desk:hover { border-color: var(--accent); }
-.desk[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-.desk svg { display: block; width: 100%; height: auto; }
-.tag { display: flex; flex-direction: column; gap: 1px; padding: 8px 12px 10px; background: var(--panel); border-top: 1px solid var(--rule); min-width: 0; }
-.tag-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.tag b { color: var(--ink); font-size: .95rem; }
-.tag small { color: var(--muted); font-size: .76rem; }
+/* Office scene */
+.scene-wrap { border: 1px solid var(--rule); border-radius: 14px; overflow-x: auto; overflow-y: hidden; background: var(--floor); }
+.scene { display: block; width: 100%; max-width: 940px; min-width: 760px; height: auto; margin: 0 auto; user-select: none; }
+.scene text { font-family: var(--sans); }
+.actor, .bossdesk { cursor: pointer; }
+.actor:focus, .bossdesk:focus { outline: none; }
+.hit { fill: transparent; }
+.ring { opacity: 0; fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.actor.selected .ring, .actor:focus-visible .ring, .bossdesk:focus-visible .ring { opacity: 1; }
+.nametag rect { fill: var(--panel); stroke: var(--rule); }
+.nametag text { font-size: 11px; font-weight: 600; fill: var(--ink); }
+.actor.selected .nametag rect { fill: var(--accent); stroke: var(--accent); }
+.actor.selected .nametag text { fill: var(--panel); }
+.folder, .cup, .bubble, .check, .hi { opacity: 0; transition: opacity .15s; }
+.actor.carrying .folder, .actor.coffee .cup, .actor.working .bubble, .actor.just-done .check, .actor.greet:not(.working) .hi { opacity: 1; }
+.actor.working .antenna { fill: var(--sun); }
+.hi text, .label-sm { font-size: 10px; fill: var(--ink); font-weight: 600; }
+.label-xs { font-size: 9px; fill: var(--muted); font-weight: 500; letter-spacing: .06em; }
+.sign { font: 600 15px var(--serif); fill: var(--ink); }
+.badge text { font-size: 11px; font-weight: 700; fill: #fff; }
+.robot-part, .eyes, .arm, .lines, .bubble circle, .antenna, .check, .leg { transform-box: fill-box; }
+.eyes { transform-origin: center; }
+.arm-l { transform-origin: 50% 10%; }
+.arm-r { transform-origin: 50% 10%; }
+.check { transform-origin: center; }
+.staff { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px; }
+.staff button { display: flex; align-items: center; gap: 7px; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 4px 12px 4px 5px; font-size: .84rem; }
+.staff button:hover { border-color: var(--accent); }
+.staff button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.staff .dot { width: 18px; height: 18px; border-radius: 50%; flex: none; }
+.staff b { color: var(--ink); font-weight: 600; }
 .pill { font-size: .66rem; font-weight: 600; letter-spacing: .04em; padding: 0 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
 .pill.busy { background: var(--sun-soft); color: var(--sun); }
 .pill.done { background: var(--ok-soft); color: var(--ok); }
@@ -82,32 +102,28 @@ h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); m
 .pill.quiet { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
 .who { font-size: .66rem; color: var(--muted); border: 1px solid var(--rule); padding: 0 6px; border-radius: 999px; }
 
-.robot, .eyes, .arm, .lines, .bubble circle, .antenna, .sparkle { transform-box: fill-box; }
-.eyes { transform-origin: center; }
-.arm-l { transform-origin: 10% 50%; }
-.arm-r { transform-origin: 90% 50%; }
-.bubble, .sparkle { opacity: 0; transition: opacity .2s; }
-.sparkle { transform-origin: center; }
-.desk.working .bubble { opacity: 1; }
-.desk.just-done .sparkle { opacity: 1; }
-.desk.working .antenna { fill: var(--sun); }
 @media (prefers-reduced-motion: no-preference) {
-  .robot { animation: bob 3.2s ease-in-out infinite; }
+  .actor .robot-part { animation: bob 3.2s ease-in-out infinite; }
   .eyes { animation: blink 4.5s infinite; }
-  .desk:hover:not(.working) .arm-r { animation: wave .35s ease-in-out 4 alternate; }
-  .desk.working .robot { animation: bob .9s ease-in-out infinite; }
-  .desk.working .arm-l { animation: type .22s ease-in-out infinite alternate; }
-  .desk.working .arm-r { animation: type .22s .11s ease-in-out infinite alternate; }
-  .desk.working .lines { animation: scroll 1.4s linear infinite; }
-  .desk.working .antenna { animation: pulse .5s ease-in-out infinite alternate; }
-  .desk.working .bubble circle { animation: dot 1s ease-in-out infinite; }
-  .desk.working .bubble circle:nth-of-type(2) { animation-delay: .15s; }
-  .desk.working .bubble circle:nth-of-type(3) { animation-delay: .3s; }
-  .desk.just-done .sparkle { animation: pop .5s ease-out; }
+  .actor.walking .robot-part { animation: bob .3s ease-in-out infinite; }
+  .actor.walking .leg-l { animation: step .3s ease-in-out infinite alternate; }
+  .actor.walking .leg-r { animation: step .3s .15s ease-in-out infinite alternate; }
+  .actor.working:not(.walking) .robot-part { animation: bob .9s ease-in-out infinite; }
+  .actor.working:not(.walking) .arm-l { animation: typeL .22s ease-in-out infinite alternate; }
+  .actor.working:not(.walking) .arm-r { animation: typeR .22s .11s ease-in-out infinite alternate; }
+  .actor.greet:not(.working) .arm-r { animation: wave .3s ease-in-out 4 alternate; }
+  .station.working .lines { animation: scroll 1.4s linear infinite; }
+  .actor.working .antenna { animation: pulse .5s ease-in-out infinite alternate; }
+  .actor.working .bubble circle { animation: dot 1s ease-in-out infinite; }
+  .actor.working .bubble circle:nth-of-type(2) { animation-delay: .15s; }
+  .actor.working .bubble circle:nth-of-type(3) { animation-delay: .3s; }
+  .actor.just-done .check { animation: pop .5s ease-out; }
   @keyframes bob { 50% { transform: translateY(-2px); } }
+  @keyframes step { to { transform: translateY(-3px); } }
   @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
-  @keyframes type { from { transform: translateY(-1.5px) rotate(-4deg); } to { transform: translateY(1.5px) rotate(4deg); } }
-  @keyframes wave { from { transform: rotate(0); } to { transform: rotate(-40deg); } }
+  @keyframes typeL { from { transform: rotate(-20deg); } to { transform: rotate(-38deg); } }
+  @keyframes typeR { from { transform: rotate(20deg); } to { transform: rotate(38deg); } }
+  @keyframes wave { from { transform: rotate(0); } to { transform: rotate(-150deg); } }
   @keyframes scroll { from { transform: translateY(0); } to { transform: translateY(-24px); } }
   @keyframes pulse { to { opacity: .35; } }
   @keyframes dot { 50% { transform: translateY(-2px); opacity: .4; } }
@@ -177,7 +193,7 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
     <div>
       <span class="eyebrow">Glostudy · test office</span>
       <h1>Glostudy AI Office</h1>
-      <p class="sub">Click a robot to talk to it. When Huan finishes a booking, the client goes on the board, Scout drafts a shortlist, and it waits for your review.</p>
+      <p class="sub">Click a robot to talk to it. When Huan finishes a booking, Huan walks the folder to Scout, Scout drafts a shortlist and brings it to your desk for review.</p>
     </div>
     <div class="hud">
       <div class="stat"><b id="statWorking">0</b><span>working</span></div>
@@ -200,7 +216,8 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
 
   <section class="settings" id="settings" hidden></section>
 
-  <div class="floor" id="floor" aria-label="Office floor: click a robot"></div>
+  <div class="scene-wrap" id="sceneWrap"></div>
+  <div class="staff" id="staff" aria-label="Staff"></div>
 
   <div class="work">
     <section class="panel" id="chat" aria-live="polite">
@@ -413,68 +430,283 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
   };
   function errText(e) { return (e && COPY[e.code]) || "Something went wrong. Try again." + (e && e.code ? " (" + e.code + ")" : ""); }
 
-  // ---------- robots ----------
-  function propSvg(prop) {
-    if (prop === "headset") return '<path d="M58 46 Q78 20 98 46" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/><rect x="54" y="43" width="7" height="12" rx="3" fill="var(--ink)"/><rect x="95" y="43" width="7" height="12" rx="3" fill="var(--ink)"/><path d="M57 55 Q59 64 68 62" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="69" cy="62" r="2.2" fill="var(--ink)"/>';
-    if (prop === "books") return '<rect x="38" y="91" width="22" height="5" rx="1" fill="var(--c3)"/><rect x="36" y="86" width="24" height="5" rx="1" fill="var(--c4)"/><rect x="39" y="81" width="20" height="5" rx="1" fill="var(--c1)"/>';
-    if (prop === "paper") return '<rect x="32" y="88" width="22" height="8" rx="1" fill="var(--panel)" stroke="var(--metal)"/><path d="M35 91 h14 M35 93.5 h10" stroke="var(--muted)" stroke-width=".8"/><path d="M47 79 l7 11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>';
-    return '<path d="M36 84 l13 -6 v16 l-13 -6 z" fill="var(--c1)"/><rect x="32" y="84" width="5" height="4" rx="1" fill="var(--ink)"/><path d="M53 80 l4 -3 M54 86 h5 M53 92 l4 3" stroke="var(--sun)" stroke-width="1.6" stroke-linecap="round"/>';
-  }
-  function robotSvg(b) {
-    var c = "var(" + b.color + ")", id = "clip" + b.id;
-    var lines = [62, 68, 74, 80, 86, 92, 98, 104, 110].map(function (y, i) {
-      return '<line x1="118" y1="' + y + '" x2="' + (128 + (i * 7) % 24) + '" y2="' + y + '" opacity="' + (i % 3 ? .55 : .9) + '"/>';
+  // ---------- the office scene ----------
+  // Coordinates: 1000 x 560. Wall to y 150, floor below. Robots walk along the aisle at y 345.
+  var AISLE = 345;
+  var SEATS = { "1": { x: 185, y: 455 }, "2": { x: 200, y: 235 }, "3": { x: 470, y: 235 }, "4": { x: 800, y: 235 } };
+  var SPOTS = { coffee: { x: 640, y: 262 }, water: { x: 335, y: 262 }, scoutDrop: { x: 305, y: 285 }, inbox: { x: 735, y: 405 } };
+  var BOSS = { x: 800, y: 455 };
+  var REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+  var actors = {};
+
+  function rect(x, y, w, h, fill, extra) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '"' + (extra || "") + "/>"; }
+
+  function monitor(x, y, id) {
+    var lines = [4, 10, 16, 22, 28, 34, 40, 46, 52].map(function (yy, i) {
+      return '<line x1="' + (x + 5) + '" y1="' + (y + yy) + '" x2="' + (x + 14 + (i * 7) % 20) + '" y2="' + (y + yy) + '" opacity="' + (i % 3 ? .55 : .9) + '"/>';
     }).join("");
-    return '<svg viewBox="0 0 200 135" role="img" aria-label="' + esc(b.name) + ' at their desk">' +
-      '<rect width="200" height="135" fill="var(--wall)"/>' +
-      '<rect x="14" y="14" width="34" height="24" rx="2" fill="var(--panel)" stroke="var(--rule)"/><path d="M18 31 l8-8 6 6 4-4 8 8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>' +
-      '<rect y="106" width="200" height="29" fill="var(--floor)"/>' +
-      '<ellipse cx="100" cy="118" rx="70" ry="5" fill="var(--ink)" opacity=".08"/>' +
-      '<g class="bubble"><rect x="104" y="10" width="34" height="16" rx="8" fill="var(--panel)" stroke="var(--rule)"/><circle cx="114" cy="18" r="2" fill="var(--sun)"/><circle cx="121" cy="18" r="2" fill="var(--sun)"/><circle cx="128" cy="18" r="2" fill="var(--sun)"/></g>' +
-      '<g class="sparkle"><circle cx="121" cy="18" r="9" fill="var(--ok)"/><path d="M116.5 18 l3 3 6-6" fill="none" stroke="var(--panel)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>' +
-      '<g class="robot">' +
-        '<line x1="78" y1="22" x2="78" y2="32" stroke="var(--metal)" stroke-width="2"/><circle class="antenna" cx="78" cy="20" r="3.5" fill="var(--accent)"/>' +
-        '<rect x="56" y="31" width="44" height="34" rx="11" fill="' + c + '"/>' +
-        '<rect x="61" y="37" width="34" height="22" rx="7" fill="var(--face)"/>' +
-        '<g class="eyes"><rect x="68" y="43" width="6" height="9" rx="3" fill="var(--eye)"/><rect x="82" y="43" width="6" height="9" rx="3" fill="var(--eye)"/></g>' +
-        '<rect x="54" y="67" width="48" height="36" rx="12" fill="' + c + '"/>' +
-        '<rect x="68" y="74" width="20" height="5" rx="2.5" fill="var(--face)" opacity=".35"/>' +
-        '<rect class="arm arm-l" x="47" y="80" width="24" height="7" rx="3.5" fill="' + c + '" stroke="var(--face)" stroke-opacity=".3"/>' +
-        '<rect class="arm arm-r" x="85" y="80" width="24" height="7" rx="3.5" fill="' + c + '" stroke="var(--face)" stroke-opacity=".3"/>' +
-        (b.prop === "headset" ? propSvg("headset") : "") +
-      '</g>' +
-      '<rect x="26" y="96" width="148" height="8" rx="2" fill="var(--wood)"/><rect x="34" y="104" width="5" height="12" fill="var(--wood-dark)"/><rect x="161" y="104" width="5" height="12" fill="var(--wood-dark)"/>' +
-      '<rect x="62" y="92" width="34" height="4" rx="1.5" fill="var(--metal)"/>' +
-      '<rect x="128" y="88" width="14" height="8" fill="var(--metal)"/><rect x="110" y="54" width="50" height="36" rx="4" fill="var(--ink)"/>' +
-      '<clipPath id="' + id + '"><rect x="114" y="58" width="42" height="28" rx="2"/></clipPath>' +
-      '<rect x="114" y="58" width="42" height="28" rx="2" fill="var(--screen)"/>' +
-      '<g clip-path="url(#' + id + ')"><g class="lines" stroke="var(--screen-line)" stroke-width="2" stroke-linecap="round">' + lines + '</g></g>' +
-      (b.prop !== "headset" ? propSvg(b.prop) : "") +
-      '</svg>';
+    return rect(x - 3, y - 3, 46, 34, "var(--ink)", ' rx="3"') + rect(x + 14, y + 31, 12, 8, "var(--metal)") +
+      '<clipPath id="' + id + '"><rect x="' + x + '" y="' + y + '" width="40" height="28" rx="2"/></clipPath>' +
+      rect(x, y, 40, 28, "var(--screen)", ' rx="2"') +
+      '<g clip-path="url(#' + id + ')"><g class="lines" stroke="var(--screen-line)" stroke-width="2" stroke-linecap="round">' + lines + "</g></g>";
+  }
+  function chair(x, y) { return rect(x - 17, y - 46, 34, 34, "var(--metal)", ' rx="8" opacity=".85"'); }
+  function deskBack(x, y, w) { return rect(x - w / 2, y - 30, w, 16, "var(--wood)", ' rx="3"'); }
+  function deskFront(x, y, w) {
+    return rect(x - w / 2, y - 14, w, 24, "var(--wood-dark)", ' rx="2"') + rect(x - w / 2 + 6, y + 10, 6, 14, "var(--wood-dark)") + rect(x + w / 2 - 12, y + 10, 6, 14, "var(--wood-dark)");
+  }
+  function plant(x, y, s) {
+    s = s || 1;
+    return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')"><ellipse cx="0" cy="-34" rx="16" ry="20" fill="var(--ok)" opacity=".8"/><ellipse cx="-11" cy="-24" rx="9" ry="13" fill="var(--ok)"/><ellipse cx="11" cy="-26" rx="9" ry="13" fill="var(--ok)" opacity=".9"/>' + rect(-11, -14, 22, 16, "var(--c4)", ' rx="3"') + "</g>";
+  }
+  function clock(x, label) {
+    return '<g class="clock" data-tz="' + (label === "London" ? "Europe/London" : "Asia/Shanghai") + '"><circle cx="' + x + '" cy="62" r="24" fill="var(--panel)" stroke="var(--ink)" stroke-width="3"/>' +
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (i) { var a = i * Math.PI / 6; return '<line x1="' + (x + Math.sin(a) * 19) + '" y1="' + (62 - Math.cos(a) * 19) + '" x2="' + (x + Math.sin(a) * 21) + '" y2="' + (62 - Math.cos(a) * 21) + '" stroke="var(--muted)" stroke-width="1.5"/>'; }).join("") +
+      '<line class="hh" x1="' + x + '" y1="62" x2="' + x + '" y2="50" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>' +
+      '<line class="mh" x1="' + x + '" y1="62" x2="' + x + '" y2="44" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>' +
+      '<circle cx="' + x + '" cy="62" r="2.5" fill="var(--ink)"/>' +
+      '<text class="label-xs" x="' + x + '" y="104" text-anchor="middle">' + label.toUpperCase() + '</text><text class="label-sm clocktime" x="' + x + '" y="118" text-anchor="middle"></text></g>';
   }
 
+  function sceneSvg() {
+    var floorLines = "";
+    for (var y = 190; y < 560; y += 40) floorLines += '<line x1="0" y1="' + y + '" x2="1000" y2="' + y + '" stroke="var(--ink)" stroke-opacity=".06"/>';
+    var back =
+      rect(0, 0, 1000, 150, "var(--wall)") + rect(0, 150, 1000, 410, "var(--floor)") + floorLines + rect(0, 146, 1000, 6, "var(--wood-dark)", ' opacity=".5"') +
+      // window onto London
+      '<g>' + rect(400, 22, 200, 104, "var(--ink)", ' rx="4"') + rect(406, 28, 188, 92, "var(--sky)") +
+        '<path d="M406 120 V96 h18 v-10 h14 v18 h12 V82 h16 v38 h10 V70 l6 -16 l6 16 v50 h14 V92 h22 v-8 h12 v36 h16 V100 h20 v20 z" fill="var(--skyline)"/>' +
+        rect(489, 76, 10, 8, "var(--sun)", ' rx="1" opacity=".8"') + '<line x1="500" y1="28" x2="500" y2="120" stroke="var(--ink)" stroke-width="4"/><line x1="406" y1="74" x2="594" y2="74" stroke="var(--ink)" stroke-width="3"/></g>' +
+      clock(330, "London") + clock(670, "Beijing") +
+      // sign
+      '<g>' + rect(130, 40, 150, 40, "var(--panel)", ' rx="6" stroke="var(--rule)"') + '<text class="sign" x="205" y="66" text-anchor="middle">Glostudy 寰学</text></g>' +
+      // bookshelf (Scout)
+      '<g>' + rect(30, 50, 80, 100, "var(--wood-dark)", ' rx="3"') + [62, 92, 122].map(function (yy, r) {
+        return rect(36, yy + 22, 68, 4, "var(--wood)") + [0, 1, 2, 3, 4, 5].map(function (i) { return rect(39 + i * 11, yy + (i % 2 ? 4 : 0), 8, i % 2 ? 18 : 22, ["var(--c1)", "var(--c3)", "var(--c4)", "var(--c2)"][(i + r) % 4], ' rx="1"'); }).join("");
+      }).join("") + "</g>" +
+      // pinboard (Spark)
+      '<g>' + rect(870, 40, 100, 80, "var(--wood)", ' rx="3"') + rect(876, 46, 88, 68, "var(--sun-soft)") +
+        rect(884, 54, 22, 18, "var(--c1)", ' transform="rotate(-6 895 63)"') + rect(914, 52, 22, 18, "var(--c4)") + rect(940, 58, 18, 16, "var(--c3)", ' transform="rotate(5 949 66)"') + rect(890, 82, 26, 20, "var(--panel)") + rect(924, 84, 30, 18, "var(--c2)", ' opacity=".7"') + "</g>" +
+      // water cooler and coffee bar
+      '<g>' + rect(318, 160, 34, 72, "var(--metal)", ' rx="4"') + '<path d="M324 126 h22 v34 h-22 z" fill="var(--sky)" stroke="var(--metal)" stroke-width="2"/>' + rect(331, 190, 8, 6, "var(--accent)", ' rx="1"') + '<text class="label-xs" x="335" y="250" text-anchor="middle">WATER</text></g>' +
+      '<g>' + rect(598, 172, 84, 62, "var(--wood-dark)", ' rx="3"') + rect(594, 166, 92, 8, "var(--wood)", ' rx="2"') + rect(612, 128, 34, 38, "var(--ink)", ' rx="4"') + rect(618, 136, 22, 6, "var(--accent)", ' rx="2"') + rect(623, 150, 12, 10, "var(--panel)", ' rx="1"') + rect(654, 152, 9, 12, "var(--panel)", ' rx="2" stroke="var(--ink)"') + rect(666, 152, 9, 12, "var(--panel)", ' rx="2" stroke="var(--ink)"') + '<text class="label-xs" x="640" y="250" text-anchor="middle">COFFEE</text></g>' +
+      // desks (back parts) with chairs and monitors
+      '<g class="station" id="st2">' + chair(200, 235) + deskBack(200, 235, 170) + monitor(232, 172, "m2") + rect(128, 196, 26, 6, "var(--c3)", ' rx="1"') + rect(126, 190, 30, 6, "var(--c4)", ' rx="1"') + rect(130, 184, 24, 6, "var(--c1)", ' rx="1"') + "</g>" +
+      '<g class="station" id="st3">' + chair(470, 235) + deskBack(470, 235, 170) + monitor(502, 172, "m3") + rect(398, 196, 30, 8, "var(--panel)", ' stroke="var(--metal)"') + rect(402, 192, 30, 8, "var(--panel)", ' stroke="var(--metal)"') + '<line x1="436" y1="186" x2="446" y2="200" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/></g>' +
+      '<g class="station" id="st4">' + chair(800, 235) + deskBack(800, 235, 170) + monitor(832, 172, "m4") + '<path d="M732 196 l16 -8 v20 l-16 -8 z" fill="var(--c1)"/>' + rect(727, 193, 6, 6, "var(--ink)", ' rx="1"') + "</g>" +
+      // reception counter (back) and boss desk (back)
+      '<g class="station" id="st1">' + chair(185, 455) + rect(60, 418, 250, 18, "var(--wood)", ' rx="3"') + monitor(232, 392, "m1") + '<circle cx="90" cy="414" r="6" fill="var(--sun)"/>' + rect(84, 414, 12, 3, "var(--ink)") + "</g>" +
+      '<g>' + rect(BOSS.x - 22, BOSS.y - 50, 44, 40, "var(--c2)", ' rx="10" opacity=".85"') + rect(BOSS.x - 110, BOSS.y - 30, 220, 16, "var(--wood)", ' rx="3"') + monitor(BOSS.x + 34, BOSS.y - 63, "m5") + "</g>" +
+      // rug and waiting sofa
+      '<ellipse cx="500" cy="470" rx="120" ry="34" fill="var(--accent)" opacity=".12"/>' +
+      '<g>' + rect(430, 470, 140, 34, "var(--c3)", ' rx="10" opacity=".85"') + rect(424, 462, 20, 46, "var(--c3)", ' rx="8"') + rect(556, 462, 20, 46, "var(--c3)", ' rx="8"') + rect(440, 452, 120, 24, "var(--c3)", ' rx="8" opacity=".7"') + '<text class="label-xs" x="500" y="528" text-anchor="middle">WAITING AREA</text></g>' +
+      plant(960, 545, 1.2) + plant(30, 545, 1) + plant(375, 240, .9) + plant(700, 240, .8);
+
+    var front =
+      '<g pointer-events="none">' + deskFront(200, 235, 170) + deskFront(470, 235, 170) + deskFront(800, 235, 170) +
+      rect(60, 436, 250, 40, "var(--wood-dark)", ' rx="3"') + '<text class="label-xs" x="185" y="461" text-anchor="middle" fill="var(--panel)" style="fill:var(--wall)">RECEPTION · 前台</text></g>';
+
+    var boss =
+      '<g class="bossdesk" id="bossdesk" tabindex="0" role="button" aria-label="Your desk: open the review pile">' +
+        '<ellipse class="ring" cx="' + BOSS.x + '" cy="' + (BOSS.y + 28) + '" rx="120" ry="12"/>' +
+        deskFront(BOSS.x, BOSS.y, 220) +
+        '<g id="tray">' + rect(BOSS.x - 96, BOSS.y - 34, 46, 6, "var(--metal)", ' rx="1"') + '<g id="trayFolders"></g></g>' +
+        '<g class="badge" id="badge" style="display:none"><circle cx="' + (BOSS.x - 52) + '" cy="' + (BOSS.y - 60) + '" r="10" fill="var(--bad)"/><text id="badgeN" x="' + (BOSS.x - 52) + '" y="' + (BOSS.y - 56) + '" text-anchor="middle"></text></g>' +
+        rect(BOSS.x - 26, BOSS.y - 6, 52, 16, "var(--panel)", ' rx="3"') + '<text class="label-sm" x="' + BOSS.x + '" y="' + (BOSS.y + 6) + '" text-anchor="middle">YOU</text>' +
+        rect(BOSS.x - 112, BOSS.y - 80, 224, 116, "transparent", ' class="hit"') +
+      "</g>";
+
+    return '<svg class="scene" viewBox="0 0 1000 560" role="group" aria-label="Glostudy office. Click a robot to chat, or your desk to review.">' +
+      back + '<g id="actors"></g>' + front + boss + "</svg>";
+  }
+
+  function actorSvg(b) {
+    var c = "var(" + b.color + ")";
+    var prop = "";
+    if (b.prop === "headset") prop = '<path d="M-17 -48 Q0 -74 17 -48" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>' + rect(-20, -52, 6, 11, "var(--ink)", ' rx="3"') + rect(14, -52, 6, 11, "var(--ink)", ' rx="3"') + '<path d="M-17 -42 Q-15 -34 -8 -36" fill="none" stroke="var(--ink)" stroke-width="2"/>';
+    if (b.prop === "books") prop = '<rect x="-9" y="-69" width="18" height="4" rx="1" fill="var(--c4)"/>';
+    if (b.prop === "paper") prop = '<path d="M10 -62 l7 -9" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>';
+    if (b.prop === "megaphone") prop = '<path d="M-22 -66 l-6 -4 M-22 -60 h-7 M-22 -54 l-6 4" stroke="var(--sun)" stroke-width="1.8" stroke-linecap="round"/>';
+    return '<ellipse class="ring" cx="0" cy="0" rx="24" ry="7"/>' +
+      '<ellipse cx="0" cy="0" rx="16" ry="4.5" fill="var(--ink)" opacity=".13"/>' +
+      '<rect class="leg leg-l" x="-9" y="-11" width="7" height="11" rx="3" fill="var(--metal)"/><rect class="leg leg-r" x="2" y="-11" width="7" height="11" rx="3" fill="var(--metal)"/>' +
+      '<g class="robot-part">' +
+        '<rect class="arm arm-l" x="-23" y="-31" width="9" height="17" rx="4.5" fill="' + c + '" stroke="var(--face)" stroke-opacity=".3"/>' +
+        '<rect class="arm arm-r" x="14" y="-31" width="9" height="17" rx="4.5" fill="' + c + '" stroke="var(--face)" stroke-opacity=".3"/>' +
+        '<rect x="-15" y="-35" width="30" height="27" rx="9" fill="' + c + '"/>' +
+        '<rect x="-7" y="-28" width="14" height="4" rx="2" fill="var(--face)" opacity=".35"/>' +
+        '<line x1="0" y1="-62" x2="0" y2="-70" stroke="var(--metal)" stroke-width="2"/><circle class="antenna" cx="0" cy="-72" r="3.2" fill="var(--accent)"/>' +
+        '<rect x="-17" y="-63" width="34" height="27" rx="9" fill="' + c + '"/>' +
+        '<rect x="-12" y="-58" width="24" height="17" rx="5" fill="var(--face)"/>' +
+        '<g class="eyes"><rect x="-7" y="-54" width="4" height="8" rx="2" fill="var(--eye)"/><rect x="3" y="-54" width="4" height="8" rx="2" fill="var(--eye)"/></g>' +
+        prop +
+        '<g class="folder">' + rect(-12, -27, 24, 17, "var(--sun-soft)", ' rx="2" stroke="var(--sun)" stroke-width="1.5"') + rect(-12, -30, 10, 4, "var(--sun)", ' rx="1"') + "</g>" +
+        '<g class="cup">' + rect(17, -24, 9, 10, "var(--panel)", ' rx="2" stroke="var(--ink)"') + '<path d="M20 -28 q2 -3 0 -6 M24 -28 q2 -3 0 -6" stroke="var(--muted)" fill="none"/></g>' +
+      "</g>" +
+      '<g class="bubble"><rect x="14" y="-88" width="32" height="15" rx="7.5" fill="var(--panel)" stroke="var(--rule)"/><circle cx="23" cy="-80.5" r="2" fill="var(--sun)"/><circle cx="30" cy="-80.5" r="2" fill="var(--sun)"/><circle cx="37" cy="-80.5" r="2" fill="var(--sun)"/></g>' +
+      '<g class="check"><circle cx="26" cy="-80" r="8" fill="var(--ok)"/><path d="M22 -80 l3 3 5-5" fill="none" stroke="var(--panel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>' +
+      '<g class="hi"><rect x="14" y="-88" width="26" height="15" rx="7.5" fill="var(--panel)" stroke="var(--rule)"/><text x="27" y="-77" text-anchor="middle">Hi!</text></g>' +
+      '<g class="nametag"><rect x="-26" y="-104" width="52" height="16" rx="8"/><text x="0" y="-92.5" text-anchor="middle">' + esc(b.name) + "</text></g>" +
+      '<rect class="hit" x="-28" y="-108" width="56" height="114"/>';
+  }
+
+  var sceneReady = false;
+  function buildScene() {
+    $("sceneWrap").innerHTML = sceneSvg();
+    var layer = $("actors");
+    BOTS.forEach(function (b) {
+      var g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "actor"); g.setAttribute("tabindex", "0"); g.setAttribute("role", "button");
+      g.setAttribute("aria-label", b.name + ", " + b.role + ". Click to chat");
+      g.innerHTML = actorSvg(b);
+      layer.appendChild(g);
+      var seat = SEATS[b.id];
+      var a = actors[b.id] = { id: b.id, el: g, x: seat.x, y: seat.y, home: seat, path: [], token: 0, resolve: null };
+      place(a);
+      function pick() { selectBot(b); a.el.classList.add("greet"); setTimeout(function () { a.el.classList.remove("greet"); }, 1400); }
+      g.addEventListener("click", pick);
+      g.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
+    });
+    var boss = $("bossdesk");
+    function openReview() { state.filter = "review"; drawHud(); drawBoard(); $("cards").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "nearest" }); }
+    boss.addEventListener("click", openReview);
+    boss.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openReview(); } });
+    sceneReady = true;
+    tickClocks(); setInterval(tickClocks, 20000);
+    requestAnimationFrame(loop);
+    setInterval(wander, 4000);
+  }
+
+  function place(a) {
+    a.el.setAttribute("transform", "translate(" + a.x.toFixed(1) + " " + a.y.toFixed(1) + ")");
+    // draw lower robots on top so they overlap correctly
+  }
+  function sortActors() {
+    var layer = $("actors"), list = Object.keys(actors).map(function (k) { return actors[k]; }).sort(function (p, q) { return p.y - q.y; });
+    list.forEach(function (a) { if (layer.lastChild !== a.el) layer.appendChild(a.el); });
+  }
+  function atHome(a) { return !a.path.length && Math.abs(a.x - a.home.x) < 1 && Math.abs(a.y - a.home.y) < 1; }
+
+  // Walk to (tx, ty) along the aisle. Resolves true on arrival, false if a newer walk replaced it.
+  function goto(a, tx, ty) {
+    a.token++;
+    if (a.resolve) { a.resolve(false); a.resolve = null; }
+    var pts = [];
+    if (Math.abs(a.y - ty) > 1 || Math.abs(a.x - tx) > 1) {
+      if (Math.abs(a.y - AISLE) > 1) pts.push({ x: a.x, y: AISLE });
+      if (Math.abs(a.x - tx) > 1) pts.push({ x: tx, y: AISLE });
+      pts.push({ x: tx, y: ty });
+    }
+    if (REDUCED || !pts.length) {
+      a.x = tx; a.y = ty; a.path = []; place(a); sortActors();
+      return new Promise(function (res) { setTimeout(function () { res(true); }, REDUCED ? 300 : 0); });
+    }
+    a.path = pts; a.el.classList.add("walking");
+    return new Promise(function (res) { a.resolve = res; });
+  }
+  var last = 0;
+  function loop(ts) {
+    var dt = last ? Math.min(.25, (ts - last) / 1000) : 0; last = ts;
+    Object.keys(actors).forEach(function (k) {
+      var a = actors[k]; if (!a.path.length) return;
+      var t = a.path[0], dx = t.x - a.x, dy = t.y - a.y, d = Math.sqrt(dx * dx + dy * dy), step = 160 * dt;
+      if (d <= step) { a.x = t.x; a.y = t.y; a.path.shift(); } else { a.x += dx / d * step; a.y += dy / d * step; }
+      place(a);
+      if (!a.path.length) { a.el.classList.remove("walking"); sortActors(); if (a.resolve) { var r = a.resolve; a.resolve = null; r(true); } }
+    });
+    if (Math.random() < .1) sortActors();
+    requestAnimationFrame(loop);
+  }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function errandCoffee(a) {
+    var spot = Math.random() < .6 ? SPOTS.coffee : SPOTS.water;
+    if (!(await goto(a, spot.x + (Math.random() * 16 - 8), spot.y))) return;
+    var tok = a.token;
+    a.el.classList.add("coffee");
+    await sleep(2600);
+    if (a.token !== tok) return;
+    if (await goto(a, a.home.x, a.home.y)) setTimeout(function () { a.el.classList.remove("coffee"); }, 3000);
+  }
+  function wander() {
+    if (document.hidden || REDUCED) return;
+    Object.keys(actors).forEach(function (k) {
+      var a = actors[k];
+      if (state.busy[k] || !atHome(a) || a.el.classList.contains("carrying")) return;
+      if (Math.random() < .07) errandCoffee(a);
+    });
+  }
+  async function deliver(fromId, to) {
+    if (!sceneReady) return;
+    var a = actors[fromId], spot = to === "boss" ? SPOTS.inbox : SPOTS.scoutDrop;
+    a.el.classList.remove("coffee");
+    a.el.classList.add("carrying");
+    var ok = await goto(a, spot.x, spot.y);
+    if (ok) { await sleep(500); }
+    a.el.classList.remove("carrying");
+    if (ok && to === "boss") drawTray(pendingReview());
+    if (ok && !state.busy[fromId]) goto(a, a.home.x, a.home.y);
+  }
+  function sceneWorking(id, on) {
+    if (!sceneReady) return;
+    var a = actors[id];
+    a.el.classList.toggle("working", on);
+    $("st" + id).classList.toggle("working", on);
+    if (on && !atHome(a)) { a.el.classList.remove("coffee"); a.el.classList.remove("carrying"); goto(a, a.home.x, a.home.y); }
+  }
+  function sceneDone(id) {
+    if (!sceneReady) return;
+    var el = actors[id].el; el.classList.add("just-done");
+    setTimeout(function () { el.classList.remove("just-done"); }, 2500);
+  }
+  function pendingReview() { return store.items().filter(function (c) { return c.status === "review"; }).length; }
+  function drawTray(n) {
+    if (!sceneReady) return;
+    var f = "";
+    for (var i = 0; i < Math.min(n, 5); i++) f += rect(BOSS.x - 94 + (i % 2), BOSS.y - 40 - i * 5, 42, 6, "var(--sun-soft)", ' rx="1" stroke="var(--sun)"');
+    $("trayFolders").innerHTML = f;
+    $("badge").style.display = n ? "" : "none";
+    $("badgeN").textContent = String(n);
+  }
+  function tickClocks() {
+    document.querySelectorAll(".clock").forEach(function (g) {
+      var parts = {};
+      try { new Intl.DateTimeFormat("en-GB", { timeZone: g.dataset.tz, hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date()).forEach(function (p) { parts[p.type] = p.value; }); } catch (e) { return; }
+      var h = (+parts.hour) % 12, m = +parts.minute, cx = +g.querySelector("circle").getAttribute("cx");
+      var ha = (h + m / 60) * 30, ma = m * 6;
+      g.querySelector(".hh").setAttribute("transform", "rotate(" + ha + " " + cx + " 62)");
+      g.querySelector(".mh").setAttribute("transform", "rotate(" + ma + " " + cx + " 62)");
+      g.querySelector(".clocktime").textContent = parts.hour + ":" + parts.minute;
+    });
+  }
+
+  function selectBot(b) {
+    if (state.bot !== b) { state.bot = b; drawAll(); }
+    if (matchMedia("(max-width: 980px)").matches) $("chat").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "start" });
+    $("box").focus({ preventScroll: true });
+  }
+
+  // Staff bar under the scene (quick picks, and the robots' status in words)
   function drawFloor() {
-    var floor = $("floor");
-    if (!floor.children.length) {
+    if (!sceneReady) buildScene();
+    var bar = $("staff");
+    if (!bar.children.length) {
       BOTS.forEach(function (b) {
-        var d = document.createElement("button");
-        d.type = "button"; d.className = "desk"; d.id = "desk" + b.id;
-        d.innerHTML = robotSvg(b) + '<span class="tag"><span class="tag-top"><b>' + esc(b.name) + '</b><span class="pill"></span><span class="who">' + esc(b.who) + '</span></span><small>' + esc(b.role) + "</small></span>";
-        d.onclick = function () {
-          if (state.bot !== b) { state.bot = b; drawAll(); }
-          if (matchMedia("(max-width: 980px)").matches) $("chat").scrollIntoView({ behavior: "smooth", block: "start" });
-          $("box").focus({ preventScroll: true });
-        };
-        floor.appendChild(d);
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.id = "pick" + b.id;
+        btn.innerHTML = '<span class="dot" style="background:var(' + b.color + ')"></span><b>' + esc(b.name) + '</b><span class="pill"></span>';
+        btn.onclick = function () { selectBot(b); };
+        bar.appendChild(btn);
       });
     }
     BOTS.forEach(function (b) {
-      var d = $("desk" + b.id), working = !!state.busy[b.id], pill = d.querySelector(".pill");
-      d.setAttribute("aria-pressed", String(b === state.bot));
-      d.classList.toggle("working", working);
-      d.classList.toggle("just-done", !!state.done[b.id] && !working);
+      var working = !!state.busy[b.id], btn = $("pick" + b.id), pill = btn.querySelector(".pill");
+      btn.setAttribute("aria-pressed", String(b === state.bot));
+      btn.title = b.role;
       pill.className = "pill" + (working ? " busy" : state.done[b.id] ? " done" : "");
-      pill.textContent = working ? (state.busy[b.id] === "job" ? "on a client" : "working") : state.done[b.id] ? "done" : "idle";
+      pill.textContent = working ? (state.busy[b.id] === "job" ? "on a client" : "working") : state.done[b.id] ? "done" : b.role.split(" · ")[0];
+      actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
   }
 
@@ -484,6 +716,7 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
     $("statClients").textContent = String(items.filter(function (c) { return c.status !== "rejected"; }).length);
     $("statReview").textContent = String(review);
     $("statReviewBox").classList.toggle("hot", review > 0);
+    if (sceneReady && !(actors["2"] && actors["2"].el.classList.contains("carrying"))) drawTray(review);
     $("engClaude").setAttribute("aria-pressed", String(state.engine === "claude"));
     $("engDeep").setAttribute("aria-pressed", String(state.engine === "deepseek"));
     $("engClaude").disabled = !IN_CLAUDE;
@@ -598,8 +831,8 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
     log.scrollTop = log.scrollHeight;
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
-  function flashDone(id) { state.done[id] = true; drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
   async function send(text, test) {
@@ -668,8 +901,9 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
       } else {
         var id = await store.add({ name: guessName(summary), summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
         state.chatClient["1"] = id;
-        turns.push({ kind: "note", good: true, text: "Saved " + guessName(summary) + " to the client board. Scout is drafting a shortlist." });
-        queueJob(id);
+        turns.push({ kind: "note", good: true, text: "Saved " + guessName(summary) + " to the client board. Huan is taking the folder to Scout." });
+        deliver("1", "scout");
+        setTimeout(function () { queueJob(id); }, REDUCED ? 0 : 1800);
       }
     } catch (e) {
       turns.push({ kind: "note", text: "Couldn't save this client to the board." });
@@ -696,6 +930,7 @@ summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--mute
       var res = await ask(scout, [{ role: "user", content: msg }], {});
       await store.update(c.id, { status: "review", draft: res.text, updated: new Date().toISOString() });
       flashDone("2");
+      setTimeout(function () { deliver("2", "boss"); }, 600);
     } catch (e) {
       try { await store.update(c.id, { status: "new", error: errText(e) }); } catch (e2) {}
     } finally {
