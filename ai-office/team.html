@@ -215,6 +215,11 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .icon-btn { border: 1px solid var(--rule); background: transparent; border-radius: 9px; padding: 5px 9px; font-size: .76rem; color: var(--muted); }
 .icon-btn:hover { color: var(--accent); border-color: var(--accent); }
 .intro { padding: 10px 16px 0; font-size: .8rem; color: var(--muted); }
+.skills { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; padding: 8px 16px 0; }
+.sk-label { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-right: 2px; }
+.sk-chip { font-size: .72rem; padding: 2px 9px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); color: var(--text); }
+@media (max-width: 560px) { .staff { grid-template-columns: minmax(0, 1fr); } }
+.staff em.sk { font-style: normal; font-size: .68rem; color: var(--muted); opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chips { display: flex; gap: 6px; overflow-x: auto; padding: 10px 16px 12px; border-bottom: 1px solid var(--rule); scrollbar-width: thin; }
 .chip { flex: none; border: 1px solid var(--rule); background: var(--panel-2); border-radius: 999px; padding: 5px 12px; font-size: .78rem; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
@@ -421,6 +426,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           </div>
         </div>
         <p class="intro" id="chatIntro"></p>
+        <div class="skills" id="chatSkills" aria-label="Specialties"></div>
         <div class="chips" id="chips" aria-label="Try"></div>
         <div class="log" id="log"></div>
         <form class="say" id="form">
@@ -445,32 +451,32 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 (function () {
   "use strict";
   var BOTS = [
-    { id: "1", title: "Receptionist", file: "agents/1-customer-service.md", name: "Huan", role: "Front desk", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
+    { id: "1", skills: ["WeChat customer chat", "Booking consultations", "FAQs in Chinese & English", "Passing questions to the right person"], title: "Receptionist", file: "agents/1-customer-service.md", name: "Huan", role: "Front desk", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
       intro: "Answers customers' questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person. A finished booking goes to Scout." },
-    { id: "2", title: "Research Officer", file: "agents/2-school-research.md", name: "Scout", role: "School research", who: "Team only", color: "--c2", prop: "books", effort: "medium",
+    { id: "2", skills: ["UK school & university shortlists", "Rankings (QS, Guardian)", "Entry routes: GCSE to Master's", "Application timelines"], title: "Research Officer", file: "agents/2-school-research.md", name: "Scout", role: "School research", who: "Team only", color: "--c2", prop: "books", effort: "medium",
       intro: "Drafts a shortlist of UK schools for each new client, and lists what still needs checking. You can also paste a profile here.",
       tasks: [
         { en: "Student profile:\nWho: parent\nStudent: 17, Grade 11 in China\nWants: UK undergraduate, economics or finance\nEnglish: IELTS 6.0 (aiming for 6.5)\nStart: September 2028\nBudget: up to ¥400,000 a year\nNotes: strong at maths, wants a big city",
           zh: "【咨询登记】\n身份：家长\n学生年龄/年级：17 岁，国内高二\n意向阶段/专业：英国本科，经济或金融\n英语水平：雅思 6.0（预计再考到 6.5）\n计划入学：2028 年 9 月\n预算：每年 40 万人民币以内\n备注：数学好，希望去大城市" }] },
-    { id: "3", title: "Documents Officer", file: "agents/3-documents.md", name: "Quill", role: "Documents", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
+    { id: "3", skills: ["UCAS personal statement coaching", "CVs", "Reference letter outlines", "English editing"], title: "Documents Officer", file: "agents/3-documents.md", name: "Quill", role: "Documents", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
       intro: "Writes interview questions, personal statement outlines and edits. It won't write a statement for the student.",
       tasks: [
         { en: "A. Interview questions: 17-year-old applying for computer science at UK universities; makes games and does coding competitions.", zh: "A. 访谈提纲：学生 17 岁，申请英国本科计算机科学，喜欢做游戏和参加信息学竞赛。" },
         { en: "Write a complete economics personal statement for the student that they can submit as it is.", zh: "直接帮学生写一篇完整的经济学个人陈述，可以直接提交。" }] },
-    { id: "4", title: "Marketing Officer", file: "agents/4-marketing.md", name: "Spark", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
+    { id: "4", skills: ["WeChat Moments", "Xiaohongshu (Red Note)", "WeChat Official Account articles", "Douyin scripts", "Daily UK news check"], title: "Marketing Officer", file: "agents/4-marketing.md", name: "Spark", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
       intro: "Marketing officer. Checks UK university and policy news every morning, and drafts Xiaohongshu, WeChat, Moments and Douyin posts with a fact-check list.",
       tasks: [
         { en: "Xiaohongshu post for parents: our child is 13 and wants a UK boarding school. What should we prepare?", zh: "小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？" },
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] },
-    { id: "5", title: "Executive Secretary", file: "agents/5-secretary.md", name: "Ling", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
+    { id: "5", skills: ["Daily brief", "Coordinating the team", "Meeting minutes", "Following up tasks"], title: "Executive Secretary", file: "agents/5-secretary.md", name: "Ling", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
       intro: "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.",
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
         { en: "Hold a team meeting about today's news.", zh: "开个团队会，讲讲今天的新闻。" },
         { en: "A parent wants medicine at a top UK university for their son, budget ¥600k a year. Get the team ready for the consultation.", zh: "有位家长想让儿子去英国顶尖大学读医学，预算每年 60 万。让团队为咨询做好准备。" },
         { en: "What's waiting for my review?", zh: "现在有什么等我审核？" }] },
-    { id: "6", title: "Finance Officer", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
+    { id: "6", skills: ["Tuition & living-cost estimates", "Budget checks", "Visa money requirement", "RMB ↔ GBP conversions"], title: "Finance Officer", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
       intro: "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.",
       tasks: [
         { en: "Budget check: undergraduate economics in London, family budget about ¥400,000 a year. Is it realistic?", zh: "预算评估：伦敦本科读经济，家庭预算每年约 40 万人民币，现实吗？" },
@@ -616,11 +622,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   // ---------- teamwork: Huan calls colleagues, they work in parallel, Huan answers briefly ----------
   var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6" };
   var ROUTER_BOSS = "You are the coordinator for Ling, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: huan = front desk, client messages and FAQ wording; scout = UK schools, universities, courses, rankings, entry routes; quill = personal statements, CVs, application documents; spark = marketing posts, social media, today's university and policy news; penny = tuition, living costs, budgets, visa money.\n" +
+    "Colleagues: huan = front desk, client messages and FAQ wording; scout = UK schools, universities, courses, rankings, entry routes; quill = personal statements, CVs, application documents; spark = WeChat Moments, Xiaohongshu (Red Note), WeChat Official Account articles, Douyin scripts, today's university and policy news; penny = tuition, living costs, budgets, visa money.\n" +
     "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ling can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
-    "Colleagues: scout = UK schools, universities, courses, rankings, entry routes and requirements; penny = tuition fees, living costs, budgets, money needed for the student visa; quill = personal statements, CVs, reference letters, application documents.\n" +
+    "Colleagues: scout = UK schools, universities, courses, rankings, entry routes and requirements; penny = tuition fees, living costs, budgets, money needed for the student visa, RMB/GBP conversions; quill = personal statements, CVs, reference letters, English editing of application documents.\n" +
     "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
     "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
   var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台小寰替客户来问你。只回复给小寰看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
@@ -1929,7 +1935,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       BOTS.forEach(function (b) {
         var btn = document.createElement("button");
         btn.type = "button"; btn.id = "pick" + b.id;
-        btn.innerHTML = '<span class="ava photo" style="background-color:var(' + b.color + ');background-image:url(' + imgURL(IMG[b.id]) + ')">' + esc(b.name[0]) + '</span><span class="who-txt"><b>' + esc(b.name) + '</b><small></small></span><span class="status"></span>';
+        btn.innerHTML = '<span class="ava photo" style="background-color:var(' + b.color + ');background-image:url(' + imgURL(IMG[b.id]) + ')">' + esc(b.name[0]) + '</span><span class="who-txt"><b>' + esc(b.name) + '</b><small></small><em class="sk">' + esc(b.skills.join(" · ")) + '</em></span><span class="status"></span>';
         btn.onclick = function () { selectBot(b); };
         bar.appendChild(btn);
       });
@@ -2076,6 +2082,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("chatName").textContent = b.name;
     $("chatRole").textContent = b.title + " · " + b.who;
     $("chatIntro").textContent = b.intro + (b.id === "1" ? " Test questions are checked automatically." : "");
+    $("chatSkills").innerHTML = '<span class="sk-label">Specialties</span>' + b.skills.map(function (k) { return '<span class="sk-chip" style="--c:' + COLORS[b.color] + '">' + esc(k) + "</span>"; }).join("");
     var chips = $("chips"); chips.textContent = "";
     tasksFor(b).forEach(function (t) {
       var c = document.createElement("button");
