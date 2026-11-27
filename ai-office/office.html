@@ -1238,6 +1238,25 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .photo-frame .hs:not(.boss):not(.room-spot) .hs-tag { display: none; }
 @media (max-width: 640px) { .photo-frame .plate.wall-plate span { font-size: clamp(4.5px, 1.05cqw, .48rem); } }
 .dls-log { max-height: 92px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; }
+
+/* customers stand on the floor: smaller, feet at their spot, soft floor shadow instead of a big glow */
+.photo-frame .live-pin, .photo-frame .live-bub { margin: -28px 0 0 -12px; transform-origin: 50% 100%; scale: clamp(.42, calc(100cqw / 1500px), .6) !important;
+  filter: drop-shadow(0 0 0 1px rgba(255,255,255,.9)) drop-shadow(0 0 3px var(--c)) !important; }
+.photo-frame .live-pin.talking, .photo-frame .live-bub.talking { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 6px var(--c)) !important; }
+.photo-frame .live-pin::after, .photo-frame .live-bub::after { top: 96%; width: 22px; height: 7px; margin-left: -11px; opacity: .75 !important;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--c) 70%, transparent) 0, transparent 70%) !important; animation: none !important; }
+.photo-frame .live-pin.waiting, .photo-frame .live-bub.waiting { animation: none; }
+.photo-frame .live-pin .ct-dots, .photo-frame .live-bub .ct-dots { scale: 1.3; }
+.photo-frame .live-more { scale: clamp(.6, calc(100cqw / 1200px), .85); }
+/* phone: names only on the wall; one title per floor lights up in turn */
+@media (max-width: 640px) {
+  .photo-frame .plate.wall-plate span { display: none !important; }
+  .photo-frame .plate.wall-plate.show-title { z-index: 1; opacity: 1; background: rgba(14,18,26,.9); border-color: var(--c); }
+  .photo-frame .plate.wall-plate.show-title b { display: none; }
+  .photo-frame .plate.wall-plate.show-title span { display: block !important; color: #fff; font-size: clamp(5.5px, 1.4cqw, .6rem); animation: titleIn .35s ease; }
+}
+@keyframes titleIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) { .photo-frame .fx-tag { font-size: .5rem; padding: 1px 5px; transform: translate(-50%, -26px); } }
 </style>
 
 <div class="app">
@@ -3082,7 +3101,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title; pl.style.setProperty("--c", COLORS[b.color]); pl.id = "plate" + b.id;
       box.insertBefore(pl, box.firstChild);
     });
-    var glowEl = document.createElement("div"); glowEl.className = "ceo-glow";
+      // phone: cycle one title per floor so names stay readable
+    if (!buildPhoto.cycling) { buildPhoto.cycling = true; var tick = 0;
+      setInterval(function () {
+        if (!window.matchMedia("(max-width: 640px)").matches) return; tick++;
+        var byFloor = {}; BOTS.forEach(function (b) { var sp = SPOTS_PV[b.id], pl = $("plate" + b.id); if (sp && pl) (byFloor[Math.floor(sp[1] / 25)] = byFloor[Math.floor(sp[1] / 25)] || []).push(pl); });
+        Object.keys(byFloor).forEach(function (k) { var a = byFloor[k]; a.forEach(function (pl, i) { pl.classList.toggle("show-title", i === tick % a.length); }); });
+      }, 2600); }
+  var glowEl = document.createElement("div"); glowEl.className = "ceo-glow";
     glowEl.style.cssText = "left:" + LAY.glow[0] + "%;top:" + LAY.glow[1] + "%;width:" + LAY.glow[2] + "%;height:" + LAY.glow[3] + "%"; box.insertBefore(glowEl, box.firstChild);
     var you = document.createElement("div"); you.className = "plate ceo-plate"; you.style.left = LAY.ceoPlate[0] + "%"; you.style.top = LAY.ceoPlate[1] + "%";
     you.innerHTML = "<i>✦</i><b>Aliya</b><span>Chief Executive Officer</span>"; box.appendChild(you);
