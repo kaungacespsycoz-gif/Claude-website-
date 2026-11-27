@@ -982,6 +982,21 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .photo-frame .live-lab { opacity: .7; font-size: .55rem; }
 .photo-frame .live-lab:hover { opacity: 1; }
 .desk-status { pointer-events: none; }
+
+/* ---------- waiting areas: glowing carpet + acrylic sign in the channel's colour ---------- */
+.zone-rug { position: absolute; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; border-radius: 50%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--zc) 38%, transparent), color-mix(in srgb, var(--zc) 16%, transparent) 60%, transparent 72%);
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--zc) 70%, transparent) inset, 0 0 18px color-mix(in srgb, var(--zc) 45%, transparent);
+  animation: rugGlow 3.5s ease-in-out infinite; }
+@keyframes rugGlow { 50% { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--zc) 90%, transparent) inset, 0 0 26px color-mix(in srgb, var(--zc) 60%, transparent); } }
+.live-lab { display: inline-flex; align-items: center; gap: 4px; opacity: 1 !important; color: #fff; border: 1px solid color-mix(in srgb, var(--zc, #fff) 80%, transparent) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(12,14,18,.78) 55%) !important; box-shadow: 0 0 10px color-mix(in srgb, var(--zc, #fff) 45%, transparent), inset 0 -2px 0 var(--zc, #fff); }
+.live-lab .zl-ico { display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; background: var(--zc); color: #0b0f14; flex: none; }
+.live-lab .zl-n { margin-left: 3px; min-width: 14px; height: 14px; padding: 0 4px; border-radius: 7px; background: var(--zc); color: #0b0f14; font: 700 .58rem/14px var(--sans); text-align: center; }
+.live-lab.empty { opacity: .65 !important; }
+.photo-frame .live-lab { font-size: .56rem; padding: 2px 6px 2px 3px; }
+.photo-frame .live-lab .zl-ico { width: 13px; height: 13px; } .photo-frame .live-lab .zl-ico svg { width: 9px; height: 9px; }
+.pano-spots .zone-rug { transform: translate(-50%, -50%); }
 </style>
 
 <div class="app">
@@ -3675,8 +3690,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     Object.keys(P).forEach(function (z) {
       var zone = P[z], cs = groups[z] || [];
       if (zone.label) {
-        var lb = document.createElement("button"); lb.type = "button"; lb.className = "live-lab " + z + (cs.length ? "" : " empty");
-        lb.innerHTML = zone.n + " " + esc(ZONE_NAME[z][state.lang]) + (cs.length ? " · " + cs.length : "");
+        // a glowing carpet under each waiting area, in the channel's colour
+        var xs = zone.pts.map(function (p) { return p[0]; }), ys = zone.pts.map(function (p) { return p[1]; }), big = view !== "photo";
+        var rug = document.createElement("div"); rug.className = "zone-rug " + z; rug.style.setProperty("--zc", ZONE_COLOR[z]);
+        rug.style.width = (Math.max.apply(null, xs) - Math.min.apply(null, xs) + (big ? 9 : 4.5)) + "%"; rug.style.height = (big ? 9 : 2.8) + "%";
+        out.push({ el: rug, x: (Math.max.apply(null, xs) + Math.min.apply(null, xs)) / 2, y: ys.reduce(function (a, b) { return a + b; }, 0) / ys.length + (big ? 3.5 : 1) });
+        var lb = document.createElement("button"); lb.type = "button"; lb.className = "live-lab " + z + (cs.length ? "" : " empty"); lb.style.setProperty("--zc", ZONE_COLOR[z]);
+        lb.innerHTML = '<span class="zl-ico">' + ZONE_ICON[z] + "</span>" + esc(ZONE_NAME[z][state.lang]) + (cs.length ? '<b class="zl-n">' + cs.length + "</b>" : "");
         lb.onclick = function (e) { e.stopPropagation(); openLive(z); };
         out.push({ el: lb, x: zone.label[0], y: zone.label[1] });
       }
@@ -3695,7 +3715,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     });
     return out;
   }
-  function placeTokens(box, toks) { Array.prototype.forEach.call(box.querySelectorAll(".live-pin,.live-bub,.live-lab,.live-more"), function (t) { t.remove(); }); toks.forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; box.appendChild(q.el); }); }
+  var ZONE_COLOR = { wechat: "#3ee8a0", lead: "#c77dff", web: "#5aa9ff", booked: "#e8c17a", human: "#b5bcc6", comments: "#ff4f9a" };
+  var ZI = function (d) { return '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + "</svg>"; };
+  var ZONE_ICON = {
+    wechat: ZI('<path d="M9 4C5 4 2 6.6 2 9.8c0 1.8 1 3.4 2.6 4.5L4 17l3-1.5c.6.2 1.3.3 2 .3"/><path d="M15 9c3.9 0 7 2.4 7 5.4 0 1.6-.9 3-2.3 4L20 21l-2.7-1.3c-.7.2-1.5.3-2.3.3-3.9 0-7-2.4-7-5.4S11.1 9 15 9z"/>'),
+    web: ZI('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>'),
+    lead: ZI('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),
+    booked: ZI('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/>'),
+    human: ZI('<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.3-7 8-7s7 2.5 8 7"/>'),
+    comments: ZI('<path d="M4 5h16v11H9l-5 4z"/><path d="M12 13s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z" fill="currentColor"/>')
+  };
+  function placeTokens(box, toks) { Array.prototype.forEach.call(box.querySelectorAll(".live-pin,.live-bub,.live-lab,.live-more,.zone-rug"), function (t) { t.remove(); }); toks.forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; box.appendChild(q.el); }); }
   function drawLive() {
     if (pvReady) { placeTokens($("hotspots"), liveTokens("photo")); drawTicker(); }
     if (typeof inS !== "undefined" && $("inSpots").children.length) { if (inS.floor === 1) placeTokens($("inSpots"), liveTokens("in1")); else if (inS.floor === 2) placeTokens($("inSpots"), liveTokens("in2")); }
