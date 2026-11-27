@@ -487,7 +487,267 @@ ans("6", r"visa|签证", """
 【简要】在伦敦读书办学生签证，需要证明每月 £1,570、最多 9 个月，共 £14,130，再加上未付的学费；伦敦以外每月 £1,203。以上适用于 2026 年 11 月 30 日起的申请。
 """)
 
+# ---------- test customers (Huan), placed first so they win over the general answers ----------
+C = []
+def cust(bot, match, en, zh): C.append({"bot": bot, "match": match, "en": en.strip(), "zh": zh.strip()})
+cust("1", r"A-Level for my daughter|女儿去英国读A-Level", """
+Hello! Happy to help 😊 A-levels are a great route into UK universities. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?
+""", """
+您好！很高兴为您服务 😊 A-Level 是进入英国大学很好的路径。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？
+""")
+cust("1", r"28 and work in finance|28岁，在深圳", """
+Great plan! For a one-year master's, most people budget roughly £35,000 to £60,000 in total, depending a lot on the city and the course. Tuition is the biggest part, and London sits at the top of that range. Do you already have a subject or a few universities in mind?
+""", """
+很好的计划！读一年硕士，总费用大多在 3.5 万到 6 万英镑之间，主要看城市和专业。学费是大头，伦敦在区间的上限。您已经有想读的专业或学校了吗？
+""")
+cust("1", r"London much more expensive|伦敦是不是比其他城市贵", """
+London is usually about a third more for living costs, mainly rent: around £1,500–£1,900 a month versus £1,000–£1,300 in cities like Manchester or Leeds. Tuition can be higher too. Many finance master's outside London are excellent, so it's worth comparing. Shall I book a free consultation to go through options?
+""", """
+伦敦生活费一般贵三分之一左右，主要是房租：每月约 £1,500–£1,900，曼彻斯特、利兹等城市大约 £1,000–£1,300。学费也可能更高。伦敦以外也有很多很好的金融硕士，值得比较一下。要不要帮您约个免费咨询，一起看看选择？
+""")
+cust("1", r"Chen Hao|chenhao_sz|陈浩", """
+Thank you, Mr Chen! I've noted everything, and a consultant will add you on WeChat to set a time.
+
+【咨询登记】
+Who: working adult (Mr Chen)
+Student: 28, works in finance in Shenzhen
+Wants: one-year UK master's, finance
+English: IELTS 6.5
+Start: September 2027
+Budget: about ¥450,000
+Name / contact: Chen Hao / WeChat chenhao_sz
+Notes: agreed to use these details to arrange a consultation
+【登记完成】
+""", """
+谢谢陈先生！信息都记下了，顾问会加您微信约时间。
+
+【咨询登记】
+身份：在职人士（陈先生）
+学生年龄/年级：28 岁，深圳金融行业
+意向阶段/专业：英国一年制硕士，金融
+英语水平：雅思 6.5
+计划入学：2027 年 9 月
+预算：约 45 万人民币
+称呼/联系方式：陈浩 / 微信 chenhao_sz
+备注：同意使用以上信息安排咨询
+【登记完成】
+""")
+cust("1", r"guarantee him a place at Oxford|保证他上牛津", """
+I understand you want the best for your son. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?
+""", """
+理解您想给孩子最好的。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？
+""")
+cust("1", r"what's your fee|收费多少", """
+Of course. Our service fee depends on what your son needs and is agreed in writing before anything starts, so I'll ask a consultant to explain it to you directly, that's more accurate.
+【转人工】 Parent asks for Glostudy's service fee.
+""", """
+好的。我们的服务费要看孩子需要哪些服务，开始前会书面约定。这个问题我请顾问直接和您说，更准确。
+【转人工】家长询问寰学服务费。
+""")
+cust("1", r"write my personal statement for me|帮我写个人陈述", """
+Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But our documents officer can coach you, help you plan it and give feedback on your drafts. Would you like that?
+""", """
+心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我们的文书老师可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？
+""")
+cust("1", r"improve my own draft|改我自己写的初稿", """
+Yes, absolutely! Send your draft when you're ready, and our documents officer will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?
+""", """
+当然可以！准备好了就把初稿发过来，文书老师会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？
+""")
+cust("2", r"Chen Hao|chenhao", """
+零、一句话总结 / One-line summary: Mr Chen (28, IELTS 6.5, ¥450k) fits a one-year finance master's; best value outside London, with one London option.
+
+| University | City | Course | Typical entry (check website) |
+|---|---|---|---|
+| University of Manchester | Manchester | MSc Finance | 2:1-equivalent, IELTS 7.0 |
+| University of Leeds | Leeds | MSc Finance & Investment | IELTS 6.5 |
+| University of Birmingham | Birmingham | MSc Finance | IELTS 6.5 |
+| University of Bristol | Bristol | MSc Finance & Investment | IELTS 6.5–7.0 |
+| King's College London | London | MSc Banking & Finance | IELTS 7.0 (stretch) |
+
+**Notes:** work experience helps; check if IELTS 7.0 is needed for Manchester and KCL.
+""", """
+零、一句话总结：陈先生（28 岁，雅思 6.5，预算 45 万）适合一年制金融硕士；伦敦以外性价比高，加一个伦敦选项。
+
+| 大学 | 城市 | 专业 | 常见要求（以官网为准） |
+|---|---|---|---|
+| 曼彻斯特大学 | 曼彻斯特 | MSc Finance | 相当于 2:1，雅思 7.0 |
+| 利兹大学 | 利兹 | MSc Finance & Investment | 雅思 6.5 |
+| 伯明翰大学 | 伯明翰 | MSc Finance | 雅思 6.5 |
+| 布里斯托大学 | 布里斯托 | MSc Finance & Investment | 雅思 6.5–7.0 |
+| 伦敦国王学院 | 伦敦 | MSc Banking & Finance | 雅思 7.0（冲刺） |
+
+**备注：** 工作经验是加分项；需核实曼大和 KCL 是否要求雅思 7.0。
+""")
+
+# ---------- Spark: posts from a chosen photo ----------
+def photo_posts(pid, mom_en, mom_zh, rn):
+    cust("4", r"Moments.*photo:%s|朋友圈.*照片:%s" % (pid, pid), mom_en, mom_zh)
+    cust("4", r"Xiaohongshu.*photo:%s|小红书.*照片:%s" % (pid, pid), rn[0], rn[1])
+photo_posts("campus", """
+【简要】Here's a Moments post for the college photo: warm and simple, it invites parents to picture their child there, with the free consultation at the end.
+【完整报告】
+【朋友圈预览】
+金色的傍晚，走在英国学院的石板路上，这是很多孩子梦想中的大学生活 ✨
+想知道哪所英国学校最适合孩子？我们只做英国，帮你一步步规划。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：campus
+配图：梦想中的英国校园｜从规划开始
+【/朋友圈预览】
+""", """
+【简要】给这张学院照片写了一条朋友圈：温暖简单，让家长想象孩子在这里读书，结尾是免费咨询。
+【完整报告】
+【朋友圈预览】
+金色的傍晚，走在英国学院的石板路上，这是很多孩子梦想中的大学生活 ✨
+想知道哪所英国学校最适合孩子？我们只做英国，帮你一步步规划。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：campus
+配图：梦想中的英国校园｜从规划开始
+【/朋友圈预览】
+""", ("""
+【简要】A Xiaohongshu post built on the college photo: a "what UK campus life is really like" angle with 4 practical points, tags at the end.
+【完整报告】
+【小红书预览】
+标题：在英国读大学，真实的校园生活是这样的 🏰
+图片：campus
+封面：英国校园生活｜真实分享
+正文：很多家长和同学问：英国大学的生活到底是什么样？
+📚 小班讨论多，要敢开口
+🏛 很多学院有几百年历史，图书馆通宵开放
+🍳 学生宿舍大多自己做饭，独立能力很重要
+🧭 学校有国际学生办公室，遇到问题有人帮
+
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #英国大学 #留学生活 #校园日常
+【/小红书预览】
+""", """
+【简要】用这张学院照片写了一篇小红书：“英国真实校园生活”角度，4 个实用要点，结尾加标签。
+【完整报告】
+【小红书预览】
+标题：在英国读大学，真实的校园生活是这样的 🏰
+图片：campus
+封面：英国校园生活｜真实分享
+正文：很多家长和同学问：英国大学的生活到底是什么样？
+📚 小班讨论多，要敢开口
+🏛 很多学院有几百年历史，图书馆通宵开放
+🍳 学生宿舍大多自己做饭，独立能力很重要
+🧭 学校有国际学生办公室，遇到问题有人帮
+
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #英国大学 #留学生活 #校园日常
+【/小红书预览】
+"""))
+photo_posts("graduation", """
+【简要】A Moments post for the graduation photo: celebrates the moment without promising results, then invites families to start planning.
+【完整报告】
+【朋友圈预览】
+毕业季的帽子抛向天空的那一刻，是几年努力最好的回报 🎓
+每一份录取都来自提前的规划和孩子自己的努力。想开始规划英国留学？
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：graduation
+配图：毕业那一刻｜从今天开始规划
+【/朋友圈预览】
+""", """
+【简要】给毕业照写了一条朋友圈：庆祝那一刻，但不承诺结果，然后邀请家庭开始规划。
+【完整报告】
+【朋友圈预览】
+毕业季的帽子抛向天空的那一刻，是几年努力最好的回报 🎓
+每一份录取都来自提前的规划和孩子自己的努力。想开始规划英国留学？
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：graduation
+配图：毕业那一刻｜从今天开始规划
+【/朋友圈预览】
+""", ("""
+【简要】A Xiaohongshu post for the graduation photo: a timeline from planning to graduation that parents can save.
+【完整报告】
+【小红书预览】
+标题：从准备到毕业，英国本科时间线一张看懂 🎓
+图片：graduation
+封面：英国本科时间线｜收藏备用
+正文：英国本科一般 3 年（苏格兰 4 年），国内高中生常见路径：
+1️⃣ 高二：确定方向，准备雅思
+2️⃣ 高三上：9–10 月准备文书，1 月前递交 UCAS
+3️⃣ 高三下：收到 offer，满足条件
+4️⃣ 9 月：入学（部分同学先读一年预科）
+
+具体要求以各校官网为准。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #英国本科 #UCAS #留学时间线
+【/小红书预览】
+""", """
+【简要】给毕业照写了一篇小红书：从准备到毕业的时间线，适合家长收藏。
+【完整报告】
+【小红书预览】
+标题：从准备到毕业，英国本科时间线一张看懂 🎓
+图片：graduation
+封面：英国本科时间线｜收藏备用
+正文：英国本科一般 3 年（苏格兰 4 年），国内高中生常见路径：
+1️⃣ 高二：确定方向，准备雅思
+2️⃣ 高三上：9–10 月准备文书，1 月前递交 UCAS
+3️⃣ 高三下：收到 offer，满足条件
+4️⃣ 9 月：入学（部分同学先读一年预科）
+
+具体要求以各校官网为准。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #英国本科 #UCAS #留学时间线
+【/小红书预览】
+"""))
+photo_posts("london", """
+【简要】A Moments post for the London street photo: a light, real-life feel about student life in London plus honest cost info, with the consultation invite.
+【完整报告】
+【朋友圈预览】
+下课后的伦敦街头，红色巴士和雨后的灯光 🌧️🚌
+伦敦机会多，生活费也更高（每月约 £1,500 起）。适不适合，要看孩子的目标和预算。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：london
+配图：在伦敦读书｜机会与成本
+【/朋友圈预览】
+""", """
+【简要】给伦敦街景写了一条朋友圈：轻松的生活感，加上真实的费用信息，结尾邀请咨询。
+【完整报告】
+【朋友圈预览】
+下课后的伦敦街头，红色巴士和雨后的灯光 🌧️🚌
+伦敦机会多，生活费也更高（每月约 £1,500 起）。适不适合，要看孩子的目标和预算。
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：london
+配图：在伦敦读书｜机会与成本
+【/朋友圈预览】
+""", ("""
+【简要】A Xiaohongshu post for the London photo: "London or another city?" comparison that helps parents decide.
+【完整报告】
+【小红书预览】
+标题：去英国读书，选伦敦还是其他城市？🇬🇧
+图片：london
+封面：伦敦 vs 其他城市｜怎么选
+正文：伦敦 ✅ 名校多、实习机会多、交通方便
+伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£1,900
+曼城/利兹/伯明翰 ✅ 生活费约 £1,000–£1,300，学校同样优秀
+建议：先看专业和预算，再选城市。
+
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #伦敦留学 #留学费用 #选校
+【/小红书预览】
+""", """
+【简要】给伦敦街景写了一篇小红书：“伦敦还是其他城市”的对比，帮家长做决定。
+【完整报告】
+【小红书预览】
+标题：去英国读书，选伦敦还是其他城市？🇬🇧
+图片：london
+封面：伦敦 vs 其他城市｜怎么选
+正文：伦敦 ✅ 名校多、实习机会多、交通方便
+伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£1,900
+曼城/利兹/伯明翰 ✅ 生活费约 £1,000–£1,300，学校同样优秀
+建议：先看专业和预算，再选城市。
+
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+标签：#英国留学 #伦敦留学 #留学费用 #选校
+【/小红书预览】
+"""))
+A[:0] = C
+
 ROUTES = [
+  {"bot": "1", "match": r"28 and work in finance|28岁，在深圳", "calls": [{"who": "penny", "task": "Total cost of a one-year UK master's"}, {"who": "scout", "task": "Finance master's options by city"}]},
+  {"bot": "1", "match": r"London much more expensive|伦敦是不是比其他城市贵", "calls": [{"who": "penny", "task": "London vs other cities living costs"}]},
   {"bot": "1", "match": r"How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱", "calls": [{"who": "penny", "task": "Rough yearly costs for UK study"}, {"who": "scout", "task": "Typical tuition ranges by city"}]},
   {"bot": "5", "match": r"medicine|医学", "calls": [{"who": "scout", "task": "Medical school shortlist and entry route"}, {"who": "penny", "task": "Cost check for ¥600k a year"}, {"who": "quill", "task": "Interview and statement prep points"}]},
 ]

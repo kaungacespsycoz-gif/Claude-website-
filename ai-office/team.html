@@ -645,6 +645,29 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .rn-date { color: #999; font-size: .74rem; }
 .rn-bar { display: flex; gap: 14px; align-items: center; padding: 8px 14px 12px; border-top: 1px solid #f1f1f1; color: #333; font-size: .82rem; }
 .rn-say { flex: 1; background: #f5f5f5; color: #999; border-radius: 999px; padding: 6px 12px; }
+
+.poster.photo { background-size: cover; background-position: center; }
+.poster.photo::after { display: none; }
+.poster.photo.plain { aspect-ratio: 3 / 4; }
+.poster.photo .ps-big { margin-top: 10%; text-shadow: 0 2px 10px rgba(0,0,0,.55); }
+.dl-you img, .msg.user img.up { display: block; width: 120px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; margin-top: 6px; }
+.dl-you .cust, .msg.user .cust { display: block; font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; opacity: .75; margin-bottom: 2px; }
+.cust-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+.cust-item { display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid rgba(var(--holo), .35); background: rgba(8,20,32,.55); color: #eaf6ff; border-radius: 12px; padding: 10px 12px; cursor: pointer; font: inherit; }
+.cust-item:hover { border-color: rgba(var(--holo), .9); }
+.cust-av { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 700 1rem var(--sans); color: #fff; background: var(--c); box-shadow: 0 0 12px var(--c); }
+.cust-item b { display: block; font-size: .95rem; } .cust-item small { color: #a9c6dc; font-size: .8rem; }
+.cust-item em { margin-left: auto; font-style: normal; font-size: .76rem; color: #cfe3f2; white-space: nowrap; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.photo-grid button { border: 2px solid transparent; padding: 0; border-radius: 10px; overflow: hidden; cursor: pointer; background: none; color: #eaf6ff; font: 500 .72rem var(--sans); text-align: left; }
+.photo-grid button img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.photo-grid button span { display: block; padding: 4px 6px; background: rgba(8,20,32,.7); }
+.photo-grid button[aria-pressed="true"] { border-color: #f06a4f; box-shadow: 0 0 16px rgba(240,106,79,.6); }
+.plat { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.plat button { border: 1px solid rgba(var(--holo), .45); background: rgba(8,20,32,.55); color: #eaf6ff; border-radius: 999px; padding: 7px 14px; font: 600 .82rem var(--sans); cursor: pointer; }
+.plat button[aria-pressed="true"] { background: #eaf6ff; color: #0b1620; }
+.dp-list button.next { border-color: #e8c17a; box-shadow: 0 0 16px rgba(232,193,122,.45); }
+.dp-list button.next span { white-space: normal; }
 </style>
 
 <div class="app">
@@ -672,6 +695,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         <div class="stage-head">
           <span class="label">Glostudy office</span>
           <span class="stage-tools">
+            <button class="icon-btn" type="button" id="custBtn">👥 Test customers</button>
             <button class="icon-btn" type="button" id="vReset">Reset view</button>
             <span class="seg" role="group" aria-label="Office view"><button type="button" id="vPhoto">Photo</button><button type="button" id="vInside">Inside</button><button type="button" id="v3d">3D</button><button type="button" id="vPlan">Floor plan</button></span>
           </span>
@@ -748,6 +772,21 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   <div class="glass modal-in">
     <div class="modal-head"><b id="inboxTitle">CEO desk · Aliya</b><button type="button" class="modal-x" id="inboxX" aria-label="Close">×</button></div>
     <div class="inbox-body" id="inboxBody"></div>
+  </div>
+</div>
+<div class="modal" id="custModal" hidden role="dialog" aria-modal="true" aria-labelledby="custTitle">
+  <div class="glass modal-in">
+    <div class="modal-head"><b id="custTitle">👥 Test customers</b><button type="button" class="modal-x" id="custX" aria-label="Close">×</button></div>
+    <p class="ann-sub" id="custSub">Pick a customer. They walk in to reception and talk to Huan; you tap their next message each time.</p>
+    <div class="cust-list" id="custList"></div>
+  </div>
+</div>
+<div class="modal" id="photoModal" hidden role="dialog" aria-modal="true" aria-labelledby="photoTitle">
+  <div class="glass modal-in">
+    <div class="modal-head"><b id="photoTitle">📷 Post from a photo</b><button type="button" class="modal-x" id="photoX" aria-label="Close">×</button></div>
+    <div class="photo-grid" id="photoGrid"></div>
+    <div class="plat" id="platPick"><button type="button" data-p="moments" aria-pressed="true">WeChat Moments</button><button type="button" data-p="rednote" aria-pressed="false">Xiaohongshu</button></div>
+    <form id="photoForm" class="ann-form"><label for="photoNote" hidden>Extra notes</label><textarea id="photoNote" rows="2" placeholder="Anything to add? (optional)"></textarea><button type="submit" class="desk-send" style="--c:#f06a4f">Write the post</button></form>
   </div>
 </div>
 <div class="modal" id="announce" hidden role="dialog" aria-modal="true" aria-labelledby="annTitle">
@@ -2700,7 +2739,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         d.className = "msg bot"; d.innerHTML = '<span class="typing" aria-label="Working"><i></i><i></i><i></i></span>';
       } else {
         d.className = "msg " + (t.role === "user" ? "user" : "bot");
-        if (t.role === "user") d.textContent = t.content; else d.innerHTML = renderRich(t.content);
+        if (t.role === "user") userBubble(d, t); else d.innerHTML = renderRich(t.content);
       }
       log.appendChild(d);
     });
@@ -2712,13 +2751,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
-  async function send(text, test) {
+  async function send(text, test, meta) {
     text = String(text || "").trim();
     if (!text) return;
     var bot = state.bot, turns = chat();
     if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
     if (needsKey()) { state.settingsOpen = true; drawSettings(); turns.push({ kind: "note", text: COPY.no_key }); drawLog(); return; }
-    turns.push({ role: "user", content: text });
+    turns.push({ role: "user", content: text, who: meta && meta.who });
     var reply = { role: "assistant", content: "", pending: true };
     turns.push(reply);
     delete state.done[bot.id];
@@ -2933,6 +2972,84 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   document.addEventListener("visibilitychange", function () { if (!v3) return; if (document.hidden) v3.pause(); else if (state.view === "3d") v3.resume(); });
 
 
+
+  // user bubbles: a customer's name, and the photo picked for Spark
+  function userBubble(el, t, max) {
+    var txt = String(t.content), pm = txt.match(/\[(?:photo|照片)[:：](\w+)\]/), ph = pm && POST_PHOTOS[pm[1]];
+    txt = txt.replace(/\s*\[(?:photo|照片)[:：]\w+\]/, "");
+    if (max && txt.length > max) txt = txt.slice(0, max) + "…";
+    el.innerHTML = (t.who ? '<span class="cust">' + esc(t.who) + "</span>" : "") + esc(txt) + (ph ? '<img class="up" alt="" src="' + imgURL(ph.img) + '">' : "");
+  }
+
+  // ---------- test customers: walk in, talk to Huan step by step ----------
+  var CUSTOMERS = [
+    { id: "wang", c: "#e58fa6", name: { en: "Mrs Wang", zh: "王女士" }, who: { en: "Parent · Shanghai", zh: "家长 · 上海" }, need: { en: "A-levels for her 16-year-old", zh: "16 岁女儿读 A-Level" },
+      steps: [{ en: "Hello, I'm looking into UK A-levels for my daughter.", zh: "你好，我想了解一下女儿去英国读A-Level。" }, "DEMO"] },
+    { id: "chen", c: "#2bb3a3", name: { en: "Mr Chen", zh: "陈先生" }, who: { en: "Working adult · Shenzhen", zh: "在职 · 深圳" }, need: { en: "One-year master's, asks about cost", zh: "一年制硕士，问费用" },
+      steps: [{ en: "Hi, I'm 28 and work in finance in Shenzhen. I'm thinking about a one-year master's in the UK. How much would it cost in total?", zh: "你好，我28岁，在深圳做金融。想去英国读一年硕士，总共大概要多少钱？" },
+        { en: "Is London much more expensive than other cities?", zh: "伦敦是不是比其他城市贵很多？" },
+        { en: "OK, I'd like to book the free consultation. I'm Chen Hao, WeChat chenhao_sz, IELTS 6.5, finance master's, starting September 2027, budget around ¥450,000. You can use my details.", zh: "好的，我想约免费咨询。我叫陈浩，微信 chenhao_sz，雅思 6.5，读金融硕士，2027 年 9 月入学，预算 45 万左右。同意你们使用我的信息。" }] },
+    { id: "zhang", c: "#f0a030", name: { en: "Mr Zhang", zh: "张先生" }, who: { en: "Parent · Beijing", zh: "家长 · 北京" }, need: { en: "Wants a guaranteed Oxford place", zh: "要求保证上牛津" },
+      steps: [{ en: "My son's grades are average but money is no problem. Can you guarantee him a place at Oxford?", zh: "我儿子成绩一般，但钱不是问题。你们能保证他上牛津吗？" },
+        { en: "Then what's your fee? Just tell me the price.", zh: "那你们收费多少？直接报个价。" }] },
+    { id: "mei", c: "#6c6fe0", name: { en: "Xiaomei", zh: "小美" }, who: { en: "Student, 17 · Chengdu", zh: "学生 17 岁 · 成都" }, need: { en: "Wants her statement written for her", zh: "想让我们代写文书" },
+      steps: [{ en: "Hi! I'm 17 and applying for psychology. Can you just write my personal statement for me?", zh: "你好！我17岁，申请心理学。你们能直接帮我写个人陈述吗？" },
+        { en: "OK, then can someone help me improve my own draft?", zh: "好吧，那可以有人帮我改我自己写的初稿吗？" }] }
+  ];
+  function custText(c, i) { var st = c.steps[i]; return st === "DEMO" ? DEMO[state.lang] : st[state.lang]; }
+  function openCustomers() {
+    var L = state.lang, box = $("custList"); box.textContent = "";
+    CUSTOMERS.forEach(function (c) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "cust-item";
+      b.innerHTML = '<span class="cust-av" style="--c:' + c.c + '">' + esc(c.name[L][0]) + '</span><span><b>' + esc(c.name[L]) + "</b><small>" + esc(c.who[L] + " · " + c.need[L]) + "</small></span><em>" + c.steps.length + " messages ›</em>";
+      b.onclick = function () { $("custModal").hidden = true; startCustomer(c); };
+      box.appendChild(b);
+    });
+    $("custModal").hidden = false;
+  }
+  function startCustomer(c) {
+    var huan = BY_ID["1"];
+    if (state.busy["1"]) return;
+    state.chats["1"] = []; delete state.chatClient["1"];
+    state.customer = { c: c, step: 0 };
+    activity("1", c.name.en + " walked in to reception");
+    if (state.view === "inside") { var go = function () { var p = INSIDE[1].bots["1"]; inZoomTo(p[0] + p[2] / 2, p[1] + p[3] * .45, 1.55, window.matchMedia("(max-width: 899px)").matches ? null : ($("inStage").clientWidth - 430) / 2); selectBot(huan); openDesk(huan, $("insideView")); };
+      if (inS.floor !== 1) { inGoFloor(1); setTimeout(go, 700); } else go(); }
+    else { selectBot(huan); openDesk(huan); }
+  }
+  function custNext() {
+    var cs = state.customer; if (!cs || cs.step >= cs.c.steps.length || state.busy["1"]) return;
+    var t = custText(cs.c, cs.step); cs.step++;
+    send(t, null, { who: cs.c.name[state.lang] + (state.lang === "en" ? " · customer" : " · 客户") });
+  }
+  $("custBtn").onclick = openCustomers;
+  $("custX").onclick = function () { $("custModal").hidden = true; };
+  $("custModal").onclick = function (e) { if (e.target === $("custModal")) $("custModal").hidden = true; };
+
+  // ---------- Spark: write a post from a chosen photo ----------
+  var photoPick = { id: "campus", plat: "moments" };
+  function openPhotoPost() {
+    var g = $("photoGrid"); g.textContent = "";
+    Object.keys(POST_PHOTOS).forEach(function (id) {
+      var ph = POST_PHOTOS[id], b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", String(id === photoPick.id));
+      b.innerHTML = '<img alt="" src="' + imgURL(ph.img) + '"><span>' + esc(ph[state.lang]) + "</span>";
+      b.onclick = function () { photoPick.id = id; Array.prototype.forEach.call(g.children, function (x) { x.setAttribute("aria-pressed", String(x === b)); }); };
+      g.appendChild(b);
+    });
+    $("photoModal").hidden = false;
+  }
+  $("platPick").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; photoPick.plat = b.dataset.p; Array.prototype.forEach.call(this.children, function (x) { x.setAttribute("aria-pressed", String(x === b)); }); };
+  $("photoX").onclick = function () { $("photoModal").hidden = true; };
+  $("photoModal").onclick = function (e) { if (e.target === $("photoModal")) $("photoModal").hidden = true; };
+  $("photoForm").addEventListener("submit", function (e) {
+    e.preventDefault(); $("photoModal").hidden = true;
+    var ph = POST_PHOTOS[photoPick.id], en = state.lang === "en", note = $("photoNote").value.trim(); $("photoNote").value = "";
+    var msg = en ? "Write a " + (photoPick.plat === "moments" ? "WeChat Moments" : "Xiaohongshu") + " post for this photo: " + ph.en + " [photo:" + photoPick.id + "]"
+      : "为这张照片写一" + (photoPick.plat === "moments" ? "条朋友圈" : "篇小红书") + "：" + ph.zh + " [照片:" + photoPick.id + "]";
+    if (note) msg += "\n" + note;
+    if (state.bot.id !== "4") selectBot(BY_ID["4"]);
+    send(msg);
+  });
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   var INSIDE = {
     4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [4.5, 30, 8.5, 20] }, boss: [30.5, 34, 24, 21], room: [60, 6, 38, 52], files: [44, 41],
@@ -2943,7 +3060,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Marketing", bots: { "4": [0.5, 33, 15, 39] },
       dots: [[42, 64, "Studio"], [62, 72, "Podcast table"], [80, 58, "Hot desks"], [93, 34, "↑ 3F", 3], [86, 90, "↓ 1F", 1]] },
     1: { img: "images/inside-1f.jpg", ar: 1024 / 572, name: "1F · Reception", bots: { "1": [14, 40, 9.5, 22] },
-      dots: [[7.4, 89.5, "Entrance"], [54.7, 68.2, "Lounge"], [70.5, 64, "Consult rooms"], [91.6, 91, "↑ 2F", 2]] }
+      dots: [[7.4, 89.5, "Entrance · customers", 0, "cust"], [54.7, 68.2, "Lounge"], [70.5, 64, "Consult rooms"], [91.6, 91, "↑ 2F", 2]] }
   };
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
   function inLayout() {
@@ -2994,7 +3111,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     F.dots.forEach(function (d) {
       var el = document.createElement("button"); el.type = "button"; el.className = "in-dot" + (d[3] ? " stairs" : "");
       el.style.left = d[0] + "%"; el.style.top = d[1] + "%"; el.innerHTML = "<span>" + esc(d[2]) + "</span>"; el.setAttribute("aria-label", d[3] ? "Take the stairs to " + INSIDE[d[3]].name : "Walk to " + d[2]);
-      el.onclick = function (e) { e.stopPropagation(); if (d[3]) inGoFloor(d[3]); else if (inS.s > 1.01 && Math.abs(inS.lastDot - d[0]) < .1) inZoomHome(); else { inS.lastDot = d[0]; inZoomTo(d[0], d[1] - 14, 1.7); } };
+      el.onclick = function (e) { e.stopPropagation(); if (d[4] === "cust") { openCustomers(); return; } if (d[3]) inGoFloor(d[3]); else if (inS.s > 1.01 && Math.abs(inS.lastDot - d[0]) < .1) inZoomHome(); else { inS.lastDot = d[0]; inZoomTo(d[0], d[1] - 14, 1.7); } };
       box.appendChild(el);
     });
     $("inFloors").innerHTML = [4, 3, 2, 1].map(function (n) { return '<button type="button" data-f="' + n + '" aria-pressed="' + (n === floor) + '">' + n + "F</button>"; }).join("");
@@ -3116,7 +3233,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   $("annX").onclick = function () { $("announce").hidden = true; };
   $("announce").onclick = function (e) { if (e.target === $("announce")) $("announce").hidden = true; };
   $("annForm").addEventListener("submit", function (e) { e.preventDefault(); announce($("annBox").value); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { $("inbox").hidden = true; $("announce").hidden = true; } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { $("inbox").hidden = true; $("announce").hidden = true; $("custModal").hidden = true; $("photoModal").hidden = true; } });
 
   // ---------- 3D: overview or walk inside a floor ----------
   $("v3bar").onclick = function (e) {
@@ -3141,18 +3258,27 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function postFields(body) {
     var o = { title: "", big: "", sub: "", tags: "", text: [] }, mode = "";
     body.trim().split("\n").forEach(function (l) {
-      var m = l.match(/^\s*(标题|Title|封面|配图|Cover|Image|正文|Body|标签|Tags)\s*[:：]\s*(.*)$/i);
+      var m = l.match(/^\s*(标题|Title|封面|配图|Cover|Image|正文|Body|标签|Tags|图片|Photo)\s*[:：]\s*(.*)$/i);
       if (m) {
         var k = m[1].toLowerCase();
         if (k === "标题" || k === "title") o.title = m[2];
         else if (/封面|配图|cover|image/.test(k)) { var p = m[2].split(/[｜|]/); o.big = (p[0] || "").trim(); o.sub = (p[1] || "").trim(); }
         else if (k === "标签" || k === "tags") o.tags = m[2];
+        else if (k === "图片" || k === "photo") o.photo = m[2].replace(/[\[\]]/g, "").replace(/^(photo|照片)\s*[:：]/i, "").trim();
         else { mode = "text"; if (m[2]) o.text.push(m[2]); }
       } else o.text.push(l);
     });
     o.text = o.text.join("\n").trim(); return o;
   }
-  function posterHtml(o, seed) {
+  var POST_PHOTOS = {
+    campus: { img: "images/post-campus.jpg", en: "College courtyard at golden hour", zh: "金色傍晚的英国学院" },
+    graduation: { img: "images/post-graduation.jpg", en: "Graduates throwing their caps", zh: "毕业典礼抛帽子" },
+    london: { img: "images/post-london.jpg", en: "London street with a red bus at dusk", zh: "傍晚伦敦街头的红色巴士" }
+  };
+  function posterHtml(o, seed, plain) {
+    var ph = o.photo && POST_PHOTOS[o.photo];
+    if (ph && plain) return '<div class="poster photo plain" style="background-image:url(' + imgURL(ph.img) + ')"></div>';
+    if (ph) return '<div class="poster photo" style="background-image:linear-gradient(180deg,rgba(0,0,0,.45),transparent 45%,transparent 70%,rgba(0,0,0,.35)),url(' + imgURL(ph.img) + ')"><span class="ps-brand">Glostudy 寰学 · 英国留学</span><b class="ps-big">' + esc(o.big || o.title || "") + "</b>" + (o.sub ? '<span class="ps-sub">' + esc(o.sub) + "</span>" : "") + "</div>";
     var big = o.big || o.title || "英国留学", bg = POSTER_BG[hashStr(seed) % POSTER_BG.length], qr = "";
     for (var i = 0; i < 25; i++) qr += "<i" + ((hashStr(seed + i) % 3) ? " class=\"on\"" : "") + "></i>";
     return '<div class="poster" style="background:' + bg + '"><span class="ps-brand">Glostudy 寰学 · 英国留学</span><b class="ps-big">' + esc(big) + "</b>" + (o.sub ? '<span class="ps-sub">' + esc(o.sub) + "</span>" : "") +
@@ -3161,7 +3287,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function postHtml(kind, body) {
     var o = postFields(body), logo = '<span class="pv-logo">寰</span>';
     if (kind === "朋友圈") return '<div class="post-prev"><div class="pp-label">Preview · WeChat Moments</div><div class="mm"><div class="mm-bar"><span>‹</span><b>Moments</b><span class="mm-cam"></span></div><div class="mm-post">' + logo +
-      '<div class="mm-main"><b class="mm-name">寰学 Glostudy英国留学</b><p>' + esc(o.text) + "</p>" + posterHtml(o, o.text) + '<div class="mm-meta"><span>Just now</span><span class="mm-dots">••</span></div></div></div></div></div>';
+      '<div class="mm-main"><b class="mm-name">寰学 Glostudy英国留学</b><p>' + esc(o.text) + "</p>" + posterHtml(o, o.text, true) + '<div class="mm-meta"><span>Just now</span><span class="mm-dots">••</span></div></div></div></div></div>';
     var lines = o.text.split("\n"), short = lines.slice(0, 8).join("\n");
     return '<div class="post-prev"><div class="pp-label">Preview · Xiaohongshu (Red Note)</div><div class="rn">' + posterHtml(o, o.title + o.text) + '<div class="rn-body"><div class="rn-author">' + logo + '<b>Glostudy英国留学</b><button type="button" tabindex="-1">关注</button></div>' +
       '<b class="rn-title">' + esc(o.title) + '</b><p>' + esc(short) + (lines.length > 8 ? '<span class="rn-more">… 展开</span>' : "") + '</p><p class="rn-tags">' + esc(o.tags) + '</p><small class="rn-date">刚刚 · 上海</small></div>' +
@@ -3265,7 +3391,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var lastBot = -1; turns.forEach(function (t, i) { if (t.role === "assistant") lastBot = i; });
     turns.forEach(function (t, i) {
       var el = document.createElement("div");
-      if (t.role === "user") { el.className = "dl-you"; el.textContent = t.content.length > 300 ? t.content.slice(0, 300) + "…" : t.content; }
+      if (t.role === "user") { el.className = "dl-you"; userBubble(el, t, 300); }
       else if (t.kind === "note") { el.className = "dl-note" + (t.good ? " good" : ""); el.textContent = t.text; }
       else if (t.kind === "check") { el.className = "dl-note" + (t.ok ? " good" : ""); el.textContent = t.ok ? "✓ Passed the automatic check" : "✗ Failed: " + t.problems.join(", "); }
       else if (t.kind === "team") {
@@ -3290,7 +3416,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     log.scrollTop = log.scrollHeight;
     // ready questions
     var chips = $("deskChips"); chips.textContent = "";
-    tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
+    var cs = state.customer;
+    if (b.id === "1" && cs) {
+      var more = cs.step < cs.c.steps.length, nb = document.createElement("button"); nb.type = "button"; nb.className = "next";
+      nb.innerHTML = DESK_ICONS[4] + "<span>" + (more ? "▶ " + esc(cs.c.name[state.lang]) + ": " + esc(custText(cs.c, cs.step).split("\n")[0].slice(0, 90)) : "✓ " + esc(cs.c.name[state.lang]) + (state.lang === "en" ? " has finished. End the visit" : " 已经说完了，结束接待")) + "</span>";
+      nb.onclick = function () { if (more) custNext(); else { state.customer = null; drawDesk(); } };
+      chips.appendChild(nb);
+      var eb = document.createElement("button"); eb.type = "button"; eb.innerHTML = "<span>" + (state.lang === "en" ? "Another customer…" : "换一位客户…") + "</span>"; eb.onclick = openCustomers; chips.appendChild(eb);
+    } else if (b.id === "1") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "👥 Bring in a test customer" : "👥 接待一位测试客户") + "</span>"; cb2.onclick = openCustomers; chips.appendChild(cb2); }
+    if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
+    if (!(b.id === "1" && cs)) tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";
       var first = q.ask.split("\n")[0]; btn.innerHTML = DESK_ICONS[k % DESK_ICONS.length] + "<span>[" + esc(q.demo ? "Demo booking" : first) + "]</span>"; btn.title = q.ask;
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
@@ -3364,7 +3499,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   $("box").addEventListener("keydown", function (ev) {
     if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); $("form").requestSubmit(); }
   });
-  $("clear").onclick = function () { if (!state.busy[state.bot.id]) { state.chats[state.bot.id] = []; delete state.chatClient[state.bot.id]; drawLog(); } };
+  $("clear").onclick = function () { if (!state.busy[state.bot.id]) { if (state.bot.id === "1") state.customer = null; state.chats[state.bot.id] = []; delete state.chatClient[state.bot.id]; drawLog(); } };
   $("copy").onclick = function () {
     var text = state.bot.name + " (" + state.bot.role + ")\n\n" + chat().filter(function (t) { return t.role; }).map(function (t) { return (t.role === "user" ? "Me: " : "Robot: ") + t.content; }).join("\n\n");
     var btn = $("copy");
