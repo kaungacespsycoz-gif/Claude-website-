@@ -819,6 +819,50 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .view3d.photo [data-lv="-1"] { display: none; }
 .in-floors button { white-space: nowrap; }
 @media (max-width: 899px) { .v3bar { left: 6px; right: 6px; overflow-x: auto; scrollbar-width: none; } .v3bar button { padding: 6px 9px; font-size: .74rem; } }
+
+/* ---------- customers queuing at reception ---------- */
+.cust-tok { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 2px solid #fff; padding: 0; cursor: pointer; z-index: 4; color: #fff; font: 700 .85rem var(--sans); background: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 45%, transparent), 0 8px 16px rgba(0,0,0,.45); transition: left 1.4s cubic-bezier(.4,.1,.2,1), top 1.4s cubic-bezier(.4,.1,.2,1), opacity .4s; }
+.pano-spots .cust-tok { margin: 0; transform: translate(-50%, -50%); transition: none; }
+.cust-tok .ct-ico { position: absolute; left: 50%; bottom: calc(100% + 5px); transform: translateX(-50%); font-size: 1.15rem; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); animation: bob 1.8s ease-in-out infinite; }
+.cust-tok .ct-tag { position: absolute; left: 50%; top: calc(100% + 4px); transform: translateX(-50%); white-space: nowrap; font: 600 .64rem var(--sans); background: rgba(12,14,18,.78); padding: 2px 7px; border-radius: 999px; }
+.cust-tok.waiting { animation: waitPulse 2s ease-in-out infinite; }
+.cust-tok.talking { box-shadow: 0 0 0 4px #3ddc84, 0 0 22px #3ddc84; }
+.cust-tok.done { opacity: .55; }
+.cust-tok.star::after { content: "★"; position: absolute; right: -8px; top: -8px; width: 16px; height: 16px; border-radius: 50%; background: #ffcf4a; color: #4a3500; font-size: .62rem; line-height: 16px; text-align: center; }
+.ct-dots { position: absolute; left: calc(100% + 2px); top: -12px; background: #fff; border-radius: 9px; padding: 3px 6px; display: flex; gap: 2px; }
+.ct-dots i { width: 4px; height: 4px; border-radius: 50%; background: #3ddc84; animation: breathe 1s ease-in-out infinite; }
+.ct-dots i:nth-child(2) { animation-delay: .2s; } .ct-dots i:nth-child(3) { animation-delay: .4s; }
+@keyframes bob { 50% { transform: translate(-50%, -4px); } }
+@keyframes waitPulse { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 25%, transparent), 0 8px 16px rgba(0,0,0,.45); } }
+/* reception inbox */
+#custModal .modal-in { width: min(920px, 100%); }
+.cust-list { display: grid !important; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; flex-direction: initial; }
+.ib-list { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ib-tk { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left; border: 1px solid rgba(var(--holo), .3); background: rgba(8,20,32,.55); color: #eaf6ff; border-radius: 12px; padding: 10px; cursor: pointer; font: inherit; }
+.ib-tk.sel { border-color: rgba(var(--holo), .95); box-shadow: 0 0 18px rgba(var(--holo), .25); background: rgba(20,45,70,.6); }
+.ib-tk.done { opacity: .7; }
+.ib-tk .cust-av { font-size: 1.1rem; }
+.tk-main { min-width: 0; } .tk-main b { display: block; font-size: .92rem; } .tk-main small { display: block; color: #a9c6dc; font-size: .76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tk-star { font-style: normal; font-size: .62rem; background: #ffcf4a; color: #4a3500; border-radius: 999px; padding: 1px 7px; margin-left: 4px; vertical-align: 2px; }
+.tk-flow { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
+.fl-st { display: inline-flex; gap: 1px; padding: 2px; border-radius: 999px; background: rgba(255,255,255,.06); opacity: .55; }
+.fl-st.ok { opacity: 1; background: rgba(61,220,132,.18); box-shadow: 0 0 0 1px rgba(61,220,132,.6); }
+.fl-av { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 1.5px var(--c); font-style: normal; font-size: .7rem; line-height: 18px; text-align: center; }
+.fl-av.boss { background: #2a2010; box-shadow: 0 0 0 1.5px #e8c17a; }
+.fl-arrow { font-style: normal; color: #6f8aa0; font-size: .8rem; }
+.tk-st { font-size: .7rem; color: #cfe3f2; background: rgba(255,255,255,.08); border-radius: 999px; padding: 3px 8px; white-space: nowrap; }
+.ib-tk.talking .tk-st { background: rgba(61,220,132,.2); color: #9ff0c1; }
+.ib-detail { min-width: 0; border: 1px solid rgba(var(--holo), .3); border-radius: 14px; background: rgba(5,14,24,.55); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.dt-head { display: flex; align-items: center; gap: 10px; } .dt-head div { flex: 1; } .dt-head b { display: block; font: 600 1.05rem var(--display); } .dt-head small { color: #a9c6dc; font-size: .78rem; }
+.cust-av.big { width: 48px; height: 48px; font-size: 1.4rem; }
+.ib-detail blockquote { margin: 0; padding: 10px 12px; border-left: 3px solid #e8c17a; background: rgba(255,255,255,.05); border-radius: 0 10px 10px 0; font-size: .88rem; line-height: 1.5; color: #e6f2fa; }
+.dt-sec { font: 600 .7rem var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #a9c6dc; }
+.dt-flow { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; counter-reset: st; }
+.dt-flow li { display: flex; align-items: center; gap: 10px; font-size: .84rem; color: #9fb6c8; padding: 5px 8px; border-radius: 10px; }
+.dt-flow li.ok { color: #dff7e9; } .dt-flow li.ok span::after { content: " ✓"; color: #3ddc84; }
+.dt-flow li.now { background: rgba(61,220,132,.12); color: #fff; }
+.dt-acts { display: flex; gap: 8px; margin-top: auto; }
+@media (max-width: 760px) { .cust-list { grid-template-columns: minmax(0, 1fr); } .ib-tk { grid-template-columns: 36px minmax(0, 1fr); } .ib-tk .tk-st { grid-column: 2; justify-self: start; } }
 </style>
 
 <div class="app">
@@ -1224,6 +1268,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   async function consultTeam(calls, text, notesTurn, fromId) {
     fromId = fromId || "1";
     var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
+    if (fromId === "1") custMet(ids);
     pvCall(fromId, ids); callMap(fromId, ids, true); if (v3) v3.call(fromId, ids);
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
@@ -2567,7 +2612,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       img.style.transform = "scale(1.04) translate(" + (-dx * 1.2).toFixed(2) + "%," + (-dy * 1.2).toFixed(2) + "%)";
     });
     frame.addEventListener("pointerleave", function () { img.style.transform = ""; });
-    pvReady = true;
+    pvReady = true; setTimeout(drawQueues, 0);
     pvSelect(state.bot.id);
     Object.keys(state.busy).forEach(function (id) { pvWorking(id, true); });
     pvInbox(pendingReview());
@@ -3028,6 +3073,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         state.chatClient["1"] = id;
         turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Rachel is taking the folder to Ross." });
         activity("1", "Rachel booked " + name + " and took the folder to Ross");
+        if (state.customer) custBooked();
         deliver("1", "scout");
         setTimeout(function () { queueJob(id); }, REDUCED ? 0 : 1800);
       }
@@ -3174,47 +3220,136 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
 
   // ---------- test customers: walk in, talk to Rachel step by step ----------
+  // flow: who handles the customer, in order ("boss" = the CEO desk); icon floats over their head in the queue
   var CUSTOMERS = [
-    { id: "wang", c: "#e58fa6", name: { en: "Mrs Wang", zh: "王女士" }, who: { en: "Parent · Shanghai", zh: "家长 · 上海" }, need: { en: "A-levels for her 16-year-old", zh: "16 岁女儿读 A-Level" },
-      steps: [{ en: "Hello, I'm looking into UK A-levels for my daughter.", zh: "你好，我想了解一下女儿去英国读A-Level。" }, "DEMO"] },
-    { id: "chen", c: "#2bb3a3", name: { en: "Mr Chen", zh: "陈先生" }, who: { en: "Working adult · Shenzhen", zh: "在职 · 深圳" }, need: { en: "One-year master's, asks about cost", zh: "一年制硕士，问费用" },
+    { id: "chen", c: "#2bb3a3", icon: "💷", star: true, name: { en: "Mr Chen", zh: "陈先生" }, who: { en: "Working adult · Shenzhen", zh: "在职 · 深圳" }, need: { en: "One-year master's: how much will it cost?", zh: "一年制硕士：总共要多少钱？" },
+      flow: [["1"], ["6", "2"], ["1"], ["6"], ["1"], ["2"], ["boss"]],
       steps: [{ en: "Hi, I'm 28 and work in finance in Shenzhen. I'm thinking about a one-year master's in the UK. How much would it cost in total?", zh: "你好，我28岁，在深圳做金融。想去英国读一年硕士，总共大概要多少钱？" },
         { en: "Is London much more expensive than other cities?", zh: "伦敦是不是比其他城市贵很多？" },
         { en: "OK, I'd like to book the free consultation. I'm Chen Hao, WeChat chenhao_sz, IELTS 6.5, finance master's, starting September 2027, budget around ¥450,000. You can use my details.", zh: "好的，我想约免费咨询。我叫陈浩，微信 chenhao_sz，雅思 6.5，读金融硕士，2027 年 9 月入学，预算 45 万左右。同意你们使用我的信息。" }] },
-    { id: "zhang", c: "#f0a030", name: { en: "Mr Zhang", zh: "张先生" }, who: { en: "Parent · Beijing", zh: "家长 · 北京" }, need: { en: "Wants a guaranteed Oxford place", zh: "要求保证上牛津" },
-      steps: [{ en: "My son's grades are average but money is no problem. Can you guarantee him a place at Oxford?", zh: "我儿子成绩一般，但钱不是问题。你们能保证他上牛津吗？" },
-        { en: "Then what's your fee? Just tell me the price.", zh: "那你们收费多少？直接报个价。" }] },
-    { id: "mei", c: "#6c6fe0", name: { en: "Xiaomei", zh: "小美" }, who: { en: "Student, 17 · Chengdu", zh: "学生 17 岁 · 成都" }, need: { en: "Wants her statement written for her", zh: "想让我们代写文书" },
+    { id: "wang", c: "#e58fa6", icon: "🎓", name: { en: "Mrs Wang", zh: "王女士" }, who: { en: "Parent · Shanghai", zh: "家长 · 上海" }, need: { en: "A-levels for her 16-year-old daughter", zh: "16 岁女儿读 A-Level" },
+      flow: [["1"], ["2"], ["1"], ["2"], ["boss"]],
+      steps: [{ en: "Hello, I'm looking into UK A-levels for my daughter.", zh: "你好，我想了解一下女儿去英国读A-Level。" }, "DEMO"] },
+    { id: "mei", c: "#6c6fe0", icon: "✍️", name: { en: "Xiaomei", zh: "小美" }, who: { en: "Student, 17 · Chengdu", zh: "学生 17 岁 · 成都" }, need: { en: "Wants her personal statement written for her", zh: "想让我们代写个人陈述" },
+      flow: [["1"], ["3"], ["1"], ["3"], ["1"]],
       steps: [{ en: "Hi! I'm 17 and applying for psychology. Can you just write my personal statement for me?", zh: "你好！我17岁，申请心理学。你们能直接帮我写个人陈述吗？" },
-        { en: "OK, then can someone help me improve my own draft?", zh: "好吧，那可以有人帮我改我自己写的初稿吗？" }] }
+        { en: "OK, then can someone help me improve my own draft?", zh: "好吧，那可以有人帮我改我自己写的初稿吗？" }] },
+    { id: "zhang", c: "#f0a030", icon: "🏛️", name: { en: "Mr Zhang", zh: "张先生" }, who: { en: "Parent · Beijing", zh: "家长 · 北京" }, need: { en: "Wants a guaranteed Oxford place, asks our price", zh: "要求保证上牛津，问价格" },
+      flow: [["1"], ["2"], ["1"], ["person"]],
+      steps: [{ en: "My son's grades are average but money is no problem. Can you guarantee him a place at Oxford?", zh: "我儿子成绩一般，但钱不是问题。你们能保证他上牛津吗？" },
+        { en: "Then what's your fee? Just tell me the price.", zh: "那你们收费多少？直接报个价。" }] }
   ];
+  var CUST_BY = {}; CUSTOMERS.forEach(function (c) { CUST_BY[c.id] = c; });
+  state.cust = {}; CUSTOMERS.forEach(function (c) { state.cust[c.id] = { status: "waiting", step: 0, met: { "1": 0 }, booked: false, handover: false }; });
   function custText(c, i) { var st = c.steps[i]; return st === "DEMO" ? DEMO[state.lang] : st[state.lang]; }
-  function openCustomers() {
-    var L = state.lang, box = $("custList"); box.textContent = "";
-    CUSTOMERS.forEach(function (c) {
-      var b = document.createElement("button"); b.type = "button"; b.className = "cust-item";
-      b.innerHTML = '<span class="cust-av" style="--c:' + c.c + '">' + esc(c.name[L][0]) + '</span><span><b>' + esc(c.name[L]) + "</b><small>" + esc(c.who[L] + " · " + c.need[L]) + "</small></span><em>" + c.steps.length + " messages ›</em>";
-      b.onclick = function () { $("custModal").hidden = true; startCustomer(c); };
-      box.appendChild(b);
+  function custStatusText(id) {
+    var k = state.cust[id], en = state.lang === "en";
+    if (k.status === "done") return k.booked ? (en ? "Booked · on the CEO desk" : "已登记 · 在 CEO 桌上") : k.handover ? (en ? "Handed to a person" : "已转人工") : (en ? "Served" : "已接待");
+    if (k.status === "talking") return en ? "Talking with Rachel" : "正在和瑞秋聊";
+    return en ? "Waiting" : "等候中";
+  }
+  // which flow stages are reached so far
+  function custProgress(c) {
+    var k = state.cust[c.id], met = k.met, done = 0;
+    c.flow.forEach(function (stage, i) {
+      var hit = stage.every(function (x) { return x === "boss" ? k.booked : x === "person" ? k.handover : met[x] != null; });
+      if (hit && done === i) done = i + 1;
     });
+    if (k.status === "done") done = c.flow.length;
+    return done;
+  }
+  // ----- the queue of customers standing near reception (photo, inside and 360° views) -----
+  var QUEUE_POS = {
+    photo: { wait: [[30, 86.5], [34, 87.5], [38, 86.5], [42, 87.5]], talk: [26.5, 84.5] },
+    inside: { wait: [[30, 80], [35, 82], [40, 80], [45, 82]], talk: [25, 74] },
+    pano: { wait: [[50, 72], [55, 74], [60, 72], [65, 74]], talk: [46, 64] }
+  };
+  function queueTokens(kind) {
+    var P = QUEUE_POS[kind], wi = 0;
+    return CUSTOMERS.map(function (c) {
+      var k = state.cust[c.id], pos = k.status === "talking" ? P.talk : P.wait[wi++] || P.wait[3];
+      var el = document.createElement("button"); el.type = "button"; el.className = "cust-tok " + k.status + (c.star ? " star" : ""); el.dataset.cust = c.id;
+      el.style.setProperty("--c", c.c); el.setAttribute("aria-label", c.name.en + ": " + c.need.en + ". Open the reception inbox");
+      el.innerHTML = '<span class="ct-ico">' + c.icon + '</span><b>' + esc(c.name[state.lang][0]) + '</b><span class="ct-tag">' + esc(c.name[state.lang]) + (k.status === "done" ? " ✓" : "") + "</span>" + (k.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+      el.onclick = function (e) { e.stopPropagation(); openCustomers(c.id); };
+      return { el: el, x: pos[0], y: pos[1] };
+    });
+  }
+  function drawQueues() {
+    if (pvReady) { Array.prototype.forEach.call(document.querySelectorAll("#hotspots .cust-tok"), function (t) { t.remove(); }); queueTokens("photo").forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; $("hotspots").appendChild(q.el); }); }
+    if (typeof inS !== "undefined" && inS.floor === 1 && $("inSpots").children.length) { Array.prototype.forEach.call(document.querySelectorAll("#inSpots .cust-tok"), function (t) { t.remove(); }); queueTokens("inside").forEach(function (q) { q.el.style.left = q.x + "%"; q.el.style.top = q.y + "%"; $("inSpots").appendChild(q.el); }); }
+    if (pano) pano.queue(queueTokens("pano"));
+  }
+  // ----- reception inbox: tickets, the team each request needs, progress -----
+  var inboxSel = null;
+  function flowChip(stage, reached) {
+    return '<span class="fl-st' + (reached ? " ok" : "") + '">' + stage.map(function (x) {
+      if (x === "boss") return '<i class="fl-av boss" title="CEO desk">👑</i>';
+      if (x === "person") return '<i class="fl-av boss" title="A real consultant">🙋</i>';
+      var b = BY_ID[x]; return '<i class="fl-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')" title="' + esc(b.name) + '"></i>';
+    }).join("") + "</span>";
+  }
+  function openCustomers(selId) {
+    var L = state.lang, en = L === "en", list = $("custList");
+    inboxSel = selId || inboxSel || CUSTOMERS[0].id;
+    var waiting = CUSTOMERS.filter(function (c) { return state.cust[c.id].status !== "done"; }).length;
+    $("custTitle").textContent = (en ? "📥 Reception inbox · " : "📥 前台收件箱 · ") + waiting + (en ? " waiting" : " 位等候");
+    $("custSub").textContent = en ? "Customers queue by Rachel's desk. Each one needs a different part of the team: pick one and press Serve, then tap their next message." : "客户在瑞秋的前台排队，每位需要不同的同事配合。选一位，点“开始接待”，再点他们的下一句话。";
+    list.innerHTML = '<div class="ib-list" role="listbox"></div><div class="ib-detail" id="ibDetail"></div>';
+    var lb = list.firstChild;
+    CUSTOMERS.forEach(function (c) {
+      var k = state.cust[c.id], it = document.createElement("button"); it.type = "button"; it.className = "ib-tk" + (c.id === inboxSel ? " sel" : "") + " " + k.status; it.setAttribute("role", "option"); it.setAttribute("aria-selected", String(c.id === inboxSel));
+      it.innerHTML = '<span class="cust-av" style="--c:' + c.c + '">' + c.icon + "</span><span class=\"tk-main\"><b>" + esc(c.name[L]) + (c.star ? ' <em class="tk-star">' + (en ? "best demo" : "推荐演示") + "</em>" : "") + "</b><small>" + esc(c.need[L]) + '</small><span class="tk-flow">' + c.flow.map(function (st, i) { return flowChip(st, i < custProgress(c)); }).join('<i class="fl-arrow">›</i>') + '</span></span><span class="tk-st">' + esc(custStatusText(c.id)) + "</span>";
+      it.onclick = function () { inboxSel = c.id; openCustomers(c.id); };
+      lb.appendChild(it);
+    });
+    var c = CUST_BY[inboxSel], k = state.cust[c.id], prog = custProgress(c), d = $("ibDetail");
+    var STAGE = { "1": en ? "Rachel talks to them" : "瑞秋接待", "2": en ? "Ross researches schools" : "Ross 查学校", "3": en ? "Phoebe advises on documents" : "Phoebe 文书建议", "6": en ? "Chandler checks the money" : "Chandler 算费用", "4": "Joey", "5": "Monica", boss: en ? "Lands on your CEO desk" : "放到您的 CEO 桌上", person: en ? "Handed to a real consultant" : "转给真人顾问" };
+    d.innerHTML = '<div class="dt-head"><span class="cust-av big" style="--c:' + c.c + '">' + c.icon + '</span><div><b>' + esc(c.name[L]) + "</b><small>" + esc(c.who[L]) + '</small></div><span class="tk-st">' + esc(custStatusText(c.id)) + "</span></div>" +
+      '<blockquote>“' + esc(custText(c, 0)) + '”</blockquote>' +
+      '<div class="dt-sec">' + (en ? "What the team will do" : "团队会怎么做") + '</div><ol class="dt-flow">' + c.flow.map(function (st, i) { return '<li class="' + (i < prog ? "ok" : i === prog && k.status === "talking" ? "now" : "") + '">' + flowChip(st, i < prog) + "<span>" + st.map(function (x) { return STAGE[x]; }).join(" + ") + "</span></li>"; }).join("") + "</ol>" +
+      '<div class="dt-acts"></div>';
+    var acts = d.querySelector(".dt-acts"), btn = document.createElement("button"); btn.type = "button"; btn.className = "ib-btn";
+    if (k.status === "waiting") { btn.textContent = en ? "▶ Serve now" : "▶ 开始接待"; btn.onclick = function () { $("custModal").hidden = true; startCustomer(c); }; }
+    else if (k.status === "talking") { btn.textContent = en ? "Continue the conversation" : "继续对话"; btn.onclick = function () { $("custModal").hidden = true; startCustomer(c, true); }; }
+    else if (k.booked) { btn.textContent = en ? "📁 Open the CEO desk" : "📁 打开 CEO 桌面"; btn.onclick = function () { $("custModal").hidden = true; openInbox(); }; }
+    else { btn.textContent = en ? "Serve again" : "重新接待"; btn.onclick = function () { $("custModal").hidden = true; state.cust[c.id] = { status: "waiting", step: 0, met: { "1": 0 }, booked: false, handover: false }; startCustomer(c); }; }
+    acts.appendChild(btn);
     $("custModal").hidden = false;
   }
-  function startCustomer(c) {
+  function startCustomer(c, resume) {
     var huan = BY_ID["1"];
     if (state.busy["1"]) return;
-    state.chats["1"] = []; delete state.chatClient["1"];
-    state.customer = { c: c, step: 0 };
-    activity("1", c.name.en + " walked in to reception");
+    var cur = state.customer;
+    if (!resume || !cur || cur.c !== c) {
+      if (cur && cur.c !== c && state.cust[cur.c.id].status === "talking") state.cust[cur.c.id].status = "waiting";
+      state.chats["1"] = []; delete state.chatClient["1"];
+      state.cust[c.id].step = 0; state.cust[c.id].met = { "1": 0 };
+      state.customer = { c: c, step: 0 };
+    }
+    state.cust[c.id].status = "talking";
+    activity("1", c.name.en + " walked up to Rachel's desk");
+    drawQueues();
     if (state.view === "inside") { var go = function () { var p = INSIDE[1].bots["1"]; inZoomTo(p[0] + p[2] / 2, p[1] + p[3] * .45, 1.55, window.matchMedia("(max-width: 899px)").matches ? null : ($("inStage").clientWidth - 430) / 2); selectBot(huan); openDesk(huan, $("insideView")); };
       if (inS.floor !== 1) { inGoFloor(1); setTimeout(go, 700); } else go(); }
+    else if (state.view === "3d" && v3mode === "photo" && pano) { if (pano.floor() !== 0) pano.go(0); setTimeout(function () { var p = PANO[0].bots["1"]; pano.look(p[0] + p[2] / 2 + 7, p[1] + p[3] / 2, 40); selectBot(huan); openDesk(huan, $("view3d")); }, pano.floor() !== 0 ? 800 : 0); }
     else { selectBot(huan); openDesk(huan); }
   }
   function custNext() {
     var cs = state.customer; if (!cs || cs.step >= cs.c.steps.length || state.busy["1"]) return;
-    var t = custText(cs.c, cs.step); cs.step++;
-    send(t, null, { who: cs.c.name[state.lang] + (state.lang === "en" ? " · customer" : " · 客户") });
+    var t = custText(cs.c, cs.step); cs.step++; state.cust[cs.c.id].step = cs.step;
+    state.cust[cs.c.id].met["1"] = cs.step;
+    send(t, null, { who: cs.c.name[state.lang] + (state.lang === "en" ? " · customer" : " · 客户") }).then(function () {
+      var k = state.cust[cs.c.id], last = (chat().filter(function (x) { return x.role === "assistant"; }).slice(-1)[0] || {}).content || "";
+      if (/【转人工】/.test(last)) k.handover = true;
+      if (cs.step >= cs.c.steps.length) k.status = "done";
+      drawQueues(); if (state.desk) drawDesk();
+    });
   }
-  $("custBtn").onclick = openCustomers;
+  // remember which colleagues each customer's request reached
+  function custMet(ids) { var cs = state.customer; if (!cs || state.bot.id !== "1") return; ids.forEach(function (id) { state.cust[cs.c.id].met[id] = 1; }); }
+  function custBooked() { var cs = state.customer; if (!cs) return; state.cust[cs.c.id].booked = true; state.cust[cs.c.id].met["2"] = 1; drawQueues(); }
+  $("custBtn").onclick = function () { openCustomers(); };
   $("custX").onclick = function () { $("custModal").hidden = true; };
   $("custModal").onclick = function (e) { if (e.target === $("custModal")) $("custModal").hidden = true; };
 
@@ -3280,6 +3415,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         el.onclick = function () { look(p[0] + p[2] / 2 + (window.matchMedia("(max-width: 899px)").matches ? 0 : 7), p[1] + p[3] * .5, 40); setTimeout(function () { pickOfficer(b, "pano"); }, 450); };
         add(el, p[0] + p[2] / 2, p[1] + p[3] / 2); spots[spots.length - 1].size = [p[2], p[3]];
       });
+      if (f === 0) setTimeout(drawQueues, 0);
       P.dots.forEach(function (d) {
         var el = document.createElement("button"); el.type = "button"; el.className = "in-dot" + (d[3] != null && d[4] !== "cust" ? " stairs" : ""); el.innerHTML = "<span>" + esc(d[2]) + "</span>";
         el.onclick = function () { if (d[4] === "cust") { openCustomers(); return; } if (d[3] != null) { go(d[3], d[0]); return; } look(d[0], d[1] - 12, 38); };
@@ -3341,6 +3477,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     window.addEventListener("keydown", function (e) { if (!st.running || state.view !== "3d" || v3mode !== "photo") return; var t = e.target; if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT")) return; if (e.key === "ArrowLeft") st.gy += .15; else if (e.key === "ArrowRight") st.gy -= .15; else if (e.key === "ArrowUp") st.gf *= .85; else if (e.key === "ArrowDown") st.gf /= .85; else return; e.preventDefault(); limits(); });
     frame();
     return {
+      queue: function (toks) { spots = spots.filter(function (s) { if (s.cust) { s.el.remove(); return false; } return true; }); if (st.floor !== 0) return; toks.forEach(function (q) { spotsBox.appendChild(q.el); spots.push({ el: q.el, p: worldOf(q.x, q.y), cust: true }); }); },
       show: show, go: go, look: look, refresh: refresh, floor: function () { return st.floor; }, opts: opts,
       zoomHome: function () { st.gf = 62; st.gp = 0; limits(); },
       pause: function () { st.running = false; if (st.raf) cancelAnimationFrame(st.raf); st.raf = 0; },
@@ -3428,6 +3565,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       el.onclick = function (e) { e.stopPropagation(); if (d[4] === "cust") { openCustomers(); return; } if (d[3]) inGoFloor(d[3]); else if (inS.s > 1.01 && Math.abs(inS.lastDot - d[0]) < .1) inZoomHome(); else { inS.lastDot = d[0]; inZoomTo(d[0], d[1] - 14, 1.7); } };
       box.appendChild(el);
     });
+    setTimeout(drawQueues, 0);
     $("inFloors").innerHTML = [4, 3, 2, 1].map(function (n) { return '<button type="button" data-f="' + n + '" aria-pressed="' + (n === floor) + '">' + n + "F</button>"; }).join("");
     inRefresh();
   }
@@ -3837,8 +3975,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       nb.innerHTML = DESK_ICONS[4] + "<span>" + (more ? "▶ " + esc(cs.c.name[state.lang]) + ": " + esc(custText(cs.c, cs.step).split("\n")[0].slice(0, 90)) : "✓ " + esc(cs.c.name[state.lang]) + (state.lang === "en" ? " has finished. End the visit" : " 已经说完了，结束接待")) + "</span>";
       nb.onclick = function () { if (more) custNext(); else { state.customer = null; drawDesk(); } };
       chips.appendChild(nb);
-      var eb = document.createElement("button"); eb.type = "button"; eb.innerHTML = "<span>" + (state.lang === "en" ? "Another customer…" : "换一位客户…") + "</span>"; eb.onclick = openCustomers; chips.appendChild(eb);
-    } else if (b.id === "1") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "👥 Bring in a test customer" : "👥 接待一位测试客户") + "</span>"; cb2.onclick = openCustomers; chips.appendChild(cb2); }
+      var eb = document.createElement("button"); eb.type = "button"; eb.innerHTML = "<span>" + (state.lang === "en" ? "Another customer…" : "换一位客户…") + "</span>"; eb.onclick = function () { openCustomers(); }; chips.appendChild(eb);
+    } else if (b.id === "1") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "👥 Bring in a test customer" : "👥 接待一位测试客户") + "</span>"; cb2.onclick = function () { openCustomers(); }; chips.appendChild(cb2); }
     if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
     if (!(b.id === "1" && cs)) tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";

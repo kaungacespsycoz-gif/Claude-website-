@@ -491,9 +491,9 @@ ans("6", r"visa|签证", """
 C = []
 def cust(bot, match, en, zh): C.append({"bot": bot, "match": match, "en": en.strip(), "zh": zh.strip()})
 cust("1", r"A-Level for my daughter|女儿去英国读A-Level", """
-Hello! Happy to help 😊 A-levels are a great route into UK universities. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?
+Hello! Happy to help 😊 I just checked with Ross, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?
 """, """
-您好！很高兴为您服务 😊 A-Level 是进入英国大学很好的路径。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？
+您好！很高兴为您服务 😊 我刚和研究官 Ross 确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？
 """)
 cust("1", r"28 and work in finance|28岁，在深圳", """
 Great plan! For a one-year master's, most people budget roughly £35,000 to £60,000 in total, depending a lot on the city and the course. Tuition is the biggest part, and London sits at the top of that range. Do you already have a subject or a few universities in mind?
@@ -533,9 +533,9 @@ Notes: agreed to use these details to arrange a consultation
 【登记完成】
 """)
 cust("1", r"guarantee him a place at Oxford|保证他上牛津", """
-I understand you want the best for your son. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?
+I understand you want the best for your son. I asked Ross to look at Oxford's entry route: it needs top grades, an admissions test and an interview. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?
 """, """
-理解您想给孩子最好的。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？
+理解您想给孩子最好的。我请 Ross 查了牛津的录取路径：需要顶尖成绩、入学笔试和面试。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？
 """)
 cust("1", r"what's your fee|收费多少", """
 Of course. Our service fee depends on what your son needs and is agreed in writing before anything starts, so I'll ask a consultant to explain it to you directly, that's more accurate.
@@ -545,14 +545,14 @@ Of course. Our service fee depends on what your son needs and is agreed in writi
 【转人工】家长询问寰学服务费。
 """)
 cust("1", r"write my personal statement for me|帮我写个人陈述", """
-Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But our documents officer can coach you, help you plan it and give feedback on your drafts. Would you like that?
+Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But I checked with Phoebe, our documents officer: she can coach you, help you plan it and give feedback on your drafts. Would you like that?
 """, """
-心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我们的文书老师可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？
+心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我问了文书官 Phoebe：她可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？
 """)
 cust("1", r"improve my own draft|改我自己写的初稿", """
-Yes, absolutely! Send your draft when you're ready, and our documents officer will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?
+Yes, absolutely! Send your draft when you're ready, and Phoebe will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?
 """, """
-当然可以！准备好了就把初稿发过来，文书老师会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？
+当然可以！准备好了就把初稿发过来，Phoebe 会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？
 """)
 cust("2", r"Chen Hao|chenhao", """
 零、一句话总结 / One-line summary: Mr Chen (28, IELTS 6.5, ¥450k) fits a one-year finance master's; best value outside London, with one London option.
@@ -746,6 +746,10 @@ photo_posts("london", """
 A[:0] = C
 
 ROUTES = [
+  {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}]},
+  {"bot": "1", "match": r"guarantee him a place at Oxford|保证他上牛津", "calls": [{"who": "scout", "task": "Oxford entry route and realistic alternatives"}]},
+  {"bot": "1", "match": r"write my personal statement for me|帮我写个人陈述", "calls": [{"who": "quill", "task": "Can we coach a psychology statement?"}]},
+  {"bot": "1", "match": r"improve my own draft|改我自己写的初稿", "calls": [{"who": "quill", "task": "Draft feedback process and timeline"}]},
   {"bot": "1", "match": r"28 and work in finance|28岁，在深圳", "calls": [{"who": "penny", "task": "Total cost of a one-year UK master's"}, {"who": "scout", "task": "Finance master's options by city"}]},
   {"bot": "1", "match": r"London much more expensive|伦敦是不是比其他城市贵", "calls": [{"who": "penny", "task": "London vs other cities living costs"}]},
   {"bot": "1", "match": r"How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱", "calls": [{"who": "penny", "task": "Rough yearly costs for UK study"}, {"who": "scout", "task": "Typical tuition ranges by city"}]},
@@ -753,8 +757,8 @@ ROUTES = [
 ]
 NOTES = {
   "chandler": {"en": "- Tuition £20k–£40k a year by city\n- Living £12k–£22k\n- Visa funds up from 30 Nov", "zh": "- 学费每年 £2–4 万，看城市\n- 生活费 £1.2–2.2 万\n- 11 月 30 日起签证资金上调"},
-  "ross": {"en": "- London tuition is at the top of the range\n- Most universities publish fees on their website", "zh": "- 伦敦学费在上限\n- 各校官网都公布学费"},
-  "phoebe": {"en": "- Work-experience reflection\n- MMI interview practice", "zh": "- 医疗经历反思\n- MMI 面试练习"},
+  "ross": {"en": "- Options checked on university websites\n- Entry requirements vary by course", "zh": "- 已核对各校官网\n- 不同专业录取要求不同"},
+  "phoebe": {"en": "- Coaching yes, ghostwriting no\n- Plan → draft → feedback, 2–3 rounds", "zh": "- 可以辅导，不能代写\n- 提纲 → 初稿 → 修改，2–3 轮"},
   "rachel": {"en": "- FAQ wording ready", "zh": "- 常见问题话术已准备"},
   "joey": {"en": "- Post idea ready", "zh": "- 选题已准备"},
 }
