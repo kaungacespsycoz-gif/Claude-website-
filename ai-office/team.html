@@ -1216,6 +1216,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .dls-qs { position: relative; }
 .dls-qs::before { content: ""; position: absolute; left: -4px; right: -4px; top: calc(50% + 4px); height: 44px; margin-top: -22px; border-top: 1px solid rgba(var(--holo), .25); border-bottom: 1px solid rgba(var(--holo), .25); pointer-events: none; }
 .dls-hint { margin: 6px 0 0; text-align: center; font-size: .68rem; color: #8fb3cc; }
+.dls-list { height: 132px; padding: 46px 0; }
+.dls-list button { padding: 5px 10px !important; font-size: .78rem !important; min-height: 0; border-radius: 9px !important; }
+.dls-list button svg { width: 14px; height: 14px; }
+.dls-list button.mid { font-weight: 600; box-shadow: 0 0 10px -4px var(--c); }
+.dls-list button.mid::after { font-size: .64rem; padding: 2px 7px; }
+.dls-qs::before { height: 34px; margin-top: -17px; }
+.dls-qs::before { display: none; }
 </style>
 
 <div class="app">
@@ -4982,7 +4989,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var r = dl.getBoundingClientRect(), mid = r.top + r.height / 2, best = null, bd = 1e9;
         Array.prototype.forEach.call(dl.children, function (el) {
           var e = el.getBoundingClientRect(), d = (e.top + e.height / 2 - mid) / (r.height / 2), ad = Math.min(1.4, Math.abs(d));
-          el.style.transform = "perspective(500px) rotateX(" + (-d * 38) + "deg) scale(" + (1 - ad * .14) + ")";
+          el.style.transform = "perspective(500px) rotateX(" + (-d * 34) + "deg) scale(" + (.94 - ad * .1) + ")";
           el.style.opacity = String(Math.max(.18, 1 - ad * .72));
           if (Math.abs(d) < bd) { bd = Math.abs(d); best = el; }
         });
