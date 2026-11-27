@@ -359,6 +359,110 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   @keyframes pop { from { transform: scale(.4); } }
 }
 
+
+/* ---------- inside view: walk around each floor ---------- */
+.inside-view { position: relative; aspect-ratio: 16 / 9; max-height: 80vh; width: 100%; background: #050608; overflow: hidden; }
+.in-stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; cursor: grab; }
+.in-world { position: absolute; left: 0; top: 0; transform-origin: 0 0; transition: transform .9s cubic-bezier(.3,.7,.2,1), opacity .45s; will-change: transform; }
+.in-world.fading { opacity: 0; }
+.in-world img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+.in-spots { position: absolute; inset: 0; }
+.in-dot { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: radial-gradient(circle, #9ffcff 0 22%, #2fd6e0 34%, rgba(47,214,224,.25) 52%, transparent 70%); box-shadow: 0 0 18px rgba(80,230,240,.8); }
+.in-dot::before { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 2px dashed rgba(140,250,255,.75); animation: dotSpin 6s linear infinite; }
+.in-dot span { position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%); white-space: nowrap; font: 600 .72rem var(--sans); color: #e9fdff; background: rgba(5,25,30,.6); padding: 2px 8px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.in-dot:hover span, .in-dot:focus-visible span, .in-dot.stairs span { opacity: 1; }
+.in-dot.stairs { background: radial-gradient(circle, #fff4d6 0 22%, #f0b44a 34%, rgba(240,180,74,.3) 52%, transparent 70%); box-shadow: 0 0 18px rgba(255,190,90,.85); }
+.in-dot.stairs::before { border-color: rgba(255,215,150,.8); }
+@keyframes dotSpin { to { transform: rotate(360deg); } }
+.in-bot { position: absolute; border: 0; padding: 0; background: transparent; border-radius: 14px; cursor: pointer; }
+.in-bot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 2px var(--c), 0 0 22px var(--c); opacity: 0; transition: opacity .2s; }
+.in-bot:hover::after, .in-bot.selected::after, .in-bot.working::after { opacity: .85; }
+.in-bot.working::after { animation: breathe 1.6s ease-in-out infinite; }
+.in-bot .hs-tag { font-size: .8rem; }
+.in-bot.away { opacity: .35; }
+.in-spot { position: absolute; border: 0; background: transparent; padding: 0; cursor: pointer; border-radius: 12px; }
+.in-spot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 2px rgba(232,193,122,.9), 0 0 26px rgba(232,193,122,.5); opacity: 0; transition: opacity .2s; }
+.in-spot:hover::after, .in-spot:focus-visible::after { opacity: 1; }
+.in-spot .hs-tag { background: linear-gradient(90deg, #f6dc9c, #d7a955, #f6dc9c); color: #2a1d08; }
+.in-spot .hs-tag em { color: #5b4520; }
+.files { position: absolute; transform: translate(-50%, -100%); display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,220,150,.85); background: rgba(30,22,8,.72); color: #fff2cf; font: 600 .74rem var(--sans); padding: 5px 10px 5px 6px; border-radius: 10px; cursor: pointer; z-index: 3; box-shadow: 0 0 16px rgba(255,200,110,.55); backdrop-filter: blur(4px); }
+.files[hidden] { display: none; }
+.files i { font-style: normal; font-size: 1rem; line-height: 1; }
+.files.new { animation: filesPop 1.2s ease-out; }
+@keyframes filesPop { 0% { transform: translate(-50%, -100%) scale(.6); opacity: 0; } 40% { transform: translate(-50%, -100%) scale(1.15); opacity: 1; } 100% { transform: translate(-50%, -100%) scale(1); } }
+.in-floors { position: absolute; left: 12px; top: 12px; z-index: 4; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(8,14,20,.6); border: 1px solid rgba(150,215,255,.35); backdrop-filter: blur(8px); }
+.in-floors button { border: 0; background: transparent; color: #dfeefa; font: 600 .78rem var(--sans); padding: 6px 11px; border-radius: 999px; cursor: pointer; }
+.in-floors button[aria-pressed="true"] { background: #eaf6ff; color: #0b1620; }
+.in-hint { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); margin: 0; z-index: 4; font-size: .76rem; color: #e6f2fa; background: rgba(8,14,20,.55); padding: 5px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none; backdrop-filter: blur(6px); }
+.in-back { position: absolute; left: 12px; bottom: 12px; z-index: 4; border: 1px solid rgba(150,215,255,.4); background: rgba(8,14,20,.6); color: #fff; border-radius: 999px; padding: 7px 12px; font: 600 .78rem var(--sans); cursor: pointer; backdrop-filter: blur(6px); }
+.in-tok { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c), 0 0 14px var(--c); transition: left 1.6s cubic-bezier(.4,.1,.2,1), top 1.6s cubic-bezier(.4,.1,.2,1), opacity .5s; z-index: 3; pointer-events: none; }
+.v3bar { top: 12px; left: 12px; }
+.v3pad { position: absolute; left: 14px; bottom: 46px; z-index: 4; display: grid; grid-template-columns: repeat(3, 40px); grid-template-rows: repeat(2, 40px); gap: 4px; }
+.v3pad[hidden] { display: none; }
+.v3pad button { border: 1px solid rgba(150,215,255,.4); background: rgba(8,14,20,.6); color: #fff; border-radius: 10px; font-size: .9rem; cursor: pointer; touch-action: none; backdrop-filter: blur(6px); }
+.v3pad [data-k="f"] { grid-column: 2; grid-row: 1; } .v3pad [data-k="l"] { grid-column: 1; grid-row: 2; } .v3pad [data-k="b"] { grid-column: 2; grid-row: 2; } .v3pad [data-k="r"] { grid-column: 3; grid-row: 2; }
+/* zoom-out map when officers call each other */
+.call-map { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; background: rgba(3,5,8,.82); opacity: 0; transition: opacity .5s; pointer-events: none; }
+.call-map.on { opacity: 1; }
+.call-map .cm-frame { position: relative; height: 92%; aspect-ratio: 1024 / 1280; transform: scale(2.6); transition: transform 1.1s cubic-bezier(.3,.7,.2,1); border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px rgba(150,215,255,.4), 0 0 40px rgba(80,170,255,.35); }
+.call-map.on .cm-frame { transform: scale(1); }
+.call-map img { width: 100%; height: 100%; display: block; }
+.call-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.call-map line { stroke-width: 3; stroke-dasharray: 6 5; animation: dash 1s linear infinite; }
+.call-map .cm-ring { position: absolute; width: 13%; aspect-ratio: 1; margin: -6.5% 0 0 -6.5%; border-radius: 50%; border: 2px solid var(--c); box-shadow: 0 0 16px var(--c), inset 0 0 12px var(--c); animation: breathe 1.2s ease-in-out infinite; }
+.call-map .cm-cap { position: absolute; left: 50%; bottom: 3%; transform: translateX(-50%); white-space: nowrap; font: 600 .8rem var(--sans); color: #fff; background: rgba(8,14,20,.75); padding: 5px 12px; border-radius: 999px; }
+@keyframes dash { to { stroke-dashoffset: -22; } }
+/* docked 1-on-1 chat next to the officer */
+.desk.docked { position: absolute; inset: 0; z-index: 5; background: none; padding: 0; display: block; pointer-events: none; backdrop-filter: none; }
+.desk.docked .desk-in { position: absolute; right: 12px; top: 12px; bottom: 12px; left: auto; width: min(400px, 44%); height: auto; max-width: none; margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: visible; pointer-events: auto; background: none; }
+.desk.docked .desk-scene { display: none; }
+.desk.docked .desk-ui { display: flex !important; flex-direction: column; padding: 0; gap: 8px; height: 100%; }
+.desk.docked .desk-top { padding: 6px 8px; border-radius: 999px; background: rgba(8,14,20,.6); border: 1px solid rgba(150,215,255,.3); backdrop-filter: blur(8px); }
+.desk.docked .desk-sound { padding: 5px 10px; }
+.desk.docked .desk-status { margin: 0 !important; }
+.desk.docked .desk-prompts { order: 3; align-self: stretch; min-width: 0; margin: 0 !important; padding: 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.desk.docked .desk-prompts::before, .desk.docked .desk-prompts h3 { display: none; }
+.desk.docked .dp-list { flex-direction: row; overflow-x: auto; }
+.desk.docked .dp-list button { width: auto; max-width: 240px; padding: 7px 10px; }
+.desk.docked .dp-list button span { white-space: nowrap; display: block; }
+.desk.docked .desk-chat { order: 2; flex: 1; max-height: none; margin: 0; }
+@media (max-width: 899px) {
+  .desk.docked { position: fixed; z-index: 60; }
+  .desk.docked .desk-in { left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; height: 60vh; }
+  .desk.docked .desk-in { height: 56vh; }
+  .desk.docked .desk-chat, .desk.docked .desk-top { background: rgba(6,14,22,.9); }
+  .desk.docked .dp-list button { background: rgba(6,14,22,.88); }
+  .inside-view { aspect-ratio: auto; height: 62vh; }
+  .in-hint { display: none; }
+}
+/* modals: CEO inbox and announcements */
+.modal { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; background: rgba(3,5,8,.7); padding: 16px; --holo: 150, 215, 255; }
+.modal[hidden] { display: none; }
+.modal-in { width: min(560px, 100%); max-height: 86vh; display: flex; flex-direction: column; padding: 16px; color: #eaf6ff; background: linear-gradient(160deg, rgba(40,70,100,.55), rgba(10,20,34,.88)); }
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.modal-head b { font: 600 1.1rem var(--display); }
+.modal-x { border: 0; background: transparent; color: #cfe3f2; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.inbox-body { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.ib-sec { font: 600 .72rem var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #a9c6dc; margin-top: 4px; }
+.ib-item { border: 1px solid rgba(var(--holo), .35); background: rgba(8,20,32,.55); border-radius: 12px; }
+.ib-item summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; list-style: none; }
+.ib-item summary::-webkit-details-marker { display: none; }
+.ib-item summary span { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c); flex: none; }
+.ib-item summary b { flex: 1; font-weight: 600; font-size: .92rem; }
+.ib-item summary small { color: #9fb6c8; font-size: .74rem; }
+.ib-item summary i { width: 8px; height: 8px; border-radius: 50%; background: #ffcf70; box-shadow: 0 0 8px #ffcf70; }
+.ib-item .ib-text { padding: 0 14px 14px; font-size: .88rem; line-height: 1.5; white-space: pre-wrap; color: #e2eef7; }
+.ib-item .ib-text table { width: 100%; border-collapse: collapse; } .ib-item .ib-text td, .ib-item .ib-text th { border-bottom: 1px solid rgba(var(--holo), .2); padding: 4px 6px; text-align: left; }
+.ib-empty { color: #a9c6dc; font-size: .88rem; }
+.ib-btn { align-self: flex-start; border: 0; border-radius: 999px; padding: 8px 14px; background: #e8c17a; color: #2a1d08; font: 600 .85rem var(--sans); cursor: pointer; }
+.ann-sub { margin: 0 0 10px; font-size: .84rem; color: #c3d6e4; }
+.ann-chips { flex-wrap: wrap; margin-bottom: 10px; }
+.ann-form { display: flex; flex-direction: column; gap: 8px; }
+.ann-form textarea { resize: vertical; border: 1px solid rgba(var(--holo), .45); background: rgba(5,15,25,.6); color: #fff; border-radius: 12px; padding: 10px 12px; font: 400 .95rem var(--sans); }
+.ann-form .desk-send { align-self: flex-end; height: 42px; }
+.pv-tok { position: absolute; width: 4.2%; aspect-ratio: 1; margin: -2.1% 0 0 -2.1%; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c), 0 0 12px var(--c); transition: left 1.6s cubic-bezier(.4,.1,.2,1), top 1.6s cubic-bezier(.4,.1,.2,1), opacity .5s; z-index: 3; pointer-events: none; }
+.hs.room-spot .hs-tag { background: linear-gradient(90deg, #f6dc9c, #d7a955, #f6dc9c); color: #2a1d08; }
+.hs.room-spot .hs-tag em { color: #5b4520; }
 /* ---------- 1-on-1 desk chat ---------- */
 .one-cta { margin: 12px 16px 0; width: calc(100% - 32px); font: inherit; display: flex; align-items: center; gap: 14px; text-align: left; padding: 14px; border-radius: 18px; cursor: pointer; color: inherit;
   background: linear-gradient(135deg, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 10px 30px -18px var(--c); }
@@ -481,6 +585,26 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 @keyframes holoIn { from { opacity: 0; transform: translateY(6px) scale(.98); filter: brightness(1.8); } }
 @keyframes deskDrift { from { scale: 1; } to { scale: 1.045; } }
 @keyframes deskTalk { 0%, 100% { scale: 1.02; } 50% { scale: 1.035; } }
+
+/* report shown on the officer's screen / projector, not a sheet */
+.desk-sheet { left: 50% !important; right: auto !important; top: 64px !important; bottom: auto !important; transform: translateX(-50%); width: min(94vw, 720px) !important; max-height: min(62vh, 640px) !important; border-radius: 12px !important;
+  background: #07111c !important; color: #dcefff !important; border: 10px solid #111418; box-shadow: 0 0 0 1px #2a3038, 0 0 40px -6px var(--c), 0 30px 60px rgba(0,0,0,.7) !important; animation: screenOn .5s ease-out; z-index: 62; }
+.desk-sheet::before { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 2px; background: repeating-linear-gradient(180deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px), radial-gradient(120% 80% at 30% 0%, rgba(120,190,255,.12), transparent 60%); }
+.desk-sheet::after { content: ""; position: absolute; left: 50%; bottom: -26px; width: 90px; height: 16px; transform: translateX(-50%); background: linear-gradient(#1b1f24, #0d1014); border-radius: 0 0 8px 8px; }
+.desk-sheet .sheet-head { border-bottom: 1px solid rgba(150,215,255,.18); }
+.desk-sheet .sheet-head b { color: #fff; } .desk-sheet .sheet-head small { color: #8fb3cc; }
+.desk-sheet .sheet-head button { background: rgba(20,40,60,.7); border-color: rgba(150,215,255,.35); color: #e8f5ff; }
+.desk-sheet .sheet-body { color: #dcefff; }
+.desk-sheet .sheet-body strong { color: #fff; }
+.desk-sheet .sheet-body table { background: rgba(10,30,50,.6); box-shadow: 0 0 0 1px rgba(150,215,255,.25); }
+.desk-sheet .sheet-body th { background: rgba(60,120,170,.25); color: #fff; }
+.desk-sheet .sheet-body td, .desk-sheet .sheet-body th { border-bottom-color: rgba(150,215,255,.12); }
+.desk-sheet .scr-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3dfc8a; box-shadow: 0 0 8px #3dfc8a; margin-right: 6px; vertical-align: 1px; }
+@keyframes screenOn { from { opacity: 0; transform: translateX(-50%) scaleY(.04); filter: brightness(3); } 60% { opacity: 1; transform: translateX(-50%) scaleY(1); } }
+@media (min-width: 900px) {
+  .desk:not(.docked) .desk-sheet { left: calc(50% - 160px) !important; width: min(52vw, 700px) !important; top: 90px !important; }
+  .desk.docked .desk-sheet { position: absolute; left: calc((100% - 420px) / 2) !important; width: min(calc(100% - 470px), 640px) !important; top: 56px !important; max-height: calc(100% - 110px) !important; }
+}
 </style>
 
 <div class="app">
@@ -509,7 +633,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           <span class="label">Glostudy office</span>
           <span class="stage-tools">
             <button class="icon-btn" type="button" id="vReset">Reset view</button>
-            <span class="seg" role="group" aria-label="Office view"><button type="button" id="vPhoto">Photo</button><button type="button" id="v3d">3D</button><button type="button" id="vPlan">Floor plan</button></span>
+            <span class="seg" role="group" aria-label="Office view"><button type="button" id="vPhoto">Photo</button><button type="button" id="vInside">Inside</button><button type="button" id="v3d">3D</button><button type="button" id="vPlan">Floor plan</button></span>
           </span>
         </div>
         <div class="photo-view" id="photoView">
@@ -519,9 +643,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
             <div class="pv-card" id="pvCard" hidden><img id="pvCardImg" alt=""><div><b id="pvCardName"></b><small id="pvCardRole"></small></div><button type="button" class="one" id="pvOne">1-on-1 ›</button></div>
           </div>
         </div>
+        <div class="inside-view" id="insideView" hidden>
+          <div class="in-stage" id="inStage"><div class="in-world" id="inWorld"><img id="inImg" alt="" draggable="false"><div class="in-spots" id="inSpots"></div></div></div>
+          <div class="in-floors" id="inFloors" role="group" aria-label="Floor"></div>
+          <p class="in-hint" id="inHint">Tap the glowing dots to move · tap an officer to talk</p>
+          <button type="button" class="in-back" id="inBack" hidden>↩ Step back</button>
+        </div>
         <div class="view3d" id="view3d" hidden>
           <div class="v3canvas" id="v3canvas"></div>
-          <p class="v3hint">Drag to look around · scroll or pinch to zoom · click a robot to talk</p>
+          <div class="in-floors v3bar" id="v3bar" role="group" aria-label="3D camera"><button type="button" data-lv="-1" aria-pressed="true">Overview</button><button type="button" data-lv="3">Walk 4F</button><button type="button" data-lv="2">3F</button><button type="button" data-lv="1">2F</button><button type="button" data-lv="0">1F</button></div>
+          <div class="v3pad" id="v3pad" hidden><button type="button" data-k="f" aria-label="Forward">▲</button><button type="button" data-k="l" aria-label="Turn left">◀</button><button type="button" data-k="b" aria-label="Back">▼</button><button type="button" data-k="r" aria-label="Turn right">▶</button></div>
+          <p class="v3hint" id="v3hint">Drag to look around · scroll or pinch to zoom · click a robot to talk</p>
           <p class="v3note" id="v3note" aria-live="polite"></p>
         </div>
         <div class="scene-wrap" id="sceneWrap" hidden></div>
@@ -572,6 +704,20 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 </div>
 
 
+<div class="modal" id="inbox" hidden role="dialog" aria-modal="true" aria-labelledby="inboxTitle">
+  <div class="glass modal-in">
+    <div class="modal-head"><b id="inboxTitle">CEO desk · Aliya</b><button type="button" class="modal-x" id="inboxX" aria-label="Close">×</button></div>
+    <div class="inbox-body" id="inboxBody"></div>
+  </div>
+</div>
+<div class="modal" id="announce" hidden role="dialog" aria-modal="true" aria-labelledby="annTitle">
+  <div class="glass modal-in">
+    <div class="modal-head"><b id="annTitle">📣 Announcement to all team</b><button type="button" class="modal-x" id="annX" aria-label="Close">×</button></div>
+    <p class="ann-sub">Everyone comes to the boardroom. Ling runs a short meeting and puts the minutes on your desk.</p>
+    <div class="dp-list ann-chips" id="annChips"></div>
+    <form id="annForm" class="ann-form"><label for="annBox" hidden>Announcement</label><textarea id="annBox" rows="3" placeholder="Type your announcement…"></textarea><button type="submit" class="desk-send" style="--c:#e8c17a">Gather the team</button></form>
+  </div>
+</div>
 <div class="desk" id="desk" hidden role="dialog" aria-modal="true" aria-labelledby="deskName">
   <div class="desk-in">
     <div class="desk-scene">
@@ -605,7 +751,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     </div>
   </div>
   <div class="desk-sheet" id="deskSheet" hidden role="dialog" aria-labelledby="sheetTitle">
-    <div class="sheet-head"><b id="sheetTitle">Full report<small id="sheetSub"></small></b><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
+    <div class="sheet-head"><b id="sheetTitle"><span class="scr-dot"></span><span id="sheetName">On screen</span><small id="sheetSub"></small></b><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
     <div class="sheet-body" id="sheetBody"></div>
   </div>
 </div>
@@ -805,7 +951,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   async function consultTeam(calls, text, notesTurn, fromId) {
     fromId = fromId || "1";
     var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
-    pvCall(fromId, ids);
+    pvCall(fromId, ids); callMap(fromId, ids, true); if (v3) v3.call(fromId, ids);
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
       var id = ids[i], bot = BY_ID[id], mine = !state.busy[id];
@@ -820,7 +966,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           return note;
         });
     }));
-    pvCallEnd(fromId);
+    pvCallEnd(fromId); callMap(fromId, ids, false); if (v3) v3.callEnd();
     return "\n\n# 【同事笔记】（客户看不到，按“和同事合作”的规则回答）\n" + calls.map(function (c, i) { return "## " + BY_ID[ids[i]].name + "（" + c.task + "）\n" + results[i]; }).join("\n\n");
   }
 
@@ -1234,7 +1380,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       g.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
     });
     sortLayer();
-    function openReview() { state.filter = "review"; setTab("clients"); }
+    function openReview() { openInbox(); }
     boss.addEventListener("click", openReview);
     boss.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openReview(); } });
     sceneReady = true;
@@ -1354,7 +1500,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function pendingReview() { return store.items().filter(function (c) { return c.status === "review"; }).length; }
   function drawTray(n) {
-    if (v3) v3.setInbox(n);
+    if (v3) v3.setInbox(n + (state.reports ? unreadReports() : 0));
+    if (state.reports) setTimeout(deskFilesChanged, 0);
     pvInbox(n);
     if (!sceneReady) return;
     var f = "";
@@ -1794,25 +1941,91 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       for (var i = 0; i < Math.min(n, 6); i++) box(.3, .012, .22, mat(i % 2 ? 0xf2d18f : 0xe9c47c, .7), (i % 2) * .01, i * .016, 0, inbox);
     }
 
-    // ----- camera -----
+    // ----- gathering in the boardroom (4F) and walking anywhere in the building -----
+    var EXIT = { "1": 1.6, "2": 1.2, "3": 1.2, "4": 1.2, "5": 1.3, "6": 1.2 };
+    var MEET = { "5": [6.0, -2.4, -Math.PI / 2, 1], "2": [3.4, -3.3, 0, 0], "3": [4.1, -3.3, 0, 0], "6": [4.8, -3.3, 0, 0], "4": [3.4, -1.5, Math.PI, 0], "1": [4.1, -1.5, Math.PI, 0] };
+    function levelOf(y) { return Math.round(y / F2); }
+    function pathToMeeting(id) {
+      var r = robots[id], s = r.seat, L = levelOf(s.y), y3 = LV[3], pts = [[s.x + EXIT[id], s.y, s.z], [s.x + EXIT[id], s.y, .8]];
+      if (L !== 3) pts = pts.concat([[7.25, s.y, .8]], climb(L, 3), [[7.25, y3, .8]]);
+      var m = MEET[id];
+      return pts.concat([[4.5, y3, .8], [4.5, y3, -.7], [m[0], y3, m[1]]]);
+    }
+    var gathered = false;
+    function gather(on) {
+      if (on === gathered) return; gathered = on;
+      Object.keys(robots).forEach(function (id) {
+        var r = robots[id], route = pathToMeeting(id), m = MEET[id];
+        r.queue = r.queue.then(async function () {
+          r.speed = 2.6;
+          if (on) { await walk(r, route); r.root.rotation.y = m[2]; r.standGoal = m[3]; }
+          else { await walk(r, route.slice(0, -1).reverse().concat([[r.seat.x, r.seat.y, r.seat.z]])); r.path = []; r.standGoal = 0; r.root.rotation.y = 0; }
+          r.speed = 0;
+        });
+      });
+    }
+    // glowing call lines between robots
+    var beams = [], beamM = function (c) { return new T.MeshBasicMaterial({ color: c, transparent: true, opacity: .75, toneMapped: false, depthWrite: false }); };
+    function callStart(fromId, ids) {
+      callEnd(true);
+      ids.forEach(function (id) {
+        if (!robots[id] || !robots[fromId]) return;
+        var m = new T.Mesh(new T.CylinderGeometry(.025, .025, 1, 8, 1, true), beamM(opts.color(id))); scene.add(m);
+        var pulse = new T.Mesh(new T.SphereGeometry(.09, 12, 10), beamM(0xffffff)); scene.add(pulse);
+        beams.push({ a: fromId, b: id, m: m, p: pulse });
+      });
+      if (!zoom.on) { zoom.on = true; zoom.saved = Object.assign({}, goal);
+        if (walkSt.on) { var fx = -Math.sin(walkSt.yaw), fz = -Math.cos(walkSt.yaw); Object.assign(cam, { tx: walkSt.x + fx * 2, ty: LV[walkSt.level] + 1.4, tz: walkSt.z + fz * 2, r: 2.2, th: Math.atan2(-fx, -fz), ph: 1.52 }); }
+        goal = Object.assign({}, HOME, { r: 30 }); }
+    }
+    function callEnd(keepZoom) {
+      beams.forEach(function (bm) { scene.remove(bm.m); scene.remove(bm.p); }); beams = [];
+      if (keepZoom === true || !zoom.on) return;
+      clearTimeout(zoom.t); zoom.t = setTimeout(function () { if (beams.length) return; zoom.on = false; goal = zoom.saved || Object.assign({}, HOME); }, 1400);
+    }
+    var zoom = { on: false, saved: null, t: 0 };
+
+    // ----- camera: overview (orbit) or walking inside one floor -----
     var HOME = { tx: 0, ty: 7.2, tz: 0, r: 27, th: 0, ph: 1.5 }, cam = Object.assign({}, HOME, { r: 38, th: .35 }), goal = Object.assign({}, HOME);
+    var walkSt = { on: false, level: 0, x: 0, z: 3.6, yaw: 0, pitch: -.06, gx: 0, gz: 3.6, gyaw: 0, keys: {} };
+    function clampWalk() { walkSt.gx = Math.max(-9.4, Math.min(7.3, walkSt.gx)); walkSt.gz = Math.max(-4.0, Math.min(4.3, walkSt.gz)); }
+    function enterWalk(level, x, z, yaw) {
+      walkSt.on = true; walkSt.level = level;
+      walkSt.x = walkSt.gx = x == null ? -1.2 : x; walkSt.z = walkSt.gz = z == null ? 3.9 : z; walkSt.yaw = walkSt.gyaw = yaw || 0; walkSt.pitch = -.06;
+      if (opts.onMode) opts.onMode("walk", level);
+    }
+    function leaveWalk() { walkSt.on = false; goal = Object.assign({}, HOME); if (opts.onMode) opts.onMode("orbit"); }
     function placeCam() {
-      ["tx", "ty", "tz", "r", "th", "ph"].forEach(function (k) { cam[k] += (goal[k] - cam[k]) * .1; });
+      if (walkSt.on && !zoom.on) {
+        var k = walkSt.keys, sp = 2.4 * clockDt;
+        if (k.f || k.b) { var dir = k.f ? 1 : -1; walkSt.gx += -Math.sin(walkSt.gyaw) * sp * dir; walkSt.gz += -Math.cos(walkSt.gyaw) * sp * dir; clampWalk(); }
+        if (k.l) walkSt.gyaw += 1.8 * clockDt; if (k.r) walkSt.gyaw -= 1.8 * clockDt;
+        walkSt.x += (walkSt.gx - walkSt.x) * .12; walkSt.z += (walkSt.gz - walkSt.z) * .12; walkSt.yaw += (walkSt.gyaw - walkSt.yaw) * .15;
+        var y = LV[walkSt.level] + 1.55, cp = Math.cos(walkSt.pitch);
+        camera.position.set(walkSt.x, y, walkSt.z);
+        camera.lookAt(walkSt.x - Math.sin(walkSt.yaw) * cp, y + Math.sin(walkSt.pitch), walkSt.z - Math.cos(walkSt.yaw) * cp);
+        return;
+      }
+      ["tx", "ty", "tz", "r", "th", "ph"].forEach(function (k) { cam[k] += (goal[k] - cam[k]) * (zoom.on ? .06 : .1); });
       camera.position.set(cam.tx + cam.r * Math.sin(cam.ph) * Math.sin(cam.th), cam.ty + cam.r * Math.cos(cam.ph), cam.tz + cam.r * Math.sin(cam.ph) * Math.cos(cam.th));
       camera.lookAt(cam.tx, cam.ty, cam.tz);
     }
+    var clockDt = 0;
     function clampGoal() { goal.ph = Math.max(1.22, Math.min(1.62, goal.ph)); goal.th = Math.max(-.85, Math.min(.85, goal.th)); goal.r = Math.max(3, Math.min(40, goal.r)); }
     var ptrs = {}, downAt = null, pinch = 0, el = renderer.domElement;
-    el.style.touchAction = "none";
+    el.style.touchAction = "none"; el.tabIndex = 0;
     el.addEventListener("pointerdown", function (e) { el.setPointerCapture(e.pointerId); ptrs[e.pointerId] = { x: e.clientX, y: e.clientY }; downAt = { x: e.clientX, y: e.clientY, n: Object.keys(ptrs).length }; });
     el.addEventListener("pointermove", function (e) {
       var p = ptrs[e.pointerId];
       if (!p) { hover(e); return; }
       var ids = Object.keys(ptrs);
-      if (ids.length === 1) { goal.th -= (e.clientX - p.x) * .005; goal.ph -= (e.clientY - p.y) * .004; }
+      if (ids.length === 1) {
+        if (walkSt.on) { walkSt.gyaw += (e.clientX - p.x) * .004; walkSt.pitch = Math.max(-.6, Math.min(.45, walkSt.pitch + (e.clientY - p.y) * .003)); }
+        else { goal.th -= (e.clientX - p.x) * .005; goal.ph -= (e.clientY - p.y) * .004; }
+      }
       p.x = e.clientX; p.y = e.clientY;
-      if (ids.length === 2) { var a = ptrs[ids[0]], b2 = ptrs[ids[1]], d = Math.hypot(a.x - b2.x, a.y - b2.y); if (pinch) goal.r *= pinch / d; pinch = d; }
-      clampGoal();
+      if (ids.length === 2) { var a = ptrs[ids[0]], b2 = ptrs[ids[1]], d = Math.hypot(a.x - b2.x, a.y - b2.y); if (pinch) { if (walkSt.on) { walkSt.gx += -Math.sin(walkSt.gyaw) * (d - pinch) * .02; walkSt.gz += -Math.cos(walkSt.gyaw) * (d - pinch) * .02; clampWalk(); } else goal.r *= pinch / d; } pinch = d; }
+      if (!walkSt.on) clampGoal();
     });
     function up(e) {
       var wasTap = downAt && downAt.n === 1 && Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) < 6;
@@ -1821,25 +2034,54 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       if (!Object.keys(ptrs).length) downAt = null;
     }
     el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
-    el.addEventListener("wheel", function (e) { e.preventDefault(); goal.r *= 1 + Math.max(-.3, Math.min(.3, e.deltaY * .001)); clampGoal(); }, { passive: false });
+    el.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      if (walkSt.on) { var st = -Math.max(-1.2, Math.min(1.2, e.deltaY * .004)); walkSt.gx += -Math.sin(walkSt.gyaw) * st; walkSt.gz += -Math.cos(walkSt.gyaw) * st; clampWalk(); }
+      else { goal.r *= 1 + Math.max(-.3, Math.min(.3, e.deltaY * .001)); clampGoal(); }
+    }, { passive: false });
+    var KEYS = { ArrowUp: "f", KeyW: "f", ArrowDown: "b", KeyS: "b", ArrowLeft: "l", KeyA: "l", ArrowRight: "r", KeyD: "r" };
+    function keyEv(e, down) {
+      if (!walkSt.on || !running || !KEYS[e.code]) return;
+      var t = e.target; if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT" || t.isContentEditable)) return;
+      walkSt.keys[KEYS[e.code]] = down; e.preventDefault();
+    }
+    window.addEventListener("keydown", function (e) { keyEv(e, true); }); window.addEventListener("keyup", function (e) { keyEv(e, false); });
     var ray = new T.Raycaster(), ndc = new T.Vector2();
     function hitTest(e) {
       var rc = el.getBoundingClientRect(); ndc.set((e.clientX - rc.left) / rc.width * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
-      ray.setFromCamera(ndc, camera); var hits = ray.intersectObjects(pickables, false); return hits.length ? hits[0].object.userData : null;
+      ray.setFromCamera(ndc, camera); var hits = ray.intersectObjects(pickables, false);
+      var bot = hits.filter(function (h) { return h.object.userData.bot; })[0];
+      return bot ? bot.object.userData : hits.length ? hits[0].object.userData : null;
     }
-    function hover(e) { var h = hitTest(e); el.style.cursor = h ? "pointer" : "grab"; }
-    function pick(e) { var h = hitTest(e); if (!h) return; if (h.bot) opts.onPick(h.bot); else if (h.boss) { focusAt(-1.2, LV[3], -2.0, 5); opts.onBoss(); } }
+    function hover(e) { var h = hitTest(e); el.style.cursor = h ? "pointer" : walkSt.on ? "crosshair" : "grab"; }
+    function approach(id) {
+      var r = robots[id]; if (!r) return;
+      var p = r.root.position, L = levelOf(p.y), yaw = r.root.rotation.y;
+      if (!walkSt.on || walkSt.level !== L) enterWalk(L, p.x + Math.sin(yaw) * 1.9, p.z + Math.cos(yaw) * 1.9, yaw);
+      walkSt.gx = p.x + Math.sin(yaw) * 1.9; walkSt.gz = p.z + Math.cos(yaw) * 1.9; walkSt.gyaw = yaw; walkSt.pitch = -.14; clampWalk();
+    }
+    function pick(e) {
+      var h = hitTest(e);
+      if (h && h.bot) { if (walkSt.on) approach(h.bot); opts.onPick(h.bot); return; }
+      if (h && h.boss) { if (!walkSt.on) focusAt(-1.2, LV[3], -2.0, 5); opts.onBoss(); return; }
+      if (h && h.room) { opts.onRoom(); return; }
+      if (walkSt.on) {
+        var y = LV[walkSt.level], o = ray.ray.origin, d = ray.ray.direction;
+        if (d.y < -.01) { var t = (y - o.y) / d.y; walkSt.gx = o.x + d.x * t; walkSt.gz = o.z + d.z * t; clampWalk(); }
+      }
+    }
     function focusAt(x, y, z, r) { goal.tx = x; goal.ty = y + 1.05; goal.tz = z; goal.r = r || 4.6; goal.th = x > 5 ? -.3 : x < -5 ? .3 : 0; goal.ph = 1.48; }
+    var roomHit = box(4.6, 3.0, 4.3, new T.MeshBasicMaterial({ visible: false }), 4.5, LV[3] + 1.5, -2.35); roomHit.userData.room = true; pickables.push(roomHit);
 
     // ----- animation -----
     function lerp(a, b, t) { return a + (b - a) * t; }
     function animate() {
       raf = 0; if (!running) return;
-      var dt = Math.min(.1, clock.getDelta()), t = clock.elapsedTime;
+      var dt = Math.min(.1, clock.getDelta()), t = clock.elapsedTime; clockDt = dt;
       Object.keys(robots).forEach(function (k) {
         var r = robots[k];
         if (r.path.length) {
-          var p = r.path[0], dx = p[0] - r.root.position.x, dy = p[1] - r.root.position.y, dz = p[2] - r.root.position.z, d = Math.hypot(dx, dy, dz), step = 1.3 * dt;
+          var p = r.path[0], dx = p[0] - r.root.position.x, dy = p[1] - r.root.position.y, dz = p[2] - r.root.position.z, d = Math.hypot(dx, dy, dz), step = (r.speed || 1.3) * dt;
           if (r.stand > .9) {
             var want = Math.atan2(dx, dz), cur = r.root.rotation.y, diff = Math.atan2(Math.sin(want - cur), Math.cos(want - cur));
             r.root.rotation.y = cur + diff * Math.min(1, dt * 10);
@@ -1867,9 +2109,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         r.holo.position.y = r.holo.userData.y + Math.sin(t * 2) * .01;
         var hp = new T.Vector3(); r.head.getWorldPosition(hp);
         r.tag.position.set(hp.x, hp.y + .42, hp.z);
+        r.tag.visible = !walkSt.on || zoom.on || levelOf(r.root.position.y) === walkSt.level;
         r.ring.position.set(r.root.position.x, r.root.position.y + .012, r.root.position.z);
         if (r.doneT > 0) { r.doneT -= dt; r.check.visible = true; r.check.position.set(hp.x + .22, hp.y + .3 + Math.max(0, r.doneT - 2) * .3, hp.z); } else r.check.visible = false;
         r.eyeM.color.set(opts.color(k)); if (r.working) r.eyeM.color.multiplyScalar(1 + Math.sin(t * 8) * .25);
+      });
+      beams.forEach(function (bm) {
+        var a = new T.Vector3(), b = new T.Vector3(); robots[bm.a].head.getWorldPosition(a); robots[bm.b].head.getWorldPosition(b); a.y += .25; b.y += .25;
+        var mid = a.clone().add(b).multiplyScalar(.5), len = a.distanceTo(b);
+        bm.m.position.copy(mid); bm.m.scale.set(1, len, 1); bm.m.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), b.clone().sub(a).normalize());
+        bm.m.material.opacity = .45 + Math.sin(t * 8) * .25;
+        var u = (t * .6) % 1; bm.p.position.copy(a.clone().lerp(b, u));
       });
       placeCam();
       renderer.render(scene, camera);
@@ -1904,7 +2154,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       setSky: setSky,
       pause: function () { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; },
       resume: function () { if (!running) { running = true; clock.getDelta(); animate(); } },
-      reset: function () { goal = Object.assign({}, HOME); }
+      reset: function () { if (walkSt.on) leaveWalk(); goal = Object.assign({}, HOME); },
+      walk: function (level) { if (level < 0) leaveWalk(); else enterWalk(level); },
+      approach: approach,
+      isWalking: function () { return walkSt.on; },
+      key: function (k, down) { walkSt.keys[k] = down; },
+      gather: gather,
+      call: callStart,
+      callEnd: callEnd
     };
   }
 
@@ -1930,7 +2187,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         color: function (id) { return COLORS[BY_ID[id].color]; },
         pending: pendingReview,
         onPick: function (id) { pickOfficer(BY_ID[id]); },
-        onBoss: function () { state.filter = "review"; setTab("clients"); }
+        onBoss: openInbox, onRoom: openAnnounce, onMode: v3Mode
       });
       note.textContent = "";
       var ldn = zoneTime("Europe/London"); v3.setSky(ldn ? ldn.h : 12);
@@ -2001,7 +2258,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     bo.style.cssText = "left:" + BOSS_PV[0] + "%;top:" + BOSS_PV[1] + "%;width:" + BOSS_PV[2] + "%;height:" + BOSS_PV[3] + "%;--c:#e8c17a";
     bo.setAttribute("aria-label", "Aliya's office: open the clients waiting for review");
     bo.innerHTML = '<span class="hs-tag"><i></i>CEO Suite · Aliya <em id="hsBossTxt">nothing to review</em></span><span class="hs-badge" id="hsBadge" hidden>0</span>';
-    bo.onclick = function () { state.filter = "review"; setTab("clients"); };
+    bo.onclick = openInbox;
+    var pf = document.createElement("button"); pf.type = "button"; pf.className = "files"; pf.id = "pvFiles"; pf.hidden = true; pf.style.left = (LAY.ceoPlate[0] - 6) + "%"; pf.style.top = (LAY.ceoPlate[1] - 4.5) + "%"; pf.onclick = openInbox; box.appendChild(pf);
+    if (LAY.room) { var rs = document.createElement("button"); rs.type = "button"; rs.className = "hs room-spot"; rs.style.cssText = "left:" + (LAY.room[0] - 14) + "%;top:" + (LAY.room[1] - 12) + "%;width:28%;height:20%;--c:#e8c17a"; rs.setAttribute("aria-label", "Boardroom: make an announcement to the whole team"); rs.innerHTML = '<span class="hs-tag"><i></i>Boardroom <em>announce</em></span>'; rs.onclick = openAnnounce; box.appendChild(rs); }
     box.appendChild(bo);
     // gentle parallax so the picture feels alive
     var frame = $("photoFrame"), img = $("officeImg");
@@ -2153,7 +2412,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("vPlan").setAttribute("aria-pressed", String(v === "plan"));
     $("v3d").setAttribute("aria-pressed", String(v === "3d"));
     $("vPhoto").setAttribute("aria-pressed", String(v === "photo"));
+    $("vInside").setAttribute("aria-pressed", String(v === "inside"));
     $("photoView").hidden = v !== "photo";
+    $("insideView").hidden = v !== "inside";
+    if (v === "inside") { if (!$("inSpots").children.length) inBuild(inS.floor); else { inLayout(); inApply(false); inRefresh(); } }
+    if (v !== "inside" && state.desk && $("desk").classList.contains("docked") && $("desk").parentNode === $("insideView")) closeDesk();
     $("vReset").hidden = v !== "3d";
     $("sceneWrap").hidden = v !== "plan";
     $("view3d").hidden = v !== "3d";
@@ -2377,7 +2640,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
@@ -2398,7 +2661,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
       var extra = "", meeting = bot.id === "5" && /meeting|开会|会议/i.test(text);
-      if (meeting) { pvMeeting(true); activity("5", "Ling called a team meeting in the meeting room"); }
+      if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Ling called a team meeting in the boardroom"); }
       if ((bot.id === "1" || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
         var calls = await routeQuestion(text, history, bot.id === "5");
         if (calls.length && !state.ctl[bot.id].signal.aborted) {
@@ -2423,13 +2686,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         activity(bot.id, bot.name + (problems.length ? " failed a test" : " passed a test"));
       }
       if (bot.id === "1") await maybeSaveBooking(res.text, turns);
-      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ling put today's brief on Aliya's desk"); deliver("5", "boss"); }
-      if (meeting) pvMeetingMinutes(res.text);
+      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ling put today's brief on Aliya's desk"); deliver("5", "boss"); setTimeout(function () { addReport("5", state.lang === "en" ? "Daily brief" : "今日简报", res.text); }, REDUCED ? 0 : 3500); }
+      if (meeting) { pvMeetingMinutes(res.text); addReport("5", (state.lang === "en" ? "Meeting minutes: " : "会议纪要：") + text.replace(/^Team meeting: announcement from the CEO to the whole team: |^团队会议：CEO 给全体同事的公告：/, "").split("\n")[0].slice(0, 60), res.text); setTimeout(function () { gatherAll(false); }, REDUCED ? 0 : 9000); }
     } catch (e) {
       reply.pending = false;
       if (e && e.text && e.code !== "refused") reply.content = e.text; else turns.splice(turns.indexOf(reply), 1);
       if (!e || e.code !== "cancelled") turns.push({ kind: "note", text: errText(e) });
-      if (bot.id === "5") pvMeeting(false);
+      if (bot.id === "5") { pvMeeting(false); if (meeting) gatherAll(false); }
       if (e && (e.code === "no_key" || e.code === "bad_key")) { state.settingsOpen = true; drawSettings(); }
     } finally {
       delete state.ctl[bot.id];
@@ -2596,10 +2859,213 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   $("tabChat").onclick = function () { setTab("chat"); };
   $("v3d").onclick = function () { setView("3d"); };
   $("vPhoto").onclick = function () { setView("photo"); };
+  $("vInside").onclick = function () { setView("inside"); };
   $("vPlan").onclick = function () { setView("plan"); };
   $("vReset").onclick = function () { if (v3 && state.view === "3d") v3.reset(); };
   document.addEventListener("visibilitychange", function () { if (!v3) return; if (document.hidden) v3.pause(); else if (state.view === "3d") v3.resume(); });
 
+
+  // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
+  var INSIDE = {
+    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [4.5, 30, 8.5, 20] }, boss: [30.5, 34, 24, 21], room: [60, 6, 38, 52], files: [44, 41],
+      dots: [[47, 76, "Lounge"], [57, 60, "CEO desk"], [72, 64, "Boardroom"], [86, 82, "↓ 3F", 3]],
+      seats: [[66, 47], [70, 46], [74, 45], [78, 44], [82, 46], [86, 48]] },
+    3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: { "2": [11, 32, 10, 28], "3": [41.5, 30, 8.5, 19], "6": [67.5, 34, 11, 31] },
+      dots: [[46, 84, "Aisle"], [30, 66, "Library"], [62, 74, "Finance"], [94, 30, "↑ 4F", 4], [92, 78, "↓ 2F", 2]] },
+    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Marketing", bots: { "4": [0.5, 33, 15, 39] },
+      dots: [[42, 64, "Studio"], [62, 72, "Podcast table"], [80, 58, "Hot desks"], [93, 34, "↑ 3F", 3], [86, 90, "↓ 1F", 1]] },
+    1: { img: "images/inside-1f.jpg", ar: 1024 / 572, name: "1F · Reception", bots: { "1": [14, 40, 9.5, 22] },
+      dots: [[7.4, 89.5, "Entrance"], [54.7, 68.2, "Lounge"], [70.5, 64, "Consult rooms"], [91.6, 91, "↑ 2F", 2]] }
+  };
+  var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
+  function inLayout() {
+    var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight, F = INSIDE[inS.floor]; if (!Wv || !Hv) return;
+    var H = Math.max(Hv, Wv / F.ar), W = H * F.ar; inS.W = W; inS.H = H;
+    var w = $("inWorld"); w.style.width = W + "px"; w.style.height = H + "px";
+  }
+  function inApply(anim) {
+    var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight, sw = inS.W * inS.s, sh = inS.H * inS.s;
+    inS.tx = sw <= Wv ? (Wv - sw) / 2 : Math.min(0, Math.max(Wv - sw, inS.tx));
+    inS.ty = sh <= Hv ? (Hv - sh) / 2 : Math.min(0, Math.max(Hv - sh, inS.ty));
+    var w = $("inWorld"); w.style.transition = anim === false ? "none" : ""; w.style.transform = "translate(" + inS.tx + "px," + inS.ty + "px) scale(" + inS.s + ")";
+    $("inBack").hidden = inS.s <= 1.01;
+  }
+  function inZoomTo(px, py, s, screenX) {
+    var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight;
+    inS.s = s; inS.tx = (screenX == null ? Wv / 2 : screenX) - px / 100 * inS.W * s; inS.ty = Hv * .55 - py / 100 * inS.H * s; inApply();
+  }
+  var IN_FOCUS = { 4: 38, 3: 45, 2: 32, 1: 30 };
+  function inHomeX() { var Wv = $("inStage").clientWidth; return Wv / 2 - IN_FOCUS[inS.floor] / 100 * inS.W; }
+  function inZoomHome() { inS.s = 1; inS.tx = inHomeX(); inS.ty = 0; inApply(); }
+  function inBuild(floor) {
+    inS.floor = floor; lsSet("glostudy-floor", String(floor));
+    var F = INSIDE[floor], box = $("inSpots"); box.textContent = "";
+    $("inImg").src = imgURL(F.img); $("inImg").alt = "Inside the office, " + F.name;
+    inLayout(); inS.s = 1; inS.tx = inHomeX(); inS.ty = 0; inApply(false);
+    if (F.room) {
+      var rm = document.createElement("button"); rm.type = "button"; rm.className = "in-spot"; rm.style.cssText = "left:" + F.room[0] + "%;top:" + F.room[1] + "%;width:" + F.room[2] + "%;height:" + F.room[3] + "%";
+      rm.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>Boardroom <em>announce to all</em></span>'; rm.onclick = openAnnounce; box.appendChild(rm);
+    }
+    if (F.boss) {
+      var bs = document.createElement("button"); bs.type = "button"; bs.className = "in-spot"; bs.style.cssText = "left:" + F.boss[0] + "%;top:" + F.boss[1] + "%;width:" + F.boss[2] + "%;height:" + F.boss[3] + "%";
+      bs.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>CEO desk · Aliya</span>'; bs.onclick = function () { inZoomTo(F.boss[0] + F.boss[2] / 2, F.boss[1] + F.boss[3] / 2, 1.6); setTimeout(openInbox, 500); }; box.appendChild(bs);
+      var fl = document.createElement("button"); fl.type = "button"; fl.className = "files"; fl.id = "inFiles"; fl.style.left = F.files[0] + "%"; fl.style.top = F.files[1] + "%"; fl.onclick = openInbox; box.appendChild(fl);
+    }
+    Object.keys(F.bots).forEach(function (id) {
+      var b = BY_ID[id], p = F.bots[id], el = document.createElement("button");
+      el.type = "button"; el.className = "in-bot"; el.id = "inBot" + id; el.style.cssText = "left:" + p[0] + "%;top:" + p[1] + "%;width:" + p[2] + "%;height:" + p[3] + "%;--c:" + COLORS[b.color];
+      el.setAttribute("aria-label", b.name + ", " + b.title + ". Talk 1-on-1");
+      el.innerHTML = '<span class="hs-tag"><i></i>' + esc(b.name) + " <em></em></span>";
+      el.onclick = function () {
+        var dockW = window.matchMedia("(max-width: 899px)").matches ? null : $("inStage").clientWidth - 430;
+        inZoomTo(p[0] + p[2] / 2, p[1] + p[3] * .45, 1.55, dockW == null ? null : dockW / 2);
+        setTimeout(function () { pickOfficer(b, "inside"); }, 350);
+      };
+      box.appendChild(el);
+    });
+    F.dots.forEach(function (d) {
+      var el = document.createElement("button"); el.type = "button"; el.className = "in-dot" + (d[3] ? " stairs" : "");
+      el.style.left = d[0] + "%"; el.style.top = d[1] + "%"; el.innerHTML = "<span>" + esc(d[2]) + "</span>"; el.setAttribute("aria-label", d[3] ? "Take the stairs to " + INSIDE[d[3]].name : "Walk to " + d[2]);
+      el.onclick = function (e) { e.stopPropagation(); if (d[3]) inGoFloor(d[3]); else if (inS.s > 1.01 && Math.abs(inS.lastDot - d[0]) < .1) inZoomHome(); else { inS.lastDot = d[0]; inZoomTo(d[0], d[1] - 14, 1.7); } };
+      box.appendChild(el);
+    });
+    $("inFloors").innerHTML = [4, 3, 2, 1].map(function (n) { return '<button type="button" data-f="' + n + '" aria-pressed="' + (n === floor) + '">' + n + "F</button>"; }).join("");
+    inRefresh();
+  }
+  function inGoFloor(n) {
+    if (n === inS.floor) { inZoomHome(); return; }
+    if (state.desk && $("desk").classList.contains("docked")) closeDesk();
+    var w = $("inWorld"); w.classList.add("fading");
+    inZoomTo(n > inS.floor ? 92 : 88, n > inS.floor ? 30 : 85, 1.8);
+    setTimeout(function () { inBuild(n); w.classList.remove("fading"); }, 500);
+  }
+  function inRefresh() {
+    if (!$("inSpots").children.length) return;
+    var F = INSIDE[inS.floor];
+    Object.keys(F.bots).forEach(function (id) {
+      var el = $("inBot" + id); if (!el) return; var busy = state.busy[id];
+      el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && inS.floor !== 4);
+      el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? (busy === "call" ? "helping " + ((state.callFrom || {})[id] || "a colleague") : "working") : "idle";
+    });
+    var fl = $("inFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
+    // the team around the boardroom table during a meeting
+    Array.prototype.slice.call(document.querySelectorAll("#inSpots .in-tok")).forEach(function (t) { t.remove(); });
+    if (state.gathered && F.seats) BOTS.forEach(function (b, i) { var t = document.createElement("span"); t.className = "in-tok"; t.style.cssText = "left:" + F.seats[i][0] + "%;top:" + F.seats[i][1] + "%;--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ")"; t.title = b.name; $("inSpots").appendChild(t); });
+  }
+  (function () {
+    var st = $("inStage"), drag = null;
+    st.addEventListener("pointerdown", function (e) { if (e.target.closest("button")) return; drag = { x: e.clientX, y: e.clientY, tx: inS.tx, ty: inS.ty, moved: false }; st.setPointerCapture(e.pointerId); });
+    st.addEventListener("pointermove", function (e) { if (!drag) return; var dx = e.clientX - drag.x, dy = e.clientY - drag.y; if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true; inS.tx = drag.tx + dx; inS.ty = drag.ty + dy; inApply(false); });
+    st.addEventListener("pointerup", function () { drag = null; });
+    st.addEventListener("wheel", function (e) { if (state.view !== "inside") return; e.preventDefault(); var rc = st.getBoundingClientRect(), mx = e.clientX - rc.left, my = e.clientY - rc.top, s0 = inS.s, s1 = Math.max(1, Math.min(2.4, s0 * (1 - e.deltaY * .0015))); inS.tx = mx - (mx - inS.tx) * s1 / s0; inS.ty = my - (my - inS.ty) * s1 / s0; inS.s = s1; inApply(false); }, { passive: false });
+    $("inFloors").onclick = function (e) { var b = e.target.closest("button"); if (b) inGoFloor(+b.dataset.f); };
+    $("inBack").onclick = inZoomHome;
+    if (window.ResizeObserver) new ResizeObserver(function () { if (state.view === "inside") { inLayout(); inApply(false); } }).observe(st);
+  })();
+
+  // ---------- zoom out to show who is calling whom ----------
+  function callMap(fromId, ids, on) {
+    var host = state.view === "inside" ? $("insideView") : (state.desk && !$("desk").classList.contains("docked") ? document.querySelector(".desk-scene") : null);
+    var old = document.querySelector(".call-map");
+    if (!on) { if (old) { old.classList.remove("on"); setTimeout(function () { old.remove(); }, 600); } return; }
+    if (old) old.remove();
+    if (!host) return;
+    var L = LAYOUTS.f4, a = hsCenter(fromId), m = document.createElement("div"); m.className = "call-map";
+    var lines = ids.map(function (id) { var b = hsCenter(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
+    var rings = [fromId].concat(ids).map(function (id) { var c = hsCenter(id); return c ? '<span class="cm-ring" style="left:' + c[0] + "%;top:" + c[1] + "%;--c:" + COLORS[BY_ID[id].color] + '"></span>' : ""; }).join("");
+    m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">📞 ' + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
+    host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
+  }
+
+  // ---------- the whole team gathers in the boardroom ----------
+  var PLAN_MEET = { "2": [690, 70], "3": [740, 70], "6": [790, 70], "4": [690, 146], "1": [740, 146], "5": [800, 150] };
+  function gatherAll(on) {
+    if (!!state.gathered === on) return; state.gathered = on;
+    if (v3) v3.gather(on);
+    if (sceneReady) Object.keys(actors).forEach(function (id) { var a = actors[id]; goto(a, on ? G(4, PLAN_MEET[id][0], PLAN_MEET[id][1]) : a.home); });
+    if (pvReady) {
+      var room = LAY.room;
+      BOTS.forEach(function (b, i) {
+        var t = $("pvTok" + b.id), c = hsCenter(b.id); if (!c) return;
+        if (on) {
+          if (!t) { t = document.createElement("span"); t.className = "pv-tok"; t.id = "pvTok" + b.id; t.style.cssText = "--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ");left:" + c[0] + "%;top:" + c[1] + "%"; $("hotspots").appendChild(t); }
+          setTimeout(function () { t.style.left = (room[0] - 12 + i * 4.6) + "%"; t.style.top = (room[1] + (i % 2 ? 2 : -2)) + "%"; }, 30 + i * 120);
+        } else if (t) { t.style.left = c[0] + "%"; t.style.top = c[1] + "%"; setTimeout(function () { t.remove(); }, 1700); }
+      });
+    }
+    inRefresh();
+    activity("5", on ? "Everyone gathered in the boardroom" : "Meeting over, everyone back at their desks");
+  }
+
+  // ---------- reports on the CEO desk ----------
+  state.reports = (function () { try { return JSON.parse(lsGet("glostudy-reports", "[]")) || []; } catch (e) { return []; } })();
+  function saveReports() { lsSet("glostudy-reports", JSON.stringify(state.reports.slice(0, 20))); }
+  function unreadReports() { return state.reports.filter(function (r) { return !r.read; }).length; }
+  function addReport(fromId, title, text) {
+    state.reports.unshift({ from: fromId, title: title, text: text, t: new Date().toISOString(), read: false }); state.reports = state.reports.slice(0, 20); saveReports();
+    deskFilesChanged(true);
+  }
+  function deskFilesChanged(isNew) {
+    var n = unreadReports(), rv = pendingReview();
+    if (v3) v3.setInbox(rv + n);
+    var pf = $("pvFiles"); if (pf) { pf.hidden = !(n + rv); pf.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); if (isNew) { pf.classList.remove("new"); void pf.offsetWidth; pf.classList.add("new"); } }
+    inRefresh();
+  }
+  function openInbox() {
+    var rv = pendingReview(), html = '<div class="ib-sec">Reports from the team</div>';
+    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Ling for your daily brief, or hold a team meeting.</p>';
+    state.reports.forEach(function (r, i) {
+      var b = BY_ID[r.from] || BY_ID["5"];
+      html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
+    });
+    html += '<div class="ib-sec">Clients</div>' + (rv ? '<p class="ib-empty">' + rv + " client draft" + (rv > 1 ? "s" : "") + ' from Scout waiting for your review.</p><button type="button" class="ib-btn" id="ibClients">Open the client board</button>' : '<p class="ib-empty">Nothing waiting for review.</p>');
+    $("inboxBody").innerHTML = html; $("inbox").hidden = false;
+    Array.prototype.forEach.call(document.querySelectorAll("#inboxBody details"), function (d) { var mark = function () { if (d.open) { var r = state.reports[+d.dataset.i]; if (r && !r.read) { r.read = true; saveReports(); deskFilesChanged(); var dot = d.querySelector("summary i"); if (dot) dot.remove(); } } }; d.addEventListener("toggle", mark); mark(); });
+    var cb = $("ibClients"); if (cb) cb.onclick = function () { $("inbox").hidden = true; state.filter = "review"; setTab("clients"); $("side").scrollIntoView({ behavior: "smooth" }); };
+    $("inboxX").focus();
+  }
+  $("inboxX").onclick = function () { $("inbox").hidden = true; };
+  $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
+
+  // ---------- announcement to the whole team ----------
+  function openAnnounce() {
+    var chips = $("annChips"); chips.textContent = "";
+    (state.lang === "en" ? ["Hold a team meeting about today's news", "A new client from Shanghai starts next week: everyone get ready", "Reminder: never quote our own fees to clients", "Plan this week's work: what is each of you doing?"]
+      : ["就今天的新闻开个团队会", "下周有一位上海的新客户，大家准备一下", "提醒：不要对客户报我们自己的价格", "安排本周工作：每个人在做什么？"]).forEach(function (t) {
+      var b = document.createElement("button"); b.type = "button"; b.innerHTML = "<span>" + esc(t) + "</span>"; b.onclick = function () { $("annBox").value = t; $("annBox").focus(); }; chips.appendChild(b);
+    });
+    $("announce").hidden = false; $("annBox").focus();
+  }
+  function announce(text) {
+    text = String(text || "").trim(); if (!text) return;
+    $("announce").hidden = true; $("annBox").value = "";
+    if (state.desk) closeDesk();
+    selectBot(BY_ID["5"]);
+    var msg = (state.lang === "en" ? "Team meeting: announcement from the CEO to the whole team: " : "团队会议：CEO 给全体同事的公告：") + text +
+      (state.lang === "en" ? "\nRun a short meeting in the boardroom about it. Give each colleague one line with what they will do." : "\n请就此在会议室开个简短的会，每位同事用一句话说他们要做什么。");
+    send(msg);
+  }
+  $("annX").onclick = function () { $("announce").hidden = true; };
+  $("announce").onclick = function (e) { if (e.target === $("announce")) $("announce").hidden = true; };
+  $("annForm").addEventListener("submit", function (e) { e.preventDefault(); announce($("annBox").value); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { $("inbox").hidden = true; $("announce").hidden = true; } });
+
+  // ---------- 3D: overview or walk inside a floor ----------
+  $("v3bar").onclick = function (e) {
+    var b = e.target.closest("button"); if (!b) return; var lv = +b.dataset.lv;
+    start3D(); var go = function () { if (!v3) return; v3.walk(lv); };
+    if (v3) go(); else if (v3loading) v3loading.then(go);
+  };
+  function v3Mode(mode, level) {
+    Array.prototype.forEach.call($("v3bar").children, function (b) { b.setAttribute("aria-pressed", String(mode === "walk" ? +b.dataset.lv === level : b.dataset.lv === "-1")); });
+    $("v3pad").hidden = mode !== "walk";
+    $("v3hint").textContent = mode === "walk" ? "Drag to look · tap the floor to walk there · arrows or WASD · tap an officer to talk" : "Drag to look around · scroll or pinch to zoom · click a robot to talk";
+    if (mode !== "walk" && state.desk && $("desk").classList.contains("docked") && $("desk").parentNode === $("view3d")) closeDesk();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#v3pad button"), function (b) {
+    var k = b.dataset.k, on = function (e) { e.preventDefault(); if (v3) v3.key(k, true); }, off = function () { if (v3) v3.key(k, false); };
+    b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointerleave", off); b.addEventListener("pointercancel", off);
+  });
   // ---------- 1-on-1 desk chat: sit down with one officer ----------
   var DESK_RULE = "\n\n# 1-on-1 desk chat (face to face)\nThe boss is sitting at your desk talking to you. Start your reply with 【简要】 and then 2–3 short, natural spoken sentences that answer directly; they are read aloud, so no lists, tables or Markdown there. If the full answer needs more (figures, lists, steps, sources), put 【完整报告】 on its own line and then the full detail in Markdown. If it doesn't, write nothing after the short answer. Keep both tags exactly as written. Every other rule above still applies.";
   var deskSpoken = null, deskRec = null;
@@ -2614,15 +3080,22 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     return { sum: sum, rep: rep };
   }
   function plainSpeech(t) { return t.replace(/【[^】]*】/g, "").replace(/[*#|_`>]/g, "").replace(/\s+/g, " ").trim(); }
-  function openDesk(b) {
+  function openDesk(b, dockHost) {
     if (b && state.bot !== b) selectBot(b);
     state.desk = true;
-    var d = $("desk"); d.hidden = false; document.body.style.overflow = "hidden";
+    var d = $("desk"), phone = window.matchMedia("(max-width: 899px)").matches;
+    if (dockHost) { if (d.parentNode !== dockHost) dockHost.appendChild(d); d.classList.add("docked"); }
+    else { if (d.parentNode !== document.body) document.body.appendChild(d); d.classList.remove("docked"); }
+    $("deskBack").textContent = dockHost ? "× Close" : "← Office";
+    if (dockHost && phone) [60, 400].forEach(function (ms) { setTimeout(function () { dockHost.scrollIntoView({ block: "start" }); }, ms); });
+    d.hidden = false; if (!dockHost || phone) document.body.style.overflow = dockHost ? "" : "hidden";
     drawDesk();
     setTimeout(function () { $("deskBox").focus({ preventScroll: true }); }, 50);
   }
   function closeDesk() {
+    var wasDocked = $("desk").classList.contains("docked");
     state.desk = false; $("desk").hidden = true; $("deskSheet").hidden = true; document.body.style.overflow = "";
+    if (wasDocked && state.view === "inside") inZoomHome();
     if (window.speechSynthesis) speechSynthesis.cancel();
     if (deskRec) try { deskRec.stop(); } catch (e) {}
     drawChat();
@@ -2638,7 +3111,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     speechSynthesis.speak(u);
   }
   function openReport(b, rep) {
-    $("sheetSub").textContent = b.name + " · " + b.title;
+    $("sheetName").textContent = "On " + b.name + "'s screen"; $("sheetSub").textContent = b.title + " · presenting the full report";
     $("sheetBody").innerHTML = reportHtml(rep); $("sheetBody").scrollTop = 0;
     $("sheetCopy").onclick = function () { copyText(rep, $("sheetCopy")); };
     $("deskSheet").hidden = false; $("sheetClose").focus();
@@ -2696,7 +3169,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           var p = splitDesk(t.content), lines = p.rep ? p.rep.split("\n").filter(function (l) { return l.trim(); }).length : 0;
           el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><div class="say-txt">' + render(p.sum) + "</div></div>";
           var acts = document.createElement("div"); acts.className = "dl-acts";
-          if (p.rep) { var rb = document.createElement("button"); rb.type = "button"; rb.className = "rep"; rb.textContent = "📄 Full report · " + lines + " lines"; rb.onclick = function () { openReport(b, p.rep); }; acts.appendChild(rb); }
+          if (p.rep) { var rb = document.createElement("button"); rb.type = "button"; rb.className = "rep"; rb.textContent = "🖥 Show on screen · " + lines + " lines"; rb.onclick = function () { openReport(b, p.rep); }; acts.appendChild(rb); }
           if (window.speechSynthesis) { var sb = document.createElement("button"); sb.type = "button"; sb.textContent = "🔊 Play"; sb.onclick = function () { localSpeak(p.sum); }; acts.appendChild(sb); }
           var cb = document.createElement("button"); cb.type = "button"; cb.textContent = "Copy"; cb.onclick = function () { copyText(p.rep ? p.sum + "\n\n" + p.rep : p.sum, cb); }; acts.appendChild(cb);
           el.lastChild.appendChild(acts);
@@ -2734,7 +3207,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     return Q.map(function (q) { return { ask: en ? q[0] : q[1] }; }).filter(function (q) { return have.indexOf(q.ask) < 0; });
   }
   // on a phone the side chat is far below the office, so tapping an officer goes straight to their desk
-  function pickOfficer(b) { selectBot(b); if (window.matchMedia("(max-width: 899px)").matches) openDesk(b); }
+  function pickOfficer(b, where) {
+    selectBot(b);
+    if (where === "inside") { openDesk(b, $("insideView")); return; }
+    if (state.view === "3d" && v3 && v3.isWalking()) { openDesk(b, $("view3d")); return; }
+    if (window.matchMedia("(max-width: 899px)").matches) openDesk(b);
+  }
   $("pvOne").onclick = function (e) { e.stopPropagation(); openDesk(state.bot); };
   $("pvCard").onclick = function () { openDesk(state.bot); };
   $("oneCta").onclick = function () { openDesk(state.bot); };
@@ -2795,6 +3273,6 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   drawAll();
   buildPhoto();
   var savedView = lsGet("glostudy-view", "photo");
-  setView(savedView === "plan" || savedView === "3d" ? savedView : "photo", true);
+  setView(savedView === "plan" || savedView === "3d" || savedView === "inside" ? savedView : "photo", true);
 })();
 </script>
