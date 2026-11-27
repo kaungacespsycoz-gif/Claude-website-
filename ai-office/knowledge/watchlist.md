@@ -24,7 +24,7 @@ Luc（市场官）每天早上 8:22（北京时间）自动检查这些来源，
 - University of Bristol：https://www.bristol.ac.uk/news/
 
 ## 社交媒体（能公开访问时才看）
-- 各校官方 X / LinkedIn 公开帖子。Instagram、微信公众号、小红书需要登录，自动任务看不了；老板看到重要内容可以直接贴给冈瑟或 Luc。
+- 各校官方 X / LinkedIn 公开帖子。Instagram、微信公众号、小红书需要登录，自动任务看不了；老板看到重要内容可以直接贴给Ado或 Luc。
 
 ## 记录什么
 - 签证、资金要求、工签（Graduate route）变化

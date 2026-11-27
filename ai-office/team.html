@@ -1,6 +1,6 @@
 <title>Glostudy AI Office</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wghtEmily00;500;600;700&family=Space+Grotesk:wghtGunther00;600;700&family=Playfair+Display:ital,wghtMonica,500;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wghtEmily00;500;600;700&family=Space+Grotesk:wghtAdo00;600;700&family=Playfair+Display:ital,wghtMonica,500;1,600&display=swap">
 <style>
 /* Layout: app bar; the office scene (stage) on the left with staff + activity under it; a sticky side panel on the right with Chat / Clients tabs. */
 :root {
@@ -721,7 +721,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 /* social studio (Emily) */
 .app.studio .app-body { background: #f3f3f5; }
 .app.studio .post-prev { margin: 0 auto 18px; }
-/* slides (Gunther) */
+/* slides (Ado) */
 .app.slides .app-body { background: #e8eaee; padding: 18px; }
 .app.slides .page { max-width: 720px; margin: 0 auto; background: linear-gradient(160deg, #fff, #f6f2ea); padding: 28px 34px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.15); border-top: 6px solid var(--app); }
 @media (max-width: 899px) {
@@ -1317,7 +1317,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 <div class="modal" id="announce" hidden role="dialog" aria-modal="true" aria-labelledby="annTitle">
   <div class="glass modal-in">
     <div class="modal-head"><b id="annTitle">📣 Announcement to all team</b><button type="button" class="modal-x" id="annX" aria-label="Close">×</button></div>
-    <p class="ann-sub">Everyone comes to the boardroom. Gunther runs a short meeting and puts the minutes on your desk.</p>
+    <p class="ann-sub">Everyone comes to the boardroom. Ado runs a short meeting and puts the minutes on your desk.</p>
     <div class="dp-list ann-chips" id="annChips"></div>
     <form id="annForm" class="ann-form"><label for="annBox" hidden>Announcement</label><textarea id="annBox" rows="3" placeholder="Type your announcement…"></textarea><button type="submit" class="desk-send" style="--c:#e8c17a">Gather the team</button></form>
   </div>
@@ -1396,7 +1396,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         { en: "Xiaohongshu post for parents: our child is 13 and wants a UK boarding school. What should we prepare?", zh: "小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？" },
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] },
-    { id: "5", skills: ["Daily brief", "Coordinating the team", "Meeting minutes", "Following up tasks"], title: "Chief of Staff", file: "agents/5-secretary.md", name: "Gunther", role: "CEO suite", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
+    { id: "5", skills: ["Daily brief", "Coordinating the team", "Meeting minutes", "Following up tasks"], title: "Chief of Staff", file: "agents/5-secretary.md", name: "Ado", role: "CEO suite", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
       intro: "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.",
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
@@ -1460,18 +1460,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["UK university & policy news", "Visa rule changes", "News-to-post ideas"], intro: "Reads UK university and policy news every morning and tells the team what changed.",
       persona: "你负责每日资讯：看英国大学和政策新闻，告诉团队发生了什么、对谁有影响。",
       tasks: [{ en: "What's today's news?", zh: "今天有什么新闻？" }] },
-    { id: "20", demoAs: "4", name: "Ado", title: "Bilibili & Voice-overs", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c20", prop: "headset", effort: "low",
-      skills: ["Bilibili videos", "Voice-over scripts", "Music for videos"], intro: "Runs Bilibili and records the voice-overs and music for the team's videos.",
-      persona: "你负责 B 站和配音：写 B 站视频脚本和配音稿。",
-      tasks: [{ en: "Write a 30-second voice-over for a video tour of a UK campus.", zh: "为英国校园视频写一段 30 秒配音稿。" }] },
     { id: "21", demoAs: "5", name: "Anya", title: "Customer Insights", role: "CEO suite · Spy x Family", who: "Reports to you", file: "agents/5-secretary.md", color: "--c21", prop: "tablet", effort: "low",
       skills: ["Reads what customers really want", "Priority tags", "Mood of the day"], intro: "Reads every new customer and comment and tags what they really want (cost worries, dream school, upset), so the team knows who to help first.",
       persona: "你负责客户洞察：读懂每位客户和评论背后真正的需求和情绪，告诉团队谁该优先。",
       tasks: [{ en: "What are customers worried about this week?", zh: "这周客户最担心什么？" }] },
-    { id: "22", demoAs: "5", name: "Kuuga", title: "Brand Guardian", role: "CEO suite", who: "Reports to you", file: "agents/5-secretary.md", color: "--c22", prop: "tablet", effort: "low",
-      skills: ["Safety check before publishing", "No guarantees or fee quotes", "Privacy rules"], intro: "Guards the brand: does the last safety check on every post (no guarantees, no fee quotes, no private details) before it reaches your desk.",
-      persona: "你是品牌守护者：发布前做最后的安全检查，确保没有保证录取、没有报价、没有泄露隐私。",
-      tasks: [{ en: "What are our red lines for public posts?", zh: "我们公开发帖的红线是什么？" }] }
   ];
   var DEMO = {
     en: "I'm a parent. My daughter Lily is 16, in Grade 10 at a Shanghai high school. She wants to do A-levels in the UK and then study economics at university. IELTS 5.5 at the moment. We'd like her to start in September 2027. Budget is about ¥500,000 a year. My WeChat is lily_mum_sh, you can call me Mrs Wang. Yes, you can use these details to arrange a consultation.",
@@ -1639,11 +1631,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
-  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", gunther: "5", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15",
-    rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", ado: "20", anya: "21", kuuga: "22" };
-  var ROUTER_BOSS = "You are the coordinator for Gunther, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; kuuga = brand safety and red lines; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; gunther = office status.\n" +
-    "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Gunther can answer from the office data.\n" +
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15",
+    rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", anya: "21", ado: "5" };
+  var ROUTER_BOSS = "You are the coordinator for Ado, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
+    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; ado = office status.\n" +
+    "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ado can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
     "Colleagues: leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry requirements; raj = application deadlines and timelines; bernadette = tuition fees, living costs, budgets, money needed for the student visa, RMB/GBP conversions; amy = personal statements, CVs, reference letters, English editing of application documents.\n" +
@@ -1733,7 +1725,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var SPOTS = { coffee: G(2, 792, 244), water: G(1, 340, 92), scoutDrop: G(3, 150, 156), inbox: G(4, 432, 170) };
   var NS = "http://www.w3.org/2000/svg";
   var actors = {}, sceneReady = false, liftOwner = null;
-  var COLORS = { "--c1": "#3ddc84", "--c2": "#4a90e2", "--c3": "#9b6bd6", "--c4": "#ff4f6d", "--c5": "#e8c17a", "--c6": "#2fae6b", "--c7": "#d9a441", "--c8": "#f08a3c",
+  var COLORS = { "--c1": "#3ddc84", "--c2": "#4a90e2", "--c3": "#9b6bd6", "--c4": "#ff4f6d", "--c5": "#3a6dff", "--c6": "#2fae6b", "--c7": "#d9a441", "--c8": "#f08a3c",
     "--c9": "#2bb3a3", "--c10": "#8fd16a", "--c11": "#7fb2e8", "--c12": "#3c7be0", "--c13": "#f2c14e", "--c14": "#57c7d4", "--c15": "#d94fd1", "--c16": "#c9a27a",
     "--c17": "#c0c4cc", "--c18": "#e0a33c", "--c19": "#8aa6c8", "--c20": "#3a6dff", "--c21": "#ff8fb8", "--c22": "#e0392f" };
 
@@ -1741,7 +1733,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var COMMON = [[862, 34, 880, 170], [862, 240, 880, 290], [880, 34, 958, 130], [884, 140, 950, 200], [880, 248, 958, 290]];
   var OBST = {
     4: COMMON.concat([
-      [90, 118, 170, 148],                                       // Gunther's marble desk
+      [90, 118, 170, 148],                                       // Ado's marble desk
       [212, 64, 308, 104],                                       // lounge armchairs
       [404, 112, 516, 140],                                      // CEO desk
       [620, 34, 624, 200], [624, 196, 700, 200], [740, 196, 862, 200], [660, 88, 830, 122] // boardroom
@@ -1993,7 +1985,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     // a robot's own desk: chair behind (robot sits there), desk in front
     function seatDesk(f, id, x, y, top) { frontItem(OY[f] + y + 7, T(f, gamingChair(x + 40, y + 8, col(id)))); frontItem(OY[f] + y + 30, T(f, deskSvg(x, y, col(id), true, "st" + id, top))); }
     function armchair(x, y) { return box(x - 17, y - 18, 34, 34, 9, "#d8cbb5", "#b9a98e") + rect(x - 17, y - 22, 34, 9, "#c9b99c", ' rx="4"'); }
-    // 4F: Gunther's marble desk, lounge, CEO desk, boardroom
+    // 4F: Ado's marble desk, lounge, CEO desk, boardroom
     seatDesk(4, "5", 90, 118, "#f1ece4");
     frontItem(OY[4] + 104, T(4, armchair(232, 86) + armchair(290, 86) + '<circle cx="261" cy="96" r="9" fill="var(--timber)"/>'));
     frontItem(OY[4] + 122, T(4, box(660, 88, 170, 34, 8, "var(--timber)", "var(--timber-2)") + rect(672, 98, 14, 9, "#ffffff", ' rx="1"') + rect(760, 100, 14, 9, "#ffffff", ' rx="1"')));
@@ -2525,7 +2517,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     [4.05, 4.75].forEach(function (x) { box(.62, .38, .03, black, x, y2 + 1.05, -2.36); textPanel(.58, .34, function (g, W, H) { g.fillStyle = "#06141a"; g.fillRect(0, 0, W, H); g.strokeStyle = "#2fe08b"; g.lineWidth = 8; g.beginPath(); g.moveTo(0, H * .7); for (var p = 1; p < 12; p++) g.lineTo(p * W / 11, H * (.7 - .4 * p / 11) + Math.sin(p * 2.1) * 30); g.stroke(); }, x, y2 + 1.05, -2.34, true); });
     plant(-3.2, y2, -3.9, .9); plant(6.8, y2, 3.8, 1.0); plant(-9.3, y2, 3.8, .9);
 
-    // ----- 4F: Gunther's marble desk, lounge, CEO suite with the gold GLOSTUDY wall, glass boardroom -----
+    // ----- 4F: Ado's marble desk, lounge, CEO suite with the gold GLOSTUDY wall, glass boardroom -----
     var y3 = LV[3];
     box(1.8, .98, .7, marbleM, -8, y3 + .49, -2.0); box(1.84, .04, .74, white, -8, y3 + 1.0, -2.0); box(1.8, .03, .02, glow(0xffe2b0), -8, y3 + .06, -1.64, null, false);
     chair(-8, y3, -2.8, 0, leather); box(.3, .02, .22, black, -7.6, y3 + 1.03, -2.0, null, false);
@@ -2945,7 +2937,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/gunther.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/camille.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "20": "images/team/ado.jpg", "21": "images/team/anya.jpg", "22": "images/team/kuuga.jpg" };
+  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/camille.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
   var LAYOUTS = {
     "3f": { img: "previews/office-3f.jpg",
@@ -2963,13 +2955,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   };
   LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 1440", maxW: 1080,
     spots: {
-      "5": [6.5, 9, 6, 7.5], "21": [27.5, 12, 5, 5.5], "22": [59.5, 7.5, 6, 10.5],
+      "5": [7.5, 9.5, 6.5, 10], "21": [28, 11.8, 5, 6.2],
       "12": [8, 35, 5.5, 9], "2": [22.5, 35, 5.5, 9], "3": [36.5, 35, 5, 9], "13": [49.5, 32, 6, 11], "14": [63.5, 35, 6, 9], "6": [80, 35, 6, 10],
-      "17": [9.5, 59, 5, 9.5], "4": [24.5, 60.5, 5, 8], "15": [33.5, 58.5, 5, 10], "16": [57.5, 60.5, 5, 7.5], "20": [66.5, 59, 5, 9], "18": [75.5, 59.5, 5, 8.5], "19": [87.5, 60.5, 5, 8],
+      "17": [9.5, 59, 5, 9.5], "4": [24.5, 60.5, 5, 8], "15": [33.5, 58.5, 5, 10], "16": [57.5, 60.5, 5, 7.5], "18": [75.5, 59.5, 5, 8.5], "19": [87.5, 60.5, 5, 8],
       "1": [16.5, 84, 4, 6], "10": [32.5, 84.5, 4, 7], "7": [41.5, 83, 5, 9.5], "9": [58.5, 84.5, 4, 5.5], "11": [73, 84, 4, 6], "8": [88, 85.5, 4.5, 7]
     },
-    boss: [35, 11, 23, 8], ceoPlate: [46.5, 19.6], glow: [46.5, 15, 28, 9], room: [79, 12.5], meet: [62, 1.5], plates: {},
-    floorTags: [["4F · CEO Suite · Gunther, Anya & Kuuga", 3.4], ["3F · Research & Finance · the Big Bang team", 28.4], ["2F · Social & Marketing · the Emily in Paris team", 53.4], ["1F · Reception · the Friends team", 78.4]],
+    boss: [40, 11, 20, 7], ceoPlate: [50, 19.4], glow: [50, 15, 26, 9], room: [76, 13.5], meet: [62, 1.5], plates: {},
+    floorTags: [["4F · CEO Suite · Ado & Anya", 3.4], ["3F · Research & Finance · the Big Bang team", 28.4], ["2F · Social & Marketing · the Emily in Paris team", 53.4], ["1F · Reception · the Friends team", 78.4]],
     paths: { "1>scout": [[17.5, 88], [50, 95], [95, 93], [95, 70], [95, 45], [60, 44], [25, 40]], "2>boss": [[25, 40], [60, 44], [95, 44], [95, 20], [60, 18], [46.5, 16]], "5>boss": [[9.5, 13], [30, 18], [46.5, 16]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
@@ -3141,7 +3133,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     }
     requestAnimationFrame(step);
   }
-  // Team meeting: everyone "joins" the meeting room, Gunther presents, minutes appear on a card there
+  // Team meeting: everyone "joins" the meeting room, Ado presents, minutes appear on a card there
   var ROOM_PV = LAY.room;
   function pvMeeting(on) {
     if (!pvReady) return;
@@ -3162,7 +3154,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     card = document.createElement("div"); card.className = "meet-card"; card.id = "meetCard"; card.style.left = LAY.meet[0] + "%"; card.style.top = LAY.meet[1] + "%";
     card.innerHTML = '<div class="meet-head"><b>Team meeting</b><button type="button" class="meet-x" aria-label="Close meeting notes">×</button></div>' +
       '<div class="meet-faces">' + BOTS.map(function (b) { return '<span title="' + esc(b.name) + '" style="background-image:url(' + imgURL(IMG[b.id]) + ');--c:' + COLORS[b.color] + '"></span>'; }).join("") + '</div>' +
-      '<div class="meet-body" id="meetBody"><span class="typing"><i></i><i></i><i></i></span> Gunther is presenting today\'s news…</div>';
+      '<div class="meet-body" id="meetBody"><span class="typing"><i></i><i></i><i></i></span> Ado is presenting today\'s news…</div>';
     card.querySelector(".meet-x").onclick = function () { card.remove(); };
     $("hotspots").appendChild(card);
   }
@@ -3180,8 +3172,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         else out += '<div class="meet-line decide"><p><b>You</b> ' + esc(m[2]) + "</p></div>";
       } else if (!summary) summary = l;
     });
-    body.innerHTML = (summary ? '<p class="meet-sum">' + esc(summary) + "</p>" : "") + (out || '<p class="meet-sum">See Gunther\'s chat for the minutes.</p>');
-    activity("5", "Team meeting finished: " + (summary || "minutes in Gunther's chat").slice(0, 80));
+    body.innerHTML = (summary ? '<p class="meet-sum">' + esc(summary) + "</p>" : "") + (out || '<p class="meet-sum">See Ado\'s chat for the minutes.</p>');
+    activity("5", "Team meeting finished: " + (summary || "minutes in Ado's chat").slice(0, 80));
   }
   function pvIntel() {
     if (!pvReady) return;
@@ -3238,9 +3230,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   var TEAM_FLOORS = [
-    { key: "4", n: "4F", name: "CEO Suite", dept: "Leadership · Spy x Family & friends", color: "#e8c17a", ids: ["5", "21", "22"], open: true },
+    { key: "4", n: "4F", name: "CEO Suite", dept: "Leadership · Ado & Anya", color: "#e8c17a", ids: ["5", "21"], open: true },
     { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "3", "13", "14", "6"], open: false },
-    { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "20", "18", "19"], open: false },
+    { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "18", "19"], open: false },
     { key: "1", n: "1F", name: "Reception", dept: "The Friends team", color: "#3ee8a0", ids: ["1", "7", "8", "9", "10", "11"], open: true }
   ];
   function drawFloor() {
@@ -3380,7 +3372,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       return d.date + " — " + (d.summary || "") + "\n" + (d.items || []).map(function (it) { return "- [" + (it.importance || "") + "] " + it.title + " (" + (it.source || "") + ") " + (it.what || "") + " | affects: " + [].concat(it.who || []).join(", ") + " | " + (it.url || ""); }).join("\n");
     }).join("\n\n");
   }
-  // What Gunther knows: the client board, today's activity, test results and who is busy
+  // What Ado knows: the client board, today's activity, test results and who is busy
   function officeData() {
     var now = new Date(), items = store.items(), lines = [];
     lines.push("Now (Beijing): " + now.toLocaleString("en-GB", { timeZone: "Asia/Shanghai" }) + " · London: " + now.toLocaleTimeString("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" }));
@@ -3485,7 +3477,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
       var extra = "", meeting = bot.id === "5" && /meeting|开会|会议/i.test(text);
-      if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Gunther called a team meeting in the boardroom"); }
+      if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Ado called a team meeting in the boardroom"); }
       var ceoAsk = state.desk && bot.id !== "1" && !meeting && !/brief|简报/i.test(text);
       if ((bot.id === "1" || ceoAsk || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
         var calls = (await routeQuestion(text, history, bot.id !== "1", bot.id)).filter(function (c) { return TEAM_IDS[c.who] !== bot.id; });
@@ -3511,7 +3503,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         activity(bot.id, bot.name + (problems.length ? " failed a test" : " passed a test"));
       }
       if (bot.id === "1") await maybeSaveBooking(res.text, turns);
-      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Gunther put today's brief on Aliya's desk"); deliver("5", "boss"); setTimeout(function () { addReport("5", state.lang === "en" ? "Daily brief" : "今日简报", res.text); }, REDUCED ? 0 : 3500); }
+      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ado put today's brief on Aliya's desk"); deliver("5", "boss"); setTimeout(function () { addReport("5", state.lang === "en" ? "Daily brief" : "今日简报", res.text); }, REDUCED ? 0 : 3500); }
       if (meeting) { pvMeetingMinutes(res.text); addReport("5", (state.lang === "en" ? "Meeting minutes: " : "会议纪要：") + text.replace(/^Team meeting: announcement from the CEO to the whole team: |^团队会议：CEO 给全体同事的公告：/, "").split("\n")[0].slice(0, 60), res.text); setTimeout(function () { gatherAll(false); }, REDUCED ? 0 : 9000); }
     } catch (e) {
       reply.pending = false;
@@ -3756,7 +3748,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function liveName(c) { return c.name[state.lang]; }
   var LANE = { wechat: "1", lead: "1", web: "7" };     // Monica: WeChat line and leads · Rachel: website & phone
   var SOCIAL = { xhs: "4", dy: "15", wc: "16" };       // Emily: Xiaohongshu · Mindy: Douyin · Camille: WeChat posts
-  var CHECKER = "17", GUARD = "22", DISPATCH = "8", INSIGHT = "21";
+  var CHECKER = "17", GUARD = "17", DISPATCH = "8", INSIGHT = "21";
   // a short, visible step of the workflow (it follows a real event)
   function brief(id, label, ms) {
     if (inOneOnOne(id) || (state.busy[id] && state.busy[id] !== "task")) return wait(ms);
@@ -4291,9 +4283,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
-    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [12, 25, 5, 9], "21": [21, 65, 6, 9], "22": [69.5, 53, 4.5, 8] }, boss: [34, 18, 20, 22], room: [69, 10, 25, 35] },
+    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [12, 29, 6, 9], "21": [27, 64, 6, 9] }, boss: [33, 22, 28, 36], room: [70, 15, 24, 40] },
     3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [16, 20, 6, 9], "2": [15.5, 53, 6, 8], "3": [42, 17, 5, 9], "13": [60, 12, 5, 12], "14": [47.5, 49, 6, 9], "6": [75.5, 29, 5.5, 9] } },
-    2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [16, 10, 6, 9], "4": [36, 12, 5, 9], "16": [48.5, 12, 5, 9], "15": [17.5, 45, 5, 11], "20": [12, 74, 6, 12], "18": [47.5, 77, 5, 10], "19": [77, 19, 5, 9] } },
+    2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [16, 10, 6, 9], "4": [36, 12, 5, 9], "16": [48.5, 12, 5, 9], "15": [17.5, 45, 5, 11], "18": [47.5, 77, 5, 10], "19": [77, 19, 5, 9] } },
     1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [20, 13, 6, 9], "10": [41, 14, 6, 9], "7": [39.5, 43, 5.5, 11], "9": [49.5, 63, 5, 8], "11": [69, 10, 6, 9], "8": [79.5, 72, 5.5, 9] } }
   };
   function buildPlan() {
@@ -4319,11 +4311,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   var INSIDE = {
-    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [0.5, 13, 10.5, 37], "21": [26, 39, 6, 21], "22": [72, 21, 8, 36] }, boss: [37, 34, 29, 24], room: [82, 15, 18, 40], files: [48, 40],
-      dots: [[30, 72, "Lounge"], [55, 70, "CEO desk"], [80, 66, "Boardroom"], [92, 86, "↓ 3F", 3]], seatBox: [83, 34, 15, 16] },
+    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [8, 17, 14, 80], "21": [26, 40, 9, 26] }, boss: [38, 30, 24, 28], room: [75, 10, 25, 45], files: [50, 40],
+      dots: [[30, 72, "Lounge"], [55, 70, "CEO desk"], [82, 50, "Boardroom"], [88, 88, "↓ 3F", 3]], seatBox: [78, 36, 18, 10] },
     3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: { "12": [4, 31, 10, 19], "2": [20, 35, 14, 22], "3": [38, 30, 7, 25], "13": [51, 21, 9, 31], "14": [63, 31, 8, 29], "6": [78, 45, 14, 50] },
       dots: [[55, 78, "Aisle"], [90, 30, "↑ 4F", 4], [96, 52, "↓ 2F", 2]] },
-    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: { "17": [3, 20, 10, 58], "4": [27, 37, 7, 22], "15": [39, 36, 7, 20], "16": [52, 38, 7, 20], "20": [68, 28, 7, 30], "18": [78, 37, 14, 40], "19": [90, 20, 9, 30] },
+    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: { "17": [3, 20, 10, 58], "4": [27, 37, 7, 22], "15": [39, 36, 7, 20], "16": [52, 38, 7, 20], "18": [78, 37, 14, 40], "19": [90, 20, 9, 30] },
       dots: [[50, 93, "Comments lounge"], [85, 22, "↑ 3F", 3], [97, 60, "↓ 1F", 1]] },
     1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: { "10": [2, 44, 12, 48], "1": [11, 17, 7, 14], "7": [50, 20, 9, 40], "9": [37, 22, 5, 9], "11": [72, 17, 7, 26], "8": [84, 29, 10, 50] },
       dots: [[4, 30, "Live chats", 0, "cust"], [70, 40, "Consult rooms"], [92, 15, "↑ 2F", 2]] }
@@ -4473,7 +4465,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   function openInbox() {
     var rv = pendingReview(), html = approvalsHtml() + meetingsHtml() + '<div class="ib-sec">Reports from the team</div>';
-    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Gunther for your daily brief, or hold a team meeting.</p>';
+    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Ado for your daily brief, or hold a team meeting.</p>';
     state.reports.forEach(function (r, i) {
       var b = BY_ID[r.from] || BY_ID["5"];
       html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
@@ -4543,7 +4535,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function meetingsHtml() {
     var en = state.lang === "en", list = meetings().filter(function (m) { return !m.done; });
     var h = '<div class="ib-sec">' + (en ? "Review meetings" : "审批会") + "</div>";
-    list.forEach(function (m) { var due = new Date(m.t).getTime() <= Date.now(); h += '<div class="mt-row' + (due ? " due" : "") + '"><b>📅 ' + esc(fmtTime(m.t)) + "</b><span>" + esc(m.note || (en ? "Approve posts and replies with Emily and Gunther" : "与 Emily、Gunther 一起审批帖子和回复")) + '</span><button type="button" data-mstart="' + m.id + '">' + (due ? (en ? "Start now" : "现在开始") : (en ? "Start early" : "提前开始")) + '</button><button type="button" class="ghostx" data-mdel="' + m.id + '">×</button></div>'; });
+    list.forEach(function (m) { var due = new Date(m.t).getTime() <= Date.now(); h += '<div class="mt-row' + (due ? " due" : "") + '"><b>📅 ' + esc(fmtTime(m.t)) + "</b><span>" + esc(m.note || (en ? "Approve posts and replies with Emily and Ado" : "与 Emily、Ado 一起审批帖子和回复")) + '</span><button type="button" data-mstart="' + m.id + '">' + (due ? (en ? "Start now" : "现在开始") : (en ? "Start early" : "提前开始")) + '</button><button type="button" class="ghostx" data-mdel="' + m.id + '">×</button></div>'; });
     var d = new Date(); d.setMinutes(d.getMinutes() + 30 - d.getMinutes() % 15, 0, 0);
     var pad = function (n) { return String(n).padStart(2, "0"); }, val = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
     h += '<div class="mt-book"><label for="mtWhen">' + (en ? "Book a review meeting" : "预约审批会") + '</label><input type="datetime-local" id="mtWhen" value="' + val + '"><button type="button" data-mq="18">' + (en ? "18:00" : "18:00") + '</button><button type="button" data-mq="t10">' + (en ? "Tomorrow 10:00" : "明天 10:00") + '</button><button type="button" class="mt-go" id="mtBook">' + (en ? "Book" : "预约") + "</button></div>";
@@ -4551,7 +4543,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   function wireMeetings() {
     var b = $("mtBook"); if (!b) return;
-    var book = function (t) { var m = meetings(); m.push({ id: "m" + Date.now(), t: t.toISOString(), done: false }); saveMeetings(m); activity("5", "Gunther booked your review meeting for " + fmtTime(t)); refreshInbox(); };
+    var book = function (t) { var m = meetings(); m.push({ id: "m" + Date.now(), t: t.toISOString(), done: false }); saveMeetings(m); activity("5", "Ado booked your review meeting for " + fmtTime(t)); refreshInbox(); };
     b.onclick = function () { var v = $("mtWhen").value; if (v) book(new Date(v)); };
     Array.prototype.forEach.call(document.querySelectorAll("[data-mq]"), function (q) { q.onclick = function () { var d = new Date(); if (q.dataset.mq === "18") { d.setHours(18, 0, 0, 0); if (d < new Date()) d.setDate(d.getDate() + 1); } else { d.setDate(d.getDate() + 1); d.setHours(10, 0, 0, 0); } book(d); }; });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mstart]"), function (x) { x.onclick = function () { startMeeting(x.dataset.mstart); }; });
@@ -4561,7 +4553,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function startMeeting(id) {
     var m = meetings(); m.forEach(function (x) { if (x.id === id) x.done = true; }); saveMeetings(m);
     meetingOn = id; $("inbox").hidden = true; gatherAll(true);
-    activity("5", "Gunther opened your review meeting in the boardroom");
+    activity("5", "Ado opened your review meeting in the boardroom");
     openReviewMeeting();
   }
   function openReviewMeeting(refresh) {
@@ -4569,7 +4561,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("annTitle").textContent = en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室";
     var box = $("announce").querySelector(".modal-in");
     if (!box.dataset.orig) box.dataset.orig = box.innerHTML;
-    box.innerHTML = '<div class="modal-head"><b>' + (en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室") + '</b><button type="button" class="modal-x" id="rvX">×</button></div><p class="ann-sub">' + (en ? "Gunther presents what the team wants to publish. Approve, edit or reject each one." : "Gunther 汇报团队要发布的内容，请逐条批准、修改或不发。") + '</p><div class="inbox-body" id="rvBody">' + (pend.length ? pend.map(function (a) { return approvalCard(a, true); }).join("") : '<p class="ib-empty">' + (en ? "All done. Nothing left to approve." : "全部处理完毕。") + "</p>") + '</div><button type="button" class="ib-btn" id="rvEnd">' + (en ? "End meeting" : "结束会议") + "</button>";
+    box.innerHTML = '<div class="modal-head"><b>' + (en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室") + '</b><button type="button" class="modal-x" id="rvX">×</button></div><p class="ann-sub">' + (en ? "Ado presents what the team wants to publish. Approve, edit or reject each one." : "Ado 汇报团队要发布的内容，请逐条批准、修改或不发。") + '</p><div class="inbox-body" id="rvBody">' + (pend.length ? pend.map(function (a) { return approvalCard(a, true); }).join("") : '<p class="ib-empty">' + (en ? "All done. Nothing left to approve." : "全部处理完毕。") + "</p>") + '</div><button type="button" class="ib-btn" id="rvEnd">' + (en ? "End meeting" : "结束会议") + "</button>";
     $("announce").hidden = false;
     wireApprovals($("rvBody"));
     var end = function () { $("announce").hidden = true; box.innerHTML = box.dataset.orig; delete box.dataset.orig; rewireAnnounce(); if (meetingOn) { gatherAll(false); meetingOn = null; activity("5", "Review meeting finished"); } };
@@ -4579,7 +4571,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   setInterval(function () {
     var due = meetings().filter(function (m) { return !m.done && !m.told && new Date(m.t).getTime() <= Date.now(); })[0]; if (!due) return;
     var all = meetings(); all.forEach(function (x) { if (x.id === due.id) x.told = true; }); saveMeetings(all);
-    activity("5", "Gunther: your review meeting is starting now (" + pendingApprovals() + " items)");
+    activity("5", "Ado: your review meeting is starting now (" + pendingApprovals() + " items)");
     var tk = $("liveTicker"); if (tk) { var chip = document.createElement("span"); chip.className = "tk-chip mt"; chip.innerHTML = "📅 <b>" + (state.lang === "en" ? "Review meeting now" : "审批会现在开始") + "</b><em> · " + (state.lang === "en" ? "tap to start" : "点击开始") + "</em>"; chip.onclick = function () { startMeeting(due.id); }; tk.prepend(chip); }
   }, 20000);
 
@@ -4601,7 +4593,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       else addReport(w.id, w.report[state.lang], res.text);
     }, function (e) { if (state.busy[w.id] === "task") setBusy(w.id, null); activity(w.id, b.name + " couldn't finish: " + errText(e)); });
   }
-  // a post goes Emily → Julien (cover) → Kuuga (safety check) → the CEO desk
+  // a post goes Emily → Julien (cover) → Sylvie (check) → the CEO desk
   function postPipeline(w, res) {
     var en = state.lang === "en";
     activity("18", "Julien is designing the cover for Emily's post");
@@ -4611,8 +4603,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         .catch(function () { return { text: "【需CEO】" }; }).then(function (chk) {
           pvCallEnd("4"); if (state.busy[GUARD] === "task") setBusy(GUARD, null); flashDone(GUARD);
           var ok = /【通过】/.test(chk.text);
-          activity(GUARD, ok ? "Kuuga checked Emily's post: safe, sent to Aliya's desk" : "Kuuga flagged Emily's post for Aliya");
-          addApproval({ kind: "post", from: "4", where: en ? "WeChat Moments" : "朋友圈", why: ok ? (en ? "New posts always need you · Kuuga's safety check passed" : "新帖子都需要您批准 · Kuuga 安全检查通过") : chk.text.replace(/【需CEO】/g, "").trim(), body: res.text,
+          activity(GUARD, ok ? "Sylvie checked Emily's post: safe, sent to Aliya's desk" : "Sylvie flagged Emily's post for Aliya");
+          addApproval({ kind: "post", from: "4", where: en ? "WeChat Moments" : "朋友圈", why: ok ? (en ? "New posts always need you · Sylvie's check passed" : "新帖子都需要您批准 · Sylvie 审核通过") : chk.text.replace(/【需CEO】/g, "").trim(), body: res.text,
             onDecide: function (yes) { if (yes) addReport("4", en ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
         });
     });

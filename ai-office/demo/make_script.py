@@ -359,7 +359,7 @@ ans("4", r"post ideas|发帖选题", """
 【简要】本周三个选题：11 月 30 日签证资金调整、写给家长的“13 岁寄宿学校准备清单”、以及“伦敦还是其他城市”的理性对比。
 """)
 
-# ---------- Gunther ----------
+# ---------- Ado ----------
 ans("5", r"brief|简报", """
 Good evening, Aliya. Today's brief:
 - 1 new client booked by Monica (Lily, A-levels 2027); Leonard's draft is on your desk for review.
