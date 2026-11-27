@@ -895,6 +895,14 @@ cust("22", r"Quality check before publishing Emily's post|发布前质量检查�
 
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
+  {"bot": "8", "match": r"How many comments came in today|今天来了多少条评论", "calls": [{"who": "emily", "task": "Xiaohongshu comments today"}, {"who": "mindy", "task": "Douyin comments today"}, {"who": "camille", "task": "WeChat post comments today"}]},
+  {"bot": "9", "match": r"consult room schedule|咨询室的安排", "calls": [{"who": "raj", "task": "Clients' deadlines this week"}, {"who": "howard", "task": "Booked client records"}]},
+  {"bot": "11", "match": r"talking points for tomorrow|准备谈话要点", "calls": [{"who": "leonard", "task": "Mr Chen's shortlist"}, {"who": "bernadette", "task": "Mr Chen's budget check"}]},
+  {"bot": "17", "match": r"social team post this week|社媒团队本周发了什么", "calls": [{"who": "emily", "task": "Posts this week"}, {"who": "kuuga", "task": "What's waiting for approval"}]},
+  {"bot": "6", "match": r"master's in London|伦敦读一年硕士", "calls": [{"who": "leonard", "task": "Typical London master's courses"}, {"who": "sheldon", "task": "Check the visa money figures"}]},
+  {"bot": "4", "match": r"boarding|寄宿", "calls": [{"who": "sheldon", "task": "Check 13+ entry facts"}, {"who": "julien", "task": "Cover idea"}]},
+  {"bot": "21", "match": r"customers worried|客户最担心", "calls": [{"who": "monica", "task": "Common WeChat questions"}, {"who": "joey", "task": "Comment themes"}]},
+  {"bot": "12", "match": r"UCL is ranked|UCL 世界排名", "calls": [{"who": "leonard", "task": "Ranking source"}]},
   {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}, {"who": "raj", "task": "13+ entry timeline"}]},
   {"bot": "1", "match": r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", "calls": [{"who": "penny", "task": "One-year London master's cost range"}]},
   {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "sheldon", "task": "Graduate visa and degree length facts"}, {"who": "penny", "task": "Cost vs other countries"}]},
@@ -914,6 +922,12 @@ NOTES = {
   "leonard": {"en": "- Options checked on university websites\n- Entry requirements vary by course", "zh": "- 已核对各校官网\n- 不同专业录取要求不同"},
   "sheldon": {"en": "- Facts checked against university websites\n- Rankings quoted with list and year", "zh": "- 已对照大学官网核实\n- 排名注明榜单和年份"},
   "raj": {"en": "- Key deadline: 14 Jan (UCAS main), 15 Oct (Oxbridge/medicine)\n- Start preparing 12 months ahead", "zh": "- 关键日期：1 月 14 日（UCAS 主截止）、10 月 15 日（牛剑/医学）\n- 建议提前 12 个月准备"},
+  "mindy": {"en": "- 1 Douyin comment today, a question", "zh": "- 今天抖音 1 条评论，是提问"},
+  "camille": {"en": "- 1 WeChat comment today, about costs", "zh": "- 今天公众号 1 条评论，问费用"},
+  "kuuga": {"en": "- 1 post and 2 replies waiting for the CEO", "zh": "- 1 篇帖子和 2 条回复等待 CEO 批准"},
+  "julien": {"en": "- Cover: campus photo, bold title", "zh": "- 封面：校园照片 + 大标题"},
+  "howard": {"en": "- 3 booked clients on file", "zh": "- 3 位已登记客户已归档"},
+  "joey": {"en": "- Most comments ask about cost", "zh": "- 大部分评论问费用"},
   "amy": {"en": "- Coaching yes, ghostwriting no\n- Plan → draft → feedback, 2–3 rounds", "zh": "- 可以辅导，不能代写\n- 提纲 → 初稿 → 修改，2–3 轮"},
   "monica": {"en": "- FAQ wording ready", "zh": "- 常见问题话术已准备"},
   "emily": {"en": "- Post idea ready", "zh": "- 选题已准备"},

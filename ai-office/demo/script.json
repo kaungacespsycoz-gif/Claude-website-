@@ -459,6 +459,118 @@
  ],
  "routes": [
   {
+   "bot": "8",
+   "match": "How many comments came in today|今天来了多少条评论",
+   "calls": [
+    {
+     "who": "emily",
+     "task": "Xiaohongshu comments today"
+    },
+    {
+     "who": "mindy",
+     "task": "Douyin comments today"
+    },
+    {
+     "who": "camille",
+     "task": "WeChat post comments today"
+    }
+   ]
+  },
+  {
+   "bot": "9",
+   "match": "consult room schedule|咨询室的安排",
+   "calls": [
+    {
+     "who": "raj",
+     "task": "Clients' deadlines this week"
+    },
+    {
+     "who": "howard",
+     "task": "Booked client records"
+    }
+   ]
+  },
+  {
+   "bot": "11",
+   "match": "talking points for tomorrow|准备谈话要点",
+   "calls": [
+    {
+     "who": "leonard",
+     "task": "Mr Chen's shortlist"
+    },
+    {
+     "who": "bernadette",
+     "task": "Mr Chen's budget check"
+    }
+   ]
+  },
+  {
+   "bot": "17",
+   "match": "social team post this week|社媒团队本周发了什么",
+   "calls": [
+    {
+     "who": "emily",
+     "task": "Posts this week"
+    },
+    {
+     "who": "kuuga",
+     "task": "What's waiting for approval"
+    }
+   ]
+  },
+  {
+   "bot": "6",
+   "match": "master's in London|伦敦读一年硕士",
+   "calls": [
+    {
+     "who": "leonard",
+     "task": "Typical London master's courses"
+    },
+    {
+     "who": "sheldon",
+     "task": "Check the visa money figures"
+    }
+   ]
+  },
+  {
+   "bot": "4",
+   "match": "boarding|寄宿",
+   "calls": [
+    {
+     "who": "sheldon",
+     "task": "Check 13+ entry facts"
+    },
+    {
+     "who": "julien",
+     "task": "Cover idea"
+    }
+   ]
+  },
+  {
+   "bot": "21",
+   "match": "customers worried|客户最担心",
+   "calls": [
+    {
+     "who": "monica",
+     "task": "Common WeChat questions"
+    },
+    {
+     "who": "joey",
+     "task": "Comment themes"
+    }
+   ]
+  },
+  {
+   "bot": "12",
+   "match": "UCL is ranked|UCL 世界排名",
+   "calls": [
+    {
+     "who": "leonard",
+     "task": "Ranking source"
+    }
+   ]
+  },
+  {
    "bot": "1",
    "match": "孩子12岁，现在准备来得及吗|My child is 12, is it too late",
    "calls": [
@@ -641,6 +753,30 @@
   "raj": {
    "en": "- Key deadline: 14 Jan (UCAS main), 15 Oct (Oxbridge/medicine)\n- Start preparing 12 months ahead",
    "zh": "- 关键日期：1 月 14 日（UCAS 主截止）、10 月 15 日（牛剑/医学）\n- 建议提前 12 个月准备"
+  },
+  "mindy": {
+   "en": "- 1 Douyin comment today, a question",
+   "zh": "- 今天抖音 1 条评论，是提问"
+  },
+  "camille": {
+   "en": "- 1 WeChat comment today, about costs",
+   "zh": "- 今天公众号 1 条评论，问费用"
+  },
+  "kuuga": {
+   "en": "- 1 post and 2 replies waiting for the CEO",
+   "zh": "- 1 篇帖子和 2 条回复等待 CEO 批准"
+  },
+  "julien": {
+   "en": "- Cover: campus photo, bold title",
+   "zh": "- 封面：校园照片 + 大标题"
+  },
+  "howard": {
+   "en": "- 3 booked clients on file",
+   "zh": "- 3 位已登记客户已归档"
+  },
+  "joey": {
+   "en": "- Most comments ask about cost",
+   "zh": "- 大部分评论问费用"
   },
   "amy": {
    "en": "- Coaching yes, ghostwriting no\n- Plan → draft → feedback, 2–3 rounds",

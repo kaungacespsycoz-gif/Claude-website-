@@ -1047,6 +1047,17 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
 .live-pin.talking, .live-bub.talking { filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px var(--c)) !important; }
 .call-lines line, .fx-trail path { stroke-width: 3 !important; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 6px currentColor); }
 .hs.working::before, .hs.calling::before { box-shadow: 0 0 0 2px #fff, 0 0 12px var(--c) !important; }
+
+/* ---------- CEO requests: gold communication lines ---------- */
+.call-map.ceo line { stroke: #ffd36a !important; stroke-width: 4; filter: drop-shadow(0 0 3px #fff3c4) drop-shadow(0 0 10px #ffb92e); }
+.call-map.ceo .cm-ring { --c: #ffd36a !important; box-shadow: 0 0 18px #ffcf5a, inset 0 0 12px #ffcf5a; }
+.call-map.ceo .cm-cap { background: linear-gradient(90deg, #3a2a08, #1a1206); border: 1px solid #ffd36a; color: #ffe9a8; box-shadow: 0 0 16px rgba(255,200,80,.5); }
+.call-map.ceo .cm-frame { box-shadow: 0 0 0 2px #ffd36a, 0 0 50px rgba(255,190,60,.5); }
+.call-lines.ceo line { stroke-width: 3.5 !important; filter: drop-shadow(0 0 2px #fff3c4) drop-shadow(0 0 8px #ffb92e) !important; }
+.desk-scene .call-map { z-index: 3; align-items: start; padding-top: 70px; }
+.desk-scene .call-map .cm-frame { height: min(52vh, 560px); width: auto; aspect-ratio: 1080 / 1440; max-width: 88%; }
+.call-map .cm-cap { white-space: normal; text-align: center; width: max-content; max-width: 92%; font-size: .72rem; }
+@media (min-width: 900px) { .desk-scene .call-map .cm-frame { max-height: 78%; } }
 </style>
 
 <div class="app">
@@ -1473,7 +1484,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     var text = String((history.filter(function (h) { return h.role === "user"; }).slice(-1)[0] || {}).content || ""), L = state.lang, out;
     function rx(m) { try { return new RegExp(m, "i"); } catch (e) { return /$^/; } }
     if (rules === ROUTER || rules === ROUTER_BOSS) {
-      var who = rules === ROUTER ? "1" : "5", rt = (DEMO_DATA.routes || []).filter(function (x) { return x.bot === who && rx(x.match).test(text); })[0];
+      var who = rules === ROUTER ? "1" : (o.askedId || "5"), rt = (DEMO_DATA.routes || []).filter(function (x) { return x.bot === who && rx(x.match).test(text); })[0] || (rules !== ROUTER && (DEMO_DATA.routes || []).filter(function (x) { return x.bot === "5" && rx(x.match).test(text); })[0]);
       return Promise.resolve({ text: JSON.stringify({ calls: rt ? rt.calls : [] }) });
     }
     if (rules.indexOf("这次是同事之间的内部请求") >= 0) {
@@ -1495,9 +1506,10 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
   }
 
   // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
-  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", gunther: "5", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15" };
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", gunther: "5", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15",
+    rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", ado: "20", anya: "21", kuuga: "22" };
   var ROUTER_BOSS = "You are the coordinator for Gunther, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money.\n" +
+    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; kuuga = brand safety and red lines; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; gunther = office status.\n" +
     "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Gunther can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
@@ -1505,10 +1517,11 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
     "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
   var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台莫妮卡替客户来问你。只回复给莫妮卡看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
-  async function routeQuestion(text, history, forBoss) {
+  async function routeQuestion(text, history, forBoss, askedId) {
     try {
-      var msgs = history.slice(-6, -1).concat([{ role: "user", content: "Client's latest message: " + text + "\n\nReply with the JSON only." }]);
-      var res = await rawAsk(forBoss ? ROUTER_BOSS : ROUTER, msgs, { effort: "low", quick: true });
+      var who = askedId && BY_ID[askedId] ? "\nThe CEO asked " + BY_ID[askedId].name + " (" + BY_ID[askedId].title + "); pick colleagues who can help " + BY_ID[askedId].name + ", never " + BY_ID[askedId].name + " themself." : "";
+      var msgs = history.slice(-6, -1).concat([{ role: "user", content: (forBoss ? "The CEO's latest message: " : "Client's latest message: ") + text + who + "\n\nReply with the JSON only." }]);
+      var res = await rawAsk(forBoss ? ROUTER_BOSS : ROUTER, msgs, { effort: "low", quick: true, askedId: askedId });
       var t = res.text, a = t.indexOf("{"), b = t.lastIndexOf("}");
       var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { var w = c && String(c.who).toLowerCase(); return w && TEAM_IDS[w] && (forBoss || ["2", "3", "6", "12", "13"].indexOf(TEAM_IDS[w]) >= 0); });
       var seen = {};
@@ -1526,7 +1539,8 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
       var id = ids[i], bot = BY_ID[id], mine = !state.busy[id] || state.busy[id] === "task";
       state.callFrom = state.callFrom || {}; state.callFrom[id] = from.name;
       if (mine) setBusy(id, "call");
-      return ask(bot, [{ role: "user", content: (fromId === "5" ? "Task from Gunther (the boss's request): " + c.task + "\n\nThe boss's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: fromId === "5" ? NOTE_RULE.replace("前台莫妮卡替客户来问你", "秘书冈瑟替老板来分配任务") : NOTE_RULE })
+      var boss = fromId !== "1" && fromId !== "7" && state.asking === fromId;
+      return ask(bot, [{ role: "user", content: (boss ? "Task from " + from.name + " (the CEO's request): " + c.task + "\n\nThe CEO's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: boss ? NOTE_RULE.replace("前台莫妮卡替客户来问你", from.name + " 替 CEO 来问你") : NOTE_RULE })
         .then(function (r) { return r.text; }, function (e) { return "(" + bot.name + " couldn't answer: " + errText(e) + ")"; })
         .then(function (note) {
           if (mine) setBusy(id, null);
@@ -2912,7 +2926,8 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
       var b = hsCenter(id); if (!b) return;
       var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
       l.setAttribute("x1", a[0]); l.setAttribute("y1", a[1]); l.setAttribute("x2", b[0]); l.setAttribute("y2", b[1]);
-      l.setAttribute("stroke", COLORS[BY_ID[id].color]); l.setAttribute("vector-effect", "non-scaling-stroke");
+      l.setAttribute("stroke", state.asking === fromId ? "#ffd36a" : COLORS[BY_ID[id].color]); l.setAttribute("vector-effect", "non-scaling-stroke");
+      if (state.asking === fromId) svg.classList.add("ceo");
       svg.appendChild(l);
     });
     $("hotspots").insertBefore(svg, $("hotspots").firstChild);
@@ -3266,8 +3281,9 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
       var extra = "", meeting = bot.id === "5" && /meeting|开会|会议/i.test(text);
       if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Gunther called a team meeting in the boardroom"); }
-      if ((bot.id === "1" || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
-        var calls = await routeQuestion(text, history, bot.id === "5");
+      var ceoAsk = state.desk && bot.id !== "1" && !meeting && !/brief|简报/i.test(text);
+      if ((bot.id === "1" || ceoAsk || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
+        var calls = (await routeQuestion(text, history, bot.id !== "1", bot.id)).filter(function (c) { return TEAM_IDS[c.who] !== bot.id; });
         if (calls.length && !state.ctl[bot.id].signal.aborted) {
           var notesTurn = { kind: "team", from: bot.name, items: calls.map(function (c) { return { id: TEAM_IDS[c.who], task: c.task, note: null }; }) };
           turns.splice(turns.indexOf(reply), 0, notesTurn); drawLog();
@@ -4171,10 +4187,10 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     if (!on) { if (old) { old.classList.remove("on"); setTimeout(function () { old.remove(); }, 600); } return; }
     if (old) old.remove();
     if (!host) return;
-    var L = LAYOUTS.f4, a = hsCenter(fromId), m = document.createElement("div"); m.className = "call-map";
+    var L = LAYOUTS.f4, a = hsCenter(fromId), m = document.createElement("div"), ceo = fromId !== "1" && fromId !== "7"; m.className = "call-map" + (ceo ? " ceo" : "");
     var lines = ids.map(function (id) { var b = hsCenter(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
     var rings = [fromId].concat(ids).map(function (id) { var c = hsCenter(id); return c ? '<span class="cm-ring" style="left:' + c[0] + "%;top:" + c[1] + "%;--c:" + COLORS[BY_ID[id].color] + '"></span>' : ""; }).join("");
-    m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">📞 ' + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
+    m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">' + (ceo ? "👑 CEO request · " : "📞 ") + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
     host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
   }
 
