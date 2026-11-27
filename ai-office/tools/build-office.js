@@ -15,10 +15,13 @@ files['tests/customer-service-tests.json'] = fs.readFileSync(path.join(base, 'te
 const page = fs.readFileSync(path.join(base, 'team.html'), 'utf8');
 const bundle = '<script type="application/json" id="bundle">' + JSON.stringify(files).replace(/</g, '\\u003c') + '</script>\n';
 const at = page.indexOf('<script>');
+// three.js (MIT) goes inside the file so the 3D office works offline and in mainland China
+const three = fs.readFileSync(path.join(base, '..', 'vendor', 'three.min.js'), 'utf8');
+if (three.includes('</script')) throw new Error('three.min.js contains a closing script tag');
 if (at < 0) throw new Error('team.html has no <script> block');
 const out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">' +
   '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' +
   '<style>body{margin:0}[hidden]{display:none!important}</style></head><body>\n' +
-  page.slice(0, at) + bundle + page.slice(at) + '\n</body></html>\n';
+  page.slice(0, at) + '<script>' + three + '</script>\n' + bundle + page.slice(at) + '\n</body></html>\n';
 fs.writeFileSync(path.join(base, 'office.html'), out);
 console.log(`Built office.html (${Math.round(out.length / 1024)} KB, ${Object.keys(files).length} files inside)`);
