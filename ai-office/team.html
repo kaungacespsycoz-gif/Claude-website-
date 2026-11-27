@@ -142,6 +142,19 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .note-fly { position: absolute; width: 18px; height: 22px; margin: -11px 0 0 -9px; border-radius: 3px; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.4), 0 0 0 2.5px var(--c); pointer-events: none; z-index: 3;
   background-image: repeating-linear-gradient(180deg, transparent 0 4px, #c7ccd1 4px 5px); background-size: 70% 70%; background-position: center; background-repeat: no-repeat; }
 @media (prefers-reduced-motion: no-preference) { .call-lines line { animation: dash .6s linear infinite; } @keyframes dash { to { stroke-dashoffset: -12; } } }
+.meet-card { position: absolute; left: 3.5%; top: 47%; width: 24%; min-width: 190px; background: rgba(12,14,18,.86); color: #eef2f4; border-radius: 14px; padding: 10px 12px; z-index: 4; backdrop-filter: blur(6px); box-shadow: 0 10px 30px rgba(0,0,0,.4); max-height: 50%; overflow-y: auto; }
+.meet-head { display: flex; justify-content: space-between; align-items: center; font: 600 .86rem var(--display); }
+.meet-x { background: transparent; border: 0; color: #cfd6db; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
+.meet-faces { display: flex; gap: 4px; margin: 8px 0; flex-wrap: wrap; }
+.meet-faces span, .meet-line span { width: 26px; height: 26px; border-radius: 8px; background-size: cover; background-position: center 30%; box-shadow: 0 0 0 2px var(--c); flex: none; }
+.meet-body { font-size: .76rem; line-height: 1.45; display: flex; flex-direction: column; gap: 6px; }
+.meet-sum { margin: 0; color: #fff; font-weight: 600; }
+.meet-line { display: flex; gap: 8px; align-items: flex-start; }
+.meet-line p { margin: 0; color: #d6dde2; }
+.meet-line b { color: #fff; }
+.meet-line.decide { background: rgba(232,193,122,.15); border-radius: 8px; padding: 4px 8px; }
+.hs.meeting .hs-tag { box-shadow: 0 0 0 1.5px var(--c); }
+.hs-badge.intel { right: auto; left: 92%; top: -2%; background: #2f6fe0; box-shadow: 0 0 0 3px rgba(47,111,224,.3); white-space: nowrap; }
 .folder-fly { position: absolute; width: 30px; height: 22px; margin: -11px 0 0 -15px; border-radius: 3px; background: #f6d99b; border: 1.5px solid #c9902f; box-shadow: 0 4px 14px rgba(0,0,0,.45), 0 0 0 3px var(--c); pointer-events: none; z-index: 3; }
 .folder-fly::before { content: ""; position: absolute; left: -1.5px; top: -6px; width: 12px; height: 6px; background: #e3b25f; border-radius: 2px 2px 0 0; }
 .pv-card { position: absolute; right: 14px; bottom: 14px; display: flex; gap: 10px; align-items: center; background: rgba(12,14,18,.8); color: #f2f5f7; border-radius: 16px; padding: 8px 14px 8px 8px; backdrop-filter: blur(6px); max-width: 60%; }
@@ -425,18 +438,19 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       tasks: [
         { en: "A. Interview questions: 17-year-old applying for computer science at UK universities; makes games and does coding competitions.", zh: "A. 访谈提纲：学生 17 岁，申请英国本科计算机科学，喜欢做游戏和参加信息学竞赛。" },
         { en: "Write a complete economics personal statement for the student that they can submit as it is.", zh: "直接帮学生写一篇完整的经济学个人陈述，可以直接提交。" }] },
-    { id: "4", file: "agents/4-marketing.md", name: "Spark", role: "Marketing", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
-      intro: "Drafts Xiaohongshu, WeChat, Moments and Douyin posts, with a fact-check list at the end.",
+    { id: "4", file: "agents/4-marketing.md", name: "Spark", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
+      intro: "Marketing officer. Checks UK university and policy news every morning, and drafts Xiaohongshu, WeChat, Moments and Douyin posts with a fact-check list.",
       tasks: [
         { en: "Xiaohongshu post for parents: our child is 13 and wants a UK boarding school. What should we prepare?", zh: "小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？" },
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] },
     { id: "5", file: "agents/5-secretary.md", name: "Ling", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
-      intro: "Your secretary. She reads the client board, the activity and the test results, and writes you a daily brief. Ask her anything about the office.",
+      intro: "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.",
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
-        { en: "What's waiting for my review?", zh: "现在有什么等我审核？" },
-        { en: "How is each robot doing today?", zh: "每个机器人今天表现怎么样？" }] },
+        { en: "Hold a team meeting about today's news.", zh: "开个团队会，讲讲今天的新闻。" },
+        { en: "A parent wants medicine at a top UK university for their son, budget ¥600k a year. Get the team ready for the consultation.", zh: "有位家长想让儿子去英国顶尖大学读医学，预算每年 60 万。让团队为咨询做好准备。" },
+        { en: "What's waiting for my review?", zh: "现在有什么等我审核？" }] },
     { id: "6", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
       intro: "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.",
       tasks: [
@@ -573,6 +587,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       rules += state.lang === "en" ? EN_RULE : ZH_RULE;
       o.effort = bot.effort;
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
+      if (bot.id === "4") rules += "\n\n# 【今日资讯】\n" + intelText();
       if (o.extraRules) rules += o.extraRules;
       return rawAsk(rules, history, o);
     });
@@ -580,39 +595,45 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function rawAsk(rules, history, o) { return state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o); }
 
   // ---------- teamwork: Huan calls colleagues, they work in parallel, Huan answers briefly ----------
-  var TEAM_IDS = { scout: "2", quill: "3", penny: "6" };
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6" };
+  var ROUTER_BOSS = "You are the coordinator for Ling, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
+    "Colleagues: huan = front desk, client messages and FAQ wording; scout = UK schools, universities, courses, rankings, entry routes; quill = personal statements, CVs, application documents; spark = marketing posts, social media, today's university and policy news; penny = tuition, living costs, budgets, visa money.\n" +
+    "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ling can answer from the office data.\n" +
+    "Reply with JSON only: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
     "Colleagues: scout = UK schools, universities, courses, rankings, entry routes and requirements; penny = tuition fees, living costs, budgets, money needed for the student visa; quill = personal statements, CVs, reference letters, application documents.\n" +
     "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
     "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
   var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台小寰替客户来问你。只回复给小寰看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
-  async function routeQuestion(text, history) {
+  async function routeQuestion(text, history, forBoss) {
     try {
       var msgs = history.slice(-6, -1).concat([{ role: "user", content: "Client's latest message: " + text + "\n\nReply with the JSON only." }]);
-      var res = await rawAsk(ROUTER, msgs, { effort: "low", quick: true });
+      var res = await rawAsk(forBoss ? ROUTER_BOSS : ROUTER, msgs, { effort: "low", quick: true });
       var t = res.text, a = t.indexOf("{"), b = t.lastIndexOf("}");
-      var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { return c && TEAM_IDS[String(c.who).toLowerCase()]; });
+      var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { var w = c && String(c.who).toLowerCase(); return w && TEAM_IDS[w] && (forBoss || ["scout", "quill", "penny"].indexOf(w) >= 0); });
       var seen = {};
       return calls.filter(function (c) { var w = String(c.who).toLowerCase(); if (seen[w]) return false; seen[w] = 1; c.who = w; return true; }).slice(0, 3);
     } catch (e) { return []; }
   }
-  async function consultTeam(calls, text, notesTurn) {
-    var ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
-    pvCall("1", ids);
-    activity("1", "Huan asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + " for help");
+  async function consultTeam(calls, text, notesTurn, fromId) {
+    fromId = fromId || "1";
+    var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
+    pvCall(fromId, ids);
+    activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
       var id = ids[i], bot = BY_ID[id], mine = !state.busy[id];
+      state.callFrom = state.callFrom || {}; state.callFrom[id] = from.name;
       if (mine) setBusy(id, "call");
-      return ask(bot, [{ role: "user", content: "Front desk question: " + c.task + "\n\nThe client's own words: " + text }], { extraRules: NOTE_RULE })
+      return ask(bot, [{ role: "user", content: (fromId === "5" ? "Task from Ling (the boss's request): " + c.task + "\n\nThe boss's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: fromId === "5" ? NOTE_RULE.replace("前台小寰替客户来问你", "秘书玲替老板来分配任务") : NOTE_RULE })
         .then(function (r) { return r.text; }, function (e) { return "(" + bot.name + " couldn't answer: " + errText(e) + ")"; })
         .then(function (note) {
           if (mine) setBusy(id, null);
-          flashDone(id); pvReturn(id, "1");
-          notesTurn.items[i].note = note; if (state.bot.id === "1") drawLog();
+          flashDone(id); pvReturn(id, fromId);
+          notesTurn.items[i].note = note; if (state.bot.id === fromId) drawLog();
           return note;
         });
     }));
-    pvCallEnd("1");
+    pvCallEnd(fromId);
     return "\n\n# 【同事笔记】（客户看不到，按“和同事合作”的规则回答）\n" + calls.map(function (c, i) { return "## " + BY_ID[ids[i]].name + "（" + c.task + "）\n" + results[i]; }).join("\n\n");
   }
 
@@ -1693,11 +1714,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     pvSelect(state.bot.id);
     Object.keys(state.busy).forEach(function (id) { pvWorking(id, true); });
     pvInbox(pendingReview());
+    pvIntel();
   }
   function pvWorking(id, on) {
     if (!pvReady) return; var el = $("hs" + id); if (!el) return;
     el.classList.toggle("working", on);
-    el.querySelector("em").textContent = on ? (state.busy[id] === "job" ? "on a client" : state.busy[id] === "call" ? "helping Huan" : "working") : "idle";
+    el.querySelector("em").textContent = on ? (state.busy[id] === "job" ? "on a client" : state.busy[id] === "call" ? "helping " + ((state.callFrom || {})[id] || "Huan") : "working") : "idle";
     pvCardUpdate();
   }
   function pvDone(id) { if (!pvReady) return; var el = $("hs" + id); if (!el) return; el.classList.add("just-done"); setTimeout(function () { el.classList.remove("just-done"); }, 2500); }
@@ -1759,6 +1781,55 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     }
     requestAnimationFrame(step);
   }
+  // Team meeting: everyone "joins" the meeting room, Ling presents, minutes appear on a card there
+  var ROOM_PV = [13.5, 70];
+  function pvMeeting(on) {
+    if (!pvReady) return;
+    var old = $("meetLines"); if (old) old.remove();
+    var card = $("meetCard");
+    if (!on) { if (card && !card.dataset.done) card.remove(); BOTS.forEach(function (b) { var h = $("hs" + b.id); if (h) h.classList.remove("meeting"); }); return; }
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "call-lines"); svg.id = "meetLines"; svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
+    BOTS.forEach(function (b) {
+      var c = hsCenter(b.id); if (!c) return;
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      l.setAttribute("x1", c[0]); l.setAttribute("y1", c[1]); l.setAttribute("x2", ROOM_PV[0]); l.setAttribute("y2", ROOM_PV[1]);
+      l.setAttribute("stroke", COLORS[b.color]); l.setAttribute("vector-effect", "non-scaling-stroke"); svg.appendChild(l);
+      var h = $("hs" + b.id); if (h) { h.classList.add("meeting"); h.querySelector("em").textContent = "in meeting"; }
+    });
+    $("hotspots").insertBefore(svg, $("hotspots").firstChild);
+    if (card) card.remove();
+    card = document.createElement("div"); card.className = "meet-card"; card.id = "meetCard";
+    card.innerHTML = '<div class="meet-head"><b>Team meeting</b><button type="button" class="meet-x" aria-label="Close meeting notes">×</button></div>' +
+      '<div class="meet-faces">' + BOTS.map(function (b) { return '<span title="' + esc(b.name) + '" style="background-image:url(' + imgURL(IMG[b.id]) + ');--c:' + COLORS[b.color] + '"></span>'; }).join("") + '</div>' +
+      '<div class="meet-body" id="meetBody"><span class="typing"><i></i><i></i><i></i></span> Ling is presenting today\'s news…</div>';
+    card.querySelector(".meet-x").onclick = function () { card.remove(); };
+    $("hotspots").appendChild(card);
+  }
+  function pvMeetingMinutes(text) {
+    var old = $("meetLines"); if (old) old.remove();
+    BOTS.forEach(function (b) { var h = $("hs" + b.id); if (h) { h.classList.remove("meeting"); h.querySelector("em").textContent = state.busy[b.id] ? "working" : "idle"; } });
+    var card = $("meetCard"), body = $("meetBody"); if (!card || !body) return;
+    card.dataset.done = "1";
+    var lines = text.split("\n").map(function (l) { return l.replace(/\*\*/g, "").trim(); }).filter(Boolean), out = "", summary = "";
+    lines.forEach(function (l) {
+      var m = l.match(/^[-•*]\s*([A-Za-z]+|需要您决定)\s*[:：]\s*(.+)$/);
+      if (m) {
+        var b = BOTS.filter(function (x) { return x.name.toLowerCase() === m[1].toLowerCase(); })[0];
+        if (b) out += '<div class="meet-line"><span style="background-image:url(' + imgURL(IMG[b.id]) + ');--c:' + COLORS[b.color] + '"></span><p><b>' + esc(b.name) + '</b> ' + esc(m[2]) + "</p></div>";
+        else out += '<div class="meet-line decide"><p><b>You</b> ' + esc(m[2]) + "</p></div>";
+      } else if (!summary) summary = l;
+    });
+    body.innerHTML = (summary ? '<p class="meet-sum">' + esc(summary) + "</p>" : "") + (out || '<p class="meet-sum">See Ling\'s chat for the minutes.</p>');
+    activity("5", "Team meeting finished: " + (summary || "minutes in Ling's chat").slice(0, 80));
+  }
+  function pvIntel() {
+    if (!pvReady) return;
+    var h = $("hs4"); if (!h) return;
+    var today = state.intel[0], n = today ? (today.items || []).length : 0, b = h.querySelector(".hs-badge");
+    if (!b) { b = document.createElement("span"); b.className = "hs-badge intel"; h.appendChild(b); }
+    b.hidden = !n; b.textContent = n + " news"; h.title = today ? "News check " + today.date + ": " + (today.summary || "") : "";
+  }
   function pvDeliver(fromId, to) {
     if (!pvReady) return;
     var pts = PATHS_PV[fromId + ">" + (to === "boss" ? "boss" : "scout")]; if (!pts) return;
@@ -1817,7 +1888,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     BOTS.forEach(function (b) {
       var working = !!state.busy[b.id], btn = $("pick" + b.id);
       btn.setAttribute("aria-pressed", String(b === state.bot && state.tab === "chat"));
-      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping Huan" : "Typing…") : state.done[b.id] ? "Done" : b.role;
+      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping " + ((state.callFrom || {})[b.id] || "Huan") : "Typing…") : state.done[b.id] ? "Done" : b.role;
       btn.querySelector(".status").className = "status" + (working ? " busy" : state.done[b.id] ? " done" : "");
       actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
@@ -1903,6 +1974,25 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       .replace(/【咨询登记】/g, '<span class="flag book">Booking summary</span>')
       .replace(/\n?【登记完成】/g, "");
   }
+  // Spark's morning news check is filed into the shared "intel" list by the daily task (claude.ai version)
+  state.intel = [];
+  if (!IN_CLAUDE && BUNDLE) state.intel = Object.keys(BUNDLE).filter(function (k) { return k.indexOf("intel/") === 0; }).sort().reverse().map(function (k) { try { return JSON.parse(BUNDLE[k]); } catch (e) { return null; } }).filter(Boolean);
+  if (!IN_CLAUDE && state.intel.length) { var t0 = state.intel[0]; setTimeout(function () { activity("4", "Spark's news check (" + t0.date + "): " + (t0.items || []).length + " findings"); }, 0); }
+  if (IN_CLAUDE) window.claude.use("db").then(function (db) {
+    if (!db) return;
+    db.collection("intel").orderBy("date", "desc").limit(5).onSnapshot(function (snap) {
+      state.intel = snap.docs.map(function (d) { return d.data(); });
+      var today = state.intel[0];
+      if (today && !state.intelSeen) { state.intelSeen = true; var n = (today.items || []).length; activity("4", "Spark's news check (" + today.date + "): " + (n ? n + " finding" + (n > 1 ? "s" : "") : "nothing important")); }
+      pvIntel();
+    }, function () {});
+  });
+  function intelText() {
+    if (!state.intel.length) return IN_CLAUDE ? "No news check has been filed yet." : "The daily news check runs on the claude.ai version; none here.";
+    return state.intel.slice(0, 3).map(function (d) {
+      return d.date + " — " + (d.summary || "") + "\n" + (d.items || []).map(function (it) { return "- [" + (it.importance || "") + "] " + it.title + " (" + (it.source || "") + ") " + (it.what || "") + " | affects: " + [].concat(it.who || []).join(", ") + " | " + (it.url || ""); }).join("\n");
+    }).join("\n\n");
+  }
   // What Ling knows: the client board, today's activity, test results and who is busy
   function officeData() {
     var now = new Date(), items = store.items(), lines = [];
@@ -1918,6 +2008,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     lines.push("Automatic tests run on Huan this session: " + tests.length + " (" + tests.filter(function (k) { return state.results[k] === "pass"; }).length + " passed, " + tests.filter(function (k) { return state.results[k] === "fail"; }).join(", ").replace(/en|zh/g, "") + " failed)");
     lines.push("Busy right now: " + (Object.keys(state.busy).map(function (id) { return BY_ID[id].name; }).join(", ") || "nobody"));
     lines.push("Engine: " + state.engine + " · reply language: " + state.lang);
+    lines.push("\n【今日资讯】Spark's daily news check:\n" + intelText());
     return lines.join("\n");
   }
   function chat() { return state.chats[state.bot.id] || (state.chats[state.bot.id] = []); }
@@ -1966,7 +2057,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       } else if (t.kind === "team") {
         var waiting = t.items.filter(function (it) { return it.note === null; });
         d.className = "team-notes";
-        d.innerHTML = '<details><summary>' + (waiting.length ? '<span class="typing"><i></i><i></i><i></i></span> Huan is asking ' : '✓ Team notes from ') +
+        d.innerHTML = '<details><summary>' + (waiting.length ? '<span class="typing"><i></i><i></i><i></i></span> ' + esc(t.from || "Huan") + ' is asking ' : '✓ Team notes from ') +
           esc(t.items.map(function (it) { return BY_ID[it.id].name; }).join(" and ")) + ' <em>(only you see these)</em></summary>' +
           t.items.map(function (it) { var b = BY_ID[it.id]; return '<div class="tn"><b style="color:' + COLORS[b.color] + '">' + esc(b.name) + '</b> <small>' + esc(it.task) + '</small><div class="pre">' + (it.note === null ? "Working…" : render(it.note)) + "</div></div>"; }).join("") +
           "</details>";
@@ -2001,13 +2092,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     try {
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
-      var extra = "";
-      if (bot.id === "1" && text.length > 12) {
-        var calls = await routeQuestion(text, history);
+      var extra = "", meeting = bot.id === "5" && /meeting|开会|会议/i.test(text);
+      if (meeting) { pvMeeting(true); activity("5", "Ling called a team meeting in the meeting room"); }
+      if ((bot.id === "1" || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
+        var calls = await routeQuestion(text, history, bot.id === "5");
         if (calls.length && !state.ctl[bot.id].signal.aborted) {
-          var notesTurn = { kind: "team", items: calls.map(function (c) { return { id: TEAM_IDS[c.who], task: c.task, note: null }; }) };
+          var notesTurn = { kind: "team", from: bot.name, items: calls.map(function (c) { return { id: TEAM_IDS[c.who], task: c.task, note: null }; }) };
           turns.splice(turns.indexOf(reply), 0, notesTurn); drawLog();
-          extra = await consultTeam(calls, text, notesTurn);
+          extra = await consultTeam(calls, text, notesTurn, bot.id);
         }
       }
       var res = await ask(bot, history, {
@@ -2027,10 +2119,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       }
       if (bot.id === "1") await maybeSaveBooking(res.text, turns);
       if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ling put today's brief on your desk"); deliver("5", "boss"); }
+      if (meeting) pvMeetingMinutes(res.text);
     } catch (e) {
       reply.pending = false;
       if (e && e.text && e.code !== "refused") reply.content = e.text; else turns.splice(turns.indexOf(reply), 1);
       if (!e || e.code !== "cancelled") turns.push({ kind: "note", text: errText(e) });
+      if (bot.id === "5") pvMeeting(false);
       if (e && (e.code === "no_key" || e.code === "bad_key")) { state.settingsOpen = true; drawSettings(); }
     } finally {
       delete state.ctl[bot.id];

@@ -11,6 +11,9 @@ for (const dir of ['agents', 'knowledge', 'templates']) {
   }
 }
 files['tests/customer-service-tests.json'] = fs.readFileSync(path.join(base, 'tests', 'customer-service-tests.json'), 'utf8');
+// the latest daily news checks (written by the daily task), so the China version sees them too
+const intelDir = path.join(base, 'intel');
+if (fs.existsSync(intelDir)) fs.readdirSync(intelDir).filter(f => f.endsWith('.json')).sort().slice(-3).forEach(f => { files['intel/' + f] = fs.readFileSync(path.join(intelDir, f), 'utf8'); });
 // office pictures, inlined as data URLs so the file works on its own
 for (const f of fs.readdirSync(path.join(base, 'images')).sort()) {
   if (f.endsWith('.jpg')) files['images/' + f] = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(base, 'images', f)).toString('base64');
