@@ -973,6 +973,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .live-pin.big, .live-bub.big { width: 36px; height: 42px; margin: 4px 10px 4px 4px; }
 .live-pin.mini::after, .live-bub.mini::after, .live-pin.big::after, .live-bub.big::after { display: none; }
 @keyframes pinBob { 50% { translate: 0 -4px; } }
+
+/* ---------- less text on the building: LED nameplates, activity tags only when something happens ---------- */
+.photo-frame .plate { padding: 1px 7px 2px; z-index: 2; }
+.photo-frame .plate b { font-size: .56rem; }
+.photo-frame .plate span { font-size: .44rem; }
+.photo-frame .plate::after { background: var(--c, #fff3dc); box-shadow: 0 0 6px 2px color-mix(in srgb, var(--c, #ffd9a0) 80%, transparent); }
+.photo-frame .hs .hs-tag { transition: opacity .25s; }
+.photo-frame .hs:not(.boss):not(.room-spot):not(.selected):not(.working):not(.calling):not(.meeting):not(:hover):not(:focus-visible) .hs-tag { opacity: 0; pointer-events: none; }
+.photo-frame .live-lab { opacity: .7; font-size: .55rem; }
+.photo-frame .live-lab:hover { opacity: 1; }
+.desk-status { pointer-events: none; }
 </style>
 
 <div class="app">
@@ -1453,7 +1464,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     fromId = fromId || "1";
     var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
     custMet(fromId, ids);
-    pvCall(fromId, ids); callMap(fromId, ids, true); if (v3) v3.call(fromId, ids);
+    var mine = state.asking === fromId;
+    pvCall(fromId, ids); if (mine) { callMap(fromId, ids, true); if (v3) v3.call(fromId, ids); }
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
       var id = ids[i], bot = BY_ID[id], mine = !state.busy[id] || state.busy[id] === "task";
@@ -1468,7 +1480,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           return note;
         });
     }));
-    pvCallEnd(fromId); callMap(fromId, ids, false); if (v3) v3.callEnd();
+    pvCallEnd(fromId); if (mine) { callMap(fromId, ids, false); if (v3) v3.callEnd(); }
     return "\n\n# 【同事笔记】（客户看不到，按“和同事合作”的规则回答）\n" + calls.map(function (c, i) { return "## " + BY_ID[ids[i]].name + "（" + c.task + "）\n" + results[i]; }).join("\n\n");
   }
 
@@ -2747,14 +2759,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       floors: [4.8, 38.6, 68.4],
       paths: { "1>scout": [[23.5, 76], [60, 93], [93, 87], [88, 61], [60, 64], [26, 56]], "2>boss": [[26, 56], [60, 64], [90, 62], [88, 33], [60, 33], [47, 28]], "5>boss": [[14, 26], [30, 31], [45, 28]] } }
   };
-  LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 1440", maxW: 820,
+  LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 1440", maxW: 1080,
     spots: {
       "5": [6.5, 9, 6, 7.5], "21": [27.5, 12, 5, 5.5], "22": [59.5, 7.5, 6, 10.5],
       "12": [8, 35, 5.5, 9], "2": [22.5, 35, 5.5, 9], "3": [36.5, 35, 5, 9], "13": [49.5, 32, 6, 11], "14": [63.5, 35, 6, 9], "6": [80, 35, 6, 10],
       "17": [4, 60, 7, 10], "4": [21.5, 60.5, 6, 9.5], "15": [31, 58.5, 6, 11.5], "16": [45, 60.5, 7, 9.5], "20": [61, 60, 6, 10], "18": [73, 60.5, 6, 9.5], "19": [88, 60.5, 7, 9.5],
       "1": [15.5, 83.5, 4, 5], "10": [31, 85, 4.5, 8], "7": [43, 83.5, 5, 12], "9": [58.5, 85.5, 4, 6], "11": [75.5, 84, 4, 8.5], "8": [88.5, 84, 4.5, 11]
     },
-    boss: [35, 11, 23, 8], ceoPlate: [46.5, 19.6], glow: [46.5, 15, 28, 9], room: [79, 12.5], meet: [62, 1.5], plates: {},
+    boss: [35, 11, 23, 8], ceoPlate: [46.5, 19.6], glow: [46.5, 15, 28, 9], room: [79, 12.5], meet: [62, 1.5], plates: { "7": [50.5, 93] },
     floorTags: [["4F · CEO Suite · Gunther, Anya & Kuuga", 3.4], ["3F · Research & Finance · the Big Bang team", 28.4], ["2F · Social & Marketing · the Emily in Paris team", 53.4], ["1F · Reception · the Friends team", 78.4]],
     paths: { "1>scout": [[17.5, 88], [50, 95], [95, 93], [95, 70], [95, 45], [60, 44], [25, 40]], "2>boss": [[25, 40], [60, 44], [95, 44], [95, 20], [60, 18], [46.5, 16]], "5>boss": [[9.5, 13], [30, 18], [46.5, 16]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
@@ -2775,9 +2787,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     });
     var PLATES = LAY.plates;
     BOTS.forEach(function (b) {
-      var at = PLATES[b.id]; if (!at) return;
+      var sp = SPOTS_PV[b.id], at = PLATES[b.id] || (sp && [sp[0] + sp[2] / 2, sp[1] + sp[3] + 1.1]); if (!at) return;
       var pl = document.createElement("div"); pl.className = "plate"; pl.style.left = at[0] + "%"; pl.style.top = at[1] + "%";
-      pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title;
+      pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title; pl.style.setProperty("--c", COLORS[b.color]); pl.id = "plate" + b.id;
       box.appendChild(pl);
     });
     var glowEl = document.createElement("div"); glowEl.className = "ceo-glow";
@@ -3182,7 +3194,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   async function send(text, test, meta) {
     text = String(text || "").trim();
     if (!text) return;
-    var bot = state.bot, turns = chat();
+    var bot = state.bot, turns = chat(); state.asking = bot.id;
     if (state.busy[bot.id] === "task") setBusy(bot.id, null);
     if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
     if (needsKey()) { state.settingsOpen = true; drawSettings(); turns.push({ kind: "note", text: COPY.no_key }); drawLog(); return; }
@@ -3231,6 +3243,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       if (bot.id === "5") { pvMeeting(false); if (meeting) gatherAll(false); }
       if (e && (e.code === "no_key" || e.code === "bad_key")) { state.settingsOpen = true; drawSettings(); }
     } finally {
+      if (state.asking === bot.id) state.asking = null;
       delete state.ctl[bot.id];
       setBusy(bot.id, null);
       if (ok) flashDone(bot.id);
@@ -3432,7 +3445,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (k === "cust") return ["4", "15", "16"].indexOf(id) >= 0 ? "replying to a comment" : "chatting with a customer";
     return "working";
   }
-  function freeFor(id) { return !state.busy[id] || state.busy[id] === "task"; }
+  function inOneOnOne(id) { return state.desk && state.bot && state.bot.id === id; }
+  function freeFor(id) { return !inOneOnOne(id) && (!state.busy[id] || state.busy[id] === "task"); }
 
   // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
   // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Emily, bench by the stairs),
@@ -3468,7 +3482,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var CHECKER = "17", GUARD = "22", DISPATCH = "8", INSIGHT = "21";
   // a short, visible step of the workflow (it follows a real event)
   function brief(id, label, ms) {
-    if (state.busy[id] && state.busy[id] !== "task") return wait(ms);
+    if (inOneOnOne(id) || (state.busy[id] && state.busy[id] !== "task")) return wait(ms);
     state.taskLabel[id] = label; setBusy(id, "task");
     return wait(ms).then(function () { if (state.busy[id] === "task") setBusy(id, null); });
   }
@@ -3597,10 +3611,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           var exId = CHECKER, ex = BY_ID[exId];
           c.status = "checking"; drawLive(); setBusy(oid, null);
           var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = state.lang === "en" ? "checking " + joey.name + "'s reply" : "审核 " + joey.name + " 的回复"; setBusy(exId, "task"); }
-          pvCall(oid, [exId]); callMap(oid, [exId], true);
+          pvCall(oid, [exId]);
           var chk = await ask(ex, [{ role: "user", content: (state.lang === "en" ? "Quality check before publishing " + joey.name + "'s public reply.\nComment: " : "发布前质量检查：" + joey.name + " 的公开回复。\n评论：") + c.text[state.lang] + (state.lang === "en" ? "\nReply: " : "\n回复：") + clean +
             (state.lang === "en" ? "\nAnswer 【通过】 if it is accurate, polite, makes no promises and quotes no Glostudy fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果准确、礼貌、不承诺、不报寰学价格，回答【通过】；否则回答【需CEO】并写一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
-          pvCallEnd(oid); callMap(oid, [exId], false); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
+          pvCallEnd(oid); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
           if (/【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text)) { publish(ex.name); live.social[oid] = null; drawLive(); drawLiveDetail(); return; }
           why = chk.text.replace(/【需CEO】/g, "").trim();
         } else why = state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
@@ -3621,7 +3635,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     ["1", "7"].forEach(function (aid) {
       if (live.lane[aid] || !freeFor(aid)) return;
       var mine = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment" && LANE[c.kind] === aid; });
-      if (!mine.length && aid === "7" && live.lane["1"]) mine = live.list.filter(function (c) { return c.status === "waiting" && (c.kind === "wechat" || c.kind === "lead"); });
+      if (!mine.length && aid === "7" && (live.lane["1"] || !freeFor("1"))) mine = live.list.filter(function (c) { return c.status === "waiting" && (c.kind === "wechat" || c.kind === "lead"); });
       var next = mine.sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
       if (next) { if (aid === "7" && next.kind !== "web") activity("7", "Rachel is helping Monica with the WeChat line"); serveDirect(next, aid); }
     });
@@ -4212,7 +4226,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     { id: "13", at: 165, every: 45, label: { en: "updating the deadline wall", zh: "更新截止日期墙" }, ask: { en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }, report: { en: "Deadlines for the next 3 months", zh: "未来 3 个月截止日期" } }
   ];
   function runWork(w) {
-    if (!live.on || state.busy[w.id]) return Promise.resolve();
+    if (!live.on || state.busy[w.id] || inOneOnOne(w.id)) { if (inOneOnOne(w.id)) setTimeout(function () { runWork(w); }, 60000); return Promise.resolve(); }
     var b = BY_ID[w.id]; state.taskLabel[w.id] = w.label[state.lang]; setBusy(w.id, "task"); activity(w.id, b.name + " is " + w.label.en);
     return ask(b, [{ role: "user", content: w.ask[state.lang] }], {}).then(function (res) {
       if (state.busy[w.id] === "task") setBusy(w.id, null); flashDone(w.id);
