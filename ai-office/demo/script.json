@@ -99,8 +99,8 @@
   {
    "bot": "1",
    "match": "^\\s*(hello|hi|你好)\\b",
-   "en": "Hello! I'm Huan from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?",
-   "zh": "你好，我是寰学的小寰 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？"
+   "en": "Hello! I'm Rachel from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?",
+   "zh": "你好，我是寰学的瑞秋 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？"
   },
   {
    "bot": "1",
@@ -201,8 +201,8 @@
   {
    "bot": "4",
    "match": "today's news|今天有什么新闻",
-   "en": "【简要】The main news: from 30 November the money students must show for a UK visa goes up, to £1,570 a month in London and £1,203 elsewhere. Also, a two-year Graduate visa may stay for some universities, but that isn't confirmed yet.\n【完整报告】\n1. **Visa funds rise from 30 Nov 2026** (high): £1,570/month London, £1,203 elsewhere, up to 9 months. Affects Penny's cost sheet and Huan's answers. Suggest a Moments post.\n2. **Graduate visa** (medium): reports say two years kept at \"high-compliance\" universities; GOV.UK confirmation pending.\n3. **UCAS**: no new release this week.",
-   "zh": "【简要】主要新闻：11 月 30 日起，英国学生签证需要证明的资金上调，伦敦每月 £1,570，伦敦以外 £1,203。另外，部分大学可能保留两年毕业生签证，但还没有官方确认。\n【完整报告】\n1. **11 月 30 日起签证资金上调**（重要）：伦敦每月 £1,570，其他地区 £1,203，最多 9 个月。影响 Penny 的费用表和小寰的回答，建议发一条朋友圈。\n2. **毕业生签证**（一般）：报道称“高合规”大学保留两年，待 GOV.UK 确认。\n3. **UCAS**：本周没有新发布。"
+   "en": "【简要】The main news: from 30 November the money students must show for a UK visa goes up, to £1,570 a month in London and £1,203 elsewhere. Also, a two-year Graduate visa may stay for some universities, but that isn't confirmed yet.\n【完整报告】\n1. **Visa funds rise from 30 Nov 2026** (high): £1,570/month London, £1,203 elsewhere, up to 9 months. Affects Chandler's cost sheet and Rachel's answers. Suggest a Moments post.\n2. **Graduate visa** (medium): reports say two years kept at \"high-compliance\" universities; GOV.UK confirmation pending.\n3. **UCAS**: no new release this week.",
+   "zh": "【简要】主要新闻：11 月 30 日起，英国学生签证需要证明的资金上调，伦敦每月 £1,570，伦敦以外 £1,203。另外，部分大学可能保留两年毕业生签证，但还没有官方确认。\n【完整报告】\n1. **11 月 30 日起签证资金上调**（重要）：伦敦每月 £1,570，其他地区 £1,203，最多 9 个月。影响 Chandler 的费用表和瑞秋的回答，建议发一条朋友圈。\n2. **毕业生签证**（一般）：报道称“高合规”大学保留两年，待 GOV.UK 确认。\n3. **UCAS**：本周没有新发布。"
   },
   {
    "bot": "4",
@@ -213,32 +213,32 @@
   {
    "bot": "5",
    "match": "brief|简报",
-   "en": "Good evening, Aliya. Today's brief:\n- 1 new client booked by Huan (Lily, A-levels 2027); Scout's draft is on your desk for review.\n- Spark's news check: visa money to show goes up from 30 Nov.\n- Penny suggests updating the cost sheet once GOV.UK confirms.\n- Nothing urgent waiting otherwise.\n- Needs your decision: approve Spark's Moments post about the visa change?",
-   "zh": "Aliya 晚上好，今日简报：\n- 小寰新登记 1 位客户（Lily，2027 年读 A-Level）；Scout 的方案草稿已放在您桌上待审。\n- Spark 今日资讯：11 月 30 日起签证资金要求上调。\n- Penny 建议 GOV.UK 确认后更新费用表。\n- 其他没有紧急事项。\n- 需要您决定：是否同意 Spark 发一条关于签证调整的朋友圈？"
+   "en": "Good evening, Aliya. Today's brief:\n- 1 new client booked by Rachel (Lily, A-levels 2027); Ross's draft is on your desk for review.\n- Joey's news check: visa money to show goes up from 30 Nov.\n- Chandler suggests updating the cost sheet once GOV.UK confirms.\n- Nothing urgent waiting otherwise.\n- Needs your decision: approve Joey's Moments post about the visa change?",
+   "zh": "Aliya 晚上好，今日简报：\n- 瑞秋新登记 1 位客户（Lily，2027 年读 A-Level）；Ross 的方案草稿已放在您桌上待审。\n- Joey 今日资讯：11 月 30 日起签证资金要求上调。\n- Chandler 建议 GOV.UK 确认后更新费用表。\n- 其他没有紧急事项。\n- 需要您决定：是否同意 Joey 发一条关于签证调整的朋友圈？"
   },
   {
    "bot": "5",
    "match": "meeting about today's news|就今天的新闻开个",
-   "en": "Today's news means families need to show a bit more money for UK visas from 30 November.\n- Penny: will update the cost sheet with £1,570 London / £1,203 elsewhere once GOV.UK confirms.\n- Huan: will tell clients the new amounts as \"roughly, check GOV.UK\".\n- Scout: will watch for the list of universities keeping the two-year Graduate visa.\n- Spark: will draft a calm Moments post about the change.\n- Quill: no impact on documents today.\n- Needs your decision: update the cost sheet now or wait for GOV.UK?",
-   "zh": "今天的新闻意味着：11 月 30 日起，家庭办签证需要证明的资金略有增加。\n- Penny: GOV.UK 确认后，把费用表更新为伦敦 £1,570、其他 £1,203。\n- 小寰: 对客户说明新金额，并说“大致，以 GOV.UK 为准”。\n- Scout: 关注哪些大学保留两年毕业生签证。\n- Spark: 写一条平和的朋友圈说明这次调整。\n- Quill: 今天对文书没有影响。\n- 需要您决定：现在就更新费用表，还是等 GOV.UK 确认？"
+   "en": "Today's news means families need to show a bit more money for UK visas from 30 November.\n- Chandler: will update the cost sheet with £1,570 London / £1,203 elsewhere once GOV.UK confirms.\n- Rachel: will tell clients the new amounts as \"roughly, check GOV.UK\".\n- Ross: will watch for the list of universities keeping the two-year Graduate visa.\n- Joey: will draft a calm Moments post about the change.\n- Phoebe: no impact on documents today.\n- Needs your decision: update the cost sheet now or wait for GOV.UK?",
+   "zh": "今天的新闻意味着：11 月 30 日起，家庭办签证需要证明的资金略有增加。\n- Chandler: GOV.UK 确认后，把费用表更新为伦敦 £1,570、其他 £1,203。\n- Rachel: 对客户说明新金额，并说“大致，以 GOV.UK 为准”。\n- Ross: 关注哪些大学保留两年毕业生签证。\n- Joey: 写一条平和的朋友圈说明这次调整。\n- Phoebe: 今天对文书没有影响。\n- 需要您决定：现在就更新费用表，还是等 GOV.UK 确认？"
   },
   {
    "bot": "5",
    "match": "medicine|医学",
-   "en": "【简要】The team is ready: Scout shortlisted five medical schools, Penny says ¥600k a year is tight for UK medicine, and Quill prepared interview and statement points. The main thing to tell the parent: medicine is long and competitive, so a backup plan matters.\n【完整报告】\n**Scout:** realistic options include Edinburgh, Bristol, Manchester, Newcastle and St George's; all need UCAT and an interview; deadline 15 October.\n**Penny:** UK medicine tuition for international students is about £40,000–£55,000 a year for 5–6 years, so ¥600k a year is tight once living costs are added.\n**Quill:** prepare work-experience reflection, a strong personal statement outline, and MMI interview practice.\n**Needs your decision:** suggest a biomedical science backup route to the parent?",
-   "zh": "【简要】团队已准备好：Scout 列了 5 所医学院，Penny 认为每年 60 万读英国医学偏紧，Quill 准备了面试和文书要点。最重要的是告诉家长：医学周期长、竞争大，需要备选方案。\n【完整报告】\n**Scout：** 现实选项有爱丁堡、布里斯托、曼彻斯特、纽卡斯尔、圣乔治；都要 UCAT 和面试；截止日期 10 月 15 日。\n**Penny：** 国际生医学学费每年约 £40,000–£55,000，读 5–6 年，加上生活费，每年 60 万偏紧。\n**Quill：** 准备医疗相关经历反思、个人陈述提纲和 MMI 面试练习。\n**需要您决定：** 是否向家长建议生物医学作为备选路线？"
+   "en": "【简要】The team is ready: Ross shortlisted five medical schools, Chandler says ¥600k a year is tight for UK medicine, and Phoebe prepared interview and statement points. The main thing to tell the parent: medicine is long and competitive, so a backup plan matters.\n【完整报告】\n**Ross:** realistic options include Edinburgh, Bristol, Manchester, Newcastle and St George's; all need UCAT and an interview; deadline 15 October.\n**Chandler:** UK medicine tuition for international students is about £40,000–£55,000 a year for 5–6 years, so ¥600k a year is tight once living costs are added.\n**Phoebe:** prepare work-experience reflection, a strong personal statement outline, and MMI interview practice.\n**Needs your decision:** suggest a biomedical science backup route to the parent?",
+   "zh": "【简要】团队已准备好：Ross 列了 5 所医学院，Chandler 认为每年 60 万读英国医学偏紧，Phoebe 准备了面试和文书要点。最重要的是告诉家长：医学周期长、竞争大，需要备选方案。\n【完整报告】\n**Ross：** 现实选项有爱丁堡、布里斯托、曼彻斯特、纽卡斯尔、圣乔治；都要 UCAT 和面试；截止日期 10 月 15 日。\n**Chandler：** 国际生医学学费每年约 £40,000–£55,000，读 5–6 年，加上生活费，每年 60 万偏紧。\n**Phoebe：** 准备医疗相关经历反思、个人陈述提纲和 MMI 面试练习。\n**需要您决定：** 是否向家长建议生物医学作为备选路线？"
   },
   {
    "bot": "5",
    "match": "waiting|等我",
-   "en": "Waiting for you:\n- 1 client draft from Scout (Lily) on your desk.\n- Spark's Moments post about the visa change needs approval.\n- Nothing else urgent.",
-   "zh": "等您处理：\n- Scout 的 1 份客户方案草稿（Lily）在您桌上。\n- Spark 关于签证调整的朋友圈等您确认。\n- 其他没有紧急事项。"
+   "en": "Waiting for you:\n- 1 client draft from Ross (Lily) on your desk.\n- Joey's Moments post about the visa change needs approval.\n- Nothing else urgent.",
+   "zh": "等您处理：\n- Ross 的 1 份客户方案草稿（Lily）在您桌上。\n- Joey 关于签证调整的朋友圈等您确认。\n- 其他没有紧急事项。"
   },
   {
    "bot": "5",
    "match": "announcement from the CEO|CEO 给全体同事的公告",
-   "en": "Everyone heard the announcement: \"{{ann}}\"\n- Huan: will tell clients clearly and book any follow-up calls.\n- Scout: will prepare the school and course side.\n- Penny: will prepare the cost figures.\n- Spark: will hold or adjust posts to match.\n- Quill: will prepare the document checklist.\n- Needs your decision: any deadline you want the team to work to?",
-   "zh": "大家都收到了公告：“{{ann}}”\n- 小寰: 清楚告知客户，并预约后续沟通。\n- Scout: 准备学校和课程部分。\n- Penny: 准备费用数字。\n- Spark: 相应调整或暂停发帖。\n- Quill: 准备材料清单。\n- 需要您决定：希望团队在什么时间前完成？"
+   "en": "Everyone heard the announcement: \"{{ann}}\"\n- Rachel: will tell clients clearly and book any follow-up calls.\n- Ross: will prepare the school and course side.\n- Chandler: will prepare the cost figures.\n- Joey: will hold or adjust posts to match.\n- Phoebe: will prepare the document checklist.\n- Needs your decision: any deadline you want the team to work to?",
+   "zh": "大家都收到了公告：“{{ann}}”\n- Rachel: 清楚告知客户，并预约后续沟通。\n- Ross: 准备学校和课程部分。\n- Chandler: 准备费用数字。\n- Joey: 相应调整或暂停发帖。\n- Phoebe: 准备材料清单。\n- 需要您决定：希望团队在什么时间前完成？"
   },
   {
    "bot": "6",
@@ -318,23 +318,23 @@
   }
  ],
  "notes": {
-  "penny": {
+  "chandler": {
    "en": "- Tuition £20k–£40k a year by city\n- Living £12k–£22k\n- Visa funds up from 30 Nov",
    "zh": "- 学费每年 £2–4 万，看城市\n- 生活费 £1.2–2.2 万\n- 11 月 30 日起签证资金上调"
   },
-  "scout": {
+  "ross": {
    "en": "- London tuition is at the top of the range\n- Most universities publish fees on their website",
    "zh": "- 伦敦学费在上限\n- 各校官网都公布学费"
   },
-  "quill": {
+  "phoebe": {
    "en": "- Work-experience reflection\n- MMI interview practice",
    "zh": "- 医疗经历反思\n- MMI 面试练习"
   },
-  "huan": {
+  "rachel": {
    "en": "- FAQ wording ready",
    "zh": "- 常见问题话术已准备"
   },
-  "spark": {
+  "joey": {
    "en": "- Post idea ready",
    "zh": "- 选题已准备"
   }
