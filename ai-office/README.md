@@ -74,6 +74,14 @@ python3 ai-office/tools/try_bot_claude.py test        # 用 Claude 跑同一套�
 国内客户只用中国版；英国版只处理英国的客户，或不含个人信息的内部工作（例如营销文案、院校资料）。
 Do not send mainland clients' personal data to the UK version: China's PIPL restricts moving it abroad.
 
+## 测试办公室 · Test office (team.html / office.html)
+四个机器人坐在各自的桌子前，点一个就能聊天。小寰完成登记后，客户自动进入客户名单，Scout 起草匹配清单，等你审核（通过 / 修改 / 退回重做 / 拒绝）。
+Four robot desks; click one to chat. When Huan finishes a booking, the client goes on the client board, Scout drafts a shortlist, and it waits for your review.
+
+- **claude.ai 上（Claude）**：`team.html`，已发布为 Artifact。客户名单和你分享页面的人共用。不要放国内真实客户的个人信息。
+- **自己电脑上（DeepSeek）**：`office.html`，双击打开，填 DeepSeek API key 即可。客户名单只存在这台电脑的浏览器里。在 claude.ai 页面上点「DeepSeek」也可以下载这个文件。
+- 修改 team.html 或任何岗位说明/知识库后，重新生成：`node ai-office/tools/build-office.js`
+
 ## 分工 · Who does what
 - **Claude（设计）**：写和改提示词、知识库、模板、测试；官网数据变了就重新导出（`node ai-office/tools/export-knowledge.js`）。
 - **你（运营）**：注册平台账号、上线、审核所有输出、对接客户和订单；把机器人答错的对话发给 Claude 修改。

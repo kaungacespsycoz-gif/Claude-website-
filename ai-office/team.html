@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <style>
-/* Layout: an office floor of four robot desks (click one), then that robot's chat desk below. */
+/* Layout: office floor of four robot desks; below it the chosen robot's chat beside the client board (new clients flow Huan -> Scout -> your review). */
 :root {
   --bg: #f3f7f7; --panel: #ffffff; --ink: #0c2f3a; --text: #1d3a43; --muted: #5d7279; --rule: #d9e3e4;
   --accent: #0f7f8c; --accent-soft: #e3f1f2; --sun: #b9741a; --sun-soft: #fbefdc;
@@ -30,26 +30,39 @@
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--text); font: 15px/1.55 var(--sans); }
-.wrap { max-width: 1180px; margin: 0 auto; padding-block: 24px 40px;
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 24px 40px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input, textarea { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; }
 
-header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin-bottom: 18px; }
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin-bottom: 14px; }
 .eyebrow { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
 h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); margin: 2px 0 0; text-wrap: balance; }
 .sub { color: var(--muted); font-size: .9rem; margin: 6px 0 0; max-width: 62ch; }
 .hud { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
-.stat { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 6px 14px; min-width: 80px; text-align: center; }
+.stat { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 6px 12px; min-width: 72px; text-align: center; }
 .stat b { display: block; font: 600 1.3rem/1.15 var(--serif); color: var(--ink); font-variant-numeric: tabular-nums; }
-.stat span { font-size: .72rem; color: var(--muted); }
-.lang { display: flex; flex-direction: column; justify-content: center; gap: 3px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 6px 10px; }
-.lang span { font-size: .72rem; color: var(--muted); }
+.stat span { font-size: .7rem; color: var(--muted); }
+.stat.hot b { color: var(--sun); }
+.ctl { display: flex; flex-direction: column; justify-content: center; gap: 3px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 6px 10px; }
+.ctl > span { font-size: .7rem; color: var(--muted); }
 .seg { display: flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
-.seg button { border: 0; background: transparent; padding: 2px 10px; font-size: .8rem; }
+.seg button { border: 0; background: transparent; padding: 2px 10px; font-size: .8rem; white-space: nowrap; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--panel); font-weight: 600; }
 
-/* The office floor */
+.settings { background: var(--panel); border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
+.settings h3 { margin: 0; font: 600 1rem var(--serif); color: var(--ink); }
+.settings p { margin: 0; font-size: .85rem; color: var(--muted); max-width: 70ch; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row input { padding: 7px 10px; min-width: 0; flex: 1 1 220px; }
+.btn { background: var(--accent); color: var(--panel); border: 0; border-radius: 8px; padding: 7px 14px; font-weight: 600; font-size: .85rem; }
+.ghost { background: transparent; border: 1px solid var(--rule); border-radius: 8px; padding: 5px 10px; font-size: .8rem; }
+.ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.ghost.danger:hover:not(:disabled) { border-color: var(--bad); color: var(--bad); }
+
+/* Office floor */
 .floor { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
 @media (max-width: 860px) { .floor { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .desk { position: relative; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; background: var(--wall); padding: 0; text-align: left; display: flex; flex-direction: column; }
@@ -60,12 +73,13 @@ h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); m
 .tag-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .tag b { color: var(--ink); font-size: .95rem; }
 .tag small { color: var(--muted); font-size: .76rem; }
-.pill { font-size: .66rem; font-weight: 600; letter-spacing: .04em; padding: 0 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.pill { font-size: .66rem; font-weight: 600; letter-spacing: .04em; padding: 0 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
 .pill.busy { background: var(--sun-soft); color: var(--sun); }
 .pill.done { background: var(--ok-soft); color: var(--ok); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.quiet { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
 .who { font-size: .66rem; color: var(--muted); border: 1px solid var(--rule); padding: 0 6px; border-radius: 999px; }
 
-/* Robot animation */
 .robot, .eyes, .arm, .lines, .bubble circle, .antenna, .sparkle { transform-box: fill-box; }
 .eyes { transform-origin: center; }
 .arm-l { transform-origin: 10% 50%; }
@@ -98,43 +112,62 @@ h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); m
   @keyframes pop { from { transform: scale(.4); } }
 }
 
-/* The chat desk */
-.chat { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; display: flex; flex-direction: column; min-width: 0; scroll-margin-top: 12px; }
-.chat-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 14px 18px; border-bottom: 1px solid var(--rule); }
-.chat-head h2 { font: 600 1.2rem/1.2 var(--serif); color: var(--ink); margin: 0; }
-.chat-head p { margin: 2px 0 0; font-size: .85rem; color: var(--muted); max-width: 66ch; }
+/* Workspace: chat + client board */
+.work { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 980px) { .work { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; display: flex; flex-direction: column; min-width: 0; scroll-margin-top: 12px; }
+.panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 14px 18px; border-bottom: 1px solid var(--rule); }
+.panel-head h2 { font: 600 1.15rem/1.2 var(--serif); color: var(--ink); margin: 0; }
+.panel-head p { margin: 2px 0 0; font-size: .84rem; color: var(--muted); max-width: 66ch; }
 .tools { display: flex; gap: 6px; align-items: start; flex-wrap: wrap; }
-.ghost { background: transparent; border: 1px solid var(--rule); border-radius: 8px; padding: 5px 10px; font-size: .8rem; }
-.ghost:hover { border-color: var(--accent); color: var(--accent); }
 .tasks { padding: 12px 18px; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 8px; }
-.tasks-label { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.label { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { border: 1px solid var(--rule); background: var(--bg); border-radius: 999px; padding: 4px 11px; font-size: .8rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.demo { border-color: var(--sun); color: var(--sun); }
 .chip.pass { border-color: var(--ok); color: var(--ok); }
 .chip.fail { border-color: var(--bad); color: var(--bad); }
 .log { overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; height: 52vh; min-height: 300px; }
 .empty { margin: auto; text-align: center; color: var(--muted); max-width: 42ch; font-size: .9rem; overflow-wrap: anywhere; }
 .empty b { display: block; font: 600 1.05rem var(--serif); color: var(--ink); margin-bottom: 4px; }
-.msg { max-width: 86%; padding: 10px 14px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+.msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
 .msg.user { align-self: flex-end; background: var(--you); color: var(--on-you); border-bottom-right-radius: 4px; }
 .msg.bot { align-self: flex-start; background: var(--bg); border: 1px solid var(--rule); border-bottom-left-radius: 4px; }
-.msg .tbl { display: block; overflow-x: auto; font: .8rem/1.5 var(--mono); white-space: pre; margin: 4px 0; }
-.msg strong { color: var(--ink); }
+.tbl { display: block; overflow-x: auto; font: .8rem/1.5 var(--mono); white-space: pre; margin: 4px 0; }
+.msg strong, .draft strong { color: var(--ink); }
 .typing { display: inline-flex; gap: 4px; padding: 4px 0; }
 .typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
 @media (prefers-reduced-motion: no-preference) { .typing i { animation: dot 1s ease-in-out infinite; } .typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; } }
-.handoff { display: inline-block; font-size: .72rem; font-weight: 600; background: var(--sun-soft); color: var(--sun); padding: 1px 8px; border-radius: 999px; margin-top: 6px; }
-.check { align-self: flex-start; font-size: .8rem; padding: 6px 10px; border-radius: 8px; max-width: 86%; }
+.flag { display: inline-block; font-size: .72rem; font-weight: 600; background: var(--sun-soft); color: var(--sun); padding: 1px 8px; border-radius: 999px; }
+.flag.book { background: var(--accent-soft); color: var(--accent); }
+.check { align-self: flex-start; font-size: .8rem; padding: 6px 10px; border-radius: 8px; max-width: 88%; }
 .check.pass { background: var(--ok-soft); color: var(--ok); }
 .check.fail { background: var(--bad-soft); color: var(--bad); }
 .check small { display: block; color: var(--muted); }
 .note { align-self: center; font-size: .8rem; color: var(--muted); text-align: center; max-width: 56ch; }
-form { display: flex; gap: 8px; padding: 12px 18px 16px; border-top: 1px solid var(--rule); }
-textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px; padding: 9px 12px; height: 44px; }
+.note.good { color: var(--ok); }
+form.say { display: flex; gap: 8px; padding: 12px 18px 16px; border-top: 1px solid var(--rule); }
+form.say textarea { flex: 1; min-width: 0; resize: none; border-radius: 10px; padding: 9px 12px; height: 44px; }
 .send { background: var(--accent); color: var(--panel); border: 0; border-radius: 10px; padding: 0 18px; font-weight: 600; }
 .send[data-stop] { background: var(--bad); }
-.foot { margin-top: 14px; font-size: .78rem; color: var(--muted); max-width: 84ch; }
+
+.board-body { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 10px; max-height: calc(52vh + 190px); overflow-y: auto; }
+.card { border: 1px solid var(--rule); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; background: var(--bg); }
+.card[data-status="review"] { border-color: var(--sun); }
+.card-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.card-top b { color: var(--ink); overflow-wrap: anywhere; }
+.card-top small { color: var(--muted); font-size: .74rem; margin-left: auto; font-variant-numeric: tabular-nums; }
+details { border-top: 1px dashed var(--rule); padding-top: 6px; }
+summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--muted); }
+.pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .84rem; margin: 6px 0 0; }
+.draft { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .84rem; margin-top: 6px; max-height: 360px; overflow-y: auto; }
+.card textarea { width: 100%; min-height: 160px; padding: 8px 10px; font-size: .84rem; resize: vertical; }
+.card .row input { padding: 5px 9px; font-size: .84rem; }
+.acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.acts .btn { padding: 5px 12px; font-size: .8rem; }
+.board-empty { color: var(--muted); font-size: .88rem; text-align: center; padding: 24px 8px; }
+.foot { margin-top: 14px; font-size: .78rem; color: var(--muted); max-width: 90ch; }
 </style>
 
 <div class="wrap">
@@ -142,51 +175,74 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
     <div>
       <span class="eyebrow">Glostudy · test office</span>
       <h1>Glostudy AI Office</h1>
-      <p class="sub">Four AI staff at their desks. Click a robot to talk to it, or try one of its test tasks. If a robot gets something wrong, copy the chat and send it to Claude to fix.</p>
+      <p class="sub">Click a robot to talk to it. When Huan finishes a booking, the client goes on the board, Scout drafts a shortlist, and it waits for your review.</p>
     </div>
     <div class="hud">
-      <div class="stat"><b>4</b><span>staff</span></div>
-      <div class="stat"><b id="busy">0</b><span>working</span></div>
-      <div class="lang"><span>Robots reply in</span>
+      <div class="stat"><b id="statWorking">0</b><span>working</span></div>
+      <div class="stat"><b id="statClients">0</b><span>clients</span></div>
+      <div class="stat" id="statReviewBox"><b id="statReview">0</b><span>to review</span></div>
+      <div class="ctl"><span>Robots run on</span>
+        <div class="seg" role="group" aria-label="AI engine">
+          <button type="button" id="engClaude">Claude</button>
+          <button type="button" id="engDeep">DeepSeek</button>
+        </div>
+      </div>
+      <div class="ctl"><span>Replies in</span>
         <div class="seg" role="group" aria-label="Reply language">
-          <button type="button" id="langEn" aria-pressed="true">English</button>
-          <button type="button" id="langZh" aria-pressed="false">中文</button>
+          <button type="button" id="langEn">English</button>
+          <button type="button" id="langZh">中文</button>
         </div>
       </div>
     </div>
   </header>
 
+  <section class="settings" id="settings" hidden></section>
+
   <div class="floor" id="floor" aria-label="Office floor: click a robot"></div>
 
-  <section class="chat" id="chat" aria-live="polite">
-    <div class="chat-head">
-      <div><h2 id="chatName"></h2><p id="chatRole"></p></div>
-      <div class="tools">
-        <button class="ghost" id="copy" type="button">Copy chat</button>
-        <button class="ghost" id="clear" type="button">New chat</button>
+  <div class="work">
+    <section class="panel" id="chat" aria-live="polite">
+      <div class="panel-head">
+        <div><h2 id="chatName"></h2><p id="chatRole"></p></div>
+        <div class="tools">
+          <button class="ghost" id="copy" type="button">Copy chat</button>
+          <button class="ghost" id="clear" type="button">New chat</button>
+        </div>
       </div>
-    </div>
-    <div class="tasks">
-      <span class="tasks-label" id="tasksLabel"></span>
-      <div class="chips" id="chips"></div>
-    </div>
-    <div class="log" id="log"></div>
-    <form id="form">
-      <label for="box" hidden>Message</label>
-      <textarea id="box" placeholder="Ask a question…" rows="1"></textarea>
-      <button class="send" id="send" type="submit">Send</button>
-    </form>
-  </section>
-  <p class="foot">Test version running on Claude, using the viewer's own Claude account. It doesn't open in mainland China; the version for customers in China runs the same instructions on Coze. Everything the robots write is a draft: check it before it goes to a customer.</p>
+      <div class="tasks">
+        <span class="label" id="tasksLabel"></span>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="log" id="log"></div>
+      <form class="say" id="form">
+        <label for="box" hidden>Message</label>
+        <textarea id="box" placeholder="Ask a question…" rows="1"></textarea>
+        <button class="send" id="send" type="submit">Send</button>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="boardTitle">
+      <div class="panel-head">
+        <div><h2 id="boardTitle">Client board</h2><p id="boardNote">New clients from Huan. Scout drafts a shortlist for each; you approve it.</p></div>
+        <div class="seg" role="group" aria-label="Filter clients">
+          <button type="button" id="fAll">All</button>
+          <button type="button" id="fReview">To review</button>
+        </div>
+      </div>
+      <div class="board-body" id="cards"></div>
+    </section>
+  </div>
+  <p class="foot" id="foot"></p>
 </div>
 
 <script>
 (function () {
+  "use strict";
   var BOTS = [
     { id: "1", file: "agents/1-customer-service.md", name: "Huan", role: "Front desk · customer service", who: "customers", color: "--c1", prop: "headset", effort: "low",
-      intro: "Talks to customers. Answers common questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person." },
+      intro: "Talks to customers. Answers common questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person. A finished booking goes on the client board." },
     { id: "2", file: "agents/2-school-research.md", name: "Scout", role: "School research", who: "team only", color: "--c2", prop: "books", effort: "medium",
-      intro: "Team only. Turns a student's details into a draft shortlist of UK schools, and lists what still needs checking.",
+      intro: "Team only. Drafts a shortlist of UK schools for each new client on the board, and lists what still needs checking. You can also paste a profile here.",
       tasks: [
         { en: "Student profile:\nWho: parent\nStudent: 17, Grade 11 in China\nWants: UK undergraduate, economics or finance\nEnglish: IELTS 6.0 (aiming for 6.5)\nStart: September 2028\nBudget: up to ¥400,000 a year\nNotes: strong at maths, wants a big city",
           zh: "【咨询登记】\n身份：家长\n学生年龄/年级：17 岁，国内高二\n意向阶段/专业：英国本科，经济或金融\n英语水平：雅思 6.0（预计再考到 6.5）\n计划入学：2028 年 9 月\n预算：每年 40 万人民币以内\n备注：数学好，希望去大城市" }] },
@@ -202,13 +258,157 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] }
   ];
+  var DEMO = {
+    en: "I'm a parent. My daughter Lily is 16, in Grade 10 at a Shanghai high school. She wants to do A-levels in the UK and then study economics at university. IELTS 5.5 at the moment. We'd like her to start in September 2027. Budget is about ¥500,000 a year. My WeChat is lily_mum_sh, you can call me Mrs Wang. Yes, you can use these details to arrange a consultation.",
+    zh: "我是家长。女儿 Lily 16 岁，在上海读高一，想去英国读 A-Level，以后读经济学。现在雅思 5.5，希望 2027 年 9 月入学，预算一年 50 万左右。我的微信是 lily_mum_sh，叫我王女士就行。同意你们用这些信息安排咨询。"
+  };
+  var BY_ID = {}; BOTS.forEach(function (b) { BY_ID[b.id] = b; });
 
   var $ = function (id) { return document.getElementById(id); };
-  var state = { bot: BOTS[0], chats: {}, working: null, ctl: null, tests: [], prompts: {}, done: {}, lang: "en" };
-  try { if (localStorage.getItem("glostudy-lang") === "zh") state.lang = "zh"; } catch (e) {}
-  var samplePromise = window.claude ? window.claude.use("sample") : Promise.resolve(null);
+  var IN_CLAUDE = !!window.claude;
+  var BUNDLE = null;
+  try { var bEl = document.getElementById("bundle"); if (bEl) BUNDLE = JSON.parse(bEl.textContent); } catch (e) { BUNDLE = null; }
+
+  function lsGet(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+  function lsSet(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+
+  var state = {
+    bot: BOTS[0], chats: {}, chatClient: {}, busy: {}, ctl: {}, tests: [], prompts: {}, done: {}, results: {},
+    lang: lsGet("glostudy-lang", "en") === "zh" ? "zh" : "en",
+    engine: IN_CLAUDE ? "claude" : "deepseek",
+    settingsOpen: false, filter: "all", jobs: [], edits: {}, notes: {}, editing: {}
+  };
+  var deep = { key: lsGet("glostudy-deepseek-key", ""), model: lsGet("glostudy-deepseek-model", "deepseek-chat") };
+  var samplePromise = IN_CLAUDE ? window.claude.use("sample") : Promise.resolve(null);
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function getFile(path) {
+    if (BUNDLE && Object.prototype.hasOwnProperty.call(BUNDLE, path)) return Promise.resolve(BUNDLE[path]);
+    return fetch(path).then(function (r) { if (!r.ok) throw new Error(path); return r.text(); });
+  }
+
+  // ---------- client store: shared db on claude.ai, this browser otherwise ----------
+  var store = (function () {
+    var KEY = "glostudy-clients", items = [], listeners = [], mode = "local", col = null, ready = false;
+    function emit() { listeners.forEach(function (f) { f(items); }); }
+    function loadLocal() { try { items = JSON.parse(lsGet(KEY, "[]")) || []; } catch (e) { items = []; } ready = true; }
+    function saveLocal() { lsSet(KEY, JSON.stringify(items)); }
+    function sortItems() { items.sort(function (a, b) { return String(b.created).localeCompare(String(a.created)); }); }
+    var api = {
+      on: function (f) { listeners.push(f); f(items); },
+      items: function () { return items; },
+      mode: function () { return mode; },
+      ready: function () { return ready; },
+      get: function (id) { for (var i = 0; i < items.length; i++) if (items[i].id === id) return items[i]; return null; },
+      add: function (obj) {
+        if (mode === "db") return col.add(obj).then(function (ref) { return ref.id; });
+        var id = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        items.unshift(Object.assign({ id: id }, obj)); saveLocal(); emit(); return Promise.resolve(id);
+      },
+      update: function (id, patch) {
+        if (mode === "db") return col.doc(id).update(patch);
+        items = items.map(function (c) { return c.id === id ? Object.assign({}, c, patch) : c; }); saveLocal(); emit(); return Promise.resolve();
+      }
+    };
+    if (!IN_CLAUDE) { loadLocal(); return api; }
+    var timer = setTimeout(function () { if (!ready) { mode = "local"; loadLocal(); api.problem = "The shared client list didn't load, so clients are kept in this browser for now."; emit(); } }, 10000);
+    window.claude.use("db").then(function (db) {
+      if (!db) { clearTimeout(timer); loadLocal(); api.problem = "Shared client list isn't available here, so clients are kept in this browser only."; emit(); return; }
+      col = db.collection("clients");
+      col.orderBy("created", "desc").limit(200).onSnapshot(function (snap) {
+        clearTimeout(timer); mode = "db"; ready = true;
+        items = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }); sortItems(); emit();
+      }, function () {
+        clearTimeout(timer); if (mode !== "db") { loadLocal(); api.problem = "Shared client list isn't available, so clients are kept in this browser only."; emit(); }
+      });
+    });
+    return api;
+  })();
+
+  // ---------- engines ----------
+  async function askClaude(rules, history, o) {
+    var sample = await samplePromise;
+    if (!sample) throw { code: "no_claude" };
+    var res = await sample([{ role: "user", content: rules }].concat(history), {
+      cache: false, effort: o.effort, signal: o.signal, onText: function (u) { if (o.onText) o.onText(u.text); }
+    });
+    return res;
+  }
+  async function askDeepSeek(rules, history, o) {
+    if (!deep.key) throw { code: "no_key" };
+    var res;
+    try {
+      res = await fetch("https://api.deepseek.com/chat/completions", {
+        method: "POST", signal: o.signal,
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + deep.key },
+        body: JSON.stringify({ model: deep.model || "deepseek-chat", stream: true, temperature: 0.3, messages: [{ role: "system", content: rules }].concat(history) })
+      });
+    } catch (e) { throw { code: e && e.name === "AbortError" ? "cancelled" : "network" }; }
+    if (!res.ok) throw { code: res.status === 401 ? "bad_key" : res.status === 402 ? "no_balance" : res.status === 429 ? "rate_limited" : res.status === 400 ? "bad_request" : "upstream_error" };
+    var reader = res.body.getReader(), dec = new TextDecoder(), buf = "", text = "", finish = null;
+    try {
+      for (;;) {
+        var r = await reader.read(); if (r.done) break;
+        buf += dec.decode(r.value, { stream: true });
+        var lines = buf.split("\n"); buf = lines.pop();
+        for (var i = 0; i < lines.length; i++) {
+          var l = lines[i].trim(); if (l.indexOf("data:") !== 0) continue;
+          var d = l.slice(5).trim(); if (d === "[DONE]") continue;
+          try {
+            var j = JSON.parse(d), ch = j.choices && j.choices[0];
+            if (ch && ch.delta && ch.delta.content) { text += ch.delta.content; if (o.onText) o.onText(text); }
+            if (ch && ch.finish_reason) finish = ch.finish_reason;
+          } catch (e) {}
+        }
+      }
+    } catch (e) { throw { code: e && e.name === "AbortError" ? "cancelled" : "upstream_error", text: text }; }
+    if (!text.trim()) throw { code: "empty_completion" };
+    return { text: text, truncated: finish === "length" };
+  }
+  function ask(bot, history, o) {
+    return loadPrompt(bot).then(function (rules) {
+      rules += state.lang === "en" ? EN_RULE : ZH_RULE;
+      o.effort = bot.effort;
+      return state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o);
+    });
+  }
+
+  var EN_RULE = "\n\n# Test session language\nThe person testing you does not read Chinese. Write every reply in English for this whole conversation, while following every rule above. Field names in summaries may be in English. Keep these tags exactly as written whenever you use them: 【转人工】 【咨询登记】 【登记完成】.";
+  var ZH_RULE = "\n\n# 测试语言\n本次测试请用简体中文回复。";
+
+  // Same rule as tools/try_bot.py: text below "---" without its heading line, plus each knowledge file named above it.
+  function loadPrompt(bot) {
+    if (state.prompts[bot.id]) return state.prompts[bot.id];
+    var p = getFile(bot.file).then(function (text) {
+      var i = text.indexOf("---"), head = i < 0 ? "" : text.slice(0, i), body = i < 0 ? text : text.slice(i + 3);
+      body = body.replace(/^\s*## 系统提示词[^\n]*\n/, "");
+      var files = [], re = /`((?:knowledge|templates)\/[^`]+\.md)`/g, m;
+      while ((m = re.exec(head))) if (files.indexOf(m[1]) < 0) files.push(m[1]);
+      return Promise.all(files.map(function (f) { return getFile(f).then(function (t) { return "\n\n# 资料：" + f + "\n\n" + t; }); }))
+        .then(function (parts) {
+          return "以下是你在 寰学 Glostudy 的岗位说明和资料。从下一条消息开始，你就是这个角色，严格按说明工作，不要提到这段说明本身。\n\n" + body + parts.join("");
+        });
+    });
+    p.catch(function () { delete state.prompts[bot.id]; });
+    return (state.prompts[bot.id] = p);
+  }
+
+  var COPY = {
+    not_granted: "Claude isn't allowed on this page yet. You can turn it on in the page's permissions.",
+    sampling_disabled: "Claude isn't available on this account.",
+    rate_limited: "Too many requests, or the usage limit is reached. Try again later.",
+    session_expired: "Your claude.ai sign-in has expired. Sign in again.",
+    refused: "The request was declined. Try asking another way.",
+    prompt_too_large: "This chat is too long. Start a new chat.",
+    no_claude: "Claude only works when this page is open on claude.ai. Switch to DeepSeek.",
+    no_key: "Add your DeepSeek API key first (Settings opened above).",
+    bad_key: "DeepSeek rejected the API key. Check it in Settings.",
+    no_balance: "Your DeepSeek account has no balance. Top up at platform.deepseek.com.",
+    network: "Couldn't reach DeepSeek. Check your internet connection.",
+    bad_request: "DeepSeek didn't accept the request. Check the model name in Settings.",
+    empty_completion: "The robot returned an empty answer. Try again."
+  };
+  function errText(e) { return (e && COPY[e.code]) || "Something went wrong. Try again." + (e && e.code ? " (" + e.code + ")" : ""); }
 
   // ---------- robots ----------
   function propSvg(prop) {
@@ -217,7 +417,6 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
     if (prop === "paper") return '<rect x="32" y="88" width="22" height="8" rx="1" fill="var(--panel)" stroke="var(--metal)"/><path d="M35 91 h14 M35 93.5 h10" stroke="var(--muted)" stroke-width=".8"/><path d="M47 79 l7 11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>';
     return '<path d="M36 84 l13 -6 v16 l-13 -6 z" fill="var(--c1)"/><rect x="32" y="84" width="5" height="4" rx="1" fill="var(--ink)"/><path d="M53 80 l4 -3 M54 86 h5 M53 92 l4 3" stroke="var(--sun)" stroke-width="1.6" stroke-linecap="round"/>';
   }
-
   function robotSvg(b) {
     var c = "var(" + b.color + ")", id = "clip" + b.id;
     var lines = [62, 68, 74, 80, 86, 92, 98, 104, 110].map(function (y, i) {
@@ -260,21 +459,73 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
         d.innerHTML = robotSvg(b) + '<span class="tag"><span class="tag-top"><b>' + esc(b.name) + '</b><span class="pill"></span><span class="who">' + esc(b.who) + '</span></span><small>' + esc(b.role) + "</small></span>";
         d.onclick = function () {
           if (state.bot !== b) { state.bot = b; drawAll(); }
-          if (matchMedia("(max-width: 860px)").matches) $("chat").scrollIntoView({ behavior: "smooth", block: "start" });
+          if (matchMedia("(max-width: 980px)").matches) $("chat").scrollIntoView({ behavior: "smooth", block: "start" });
           $("box").focus({ preventScroll: true });
         };
         floor.appendChild(d);
       });
     }
     BOTS.forEach(function (b) {
-      var d = $("desk" + b.id), working = state.working === b.id, pill = d.querySelector(".pill");
+      var d = $("desk" + b.id), working = !!state.busy[b.id], pill = d.querySelector(".pill");
       d.setAttribute("aria-pressed", String(b === state.bot));
       d.classList.toggle("working", working);
-      d.classList.toggle("just-done", !!state.done[b.id]);
+      d.classList.toggle("just-done", !!state.done[b.id] && !working);
       pill.className = "pill" + (working ? " busy" : state.done[b.id] ? " done" : "");
-      pill.textContent = working ? "working" : state.done[b.id] ? "done" : "idle";
+      pill.textContent = working ? (state.busy[b.id] === "job" ? "on a client" : "working") : state.done[b.id] ? "done" : "idle";
     });
-    $("busy").textContent = state.working ? "1" : "0";
+  }
+
+  function drawHud() {
+    var items = store.items(), review = items.filter(function (c) { return c.status === "review"; }).length;
+    $("statWorking").textContent = String(Object.keys(state.busy).length);
+    $("statClients").textContent = String(items.filter(function (c) { return c.status !== "rejected"; }).length);
+    $("statReview").textContent = String(review);
+    $("statReviewBox").classList.toggle("hot", review > 0);
+    $("engClaude").setAttribute("aria-pressed", String(state.engine === "claude"));
+    $("engDeep").setAttribute("aria-pressed", String(state.engine === "deepseek"));
+    $("engClaude").disabled = !IN_CLAUDE;
+    $("engClaude").title = IN_CLAUDE ? "" : "Claude only works when the page is open on claude.ai";
+    $("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
+    $("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
+    $("fAll").setAttribute("aria-pressed", String(state.filter === "all"));
+    $("fReview").setAttribute("aria-pressed", String(state.filter === "review"));
+    $("fReview").textContent = "To review" + (review ? " (" + review + ")" : "");
+  }
+
+  // ---------- settings (DeepSeek key / download) ----------
+  function drawSettings() {
+    var s = $("settings");
+    s.hidden = !state.settingsOpen;
+    if (!state.settingsOpen) return;
+    if (IN_CLAUDE) {
+      s.innerHTML = '<h3>Use DeepSeek</h3><p>Pages on claude.ai can only talk to Claude, so DeepSeek runs in a copy of this office that you open on your own computer. Download it, double-click it to open in your browser, then pick DeepSeek and add your API key. Clients you save there stay in that browser.</p>' +
+        '<div class="row"><button class="btn" type="button" id="dl">Download office file</button><button class="ghost" type="button" id="closeSet">Close</button><span class="pill quiet" id="dlNote" hidden></span></div>';
+      $("dl").onclick = downloadOffice;
+    } else {
+      s.innerHTML = '<h3>DeepSeek settings</h3><p>Get an API key at platform.deepseek.com (sign up, top up a few yuan, create a key). The key is saved only in this browser on this computer.</p>' +
+        '<div class="row"><label for="keyIn" hidden>DeepSeek API key</label><input id="keyIn" type="password" autocomplete="off" placeholder="sk-…" value="' + esc(deep.key) + '">' +
+        '<label for="modelIn" hidden>Model</label><input id="modelIn" type="text" value="' + esc(deep.model) + '" style="flex:0 1 160px" title="Model name"></div>' +
+        '<div class="row"><button class="btn" type="button" id="saveKey">Save</button><button class="ghost danger" type="button" id="delKey">Remove key</button><button class="ghost" type="button" id="closeSet">Close</button><span class="pill quiet" id="keyNote">' + (deep.key ? "Key saved" : "No key yet") + "</span></div>";
+      $("saveKey").onclick = function () {
+        deep.key = $("keyIn").value.trim(); deep.model = $("modelIn").value.trim() || "deepseek-chat";
+        lsSet("glostudy-deepseek-key", deep.key || null); lsSet("glostudy-deepseek-model", deep.model);
+        $("keyNote").textContent = deep.key ? "Key saved" : "No key yet";
+      };
+      $("delKey").onclick = function () { deep.key = ""; lsSet("glostudy-deepseek-key", null); $("keyIn").value = ""; $("keyNote").textContent = "Key removed"; };
+    }
+    $("closeSet").onclick = function () { state.settingsOpen = false; drawSettings(); };
+  }
+  async function downloadOffice() {
+    var note = $("dlNote"); note.hidden = false; note.textContent = "Preparing…";
+    try {
+      var dl = await window.claude.use("downloads");
+      if (!dl) throw { code: "unavailable" };
+      var html = await fetch("office.html").then(function (r) { if (!r.ok) throw { code: "missing" }; return r.text(); });
+      await dl.save({ filename: "glostudy-ai-office.html", data: html });
+      note.textContent = "Saved. Open the file from your Downloads folder.";
+    } catch (e) {
+      note.textContent = e && e.code === "dismissed" ? "Download cancelled" : "Couldn't download here. Ask Claude for the file instead.";
+    }
   }
 
   // ---------- chat ----------
@@ -287,37 +538,18 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
       out.push(l.replace(/^#{1,4}\s*/, "").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"));
     });
     flush();
-    return out.join("\n").replace(/\n?【转人工】/g, '\n<span class="handoff">Handed to a person</span>');
+    return out.join("\n")
+      .replace(/\n?【转人工】/g, '\n<span class="flag">Handed to a person</span>')
+      .replace(/【咨询登记】/g, '<span class="flag book">Booking summary</span>')
+      .replace(/\n?【登记完成】/g, "");
   }
-
-  // Same rule as tools/try_bot.py: text below "---" without its heading line, plus each knowledge file named above it.
-  function loadPrompt(bot) {
-    if (state.prompts[bot.id]) return state.prompts[bot.id];
-    var p = fetch(bot.file).then(function (r) { if (!r.ok) throw new Error(bot.file); return r.text(); }).then(function (text) {
-      var i = text.indexOf("---"), head = i < 0 ? "" : text.slice(0, i), body = i < 0 ? text : text.slice(i + 3);
-      body = body.replace(/^\s*## 系统提示词[^\n]*\n/, "");
-      var files = [], re = /`((?:knowledge|templates)\/[^`]+\.md)`/g, m;
-      while ((m = re.exec(head))) if (files.indexOf(m[1]) < 0) files.push(m[1]);
-      return Promise.all(files.map(function (f) { return fetch(f).then(function (r) { return r.text(); }).then(function (t) { return "\n\n# 资料：" + f + "\n\n" + t; }); }))
-        .then(function (parts) {
-          return "以下是你在 寰学 Glostudy 的岗位说明和资料。从下一条消息开始，你就是这个角色，严格按说明工作，不要提到这段说明本身。\n\n" + body + parts.join("");
-        });
-    });
-    p.catch(function () { delete state.prompts[bot.id]; });
-    return (state.prompts[bot.id] = p);
-  }
-
-  var EN_RULE = "\n\n# Test session language\nThe person testing you does not read Chinese. Write every reply in English for this whole conversation, while following every rule above. Booking summary fields should also be in English. When you hand over to a person, still include the tag 【转人工】 exactly as written.";
-  var ZH_RULE = "\n\n# 测试语言\n本次测试请用简体中文回复。";
-
   function chat() { return state.chats[state.bot.id] || (state.chats[state.bot.id] = []); }
-  var results = {};
   function tasksFor(b) {
-    if (b.id === "1") return state.tests.map(function (t) {
-      var en = state.lang === "en";
+    var en = state.lang === "en";
+    if (b.id === "1") return [{ ask: DEMO[state.lang], demo: true }].concat(state.tests.map(function (t) {
       return { ask: en ? t.ask_en || t.ask : t.ask, expect: en ? t.expect_en || t.expect : t.expect,
         must: t.must || [], must_not: en ? t.must_not_en || [] : t.must_not || [], key: t.id + state.lang };
-    });
+    }));
     return (b.tasks || []).map(function (t) { return { ask: t[state.lang] }; });
   }
 
@@ -325,17 +557,20 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
     var b = state.bot;
     $("chatName").textContent = b.name + " · " + b.role;
     $("chatRole").textContent = b.intro;
-    $("tasksLabel").textContent = b.id === "1" ? "Test questions (checked automatically)" : "Sample tasks";
+    $("tasksLabel").textContent = b.id === "1" ? "Demo booking and test questions (checked automatically)" : "Sample tasks";
     var chips = $("chips"); chips.textContent = "";
     tasksFor(b).forEach(function (t) {
       var c = document.createElement("button");
-      c.type = "button"; c.className = "chip" + (t.key && results[t.key] ? " " + results[t.key] : "");
+      c.type = "button"; c.className = "chip" + (t.demo ? " demo" : "") + (t.key && state.results[t.key] ? " " + state.results[t.key] : "");
       var first = t.ask.split("\n")[0];
-      c.textContent = first.length > 46 ? first.slice(0, 46) + "…" : first;
+      c.textContent = t.demo ? "Demo: a parent gives all their details" : first.length > 46 ? first.slice(0, 46) + "…" : first;
       c.title = t.ask;
       c.onclick = function () { send(t.ask, t.expect ? t : null); };
       chips.appendChild(c);
     });
+    var s = $("send"), mine = state.busy[b.id] === "chat";
+    s.textContent = mine ? "Stop" : "Send";
+    if (mine) s.setAttribute("data-stop", ""); else s.removeAttribute("data-stop");
     drawLog();
   }
 
@@ -348,7 +583,7 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
         d.className = "check " + (t.ok ? "pass" : "fail");
         d.innerHTML = (t.ok ? "✓ Passed the automatic check" : "✗ Failed: " + esc(t.problems.join(", "))) + "<small>Should: " + esc(t.expect) + "</small>";
       } else if (t.kind === "note") {
-        d.className = "note"; d.textContent = t.text;
+        d.className = "note" + (t.good ? " good" : ""); d.textContent = t.text;
       } else if (t.pending) {
         d.className = "msg bot"; d.innerHTML = '<span class="typing" aria-label="Working"><i></i><i></i><i></i></span>';
       } else {
@@ -360,45 +595,29 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
     log.scrollTop = log.scrollHeight;
   }
 
-  function drawAll() {
-    drawFloor(); drawChat();
-    var s = $("send"), mine = state.working === state.bot.id;
-    s.textContent = mine ? "Stop" : "Send";
-    if (mine) s.setAttribute("data-stop", ""); else s.removeAttribute("data-stop");
-    $("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
-    $("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
-  }
-
-  var COPY = {
-    not_granted: "Claude isn't allowed on this page yet. You can turn it on in the page's permissions.",
-    sampling_disabled: "Claude isn't available on this account.",
-    rate_limited: "Too many messages, or your Claude usage limit is reached. Try again later.",
-    session_expired: "Your claude.ai sign-in has expired. Sign in again.",
-    refused: "Claude declined this request. Try asking another way.",
-    prompt_too_large: "This chat is too long. Start a new chat."
-  };
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function flashDone(id) { state.done[id] = true; drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
+  function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
   async function send(text, test) {
     text = String(text || "").trim();
     if (!text) return;
-    if (state.working) { chat().push({ kind: "note", text: "Another robot is still working. Wait for it to finish, or stop it." }); drawLog(); return; }
-    var sample = await samplePromise;
     var bot = state.bot, turns = chat();
-    if (!sample) { turns.push({ kind: "note", text: "Open this page on claude.ai so Claude can answer." }); drawLog(); return; }
+    if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
+    if (needsKey()) { state.settingsOpen = true; drawSettings(); turns.push({ kind: "note", text: COPY.no_key }); drawLog(); return; }
     turns.push({ role: "user", content: text });
     var reply = { role: "assistant", content: "", pending: true };
     turns.push(reply);
     delete state.done[bot.id];
-    state.working = bot.id; state.ctl = new AbortController();
-    drawAll();
+    state.ctl[bot.id] = new AbortController();
+    setBusy(bot.id, "chat");
     var ok = false;
     try {
-      var rules = (await loadPrompt(bot)) + (state.lang === "en" ? EN_RULE : ZH_RULE);
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
-      var res = await sample([{ role: "user", content: rules }].concat(history), {
-        cache: false, effort: bot.effort, signal: state.ctl.signal,
-        onText: function (u) { reply.pending = false; reply.content = u.text; if (state.bot === bot) drawLog(); }
+      var res = await ask(bot, history, {
+        signal: state.ctl[bot.id].signal,
+        onText: function (txt) { reply.pending = false; reply.content = txt; if (state.bot === bot) drawLog(); }
       });
       reply.pending = false; reply.content = res.text; ok = true;
       if (res.truncated) turns.push({ kind: "note", text: "The answer was cut short. Ask it to continue, or ask for less at once." });
@@ -406,47 +625,197 @@ textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text
         var low = res.text.toLowerCase();
         var problems = test.must_not.filter(function (w) { return low.indexOf(w.toLowerCase()) >= 0; }).map(function (w) { return 'said "' + w + '"'; })
           .concat(test.must.filter(function (w) { return res.text.indexOf(w) < 0; }).map(function (w) { return w === "转人工" ? "didn't hand over to a person" : 'missing "' + w + '"'; }));
-        results[test.key] = problems.length ? "fail" : "pass";
+        state.results[test.key] = problems.length ? "fail" : "pass";
         turns.push({ kind: "check", ok: !problems.length, problems: problems, expect: test.expect });
       }
+      if (bot.id === "1") await maybeSaveBooking(res.text, turns);
     } catch (e) {
       reply.pending = false;
       if (e && e.text && e.code !== "refused") reply.content = e.text; else turns.splice(turns.indexOf(reply), 1);
-      if (!e || e.code !== "cancelled") turns.push({ kind: "note", text: (e && COPY[e.code]) || (e && e.code ? "Something went wrong. Try again. (" + e.code + ")" : "The robot's instructions didn't load. Refresh the page.") });
+      if (!e || e.code !== "cancelled") turns.push({ kind: "note", text: errText(e) });
+      if (e && (e.code === "no_key" || e.code === "bad_key")) { state.settingsOpen = true; drawSettings(); }
     } finally {
-      state.working = null; state.ctl = null;
-      if (ok) { state.done[bot.id] = true; setTimeout(function () { delete state.done[bot.id]; drawFloor(); }, 4000); }
-      drawAll();
+      delete state.ctl[bot.id];
+      setBusy(bot.id, null);
+      if (ok) flashDone(bot.id);
     }
   }
 
-  function setLang(l) {
-    if (state.lang === l) return;
-    state.lang = l;
-    try { localStorage.setItem("glostudy-lang", l); } catch (e) {}
-    drawAll();
+  // ---------- Huan -> client board -> Scout ----------
+  function extractBooking(text) {
+    var i = text.indexOf("【咨询登记】"); if (i < 0) return null;
+    var j = text.indexOf("【登记完成】", i);
+    var s = text.slice(i + 6, j < 0 ? undefined : j).trim();
+    return s.length > 20 ? s : null;
   }
+  function guessName(summary) {
+    var m = summary.match(/^\s*[-*•]?\s*(?:称呼|Name|Contact name|Name\/contact|Name \/ contact|Name & contact)[^：:\n]*[：:]\s*([^\n]+)/im);
+    if (m) { var n = m[1].replace(/\*\*/g, "").split(/[\/／,，|]/)[0].trim(); if (n) return n.slice(0, 40); }
+    return "New client";
+  }
+  async function maybeSaveBooking(text, turns) {
+    var summary = extractBooking(text); if (!summary) return;
+    var existing = state.chatClient["1"] && store.get(state.chatClient["1"]);
+    try {
+      if (existing) {
+        if (existing.summary === summary) return;
+        await store.update(existing.id, { summary: summary, name: guessName(summary), updated: new Date().toISOString() });
+        turns.push({ kind: "note", good: true, text: "Updated " + guessName(summary) + " on the client board." });
+        if (existing.status !== "approved" && existing.status !== "rejected") queueJob(existing.id);
+      } else {
+        var id = await store.add({ name: guessName(summary), summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
+        state.chatClient["1"] = id;
+        turns.push({ kind: "note", good: true, text: "Saved " + guessName(summary) + " to the client board. Scout is drafting a shortlist." });
+        queueJob(id);
+      }
+    } catch (e) {
+      turns.push({ kind: "note", text: "Couldn't save this client to the board." });
+    }
+    if (state.bot.id === "1") drawLog();
+  }
+
+  function queueJob(id, note) {
+    state.jobs = state.jobs.filter(function (j) { return j.id !== id; });
+    state.jobs.push({ id: id, note: note || "" });
+    runJobs();
+  }
+  async function runJobs() {
+    if (state.busy["2"] || !state.jobs.length) return;
+    var job = state.jobs.shift(), c = store.get(job.id);
+    if (!c) { runJobs(); return; }
+    if (needsKey()) { await store.update(c.id, { status: "new", error: COPY.no_key }); runJobs(); return; }
+    var scout = BY_ID["2"];
+    setBusy("2", "job");
+    try {
+      await store.update(c.id, { status: "researching", error: "" });
+      var msg = (state.lang === "en" ? "New client from the front desk. Please draft the shortlist.\n\n" : "前台新登记的客户，请出匹配清单草稿。\n\n") + "【咨询登记】\n" + c.summary;
+      if (job.note) msg += (state.lang === "en" ? "\n\nYour previous draft:\n" : "\n\n你上一版草稿：\n") + (c.draft || "") + (state.lang === "en" ? "\n\nConsultant's feedback, please redo the draft with this in mind:\n" : "\n\n顾问意见，请据此重做草稿：\n") + job.note;
+      var res = await ask(scout, [{ role: "user", content: msg }], {});
+      await store.update(c.id, { status: "review", draft: res.text, updated: new Date().toISOString() });
+      flashDone("2");
+    } catch (e) {
+      try { await store.update(c.id, { status: "new", error: errText(e) }); } catch (e2) {}
+    } finally {
+      setBusy("2", null);
+      runJobs();
+    }
+  }
+
+  // ---------- client board ----------
+  var STATUS = { "new": ["New", ""], researching: ["Scout is working", "busy"], review: ["Waiting for your review", "busy"], approved: ["Approved", "done"], rejected: ["Rejected", "bad"] };
+  function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } }
+
+  function drawBoard() {
+    var box = $("cards"), focus = document.activeElement && document.activeElement.id, sel = null;
+    if (focus && document.activeElement.selectionStart != null) sel = [document.activeElement.selectionStart, document.activeElement.selectionEnd];
+    $("boardNote").textContent = store.problem || (store.mode() === "db"
+      ? "New clients from Huan, shared with everyone you share this page with. Scout drafts a shortlist for each; you approve it."
+      : IN_CLAUDE ? "Loading the shared client list…" : "New clients from Huan, kept in this browser. Scout drafts a shortlist for each; you approve it.");
+    if (IN_CLAUDE && !store.ready()) { box.innerHTML = '<div class="board-empty">Loading clients…</div>'; return; }
+    var items = store.items().filter(function (c) { return state.filter === "review" ? c.status === "review" : true; });
+    box.textContent = "";
+    if (!items.length) {
+      box.innerHTML = '<div class="board-empty">' + (state.filter === "review" ? "Nothing waiting for review." : "No clients yet. Talk to Huan and try the demo booking: the client will appear here.") + "</div>";
+      return;
+    }
+    items.forEach(function (c) {
+      var st = STATUS[c.status] || STATUS["new"], card = document.createElement("article");
+      card.className = "card"; card.setAttribute("data-status", c.status || "new");
+      var h = '<div class="card-top"><b>' + esc(c.name || "New client") + '</b><span class="pill ' + st[1] + '">' + st[0] + "</span><small>" + esc(when(c.created)) + "</small></div>";
+      if (c.error) h += '<div class="note" style="align-self:flex-start;text-align:left">' + esc(c.error) + "</div>";
+      h += '<details><summary>Booking summary</summary><div class="pre">' + esc(c.summary || "") + "</div></details>";
+      if (c.status === "researching") h += '<div><span class="typing" aria-label="Scout is working"><i></i><i></i><i></i></span></div>';
+      if (c.draft && c.status !== "researching") {
+        if (state.editing[c.id]) {
+          h += '<label class="label" for="ed' + c.id + '">Edit Scout\'s draft</label><textarea id="ed' + c.id + '" data-edit="' + c.id + '">' + esc(state.edits[c.id] != null ? state.edits[c.id] : c.draft) + "</textarea>" +
+            '<div class="acts"><button class="btn" type="button" data-act="saveEdit" data-id="' + c.id + '">Save edit</button><button class="ghost" type="button" data-act="cancelEdit" data-id="' + c.id + '">Cancel</button></div>';
+        } else {
+          h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Scout\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
+        }
+      }
+      var acts = "";
+      if (c.status === "review" && !state.editing[c.id]) {
+        acts += '<button class="btn" type="button" data-act="approve" data-id="' + c.id + '">Approve</button>' +
+          '<button class="ghost" type="button" data-act="edit" data-id="' + c.id + '">Edit</button>' +
+          '<button class="ghost danger" type="button" data-act="reject" data-id="' + c.id + '">Reject</button>';
+      }
+      if (c.status === "new") acts += '<button class="btn" type="button" data-act="scout" data-id="' + c.id + '"' + (state.busy["2"] ? " disabled" : "") + ">Send to Scout</button>";
+      if (c.status === "approved") acts += '<button class="ghost" type="button" data-act="copy" data-id="' + c.id + '">Copy draft</button><button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
+      if (c.status === "rejected") acts += '<button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
+      if (acts) h += '<div class="acts">' + acts + "</div>";
+      if (c.status === "review" && !state.editing[c.id]) {
+        h += '<div class="row"><label for="nt' + c.id + '" hidden>Feedback for Scout</label><input id="nt' + c.id + '" data-note="' + c.id + '" placeholder="Feedback, e.g. add more London options" value="' + esc(state.notes[c.id] || "") + '">' +
+          '<button class="ghost" type="button" data-act="redo" data-id="' + c.id + '">Send back to Scout</button></div>';
+      }
+      card.innerHTML = h;
+      box.appendChild(card);
+    });
+    if (focus) { var el = $(focus); if (el) { el.focus({ preventScroll: true }); if (sel && el.setSelectionRange) try { el.setSelectionRange(sel[0], sel[1]); } catch (e) {} } }
+  }
+
+  $("cards").addEventListener("input", function (ev) {
+    var t = ev.target;
+    if (t.dataset.edit) state.edits[t.dataset.edit] = t.value;
+    if (t.dataset.note) state.notes[t.dataset.note] = t.value;
+  });
+  $("cards").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-act]"); if (!b) return;
+    var id = b.dataset.id, c = store.get(id); if (!c) return;
+    var act = b.dataset.act, now = new Date().toISOString();
+    function upd(p) { b.disabled = true; store.update(id, Object.assign({ updated: now }, p)).catch(function () { b.disabled = false; }); }
+    if (act === "approve") upd({ status: "approved" });
+    else if (act === "reject") upd({ status: "rejected" });
+    else if (act === "reopen") upd({ status: c.draft ? "review" : "new" });
+    else if (act === "edit") { state.editing[id] = true; state.edits[id] = c.draft; drawBoard(); }
+    else if (act === "cancelEdit") { delete state.editing[id]; delete state.edits[id]; drawBoard(); }
+    else if (act === "saveEdit") { var v = state.edits[id]; delete state.editing[id]; delete state.edits[id]; upd({ draft: v, edited: true }); }
+    else if (act === "scout") queueJob(id);
+    else if (act === "redo") {
+      var note = (state.notes[id] || "").trim();
+      if (!note) { var inp = $("nt" + id); if (inp) { inp.focus(); inp.placeholder = "Write what Scout should change first"; } return; }
+      delete state.notes[id]; queueJob(id, note);
+    } else if (act === "copy") {
+      try { navigator.clipboard.writeText(c.draft || "").then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Couldn't copy"; }); } catch (e) { b.textContent = "Couldn't copy"; }
+    }
+  });
+
+  // ---------- wiring ----------
+  function drawAll() { drawFloor(); drawHud(); drawChat(); drawBoard(); drawSettings(); }
+  function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); }
   $("langEn").onclick = function () { setLang("en"); };
   $("langZh").onclick = function () { setLang("zh"); };
+  $("engClaude").onclick = function () { if (IN_CLAUDE) { state.engine = "claude"; state.settingsOpen = false; drawAll(); } };
+  $("engDeep").onclick = function () {
+    if (IN_CLAUDE) { state.settingsOpen = !state.settingsOpen; drawSettings(); return; }
+    state.engine = "deepseek"; state.settingsOpen = !state.settingsOpen; drawAll();
+  };
+  $("fAll").onclick = function () { state.filter = "all"; drawHud(); drawBoard(); };
+  $("fReview").onclick = function () { state.filter = "review"; drawHud(); drawBoard(); };
   $("form").addEventListener("submit", function (ev) {
     ev.preventDefault();
-    if (state.working === state.bot.id) { if (state.ctl) state.ctl.abort(); return; }
+    var id = state.bot.id;
+    if (state.busy[id] === "chat") { if (state.ctl[id]) state.ctl[id].abort(); return; }
     var v = $("box").value;
-    if (!state.working) $("box").value = "";
+    if (!state.busy[id]) $("box").value = "";
     send(v);
   });
   $("box").addEventListener("keydown", function (ev) {
     if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); $("form").requestSubmit(); }
   });
-  $("clear").onclick = function () { if (state.working !== state.bot.id) { state.chats[state.bot.id] = []; drawLog(); } };
+  $("clear").onclick = function () { if (!state.busy[state.bot.id]) { state.chats[state.bot.id] = []; delete state.chatClient[state.bot.id]; drawLog(); } };
   $("copy").onclick = function () {
     var text = state.bot.name + " (" + state.bot.role + ")\n\n" + chat().filter(function (t) { return t.role; }).map(function (t) { return (t.role === "user" ? "Me: " : "Robot: ") + t.content; }).join("\n\n");
     var btn = $("copy");
     function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = "Copy chat"; }, 1600); }
     try { navigator.clipboard.writeText(text).then(function () { done("Copied"); }, function () { done("Couldn't copy"); }); } catch (e) { done("Couldn't copy"); }
   };
+  $("foot").textContent = IN_CLAUDE
+    ? "Running on Claude with the viewer's own Claude account; it doesn't open in mainland China. Don't enter real mainland clients' personal details here (China's PIPL limits sending them abroad): use DeepSeek for those. Everything the robots write is a draft: check it before it goes to a customer."
+    : "Running from a file on this computer. Robots use DeepSeek with your key; clients are kept in this browser only. Everything the robots write is a draft: check it before it goes to a customer.";
 
-  fetch("tests/customer-service-tests.json").then(function (r) { return r.json(); }).then(function (t) { state.tests = t; drawChat(); }).catch(function () {});
+  store.on(function () { drawHud(); drawBoard(); });
+  getFile("tests/customer-service-tests.json").then(function (t) { state.tests = typeof t === "string" ? JSON.parse(t) : t; drawChat(); }).catch(function () {});
+  if (!IN_CLAUDE && !deep.key) state.settingsOpen = true;
   drawAll();
 })();
 </script>
