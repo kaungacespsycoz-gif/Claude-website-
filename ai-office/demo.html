@@ -1095,6 +1095,17 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
 @keyframes phoneWave { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
 @keyframes phoneOut { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(2); opacity: 0; } }
 .cm-ring::after { display: none !important; }
+
+/* ---------- lines: a quick flash that draws and fades; the ringing phones stay ---------- */
+.beam-pt { display: none !important; }
+.beam { animation: beamFade 1.6s ease-out forwards; }
+.beam path { stroke-dasharray: 100 !important; stroke-dashoffset: 100; animation: beamDraw .35s ease-out forwards !important; }
+.beam-glow { stroke-width: 6; }
+.beam-core { stroke-width: 1.8; }
+@keyframes beamDraw { to { stroke-dashoffset: 0; } }
+@keyframes beamFade { 0%, 45% { opacity: 1; } 100% { opacity: 0; } }
+.fx-trail.draw .beam { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .beam { display: none; } }
 </style>
 
 <div class="app">
