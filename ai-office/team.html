@@ -1714,15 +1714,15 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title;
       box.appendChild(pl);
     });
-    var you = document.createElement("div"); you.className = "plate gold-you"; you.style.left = "21%"; you.style.top = "27.6%"; you.innerHTML = "<b>You</b><span>Director</span>"; box.appendChild(you);
+    var you = document.createElement("div"); you.className = "plate gold-you"; you.style.left = "21%"; you.style.top = "27.6%"; you.innerHTML = "<b>Aliya</b><span>Director</span>"; box.appendChild(you);
     [["3F · Executive", 4.8], ["2F · Research & Finance", 34.6], ["1F · Front office & Marketing", 65.8]].forEach(function (f) {
       var fl = document.createElement("div"); fl.className = "floor-tag"; fl.style.top = f[1] + "%"; fl.textContent = f[0]; box.appendChild(fl);
     });
     var bo = document.createElement("button");
     bo.type = "button"; bo.className = "hs boss"; bo.id = "hsBoss";
     bo.style.cssText = "left:" + BOSS_PV[0] + "%;top:" + BOSS_PV[1] + "%;width:" + BOSS_PV[2] + "%;height:" + BOSS_PV[3] + "%;--c:#e8c17a";
-    bo.setAttribute("aria-label", "Your office: open the clients waiting for review");
-    bo.innerHTML = '<span class="hs-tag"><i></i>Your office <em id="hsBossTxt">nothing to review</em></span><span class="hs-badge" id="hsBadge" hidden>0</span>';
+    bo.setAttribute("aria-label", "Aliya's office: open the clients waiting for review");
+    bo.innerHTML = '<span class="hs-tag"><i></i>Aliya\'s office <em id="hsBossTxt">nothing to review</em></span><span class="hs-badge" id="hsBadge" hidden>0</span>';
     bo.onclick = function () { state.filter = "review"; setTab("clients"); };
     box.appendChild(bo);
     // gentle parallax so the picture feels alive
@@ -2140,7 +2140,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         activity(bot.id, bot.name + (problems.length ? " failed a test" : " passed a test"));
       }
       if (bot.id === "1") await maybeSaveBooking(res.text, turns);
-      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ling put today's brief on your desk"); deliver("5", "boss"); }
+      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Ling put today's brief on Aliya's desk"); deliver("5", "boss"); }
       if (meeting) pvMeetingMinutes(res.text);
     } catch (e) {
       reply.pending = false;
@@ -2211,7 +2211,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var res = await ask(scout, [{ role: "user", content: msg }], {});
       await store.update(c.id, { status: "review", draft: res.text, updated: new Date().toISOString() });
       flashDone("2");
-      activity("2", "Scout finished a shortlist for " + (c.name || "a client") + " and took it to your desk");
+      activity("2", "Scout finished a shortlist for " + (c.name || "a client") + " and took it to Aliya's desk");
       setTimeout(function () { deliver("2", "boss"); }, 600);
     } catch (e) {
       try { await store.update(c.id, { status: "new", error: errText(e) }); } catch (e2) {}
