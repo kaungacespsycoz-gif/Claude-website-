@@ -178,15 +178,19 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .foot { margin-top: 14px; font-size: .76rem; color: var(--muted); max-width: 100ch; }
 
 /* Scene details */
-.scene { --brick: #8e4b37; --brick-2: #a0563f; --mortar: #5e3226; --steel: #121518; --steel-2: #1c2126; --timber: #b98552; --timber-2: #8d5f36;
-  --concrete: #4a4f55; --wood-floor: #5f4230; --desk-top: #1b1f23; --desk-edge: #0d1013; --leg: #0c0e10; --side: #23292e; --slab: #26292d;
+.scene { --oak-1: #dcc6a1; --oak-2: #cfb68d; --oak-line: rgba(110,78,40,.22); --walnut: #6a4a33; --walnut-dark: #3b2a1f; --carpet: #5c6377;
+  --curtain: #2d3b6b; --gold: #e8c17a; --purple: #6a4bb0; --purple-dark: #4b3386; --tan: #c99a5b;
+  --brick: #8e4b37; --brick-2: #a0563f; --mortar: #5e3226; --steel: #121518; --steel-2: #1c2126; --timber: #cfae7c; --timber-2: #a98a5c;
+  --concrete: #4a4f55; --wood-floor: #5f4230; --desk-top: #f2eee8; --desk-edge: #cfc7ba; --leg: #0c0e10; --side: #b8ad9c; --slab: #26292d;
   --glass: rgba(150,210,225,.07); --glass-tint: rgba(16,26,32,.32); --ground: #3a3f43; --road: #22262a; --screen: #04080b; --screen-line: #35e0f0; --lamp: #ffcf7a;
   --neon-a: #35e0f0; --neon-b: #ff4fa3; --neon-c: #ffd23f;
   --panel: #14181c; --ink: #f1f4f6; --muted: #a2adb5; --rule: rgba(255,255,255,.14); }
 .happy { opacity: 0; transition: opacity .15s; }
 .actor.just-done .happy { opacity: 1; }
 .actor.just-done .eyes { opacity: 0; }
-.room { font-size: 7.5px; font-weight: 700; letter-spacing: .12em; fill: #ffffff; opacity: .45; }
+.room { font-size: 7.5px; font-weight: 700; letter-spacing: .12em; fill: #3b2a1f; opacity: .55; }
+.room.core { fill: #ffffff; opacity: .5; }
+.gold-sign { font: 600 13px var(--display); fill: var(--gold); letter-spacing: .03em; }
 .lift-ind { font: 700 9px var(--display); fill: #ff7a59; }
 .liftdoors rect { transition: transform .3s ease; }
 .liftdoors.open rect:first-child { transform: translateX(-26px); }
@@ -195,7 +199,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .actor.in-lift { opacity: 0; pointer-events: none; }
 .mglow { opacity: .3; transition: opacity .3s; }
 .station.working .mglow { opacity: .85; }
-.scene { --glass-line: rgba(150,215,230,.7); }
+.scene { --glass-line: rgba(190,225,235,.9); }
 .scene text { font-family: var(--sans); }
 .actor, .bossdesk { cursor: pointer; }
 .actor:focus, .bossdesk:focus { outline: none; }
@@ -622,7 +626,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' + '<ellipse cx="0" cy="4" rx="11" ry="4" fill="#000" opacity=".25"/>' + rect(-9, -8, 18, 12, "#20262b", ' rx="3"') +
       '<circle cx="-6" cy="-14" r="8" fill="#2f7d52"/><circle cx="6" cy="-15" r="8" fill="#3f9a65"/><circle cx="0" cy="-22" r="8" fill="#4caf73"/><circle cx="-2" cy="-10" r="6" fill="#3f9a65"/></g>';
   }
-  function chairTop(x, y, c) { return '<circle cx="' + x + '" cy="' + y + '" r="7" fill="' + (c || "#2a3036") + '"/><circle cx="' + x + '" cy="' + y + '" r="4" fill="#000" opacity=".2"/>'; }
+  function chairTop(x, y, c) { return '<circle cx="' + x + '" cy="' + y + '" r="7.5" fill="#16181b"/><circle cx="' + x + '" cy="' + y + '" r="5" fill="' + (c || "var(--tan)") + '"/>'; }
   var winN = 0;
   function windowPane(x, y, w, h) {
     var id = "win" + (++winN);
@@ -642,57 +646,72 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       rect(x + 22, y - 6, 36, 12, "#0b0d0f", ' rx="2"') + rect(x + 37, y + 5, 6, 5, "#0b0d0f") +
       rect(x + 26, y + 12, 22, 6, "#2a3036", ' rx="1.5"') + (on ? "" : rect(x + 56, y + 9, 12, 9, "#3a4249", ' rx="1.5"'));
   }
+  // Mesh office chair seen from behind: black mesh back, tan seat
   function gamingChair(x, y, c) {
-    return rect(x - 13, y - 34, 26, 30, "#121518", ' rx="9"') + rect(x - 4, y - 32, 8, 26, c, ' rx="3" opacity=".9"');
+    var mesh = "";
+    for (var i = -9; i <= 9; i += 4.5) mesh += '<line x1="' + (x + i) + '" y1="' + (y - 31) + '" x2="' + (x + i) + '" y2="' + (y - 9) + '" stroke="#3a3f45" stroke-width=".8"/>';
+    return rect(x - 14, y - 12, 28, 10, "var(--tan)", ' rx="4"') + rect(x - 12, y - 34, 24, 27, "#16181b", ' rx="8"') + mesh +
+      rect(x - 12, y - 34, 24, 4, c && c !== "#3a4249" ? c : "#2a2d31", ' rx="2" opacity=".85"');
+  }
+  function frameLine(x1, y1, x2, y2) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#101214" stroke-width="3.5" stroke-linecap="square"/>'; }
+  function ringLight(x, y, r) {
+    return '<ellipse cx="' + x + '" cy="' + y + '" rx="' + (r * 1.6) + '" ry="' + (r * .7) + '" fill="var(--gold)" opacity=".16" filter="url(#fBlur)"/>' +
+      '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + (r * .42) + '" fill="none" stroke="var(--gold)" stroke-width="5" opacity=".55" filter="url(#fGlow)"/>' +
+      '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + (r * .42) + '" fill="none" stroke="#fff2d6" stroke-width="2"/>';
+  }
+  function curtain(d) { return '<path d="' + d + '" fill="none" stroke="var(--curtain)" stroke-width="7" stroke-dasharray="3 1.5" stroke-linecap="round"/>'; }
+  function tv(x, y, w, h) {
+    return rect(x, y, w, h, "#0b0d10", ' rx="2"') + rect(x + 3, y + 3, w - 6, h - 6, "#16324a") +
+      rect(x + 6, y + 6, (w - 12) * .45, 3, "#e9eef2", ' opacity=".8"') + [0, 1, 2, 3].map(function (i) { return rect(x + w * .55 + i * 6, y + h - 6 - (i + 1) * 3, 4, (i + 1) * 3, "var(--gold)"); }).join("");
   }
 
   function plate(f) {
     var o = OY[f], s = '<g transform="translate(0 ' + o + ')">';
     // north wall face: brick with steel windows; floor
-    s += rect(40, 0, 920, 34, "url(#pBrick)") + rect(40, 34, 920, 256, f === 2 ? "url(#pWood)" : "var(--concrete)");
-    s += rect(40, 34, 920, 10, "#000", ' opacity=".18"');
+    s += rect(40, 0, 920, 34, "url(#pSlat)") + rect(40, 34, 920, 256, "url(#pOak)");
+    s += rect(40, 34, 920, 10, "#000", ' opacity=".1"');
     s += '<rect x="40" y="0" width="920" height="290" fill="none" stroke="var(--steel)" stroke-width="6"/>';
     if (f === 2) {
       s += windowPane(80, 5, 120, 24) + windowPane(240, 5, 150, 24) + windowPane(450, 5, 140, 24) + windowPane(680, 5, 150, 24);
       // meeting room
-      s += rect(654, 34, 208, 118, "var(--glass)") + '<ellipse cx="756" cy="108" rx="84" ry="34" fill="#000" opacity=".12"/>';
+      s += '<path d="M654 34 H862 V154 H694 Q654 154 654 114 Z" fill="url(#pCarpet)"/>' + curtain("M658 40 V108") + curtain("M858 40 V100");
       [[700, 72], [740, 66], [780, 66], [820, 72], [700, 132], [740, 136], [780, 136], [820, 132]].forEach(function (p) { s += chairTop(p[0], p[1], "#2a3036"); });
       s += label(756, 148, "MEETING ROOM");
       // pantry
       s += rect(654, 200, 208, 90, "#000", ' opacity=".1"') + label(700, 284, "PANTRY") + chairTop(704, 272) + chairTop(738, 234);
       // phone booths + lounge rug
-      s += label(520, 112, "PHONE BOOTHS") + '<ellipse cx="520" cy="240" rx="96" ry="38" fill="#2a3a8c" opacity=".55"/><ellipse cx="520" cy="240" rx="80" ry="28" fill="none" stroke="var(--neon-c)" stroke-width="2" opacity=".6"/>' + label(520, 196, "LOUNGE");
+      s += label(520, 112, "PHONE BOOTHS") + '<ellipse cx="520" cy="240" rx="98" ry="40" fill="#4b4466" opacity=".85"/><ellipse cx="520" cy="240" rx="86" ry="32" fill="none" stroke="#ffffff" stroke-width="1" opacity=".18"/>' + label(520, 196, "LOUNGE");
       s += label(250, 286, "HOT DESKS");
       s += plantTop(400, 70) + plantTop(400, 280) + plantTop(630, 280, .9) + plantTop(90, 286, .8);
       s += rect(612, 118, 4, 4, "transparent");
     } else {
       s += windowPane(290, 5, 90, 24) + windowPane(580, 5, 60, 24);
-      s += neon("寰学 Glostudy", 470, 24, 15, "var(--neon-b)");
+      s += rect(404, 4, 132, 26, "#1a1410", ' rx="3"') + '<text x="470" y="23" text-anchor="middle" class="gold-sign">寰学 Glostudy</text>';
       s += '<g>' + rect(84, 4, 160, 26, "#06090b", ' rx="3" stroke="#1f2a30"') +
         '<text class="ws-small" x="94" y="15">LONDON</text><text class="ws-big" id="wsLdn" x="94" y="27">--:--</text>' +
         '<text class="ws-small" x="146" y="15">BEIJING</text><text class="ws-big" id="wsBjs" x="146" y="27">--:--</text>' +
         '<text class="ws-small" x="198" y="21" id="wsReview">0 REVIEW</text></g>';
-      s += windowPane(690, 5, 150, 24);
+      s += tv(700, 4, 64, 26) + windowPane(780, 5, 70, 24);
       // consult rooms
-      s += rect(40, 34, 110, 112, "var(--glass)") + rect(154, 34, 110, 112, "var(--glass)");
+      s += rect(42, 34, 108, 112, "url(#pCarpet)") + rect(156, 34, 108, 112, "url(#pCarpet)") + curtain("M46 40 V110") + curtain("M260 40 V110");
       s += label(95, 140, "CONSULT A") + label(210, 140, "CONSULT B");
-      [[72, 66], [120, 66], [96, 122], [186, 66], [234, 66], [210, 122]].forEach(function (p) { s += chairTop(p[0], p[1], "#7a4a2c"); });
+      [[72, 66], [120, 66], [96, 122], [186, 66], [234, 66], [210, 122]].forEach(function (p) { s += chairTop(p[0], p[1]); });
       // waiting area rug
-      s += '<path d="M120 230 l30 -30 h120 l30 30 l-30 54 h-120 z" fill="#14a39a" opacity=".35"/>' + label(220, 196, "WAITING AREA");
+      s += '<path d="M120 230 l30 -30 h120 l30 30 l-30 54 h-120 z" fill="#4b4466" opacity=".8"/>' + label(220, 196, "WAITING AREA");
       // your office
-      s += rect(654, 34, 208, 162, "var(--glass)") + label(758, 192, "YOUR OFFICE");
+      s += rect(654, 34, 208, 162, "#000", ' opacity=".06"') + label(758, 192, "YOUR OFFICE");
       // entrance and street
       s += rect(436, 286, 68, 8, "#bfe3ee") + label(470, 282, "ENTRANCE");
       s += plantTop(380, 90) + plantTop(560, 280, .9) + plantTop(610, 280, .9) + plantTop(840, 70, .7);
       s += label(470, 196, "RECEPTION");
     }
     // core: WC, lift and stairs (the core opens to the floor between y 170 and 240)
-    s += rect(862, 34, 98, 256, "#1a1e22") + rect(862, 170, 18, 70, "#1f2428") + rect(880, 34, 78, 96, "#22282d", ' rx="2"') + label(919, 86, "WC") +
+    s += rect(862, 34, 98, 256, "#1a1e22") + rect(862, 170, 18, 70, "#1f2428") + rect(880, 34, 78, 96, "#22282d", ' rx="2"') + label(919, 86, "WC").replace('class="room"', 'class="room core"') +
       rect(884, 140, 66, 60, "#0c0f12", ' rx="3"') + rect(888, 144, 58, 52, "#20262c", ' rx="2"') +
       '<g class="liftdoors" id="lift' + f + '">' + rect(888, 186, 29, 10, "#7d8a94") + rect(917, 186, 29, 10, "#7d8a94") + "</g>" +
-      rect(904, 148, 26, 12, "#05080a", ' rx="2"') + '<text class="lift-ind" id="liftInd' + f + '" x="917" y="157.5" text-anchor="middle">' + f + "</text>" + label(917, 234, "LIFT");
+      rect(904, 148, 26, 12, "#05080a", ' rx="2"') + '<text class="lift-ind" id="liftInd' + f + '" x="917" y="157.5" text-anchor="middle">' + f + "</text>" + label(917, 234, "LIFT").replace('class="room"', 'class="room core"');
     for (var st = 0; st < 4; st++) s += rect(884, 250 + st * 10, 70, 7, st % 2 ? "#2a3036" : "#323940");
-    s += label(919, 288, "STAIRS");
+    s += label(919, 288, "STAIRS").replace('class="room"', 'class="room core"');
     s += "</g>";
     return s;
   }
@@ -703,8 +722,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var defs =
       '<defs>' +
         '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="sky0" offset="0" stop-color="#8fc7ec"/><stop id="sky1" offset="1" stop-color="#dcf0f8"/></linearGradient>' +
-        '<pattern id="pBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--mortar)"/><rect x=".8" y=".8" width="22.4" height="4.6" rx=".8" fill="var(--brick)"/><rect x="-11.2" y="6.8" width="22.4" height="4.6" rx=".8" fill="var(--brick-2)"/><rect x="12.8" y="6.8" width="22.4" height="4.6" rx=".8" fill="var(--brick)"/></pattern>' +
-        '<pattern id="pWood" width="60" height="12" patternUnits="userSpaceOnUse"><rect width="60" height="12" fill="var(--wood-floor)"/><rect y="11" width="60" height="1" fill="#000" opacity=".22"/><rect x="38" width="1" height="12" fill="#000" opacity=".18"/></pattern>' +
+        '<pattern id="pSlat" width="7" height="34" patternUnits="userSpaceOnUse"><rect width="7" height="34" fill="var(--walnut-dark)"/><rect x=".6" width="4.6" height="34" fill="var(--walnut)"/><rect x=".6" width="1.2" height="34" fill="#ffffff" opacity=".07"/></pattern>' +
+        '<pattern id="pOak" width="36" height="14" patternUnits="userSpaceOnUse"><rect width="36" height="14" fill="var(--oak-1)"/><path d="M0 0 L18 7 L18 14 L0 7 Z" fill="var(--oak-1)"/><path d="M18 7 L36 0 L36 7 L18 14 Z" fill="var(--oak-2)"/><path d="M0 0 L18 7 L36 0 M0 7 L18 14 L36 7" stroke="var(--oak-line)" stroke-width=".7" fill="none"/><path d="M9 3.5 v7 M27 3.5 v7" stroke="var(--oak-line)" stroke-width=".5"/></pattern>' +
+        '<pattern id="pCarpet" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--carpet)"/><circle cx="1.5" cy="1.5" r=".7" fill="#ffffff" opacity=".08"/><circle cx="4.5" cy="4.5" r=".7" fill="#000" opacity=".12"/></pattern>' +
         '<pattern id="pGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity=".04"/></pattern>' +
         '<filter id="fBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>' +
         '<filter id="fGlow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="2.5"/></filter>' +
@@ -715,16 +735,18 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         '<g id="skylineSrc"><path id="skyline" d="M0 175 V140 h30 v-10 h26 v14 h20 V118 h24 v57 z M100 175 V134 h34 v-14 h22 v55 z M160 175 V144 h40 v-26 h18 v57 z M228 175 V126 h28 v-16 h6 l4 -26 l4 26 h6 v16 h4 v65 z M270 175 V138 h46 v37 z M330 175 V122 h30 v53 z M372 175 V142 h54 v33 z M436 175 V130 l26 -64 l26 64 v45 z M500 175 V136 h44 v39 z M556 175 V118 c18 -30 40 -30 54 0 v57 z" fill="#9db4c4" transform="translate(0 -110)"/>' +
         '<g class="city-lights" id="cityLights" transform="translate(0 -110)">' + lights + "</g></g>" +
       '</defs>';
-    var back = rect(0, 0, 1000, 720, "#15191d") + rect(0, 0, 1000, 720, "url(#pGrid)") +
+    var back = rect(0, 0, 1000, 720, "#18181b") + rect(0, 0, 1000, 720, "url(#pGrid)") +
       '<g><rect x="40" y="6" width="96" height="16" rx="8" fill="#0d1013"/><text class="label-sm" x="88" y="17.5" text-anchor="middle">2F · TEAM FLOOR</text></g>' +
       '<g><rect x="40" y="346" width="150" height="16" rx="8" fill="#0d1013"/><text class="label-sm" x="115" y="357.5" text-anchor="middle">1F · RECEPTION &amp; CONSULTING</text></g>' +
-      '<g>' + rect(780, 4, 180, 20, "#0d1013", ' rx="4"') + neon("Glostudy 寰学 · UK Study", 870, 18.5, 11, "var(--neon-a)") + "</g>" +
+      '<g>' + rect(780, 4, 180, 20, "#0d1013", ' rx="4"') + '<text x="870" y="18.5" text-anchor="middle" class="gold-sign" style="font-size:11px">Glostudy 寰学 · UK Study</text>' + "</g>" +
       plate(2) + plate(1) +
       // street outside the entrance
       rect(0, 664, 1000, 56, "#22262a") + rect(0, 664, 1000, 8, "#3a3f43") + [40, 160, 280, 400, 520, 640, 760, 880].map(function (x) { return rect(x, 696, 50, 3, "#e8ecef", ' opacity=".35"'); }).join("") +
       '<path d="M436 662 h68 l10 10 h-88 z" fill="#3a3f43"/>';
     return '<svg class="scene" id="sceneSvg" viewBox="0 0 1000 720" role="group" aria-label="Glostudy office floor plans. Click a robot to chat, or your desk to review.">' +
-      defs + back + '<g id="layer"></g></svg>';
+      defs + back + '<g id="layer"></g><g pointer-events="none">' +
+      ringLight(756, OY[2] + 96, 30) + ringLight(520, OY[2] + 232, 24) + ringLight(470, OY[1] + 236, 20) + ringLight(220, OY[1] + 222, 22) + ringLight(96, OY[1] + 88, 14) + ringLight(210, OY[1] + 88, 14) +
+      "</g></svg>";
   }
 
   // Furniture that robots can walk in front of or behind: sorted with the robots by the y of its front edge
@@ -746,23 +768,23 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     frontItem(o2 + 282, T(2, box(42, 60, 20, 222, 6, "#1c2126", "#121518") + [70, 100, 130, 160, 190, 220, 250].map(function (yy, i) { return rect(45, yy, 14, 22, ["#f0a030", "#6c7ee0", "#ec6d5a", "#13a3b0"][i % 4], ' rx="1.5"'); }).join("")));
     frontItem(o2 + 100, T(2, box(440, 40, 75, 60, 10, "rgba(150,210,225,.18)", "#1c2126", ' stroke="var(--glass-line)"') + box(525, 40, 75, 60, 10, "rgba(150,210,225,.18)", "#1c2126", ' stroke="var(--glass-line)"') + chairTop(477, 66, "#ec6d5a") + chairTop(562, 66, "#6c7ee0")));
     frontItem(o2 + 225, T(2, box(490, 205, 60, 20, 6, "var(--timber)", "var(--timber-2)")));
-    frontItem(o2 + 272, T(2, box(450, 240, 140, 32, 10, "#8d5733", "#6e4226") + rect(450, 236, 140, 10, "#7a4a2c", ' rx="5"')));
+    frontItem(o2 + 272, T(2, '<path d="M452 246 Q520 292 588 246" fill="none" stroke="var(--purple-dark)" stroke-width="24" stroke-linecap="round"/><path d="M452 240 Q520 284 588 240" fill="none" stroke="var(--purple)" stroke-width="18" stroke-linecap="round"/><path d="M462 236 Q520 270 578 236" fill="none" stroke="#ffffff" stroke-width="1" opacity=".18"/>'));
     frontItem(o2 + 166, T(2, box(620, 140, 28, 26, 8, "#d6dde2", "#9aa6ae") + rect(626, 143, 16, 4, "#0b0d0f")));
     frontItem(o2 + 124, T(2, '<ellipse cx="756" cy="104" rx="66" ry="22" fill="var(--timber)"/><ellipse cx="756" cy="108" rx="66" ry="22" fill="var(--timber-2)" opacity=".5"/><ellipse cx="756" cy="101" rx="66" ry="20" fill="var(--timber)"/>'));
-    frontItem(o2 + 156, T(2, glassLine(652, 34, 652, 154) + glassLine(652, 154, 690, 154) + glassLine(730, 154, 862, 154)));
+    frontItem(o2 + 156, T(2, '<path d="M652 34 V114 Q652 156 694 156 H692" fill="none" stroke="var(--glass-line)" stroke-width="3"/><path d="M730 156 H862" stroke="var(--glass-line)" stroke-width="3"/><path d="M652 34 V114 Q652 156 694 156" fill="none" stroke="var(--gold)" stroke-width="1" opacity=".6"/>'));
     frontItem(o2 + 286, T(2, box(820, 205, 38, 81, 8, "#121518", "#0b0d0f") + rect(820, 205, 38, 28, "#d6dde2", ' rx="2"') + rect(826, 244, 26, 18, "#0b0d0f", ' rx="3"') + rect(830, 248, 18, 3, "var(--neon-a)")));
     frontItem(o2 + 262, T(2, '<circle cx="720" cy="249" r="16" fill="var(--timber)"/>'));
     // 1F
-    frontItem(o1 + 150, T(1, glassLine(152, 34, 152, 148) + glassLine(266, 34, 266, 148) + glassLine(42, 148, 80, 148) + glassLine(115, 148, 195, 148) + glassLine(230, 148, 266, 148)));
+    frontItem(o1 + 150, T(1, frameLine(152, 34, 152, 148) + frameLine(266, 34, 266, 148) + frameLine(42, 148, 80, 148) + frameLine(115, 148, 195, 148) + frameLine(230, 148, 266, 148) + glassLine(152, 34, 152, 148).replace('stroke-width="3"', 'stroke-width="1" opacity=".5"')));
     frontItem(o1 + 110, T(1, '<circle cx="96" cy="92" r="22" fill="var(--timber)"/><circle cx="210" cy="92" r="22" fill="var(--timber)"/>' + rect(84, 84, 16, 11, "#ffffff", ' rx="1" transform="rotate(-8 92 90)"') + rect(200, 86, 16, 11, "#ffffff", ' rx="1" transform="rotate(6 208 92)"')));
     frontItem(o1 + 141, T(1, gamingChair(470, 142, "#f0a030")));
-    frontItem(o1 + 178, T(1, '<ellipse class="mglow" cx="470" cy="150" rx="30" ry="10" fill="#f0a030" filter="url(#fBlur)" opacity=".35"/>' + box(400, 150, 140, 28, 12, "var(--timber)", "#15191d") +
-      [410, 422, 434, 446, 494, 506, 518, 530].map(function (xx) { return rect(xx, 168, 5, 9, "var(--timber)", ' opacity=".8"'); }).join("") + rect(452, 144, 36, 12, "#0b0d0f", ' rx="2"') + '<circle cx="414" cy="156" r="4" fill="#f0a030"/>'));
-    frontItem(o1 + 272, T(1, box(110, 240, 110, 32, 10, "#8d5733", "#6e4226") + rect(110, 236, 110, 10, "#7a4a2c", ' rx="5"') + box(236, 240, 94, 32, 10, "#8d5733", "#6e4226") + rect(236, 236, 94, 10, "#7a4a2c", ' rx="5"')));
+    frontItem(o1 + 178, T(1, '<ellipse class="mglow" cx="470" cy="150" rx="30" ry="10" fill="#f0a030" filter="url(#fBlur)" opacity=".35"/>' + box(400, 150, 140, 28, 12, "var(--oak-1)", "var(--walnut)") + rect(400, 164, 140, 2, "var(--gold)") +
+      [410, 418, 426, 434, 442, 490, 498, 506, 514, 522, 530].map(function (xx) { return rect(xx, 168, 4, 9, "var(--walnut-dark)", ' opacity=".7"'); }).join("") + rect(452, 144, 36, 12, "#0b0d0f", ' rx="2"') + '<circle cx="414" cy="156" r="4" fill="#f0a030"/>'));
+    frontItem(o1 + 272, T(1, box(110, 240, 110, 32, 10, "#3a3b42", "#26272c") + rect(110, 236, 110, 10, "#46474f", ' rx="5"') + box(236, 240, 94, 32, 10, "var(--purple)", "var(--purple-dark)") + rect(236, 236, 94, 10, "#7d61c4", ' rx="5"')));
     frontItem(o1 + 224, T(1, box(180, 205, 70, 19, 6, "var(--timber)", "var(--timber-2)") + rect(196, 208, 14, 9, "#ffffff", ' rx="1"')));
     frontItem(o1 + 262, T(1, box(350, 222, 24, 40, 6, "#121518", "#0b0d0f") + rect(353, 226, 8, 11, "#e0463c") + rect(363, 226, 8, 11, "#13a3b0") + rect(353, 240, 8, 11, "#6c7ee0") + rect(363, 240, 8, 11, "#f0a030") + label(362, 274, "UK UNIS")));
     frontItem(o1 + 70, T(1, box(588, 40, 24, 30, 6, "#e9edf0", "#b9c3ca") + '<circle cx="600" cy="44" r="8" fill="#bfe3ee"/>'));
-    frontItem(o1 + 200, T(1, glassLine(652, 34, 652, 198) + glassLine(652, 198, 700, 198) + glassLine(740, 198, 862, 198)));
+    frontItem(o1 + 200, T(1, frameLine(652, 34, 652, 198) + frameLine(652, 198, 700, 198) + frameLine(740, 198, 862, 198) + [700, 780].map(function (xx) { return rect(xx, 196, 3, 5, "#101214"); }).join("") + rect(654, 70, 2, 3, "#101214") + rect(654, 130, 2, 3, "#101214")));
     frontItem(o1 + 120, T(1, box(662, 40, 28, 80, 6, "#1c2126", "#121518") + [48, 66, 84, 102].map(function (yy, i) { return rect(665, yy, 22, 12, ["#6c7ee0", "#ec6d5a", "#13a3b0", "#f0a030"][i], ' rx="1.5"'); }).join("")));
     frontItem(o1 + 105, T(1, gamingChair(756, 106, "#35e0f0")));
     var boss = frontItem(o1 + 140, T(1,
