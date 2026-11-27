@@ -1207,6 +1207,17 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .dls-list button.next { border-color: #e8c17a; }
 .desk.fresh .desk-chat { margin-top: auto; }
 @media (min-width: 900px) { .desk.fresh .desk-chat { margin-top: 18px; } }
+
+/* ---------- question wheel: roll through the questions, the centre one is ready to ask ---------- */
+.dls-list { position: relative; height: 172px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 62px 0; scrollbar-width: none; gap: 4px !important;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); }
+.dls-list::-webkit-scrollbar { display: none; }
+.dls-list button { scroll-snap-align: center; flex: none; transition: transform .12s linear, opacity .12s linear, background .2s, border-color .2s, box-shadow .2s; transform-origin: 50% 50%; }
+.dls-list button.mid { background: linear-gradient(90deg, color-mix(in srgb, var(--c) 30%, rgba(14,34,54,.8)), rgba(14,34,54,.8)); border-color: var(--c); box-shadow: 0 0 16px -4px var(--c); font-weight: 600; }
+.dls-list button.mid::after { content: "Ask ›"; margin-left: auto; flex: none; font: 700 .72rem var(--sans); color: #0b0f14; background: var(--c); padding: 3px 9px; border-radius: 999px; }
+.dls-qs { position: relative; }
+.dls-qs::before { content: ""; position: absolute; left: -4px; right: -4px; top: calc(50% + 4px); height: 44px; margin-top: -22px; border-top: 1px solid rgba(var(--holo), .25); border-bottom: 1px solid rgba(var(--holo), .25); pointer-events: none; }
+.dls-hint { margin: 6px 0 0; text-align: center; font-size: .68rem; color: #8fb3cc; }
 </style>
 
 <div class="app">
@@ -4971,7 +4982,27 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
       chips.appendChild(btn);
     });
-    var dl = $("dlsList"); if (dl) Array.prototype.forEach.call(chips.children, function (c) { var cl = c.cloneNode(true); cl.onclick = c.onclick; dl.appendChild(cl); });
+    var dl = $("dlsList"); if (dl) {
+      Array.prototype.forEach.call(chips.children, function (c, k) {
+        var cl = c.cloneNode(true);
+        cl.onclick = function () { if (cl.classList.contains("mid")) c.onclick(); else cl.scrollIntoView({ block: "center", behavior: REDUCED ? "auto" : "smooth" }); };
+        dl.appendChild(cl);
+      });
+      var wheel = function () {
+        var r = dl.getBoundingClientRect(), mid = r.top + r.height / 2, best = null, bd = 1e9;
+        Array.prototype.forEach.call(dl.children, function (el) {
+          var e = el.getBoundingClientRect(), d = (e.top + e.height / 2 - mid) / (r.height / 2), ad = Math.min(1.4, Math.abs(d));
+          el.style.transform = "perspective(500px) rotateX(" + (-d * 38) + "deg) scale(" + (1 - ad * .14) + ")";
+          el.style.opacity = String(Math.max(.18, 1 - ad * .72));
+          if (Math.abs(d) < bd) { bd = Math.abs(d); best = el; }
+        });
+        Array.prototype.forEach.call(dl.children, function (el) { el.classList.toggle("mid", el === best); });
+      };
+      dl.addEventListener("scroll", function () { requestAnimationFrame(wheel); }, { passive: true });
+      requestAnimationFrame(wheel);
+      var hint = document.createElement("p"); hint.className = "dls-hint"; hint.textContent = state.lang === "en" ? "Scroll to roll · tap the highlighted question to ask" : "上下滚动选择 · 点亮起的问题即可提问";
+      dl.parentNode.appendChild(hint);
+    }
     var s = $("deskSend"); s.textContent = busy === "chat" ? "Stop" : "Send";
     if (busy === "chat") s.setAttribute("data-stop", ""); else s.removeAttribute("data-stop");
     $("deskBox").placeholder = "Ask " + b.name + "…";
