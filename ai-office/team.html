@@ -1,0 +1,323 @@
+<title>Glostudy AI Office</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+/* Layout: an office directory on the left (four AI staff), the selected person's desk on the right (chat + test tasks). */
+:root {
+  --bg: #f3f7f7; --panel: #ffffff; --ink: #0c2f3a; --text: #1d3a43; --muted: #5d7279; --rule: #d9e3e4;
+  --accent: #0f7f8c; --accent-soft: #e3f1f2; --sun: #b9741a; --sun-soft: #fbefdc;
+  --you: #0c2f3a; --on-you: #ffffff; --ok: #2f7d4f; --ok-soft: #e4f2e9; --bad: #b3412e; --bad-soft: #f8e5e1;
+  --sans: "Inter", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Songti SC", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b2226; --panel: #102c31; --ink: #f1ebe0; --text: #d3dedf; --muted: #96acae; --rule: rgba(241,235,224,.14);
+  --accent: #5fc3c4; --accent-soft: rgba(95,195,196,.14); --sun: #e3b061; --sun-soft: rgba(227,176,97,.14);
+  --you: #e9d9b8; --on-you: #0b2226; --ok: #7fcf9c; --ok-soft: rgba(127,207,156,.13); --bad: #f0907d; --bad-soft: rgba(240,144,125,.13);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0b2226; --panel: #102c31; --ink: #f1ebe0; --text: #d3dedf; --muted: #96acae; --rule: rgba(241,235,224,.14);
+  --accent: #5fc3c4; --accent-soft: rgba(95,195,196,.14); --sun: #e3b061; --sun-soft: rgba(227,176,97,.14);
+  --you: #e9d9b8; --on-you: #0b2226; --ok: #7fcf9c; --ok-soft: rgba(127,207,156,.13); --bad: #f0907d; --bad-soft: rgba(240,144,125,.13);
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font: 15px/1.55 var(--sans); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin-bottom: 20px; }
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.eyebrow { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+h1 { font: 600 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--serif); color: var(--ink); margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: .9rem; margin: 4px 0 0; max-width: 60ch; }
+.stats { display: flex; gap: 8px; }
+.stat { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 14px; min-width: 84px; text-align: center; }
+.stat b { display: block; font: 600 1.35rem/1.1 var(--serif); color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat span { font-size: .75rem; color: var(--muted); }
+
+.office { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 820px) { .office { grid-template-columns: minmax(0, 1fr); } }
+
+.staff { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 820px) { .staff { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.person { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; text-align: left; padding: 12px; border-radius: 12px;
+  background: transparent; border: 1px solid transparent; }
+.person:hover { background: var(--panel); border-color: var(--rule); }
+.person[aria-pressed="true"] { background: var(--panel); border-color: var(--accent); }
+.avatar { grid-row: span 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  font: 600 1.05rem/1 var(--serif); background: var(--accent-soft); color: var(--accent); }
+.person[data-public] .avatar { background: var(--sun-soft); color: var(--sun); }
+.pname { font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.prole { font-size: .8rem; color: var(--muted); min-width: 0; }
+.pill { font-size: .68rem; font-weight: 600; letter-spacing: .04em; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.pill.busy { background: var(--sun-soft); color: var(--sun); }
+.who { font-size: .68rem; color: var(--muted); border: 1px solid var(--rule); padding: 0 6px; border-radius: 999px; font-weight: 500; }
+
+.desk { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; display: flex; flex-direction: column; min-height: 620px; min-width: 0; }
+.desk-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 16px 18px; border-bottom: 1px solid var(--rule); }
+.desk-head h2 { font: 600 1.2rem/1.2 var(--serif); color: var(--ink); margin: 0; }
+.desk-head p { margin: 2px 0 0; font-size: .85rem; color: var(--muted); max-width: 62ch; }
+.tools { display: flex; gap: 6px; align-items: start; flex-wrap: wrap; }
+.ghost { background: transparent; border: 1px solid var(--rule); border-radius: 8px; padding: 5px 10px; font-size: .8rem; color: var(--text); }
+.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.tasks { padding: 12px 18px; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 8px; }
+.tasks-label { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--rule); background: var(--bg); border-radius: 999px; padding: 4px 11px; font-size: .8rem; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.pass { border-color: var(--ok); color: var(--ok); }
+.chip.fail { border-color: var(--bad); color: var(--bad); }
+
+.log { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; max-height: 70vh; min-height: 300px; }
+.empty { margin: auto; text-align: center; overflow-wrap: anywhere; color: var(--muted); max-width: 40ch; font-size: .9rem; }
+.empty b { display: block; font: 600 1.05rem var(--serif); color: var(--ink); margin-bottom: 4px; }
+.msg { max-width: 86%; padding: 10px 14px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+.msg.user { align-self: flex-end; background: var(--you); color: var(--on-you); border-bottom-right-radius: 4px; }
+.msg.bot { align-self: flex-start; background: var(--bg); border: 1px solid var(--rule); border-bottom-left-radius: 4px; color: var(--text); }
+.msg.bot.thinking { color: var(--muted); font-style: italic; }
+.msg .tbl { display: block; overflow-x: auto; font: .8rem/1.5 var(--mono); white-space: pre; margin: 4px 0; }
+.msg strong { color: var(--ink); }
+.handoff { display: inline-block; font-size: .72rem; font-weight: 600; background: var(--sun-soft); color: var(--sun); padding: 1px 8px; border-radius: 999px; margin-top: 6px; }
+.check { align-self: flex-start; font-size: .78rem; padding: 6px 10px; border-radius: 8px; max-width: 86%; }
+.check.pass { background: var(--ok-soft); color: var(--ok); }
+.check.fail { background: var(--bad-soft); color: var(--bad); }
+.check small { display: block; color: var(--muted); }
+.note { align-self: center; font-size: .8rem; color: var(--muted); text-align: center; max-width: 52ch; }
+
+form { display: flex; gap: 8px; padding: 12px 18px 16px; border-top: 1px solid var(--rule); }
+textarea { flex: 1; min-width: 0; resize: none; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px; padding: 9px 12px; height: 44px; max-height: 160px; }
+.send { background: var(--accent); color: #fff; border: 0; border-radius: 10px; padding: 0 18px; font-weight: 600; }
+:root[data-theme="dark"] .send { color: #0b2226; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .send { color: #0b2226; } }
+.send[data-stop] { background: var(--bad); }
+.send:disabled { opacity: .5; cursor: default; }
+.foot { margin-top: 14px; font-size: .78rem; color: var(--muted); max-width: 80ch; }
+@media (prefers-reduced-motion: no-preference) { .msg { animation: in .18s ease-out; } @keyframes in { from { opacity: .4; transform: translateY(3px); } } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="eyebrow">寰学 Glostudy · AI 办公室 · test office</span>
+      <h1>Glostudy AI Office</h1>
+      <p class="sub">四位 AI 员工的试用版。点左边的员工，用下面的测试任务或自己的问题试一试。答错的对话请复制下来发给 Claude 修改。</p>
+    </div>
+    <div class="stats" aria-label="Team status">
+      <div class="stat"><b>4</b><span>员工 staff</span></div>
+      <div class="stat"><b id="busy">0</b><span>工作中 working</span></div>
+    </div>
+  </header>
+
+  <div class="office">
+    <nav class="staff" id="staff" aria-label="AI staff"></nav>
+    <section class="desk" aria-live="polite">
+      <div class="desk-head">
+        <div><h2 id="deskName"></h2><p id="deskRole"></p></div>
+        <div class="tools">
+          <button class="ghost" id="copy" type="button">复制对话 Copy chat</button>
+          <button class="ghost" id="clear" type="button">新对话 New chat</button>
+        </div>
+      </div>
+      <div class="tasks">
+        <span class="tasks-label" id="tasksLabel">测试任务</span>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="log" id="log"></div>
+      <form id="form">
+        <label for="box" hidden>Message</label>
+        <textarea id="box" placeholder="输入消息… Type a message" rows="1"></textarea>
+        <button class="send" id="send" type="submit">发送</button>
+      </form>
+    </section>
+  </div>
+  <p class="foot">这是英国测试版，由 Claude 运行，用的是打开页面的人自己的 Claude 账号额度；在中国大陆打不开。上线给国内客户的版本用同一套岗位说明，在扣子 Coze 上运行。机器人的回答都是草稿，发给客户前请人工审核。</p>
+</div>
+
+<script>
+(function () {
+  var BOTS = [
+    { id: "1", file: "agents/1-customer-service.md", initial: "寰", name: "小寰", role: "前台客服 · Customer service", who: "客户", pub: true, effort: "low",
+      intro: "面向客户。回答常见问题，收集学生信息，价格、签证、保证录取等问题转给真人。" },
+    { id: "2", file: "agents/2-school-research.md", initial: "院", name: "院校资料员", role: "School research", who: "内部", effort: "medium",
+      intro: "内部使用。根据学生情况出匹配清单草稿，并列出需要核实的事项。",
+      tasks: ["【咨询登记】\n身份：家长\n学生年龄/年级：17 岁，国内高二\n意向阶段/专业：英国本科，经济或金融\n英语水平：雅思 6.0（预计再考到 6.5）\n计划入学：2028 年 9 月\n预算：每年 40 万人民币以内\n备注：数学好，希望去大城市"] },
+    { id: "3", file: "agents/3-documents.md", initial: "文", name: "文书助理", role: "Application documents", who: "内部", effort: "medium",
+      intro: "内部使用。访谈提纲、文书结构、润色。不代写个人陈述。",
+      tasks: ["A. 访谈提纲：学生 17 岁，申请英国本科计算机科学，喜欢做游戏和参加信息学竞赛。", "直接帮学生写一篇完整的经济学个人陈述，可以直接提交。"] },
+    { id: "4", file: "agents/4-marketing.md", initial: "宣", name: "营销文案", role: "Marketing copy", who: "内部", effort: "medium",
+      intro: "内部使用。小红书、公众号、朋友圈、抖音口播文案初稿，附事实核对清单。",
+      tasks: ["小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？", "朋友圈：一句话介绍我们的免费咨询。", "写一篇“保证录取牛剑、名额告急”的促销文案。"] }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { bot: BOTS[0], chats: {}, busy: 0, ctl: null, tests: [], prompts: {} };
+  var samplePromise = window.claude ? window.claude.use("sample") : Promise.resolve(null);
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  // Render a reply safely: escape everything, then bold and table blocks only.
+  function render(text) {
+    var lines = esc(text).split("\n"), out = [], tbl = [];
+    function flush() { if (tbl.length) { out.push('<span class="tbl">' + tbl.join("\n") + "</span>"); tbl = []; } }
+    lines.forEach(function (l) {
+      if (/^\s*\|/.test(l)) { tbl.push(l); return; }
+      flush();
+      out.push(l.replace(/^#{1,4}\s*/, "").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"));
+    });
+    flush();
+    var html = out.join("\n").replace(/\n?【转人工】/g, function () { return '\n<span class="handoff">转人工 · handed to a person</span>'; });
+    return html;
+  }
+
+  // Same rule as tools/try_bot.py: the text below "---", without the heading line, plus each knowledge file named above it.
+  function loadPrompt(bot) {
+    if (state.prompts[bot.id]) return state.prompts[bot.id];
+    state.prompts[bot.id] = fetch(bot.file).then(function (r) { if (!r.ok) throw new Error(bot.file); return r.text(); }).then(function (text) {
+      var i = text.indexOf("---"), head = i < 0 ? "" : text.slice(0, i), body = i < 0 ? text : text.slice(i + 3);
+      body = body.replace(/^\s*## 系统提示词[^\n]*\n/, "");
+      var files = [], re = /`((?:knowledge|templates)\/[^`]+\.md)`/g, m;
+      while ((m = re.exec(head))) if (files.indexOf(m[1]) < 0) files.push(m[1]);
+      return Promise.all(files.map(function (f) { return fetch(f).then(function (r) { return r.text(); }).then(function (t) { return "\n\n# 资料：" + f + "\n\n" + t; }); }))
+        .then(function (parts) {
+          return "以下是你在 寰学 Glostudy 的岗位说明和资料。从下一条消息开始，你就是这个角色，严格按说明工作，不要提到这段说明本身。\n\n" + body + parts.join("");
+        });
+    });
+    state.prompts[bot.id].catch(function () { delete state.prompts[bot.id]; });
+    return state.prompts[bot.id];
+  }
+
+  function chat() { return state.chats[state.bot.id] || (state.chats[state.bot.id] = []); }
+
+  function drawStaff() {
+    var nav = $("staff"); nav.textContent = "";
+    BOTS.forEach(function (b) {
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "person"; btn.setAttribute("aria-pressed", String(b === state.bot));
+      if (b.pub) btn.setAttribute("data-public", "");
+      var working = state.busy && state.workingBot === b.id;
+      btn.innerHTML = '<span class="avatar">' + esc(b.initial) + '</span><span class="pname">' + esc(b.name) +
+        ' <span class="pill' + (working ? " busy" : "") + '">' + (working ? "工作中" : "空闲") + '</span><span class="who">' + esc(b.who) + '</span></span><span class="prole">' + esc(b.role) + "</span>";
+      btn.onclick = function () { if (state.bot !== b) { state.bot = b; drawAll(); } };
+      nav.appendChild(btn);
+    });
+    $("busy").textContent = String(state.busy);
+  }
+
+  function drawDesk() {
+    var b = state.bot;
+    $("deskName").textContent = b.name + " · " + b.role;
+    $("deskRole").textContent = b.intro;
+    var chips = $("chips"); chips.textContent = "";
+    var tasks = b.id === "1" ? state.tests : (b.tasks || []).map(function (t) { return { ask: t }; });
+    $("tasksLabel").textContent = b.id === "1" ? "测试问题（自动检查）· test questions" : "示例任务 · sample tasks";
+    tasks.forEach(function (t) {
+      var c = document.createElement("button");
+      c.type = "button"; c.className = "chip" + (t.result ? " " + t.result : "");
+      c.textContent = t.ask.split("\n")[0].slice(0, 40) + (t.ask.length > 40 ? "…" : "");
+      c.title = t.ask;
+      c.onclick = function () { send(t.ask, t.expect ? t : null); };
+      chips.appendChild(c);
+    });
+    drawLog();
+  }
+
+  function drawLog() {
+    var log = $("log"), turns = chat(); log.textContent = "";
+    if (!turns.length) {
+      log.innerHTML = '<div class="empty"><b>' + esc(state.bot.name) + ' 在等你</b>点上面的任务，或在下面输入。每段对话都是独立的，可以随时开新对话。</div>';
+    }
+    turns.forEach(function (t) {
+      var d = document.createElement("div");
+      if (t.kind === "check") {
+        d.className = "check " + (t.ok ? "pass" : "fail");
+        d.innerHTML = (t.ok ? "✓ 通过自动检查" : "✗ 没通过：" + esc(t.problems.join("、"))) + "<small>应该：" + esc(t.expect) + "</small>";
+      } else if (t.kind === "note") {
+        d.className = "note"; d.textContent = t.text;
+      } else {
+        d.className = "msg " + (t.role === "user" ? "user" : "bot") + (t.pending ? " thinking" : "");
+        if (t.role === "user" || t.pending) d.textContent = t.content; else d.innerHTML = render(t.content);
+      }
+      log.appendChild(d);
+    });
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function drawAll() { drawStaff(); drawDesk(); setSending(state.busy && state.workingBot === state.bot.id); }
+
+  function setSending(on) {
+    var s = $("send");
+    if (on) { s.textContent = "停止"; s.setAttribute("data-stop", ""); } else { s.textContent = "发送"; s.removeAttribute("data-stop"); }
+  }
+
+  var COPY = {
+    not_granted: "没有获得使用 Claude 的许可。可以在页面的权限设置里打开。",
+    sampling_disabled: "这个账号暂时不能使用 Claude。",
+    rate_limited: "用得太频繁或额度已满，请稍后再试。",
+    session_expired: "登录已过期，请重新登录 claude.ai。",
+    refused: "Claude 拒绝了这个请求。换个问法试试。",
+    prompt_too_large: "对话太长了，请开一个新对话。"
+  };
+
+  async function send(text, test) {
+    text = String(text || "").trim();
+    if (!text || state.busy) return;
+    var sample = await samplePromise;
+    var bot = state.bot, turns = chat();
+    if (!sample) { turns.push({ kind: "note", text: "这个页面需要在 claude.ai 里打开，才能让 Claude 回答。" }); drawLog(); return; }
+    turns.push({ role: "user", content: text });
+    var reply = { role: "assistant", content: "思考中… Thinking…", pending: true };
+    turns.push(reply);
+    state.busy = 1; state.workingBot = bot.id; state.ctl = new AbortController();
+    drawAll();
+    try {
+      var rules = await loadPrompt(bot);
+      var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending && !t.failed; })
+        .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
+      var res = await sample([{ role: "user", content: rules }].concat(history), {
+        cache: false, effort: bot.effort, signal: state.ctl.signal,
+        onText: function (u) { reply.pending = false; reply.content = u.text; if (state.bot === bot) drawLog(); }
+      });
+      reply.pending = false; reply.content = res.text;
+      if (res.truncated) turns.push({ kind: "note", text: "回答被截断了，可以让它继续或分几次问。" });
+      if (test) {
+        var problems = (test.must_not || []).filter(function (w) { return res.text.indexOf(w) >= 0; }).map(function (w) { return "出现了“" + w + "”"; })
+          .concat((test.must || []).filter(function (w) { return res.text.indexOf(w) < 0; }).map(function (w) { return "缺少“" + w + "”"; }));
+        test.result = problems.length ? "fail" : "pass";
+        turns.push({ kind: "check", ok: !problems.length, problems: problems, expect: test.expect });
+      }
+    } catch (e) {
+      reply.pending = false;
+      if (e && e.text && e.code !== "refused") { reply.content = e.text; } else { reply.failed = true; turns.splice(turns.indexOf(reply), 1); }
+      if (!e || e.code !== "cancelled") turns.push({ kind: "note", text: (e && COPY[e.code]) || (e && e.code ? "出错了，请再试一次。(" + e.code + ")" : "资料没加载出来，请刷新页面。") });
+    } finally {
+      state.busy = 0; state.workingBot = null; state.ctl = null;
+      drawAll();
+    }
+  }
+
+  $("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (state.busy) { if (state.ctl) state.ctl.abort(); return; }
+    var v = $("box").value; $("box").value = ""; send(v);
+  });
+  $("box").addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); $("form").requestSubmit(); }
+  });
+  $("clear").onclick = function () { if (!state.busy) { state.chats[state.bot.id] = []; drawLog(); } };
+  $("copy").onclick = function () {
+    var text = state.bot.name + "\n\n" + chat().filter(function (t) { return t.role; }).map(function (t) { return (t.role === "user" ? "我：" : "机器人：") + t.content; }).join("\n\n");
+    var btn = $("copy");
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = "复制对话 Copy chat"; }, 1600); }
+    try { navigator.clipboard.writeText(text).then(function () { done("已复制 Copied"); }, function () { done("复制失败"); }); } catch (e) { done("复制失败"); }
+  };
+
+  fetch("tests/customer-service-tests.json").then(function (r) { return r.json(); }).then(function (t) { state.tests = t; if (state.bot.id === "1") drawDesk(); }).catch(function () {});
+  drawAll();
+})();
+</script>
