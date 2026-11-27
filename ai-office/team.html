@@ -1282,6 +1282,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .ib-btn.ghost { background: rgba(255,255,255,.08); }
 .hand-row { display: flex; align-items: center; gap: 10px; text-align: left; width: 100%; border: 1px solid rgba(255,180,92,.5); border-left: 4px solid #ffb45c; background: rgba(40,28,12,.45); color: #fff; border-radius: 12px; padding: 8px 10px; cursor: pointer; font: inherit; }
 .hand-row b { flex: 1; font-size: .86rem; } .hand-row small { display: block; color: #a9c6dc; font-weight: 400; font-size: .72rem; } .hand-row em { font-style: normal; font-size: .7rem; color: #ffd29a; } .hand-row.late { border-left-color: #ff6b5c; } .hand-row.late em { color: #ffb1a8; }
+.consent { font-size: .72rem; padding: 3px 8px; border-radius: 6px; align-self: flex-start; } .consent.ok { color: #1f7a45; background: rgba(61,220,132,.14); } .consent.no { color: #9a5a00; background: rgba(255,180,92,.18); }
 </style>
 
 <div class="app">
@@ -1540,7 +1541,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["Official Account articles", "WeChat Moments", "WeChat comment replies"], intro: "Runs our WeChat Official Account and Moments, and answers comments on our WeChat posts.",
       persona: "你负责微信公众号和朋友圈：写文章、朋友圈，回复公众号评论。",
       tasks: [{ en: "Outline this week's Official Account article about choosing a UK city.", zh: "为本周公众号文章列提纲：怎么选英国城市。" }] },
-    { id: "17", demoAs: "4", name: "Sylvie", title: "Marketing Director", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c17", prop: "megaphone", effort: "medium",
+    { id: "17", demoAs: "4", name: "Sylvie", title: "Marketing Director", role: "Social · Emily in Paris", who: "Team only", file: "agents/7-checker.md", color: "--c17", prop: "megaphone", effort: "medium",
       skills: ["Checks every reply before it posts", "Brand voice", "Decides what needs the CEO"], intro: "Marketing director: checks every public reply and post. Everyday replies she passes go out; money, visas or guarantees go to your desk.",
       persona: "你是市场总监：审核团队的每条公开回复和帖子，判断是否可以发布，涉及费用、签证或保证的交给 CEO。",
       tasks: [{ en: "What did the social team post this week, and what's waiting for approval?", zh: "社媒团队本周发了什么？有什么等待批准？" }] },
@@ -1652,7 +1653,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var store = (function () {
     var KEY = "glostudy-clients", items = [], listeners = [], mode = "local", col = null, ready = false;
     function emit() { listeners.forEach(function (f) { f(items); }); }
-    function loadLocal() { try { items = JSON.parse(lsGet(KEY, "[]")) || []; } catch (e) { items = []; } ready = true; }
+    function loadLocal() { try { items = JSON.parse(lsGet(KEY, "[]")) || []; } catch (e) { items = []; }
+      // retention: client records are kept 12 months after the last change, then deleted
+      var n = items.length, cutoff = Date.now() - 365 * 864e5; items = items.filter(function (c) { return new Date(c.updated || c.created || 0).getTime() > cutoff; }); if (items.length !== n) saveLocal(); ready = true; }
     function saveLocal() { lsSet(KEY, JSON.stringify(items)); }
     function sortItems() { items.sort(function (a, b) { return String(b.created).localeCompare(String(a.created)); }); }
     var api = {
@@ -1665,6 +1668,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         if (mode === "db") return col.add(obj).then(function (ref) { return ref.id; });
         var id = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
         items.unshift(Object.assign({ id: id }, obj)); saveLocal(); emit(); return Promise.resolve(id);
+      },
+      remove: function (id) {
+        if (mode === "db") return col.doc(id).delete();
+        items = items.filter(function (c) { return c.id !== id; }); saveLocal(); emit(); return Promise.resolve();
       },
       update: function (id, patch) {
         if (mode === "db") return col.doc(id).update(patch);
@@ -3692,7 +3699,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         activity(agentId, me.name + " updated " + name + "'s booking");
         if (existing.status !== "approved" && existing.status !== "rejected") queueJob(existing.id);
       } else {
-        var id = await store.add({ name: name, summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
+        var said = turns.filter(function (t) { return t.role === "user"; }).map(function (t) { return t.content; }).join(" ");
+        var agreed = /同意|可以用|consent|use my details|happy for you to use|you can use/i.test(said + " " + summary), age = (summary.match(/(\d{1,2})\s*(岁|-year|years? old)/) || [])[1];
+        var id = await store.add({ consent: { given: agreed, at: new Date().toISOString(), via: me.name, guardianNeeded: !!(age && +age < 14) }, name: name, summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
         state.chatClient[agentId] = id;
         turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Monica is taking the folder to Leonard." });
         activity(agentId, me.name + " booked " + name + " and took the folder to Leonard");
@@ -3711,6 +3720,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     state.jobs.push({ id: id, note: note || "" });
     runJobs();
   }
+  function redactContacts(t) { return String(t || "").split("\n").map(function (l) { return /微信|wechat|电话|phone|手机|mobile|邮箱|email|@/i.test(l) ? l.replace(/[:：].*$/, "：[hidden]") : l; }).join("\n"); }
   async function runJobs() {
     if (state.busy["2"] || !state.jobs.length) return;
     var job = state.jobs.shift(), c = store.get(job.id);
@@ -3720,7 +3730,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     setBusy("2", "job");
     try {
       await store.update(c.id, { status: "researching", error: "" });
-      var msg = (state.lang === "en" ? "New client from the front desk. Please draft the shortlist.\n\n" : "前台新登记的客户，请出匹配清单草稿。\n\n") + "【咨询登记】\n" + c.summary;
+      var msg = (state.lang === "en" ? "New client from the front desk. Please draft the shortlist.\n\n" : "前台新登记的客户，请出匹配清单草稿。\n\n") + "【咨询登记】\n" + redactContacts(c.summary);
       if (job.note) msg += (state.lang === "en" ? "\n\nYour previous draft:\n" : "\n\n你上一版草稿：\n") + (c.draft || "") + (state.lang === "en" ? "\n\nConsultant's feedback, please redo the draft with this in mind:\n" : "\n\n顾问意见，请据此重做草稿：\n") + job.note;
       var res = await ask(scout, [{ role: "user", content: msg }], {});
       await store.update(c.id, { status: "review", draft: res.text, updated: new Date().toISOString() });
@@ -3758,6 +3768,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       card.className = "client"; card.setAttribute("data-status", c.status || "new");
       var h = '<div class="client-top"><b>' + esc(c.name || "New client") + '</b><span class="pill ' + st[1] + '">' + st[0] + "</span><small>" + esc(when(c.created)) + "</small></div>";
       if (c.error) h += '<div class="note" style="align-self:flex-start;text-align:left">' + esc(c.error) + "</div>";
+      var cs = c.consent || {};
+      h += '<div class="consent ' + (cs.given ? "ok" : "no") + '">' + (cs.given ? "✓ Consent to use details" + (cs.at ? " · " + esc(when(cs.at)) : "") : "⚠ No recorded consent: confirm before using these details") + (cs.guardianNeeded ? " · ⚠ Under 14: guardian consent needed" : "") + "</div>";
       h += '<details><summary>Booking summary</summary><div class="pre">' + esc(c.summary || "") + "</div></details>";
       if (c.status === "researching") h += '<div><span class="typing" aria-label="Leonard is working"><i></i><i></i><i></i></span></div>';
       if (c.draft && c.status !== "researching") {
@@ -3777,6 +3789,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       if (c.status === "new") acts += '<button class="btn" type="button" data-act="scout" data-id="' + c.id + '"' + (state.busy["2"] ? " disabled" : "") + ">Send to Leonard</button>";
       if (c.status === "approved") acts += '<button class="ghost" type="button" data-act="copy" data-id="' + c.id + '">Copy draft</button><button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
       if (c.status === "rejected") acts += '<button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
+      acts += '<button class="ghost danger" type="button" data-act="delete" data-id="' + c.id + '">Delete client</button>';
       if (acts) h += '<div class="acts">' + acts + "</div>";
       if (c.status === "review" && !state.editing[c.id]) {
         h += '<div class="row"><label for="nt' + c.id + '" hidden>Feedback for Leonard</label><input id="nt' + c.id + '" data-note="' + c.id + '" placeholder="Feedback, e.g. add more London options" value="' + esc(state.notes[c.id] || "") + '">' +
@@ -3797,6 +3810,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var b = ev.target.closest("button[data-act]"); if (!b) return;
     var id = b.dataset.id, c = store.get(id); if (!c) return;
     var act = b.dataset.act, now = new Date().toISOString(), name = c.name || "a client";
+    if (act === "delete") { if (!window.confirm("Delete " + name + "'s record and all their details? This can't be undone.")) return; store.remove(id); activity("14", "Howard deleted " + name + "'s record at Aliya's request"); return; }
     function upd(p) { b.disabled = true; store.update(id, Object.assign({ updated: now }, p)).catch(function () { b.disabled = false; }); }
     if (act === "approve") { upd({ status: "approved" }); activity(null, "You approved " + name + "'s shortlist"); }
     else if (act === "reject") { upd({ status: "rejected" }); activity(null, "You rejected " + name + "'s shortlist"); }
