@@ -49,6 +49,24 @@
    "zh": "零、一句话总结：12 岁，明年 9 月 13+ 入读寄宿学校；每年 40 万预算可以选很多好学校。\n\n| 学校类型 | 理由 | 入学 |\n|---|---|---|\n| 东南部男女混校寄宿 | 生活照顾好 | 学校自己的英语和数学测试 |\n| 女子寄宿学校 | 小班教学 | 测试 + 面试 |\n| 国际寄宿学院 | 国际生多 | 英语测试 |\n**下一步：** 春季前报名；准备英语和数学测试。"
   },
   {
+   "bot": "4",
+   "match": "Daily task: draft one WeChat Moments post|每日任务：写一条本周",
+   "en": "【简要】Today's Moments post is ready for your approval: a calm reminder that UK visa money rules change on 30 November.\n【完整报告】\n【朋友圈预览】\n提醒正在准备英国留学的家庭：11 月 30 日起，学生签证需要证明的生活费上调，伦敦每月 £1,570，其他城市 £1,203。提前准备资金证明，申请更从容 🇬🇧\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n图片：london\n【/朋友圈预览】\n**Fact-check:** amounts from GOV.UK news (30 Nov 2026), needs final check on GOV.UK.",
+   "zh": "【简要】今天的朋友圈已写好，等您批准：平和地提醒家长 11 月 30 日起签证资金要求上调。\n【完整报告】\n【朋友圈预览】\n提醒正在准备英国留学的家庭：11 月 30 日起，学生签证需要证明的生活费上调，伦敦每月 £1,570，其他城市 £1,203。提前准备资金证明，申请更从容 🇬🇧\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n图片：london\n【/朋友圈预览】\n**事实核对：** 金额来自 GOV.UK 新闻（2026 年 11 月 30 日），发布前再核对一次。"
+  },
+  {
+   "bot": "6",
+   "match": "Weekly task: check our cost sheet|每周任务：根据最新资讯核对费用表",
+   "en": "Cost sheet check:\n- Visa money to show: update to £1,570/month London and £1,203 elsewhere for applications from 30 Nov 2026.\n- Visa fee £558 and health surcharge £776/year: unchanged.\n- Tuition ranges: still current for 2027 entry.\n- Needs your decision: update the sheet now, or wait for GOV.UK's final page?",
+   "zh": "费用表核对：\n- 签证资金：2026 年 11 月 30 日起，伦敦改为每月 £1,570，其他地区 £1,203。\n- 签证费 £558、医疗附加费每年 £776：不变。\n- 学费区间：2027 年入学仍然适用。\n- 需要您决定：现在更新，还是等 GOV.UK 正式页面？"
+  },
+  {
+   "bot": "3",
+   "match": "Prepare a short document checklist|准备一份简短的材料清单",
+   "en": "Document checklist for the consultation:\n1. Passport copy (student)\n2. Latest school transcripts, translated\n3. English test result (or test date)\n4. Short list of interests and activities\n5. Budget the family is comfortable with\nPhoebe will send it to the client before the call.",
+   "zh": "咨询材料清单：\n1. 学生护照复印件\n2. 最近的成绩单（附翻译）\n3. 英语成绩（或考试日期）\n4. 兴趣和活动简要列表\n5. 家庭能接受的预算\nPhoebe 会在咨询前发给客户。"
+  },
+  {
    "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
    "en": "Hello! Happy to help 😊 I just checked with Ross, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",

@@ -819,6 +819,57 @@ cust("2", r"lily_mama_12", """
 **下一步：** 春季前报名；准备英语和数学测试。
 """)
 
+# ---------- the team's daily work ----------
+cust("4", r"Daily task: draft one WeChat Moments post|每日任务：写一条本周", """
+【简要】Today's Moments post is ready for your approval: a calm reminder that UK visa money rules change on 30 November.
+【完整报告】
+【朋友圈预览】
+提醒正在准备英国留学的家庭：11 月 30 日起，学生签证需要证明的生活费上调，伦敦每月 £1,570，其他城市 £1,203。提前准备资金证明，申请更从容 🇬🇧
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：london
+【/朋友圈预览】
+**Fact-check:** amounts from GOV.UK news (30 Nov 2026), needs final check on GOV.UK.
+""", """
+【简要】今天的朋友圈已写好，等您批准：平和地提醒家长 11 月 30 日起签证资金要求上调。
+【完整报告】
+【朋友圈预览】
+提醒正在准备英国留学的家庭：11 月 30 日起，学生签证需要证明的生活费上调，伦敦每月 £1,570，其他城市 £1,203。提前准备资金证明，申请更从容 🇬🇧
+第一次咨询免费，加微信 GlostudyUK 聊一聊。
+图片：london
+【/朋友圈预览】
+**事实核对：** 金额来自 GOV.UK 新闻（2026 年 11 月 30 日），发布前再核对一次。
+""")
+cust("6", r"Weekly task: check our cost sheet|每周任务：根据最新资讯核对费用表", """
+Cost sheet check:
+- Visa money to show: update to £1,570/month London and £1,203 elsewhere for applications from 30 Nov 2026.
+- Visa fee £558 and health surcharge £776/year: unchanged.
+- Tuition ranges: still current for 2027 entry.
+- Needs your decision: update the sheet now, or wait for GOV.UK's final page?
+""", """
+费用表核对：
+- 签证资金：2026 年 11 月 30 日起，伦敦改为每月 £1,570，其他地区 £1,203。
+- 签证费 £558、医疗附加费每年 £776：不变。
+- 学费区间：2027 年入学仍然适用。
+- 需要您决定：现在更新，还是等 GOV.UK 正式页面？
+""")
+cust("3", r"Prepare a short document checklist|准备一份简短的材料清单", """
+Document checklist for the consultation:
+1. Passport copy (student)
+2. Latest school transcripts, translated
+3. English test result (or test date)
+4. Short list of interests and activities
+5. Budget the family is comfortable with
+Phoebe will send it to the client before the call.
+""", """
+咨询材料清单：
+1. 学生护照复印件
+2. 最近的成绩单（附翻译）
+3. 英语成绩（或考试日期）
+4. 兴趣和活动简要列表
+5. 家庭能接受的预算
+Phoebe 会在咨询前发给客户。
+""")
+
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
   {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}]},

@@ -907,6 +907,34 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .lv-msg.ai { align-self: flex-end; background: rgba(61,140,220,.22); border: 1px solid rgba(var(--holo), .3); }
 @media (max-width: 899px) { .live-ticker { display: none; } .live-lab { font-size: .55rem; padding: 1px 5px; } }
 .pv-card { transition: opacity .5s, transform .5s; } .pv-card.fade { opacity: 0; transform: translateY(10px); pointer-events: none; }
+
+/* ---------- CEO approvals and review meetings ---------- */
+.files.urgent { border-color: #ff9a6a; box-shadow: 0 0 18px rgba(255,140,90,.75); animation: filesPop 1.2s ease-out, breathe 2s ease-in-out infinite 1.2s; }
+.ap-mode { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: .78rem; color: #a9c6dc; }
+.ap-mode button, .mt-book button, .mt-row button { border: 1px solid rgba(var(--holo), .4); background: rgba(8,20,32,.55); color: #eaf6ff; border-radius: 999px; padding: 4px 10px; font: 600 .74rem var(--sans); cursor: pointer; }
+.ap-mode button[aria-pressed="true"] { background: #eaf6ff; color: #0b1620; }
+.ap-card { border: 1px solid rgba(255,190,120,.5); background: rgba(40,28,12,.45); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.ap-card.approved { border-color: rgba(61,220,132,.5); background: rgba(10,40,24,.4); } .ap-card.rejected { opacity: .6; }
+.ap-head { display: flex; align-items: center; gap: 10px; } .ap-head b { flex: 1; font-size: .9rem; } .ap-head small { display: block; color: #a9c6dc; font-weight: 500; font-size: .74rem; }
+.ap-av { width: 30px; height: 30px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c); flex: none; }
+.ap-st { font-size: .72rem; color: #cfe3f2; }
+.ap-ctx { font-size: .8rem; color: #cfe3f2; background: rgba(255,255,255,.06); border-radius: 8px; padding: 6px 9px; }
+.ap-body { font-size: .86rem; line-height: 1.5; white-space: pre-wrap; color: #f2f6f9; max-height: 340px; overflow: auto; }
+.ap-body textarea { width: 100%; box-sizing: border-box; border-radius: 8px; border: 1px solid rgba(var(--holo), .5); background: rgba(5,15,25,.7); color: #fff; padding: 8px; font: 400 .86rem var(--sans); }
+.ap-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.ap-acts button { border: 0; border-radius: 999px; padding: 7px 12px; font: 600 .8rem var(--sans); cursor: pointer; }
+.ap-ok { background: #3ddc84; color: #052; } .ap-edit { background: #eaf6ff; color: #0b1620; } .ap-no { background: rgba(255,255,255,.12); color: #fff; }
+.ap-done summary { cursor: pointer; font-size: .78rem; color: #a9c6dc; margin: 4px 0; }
+.mt-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border: 1px solid rgba(var(--holo), .3); border-radius: 10px; padding: 8px 10px; font-size: .82rem; }
+.mt-row span { flex: 1; color: #cfe3f2; } .mt-row.due { border-color: #ffcf70; box-shadow: 0 0 14px rgba(255,207,112,.35); }
+.mt-row .ghostx { padding: 2px 8px; }
+.mt-book { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: .78rem; color: #a9c6dc; }
+.mt-book label { width: 100%; }
+.mt-book input { border: 1px solid rgba(var(--holo), .45); background: rgba(5,15,25,.6); color: #fff; border-radius: 8px; padding: 5px 8px; font: 400 .8rem var(--sans); color-scheme: dark; }
+.mt-book .mt-go { background: #e8c17a; color: #2a1d08; border-color: transparent; }
+.tk-chip.mt { background: rgba(80,60,10,.9); border-color: #ffcf70; }
+#announce .modal-in { width: min(720px, 100%); }
+#rvBody { max-height: 60vh; margin-bottom: 10px; }
 </style>
 
 <div class="app">
@@ -3286,16 +3314,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     return "working";
   }
   function freeFor(id) { return !state.busy[id] || state.busy[id] === "task"; }
-  // between customers everyone gets on with their daily work (demo only: in the live versions this is real work)
-  if (DEMO_DATA && !IN_CLAUDE) setInterval(function () {
-    if (document.hidden || REDUCED) return;
-    var idle = BOTS.filter(function (b) { return !state.busy[b.id] && !(b.id === "1" && live.serving) && !(b.id === "4" && live.joey); });
-    if (!idle.length || Math.random() < .25) return;
-    var b = idle[Math.floor(Math.random() * idle.length)], list = DAILY[b.id], label = list[Math.floor(Math.random() * list.length)];
-    state.taskLabel[b.id] = label; setBusy(b.id, "task");
-    if (Math.random() < .35) activity(b.id, b.name + " is " + label);
-    setTimeout(function () { if (state.busy[b.id] === "task") { setBusy(b.id, null); } }, 9000 + Math.random() * 9000);
-  }, 4000);
+
   // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
   // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Joey, bench by the stairs),
   //       web (website form / phone, lounge sofa), comment (on our posts, 2F comments lounge, Joey replies)
@@ -3323,10 +3342,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var LIVE_FIRST = [["chen", 3], ["lilymama", 9], ["wang", 18], ["mei", 28], ["xiaolu", 36], ["kevin", 46], ["zhang", 60], ["amy", 74], ["mao", 88]];
   var PLAT = { xhs: { c: "#ff2442", en: "Xiaohongshu", zh: "小红书" }, wc: { c: "#07c160", en: "WeChat post", zh: "公众号" }, dy: { c: "#111", en: "Douyin", zh: "抖音" } };
   var KIND = { wechat: { c: "#07c160", en: "WeChat chat", zh: "微信咨询" }, web: { c: "#3b82f6", en: "Website", zh: "官网表单" }, lead: { c: "#ff2442", en: "Lead from a comment", zh: "评论线索" } };
-  var live = { on: !IN_CLAUDE && !!DEMO_DATA, list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
+  var live = { on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
   function liveName(c) { return c.name[state.lang]; }
   function liveZone(c) {
-    if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null;
+    if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval") return "comments";
     if (c.status === "talking") return c.kind === "comment" ? "joey" : "rachel";
     return { wechat: "wechat", web: "web", lead: "lead", comment: "comments" }[c.kind];
   }
@@ -3399,9 +3418,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
       var res = await ask(joey, [{ role: "user", content: msg }], { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
       reply.pending = false; reply.content = res.text; setBusy("4", null); flashDone("4");
-      if (/【线索】/.test(res.text) && c.lead) { await wait(1500); c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Joey sent " + c.name.en + " down to Rachel as a new lead"); }
-      else if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
-      else c.status = "done";
+      if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
+      else {
+        var isLead = /【线索】/.test(res.text) && c.lead;
+        c.status = "approval";
+        addApproval({ kind: "reply", from: "4", where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
+          c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") });
+          if (ok && isLead) { c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Reply posted. " + c.name.en + " messaged us: sent down to Rachel as a lead"); }
+          else c.status = "done";
+          drawLive(); drawLiveDetail();
+        } });
+      }
     } catch (e) { setBusy("4", null); c.status = "waiting"; live.on = false; activity("4", "Auto-reply paused: " + errText(e)); }
     live.joey = null; drawLive(); drawLiveDetail();
   }
@@ -3418,7 +3445,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }, 1500);
   // the hooks the rest of the office calls
   function custMet(ids) { var c = live.serving; if (c) ids.forEach(function (id) { c.met[id] = 1; }); }
-  function custBooked() { var c = live.serving; if (c) { c.booked = true; c.status = "booked"; activity("1", c.name.en + " is booked and waiting in the booked nook"); drawLive(); } }
+  function custBooked() { var c = live.serving; if (c) { c.booked = true; c.status = "booked"; checklistFor(c); activity("1", c.name.en + " is booked and waiting in the booked nook"); drawLive(); } }
   function openCustomers() { openLive("all"); }
 
   // ----- where pins sit, per view (percent of each picture) -----
@@ -3462,7 +3489,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         if (last) { el.className = "live-more"; el.textContent = "+" + (cs.length - i); el.onclick = function (e) { e.stopPropagation(); openLive(z); }; }
         else {
           el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", liveColor(c));
-          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
           el.setAttribute("aria-label", liveName(c) + " · " + (c.kind === "comment" ? PLAT[c.plat].en : KIND[c.kind].en)); el.title = liveName(c);
           el.onclick = function (e) { e.stopPropagation(); openLive(z, c.id); };
         }
@@ -3494,7 +3521,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var liveSel = { zone: "all", id: null };
   function liveStatusText(c) {
     var en = state.lang === "en";
-    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
+    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
   }
   function openLive(zone, id, refresh) {
     var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
@@ -3516,7 +3543,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (sel) liveSel.id = sel.id;
     drawLiveDetail();
     Array.prototype.forEach.call($("custSub").querySelectorAll("[data-z]"), function (b) { b.onclick = function () { liveSel.id = null; openLive(b.dataset.z); }; });
-    $("lvAuto").onclick = function () { live.on = !live.on; drawLive(); openLive(liveSel.zone, liveSel.id); };
+    $("lvAuto").onclick = function () { live.on = !live.on; lsSet("glostudy-auto", live.on ? "on" : "off"); drawLive(); openLive(liveSel.zone, liveSel.id); };
     if (!refresh) $("custModal").hidden = false;
   }
   function drawLiveDetail() {
@@ -3535,6 +3562,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var cv = d.querySelector(".lv-conv"); cv.scrollTop = cv.scrollHeight;
     var acts = d.querySelector(".dt-acts");
     if (c.status === "waiting" || c.status === "talking") { var tb = document.createElement("button"); tb.type = "button"; tb.className = "ib-btn"; tb.textContent = en ? "🙋 Take over (a person replies)" : "🙋 人工接管"; tb.onclick = function () { c.status = "human"; activity("1", "You took over " + c.name.en + "'s chat"); drawLive(); }; acts.appendChild(tb); }
+    if (c.status === "approval") { var ab = document.createElement("button"); ab.type = "button"; ab.className = "ib-btn"; ab.textContent = en ? "✍ Approve at the CEO desk" : "✍ 到 CEO 桌上批准"; ab.onclick = function () { $("custModal").hidden = true; openInbox(); }; acts.appendChild(ab); }
     if (c.status === "booked") { var bb = document.createElement("button"); bb.type = "button"; bb.className = "ib-btn"; bb.textContent = en ? "📁 Open the CEO desk" : "📁 打开 CEO 桌面"; bb.onclick = function () { $("custModal").hidden = true; openInbox(); }; acts.appendChild(bb); }
     if (c.status === "human") { var hb = document.createElement("button"); hb.type = "button"; hb.className = "ib-btn"; hb.textContent = en ? "✓ Mark as handled" : "✓ 已处理"; hb.onclick = function () { c.status = "done"; drawLive(); }; acts.appendChild(hb); }
   }
@@ -3633,7 +3661,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && st.floor !== 3);
         el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? busyText(id) : "idle";
       });
-      var fl = $("panoFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
+      var fl = $("panoFiles"); if (fl) filesLabel(fl);
     }
     var v = new T.Vector3(), opts = {};
     function frame() {
@@ -3774,7 +3802,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && inS.floor !== 4);
       el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? busyText(id) : "idle";
     });
-    var fl = $("inFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
+    var fl = $("inFiles"); if (fl) filesLabel(fl);
     // the team around the boardroom table during a meeting
     Array.prototype.slice.call(document.querySelectorAll("#inSpots .in-tok")).forEach(function (t) { t.remove(); });
     if (state.gathered && F.seats) BOTS.forEach(function (b, i) { var t = document.createElement("span"); t.className = "in-tok"; t.style.cssText = "left:" + F.seats[i][0] + "%;top:" + F.seats[i][1] + "%;--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ")"; t.title = b.name; $("inSpots").appendChild(t); });
@@ -3832,28 +3860,157 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     state.reports.unshift({ from: fromId, title: title, text: text, t: new Date().toISOString(), read: false }); state.reports = state.reports.slice(0, 20); saveReports();
     deskFilesChanged(true);
   }
+  function pendingApprovals() { return (state.approvals || []).filter(function (a) { return a.status === "pending"; }).length; }
+  function filesLabel(el) {
+    var n = unreadReports(), rv = pendingReview(), ap = pendingApprovals(), parts = [];
+    if (ap) parts.push("✍ " + ap + " to approve"); if (n) parts.push(n + " report" + (n > 1 ? "s" : "")); if (rv) parts.push(rv + " to review");
+    el.hidden = !parts.length; el.classList.toggle("urgent", !!ap); el.innerHTML = "<i>📁</i>" + parts.join(" · ");
+  }
   function deskFilesChanged(isNew) {
     var n = unreadReports(), rv = pendingReview();
-    if (v3) v3.setInbox(rv + n);
-    var pf = $("pvFiles"); if (pf) { pf.hidden = !(n + rv); pf.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); if (isNew) { pf.classList.remove("new"); void pf.offsetWidth; pf.classList.add("new"); } }
-    inRefresh();
+    if (v3) v3.setInbox(rv + n + pendingApprovals());
+    var pf = $("pvFiles"); if (pf) { filesLabel(pf); if (isNew) { pf.classList.remove("new"); void pf.offsetWidth; pf.classList.add("new"); } }
+    inRefresh(); if (pano) pano.refresh();
   }
   function openInbox() {
-    var rv = pendingReview(), html = '<div class="ib-sec">Reports from the team</div>';
+    var rv = pendingReview(), html = approvalsHtml() + meetingsHtml() + '<div class="ib-sec">Reports from the team</div>';
     if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Monica for your daily brief, or hold a team meeting.</p>';
     state.reports.forEach(function (r, i) {
       var b = BY_ID[r.from] || BY_ID["5"];
       html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
     });
     html += '<div class="ib-sec">Clients</div>' + (rv ? '<p class="ib-empty">' + rv + " client draft" + (rv > 1 ? "s" : "") + ' from Ross waiting for your review.</p><button type="button" class="ib-btn" id="ibClients">Open the client board</button>' : '<p class="ib-empty">Nothing waiting for review.</p>');
-    $("inboxBody").innerHTML = html; $("inbox").hidden = false;
+    var keepScroll = $("inboxBody").scrollTop; $("inboxBody").innerHTML = html; if (!openInbox.refreshing) $("inbox").hidden = false; else $("inboxBody").scrollTop = keepScroll;
     Array.prototype.forEach.call(document.querySelectorAll("#inboxBody details"), function (d) { var mark = function () { if (d.open) { var r = state.reports[+d.dataset.i]; if (r && !r.read) { r.read = true; saveReports(); deskFilesChanged(); var dot = d.querySelector("summary i"); if (dot) dot.remove(); } } }; d.addEventListener("toggle", mark); mark(); });
     var cb = $("ibClients"); if (cb) cb.onclick = function () { $("inbox").hidden = true; state.filter = "review"; setTab("clients"); $("side").scrollIntoView({ behavior: "smooth" }); };
-    $("inboxX").focus();
+    wireApprovals($("inboxBody")); wireMeetings();
+    if (!$("inbox").hidden) $("inboxX").focus({ preventScroll: true });
   }
   $("inboxX").onclick = function () { $("inbox").hidden = true; };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
 
+
+  // ---------- CEO approval: nothing is published without Aliya ----------
+  state.approvals = [];
+  var apSeq = 0, KIND_AP = { reply: { en: "Public reply to a comment", zh: "评论公开回复" }, post: { en: "New post", zh: "新帖子" } };
+  function addApproval(item) {
+    item.id = "a" + (++apSeq); item.status = "pending"; item.t = Date.now(); state.approvals.unshift(item);
+    var b = BY_ID[item.from]; activity(item.from, b.name + " sent a " + KIND_AP[item.kind].en.toLowerCase() + " to your desk for approval");
+    deskFilesChanged(true); refreshInbox();
+  }
+  function decideApproval(id, ok, text) {
+    var a = state.approvals.filter(function (x) { return x.id === id; })[0]; if (!a || a.status !== "pending") return;
+    if (text != null) a.body = text;
+    a.status = ok ? "approved" : "rejected";
+    activity(a.from, ok ? "Aliya approved " + BY_ID[a.from].name + "'s " + KIND_AP[a.kind].en.toLowerCase() + ": published" : "Aliya rejected " + BY_ID[a.from].name + "'s " + KIND_AP[a.kind].en.toLowerCase() + ": not published");
+    if (a.onDecide) a.onDecide(ok, a.body);
+    deskFilesChanged(); refreshInbox(); drawLive();
+  }
+  function refreshInbox() { if ($("inbox").hidden) return; openInbox.refreshing = true; openInbox(); openInbox.refreshing = false; }
+  function approvalsHtml() {
+    var en = state.lang === "en", pend = state.approvals.filter(function (a) { return a.status === "pending"; }), done = state.approvals.filter(function (a) { return a.status !== "pending"; }).slice(0, 4);
+    var mode = lsGet("glostudy-apprmode", "desk"), next = nextMeeting();
+    var h = '<div class="ib-sec">' + (en ? "Needs your approval before it's published" : "发布前需要您批准") + " · " + pend.length + '</div><div class="ap-mode">' + (en ? "Approve:" : "批准方式：") +
+      '<button type="button" data-apm="desk" aria-pressed="' + (mode === "desk") + '">' + (en ? "Right here, any time" : "随时在这里批") + '</button><button type="button" data-apm="meeting" aria-pressed="' + (mode === "meeting") + '">' + (en ? "At my review meeting" : "在审批会上统一批") + "</button></div>";
+    if (mode === "meeting" && pend.length) h += '<p class="ib-empty">' + (next ? (en ? "Saved for your review meeting at " : "留到您的审批会：") + fmtTime(next.t) : (en ? "No review meeting booked yet: book one below." : "还没有预约审批会，请在下方预约。")) + "</p>";
+    if (!pend.length) h += '<p class="ib-empty">' + (en ? "Nothing waiting. Joey's posts and public comment replies will appear here." : "暂时没有。Joey 的帖子和评论回复会出现在这里。") + "</p>";
+    pend.forEach(function (a) { h += approvalCard(a, true); });
+    if (done.length) h += '<details class="ap-done"><summary>' + (en ? "Recently decided" : "最近处理") + "</summary>" + done.map(function (a) { return approvalCard(a, false); }).join("") + "</details>";
+    return h;
+  }
+  function approvalCard(a, live) {
+    var b = BY_ID[a.from], en = state.lang === "en";
+    return '<div class="ap-card ' + a.status + '" data-ap="' + a.id + '"><div class="ap-head"><span class="ap-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(KIND_AP[a.kind][state.lang]) + "<small>" + esc(b.name + " · " + a.where) + "</small></b>" +
+      (live ? "" : '<span class="ap-st">' + (a.status === "approved" ? (en ? "✓ published" : "✓ 已发布") : (en ? "✗ not published" : "✗ 未发布")) + "</span>") + "</div>" +
+      (a.context ? '<div class="ap-ctx">' + esc(a.context) + "</div>" : "") +
+      '<div class="ap-body">' + renderRich(a.body) + "</div>" +
+      (live ? '<div class="ap-acts"><button type="button" class="ap-ok">' + (en ? "✓ Approve & publish" : "✓ 批准并发布") + '</button><button type="button" class="ap-edit">' + (en ? "✎ Edit" : "✎ 修改") + '</button><button type="button" class="ap-no">' + (en ? "✗ Reject" : "✗ 不发") + "</button></div>" : "") + "</div>";
+  }
+  function wireApprovals(root) {
+    Array.prototype.forEach.call(root.querySelectorAll(".ap-card"), function (card) {
+      var id = card.dataset.ap, ok = card.querySelector(".ap-ok"), no = card.querySelector(".ap-no"), ed = card.querySelector(".ap-edit"); if (!ok) return;
+      ok.onclick = function () { var ta = card.querySelector("textarea"); decideApproval(id, true, ta ? ta.value : null); if (root !== $("inboxBody")) openReviewMeeting(true); };
+      no.onclick = function () { decideApproval(id, false); if (root !== $("inboxBody")) openReviewMeeting(true); };
+      ed.onclick = function () { var a = state.approvals.filter(function (x) { return x.id === id; })[0], body = card.querySelector(".ap-body"); body.innerHTML = '<textarea rows="8"></textarea>'; body.firstChild.value = a.body; body.firstChild.focus(); ed.disabled = true; };
+    });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-apm]"), function (b) { b.onclick = function () { lsSet("glostudy-apprmode", b.dataset.apm); refreshInbox(); }; });
+  }
+  // review meetings Aliya books herself
+  function meetings() { try { return JSON.parse(lsGet("glostudy-meetings", "[]")) || []; } catch (e) { return []; } }
+  function saveMeetings(m) { lsSet("glostudy-meetings", JSON.stringify(m.slice(-20))); }
+  function nextMeeting() { var now = Date.now() - 30 * 60000; return meetings().filter(function (m) { return !m.done && new Date(m.t).getTime() > now; }).sort(function (a, b) { return new Date(a.t) - new Date(b.t); })[0]; }
+  function fmtTime(t) { var d = new Date(t); return d.toLocaleString(state.lang === "en" ? "en-GB" : "zh-CN", { weekday: "short", hour: "2-digit", minute: "2-digit" }); }
+  function meetingsHtml() {
+    var en = state.lang === "en", list = meetings().filter(function (m) { return !m.done; });
+    var h = '<div class="ib-sec">' + (en ? "Review meetings" : "审批会") + "</div>";
+    list.forEach(function (m) { var due = new Date(m.t).getTime() <= Date.now(); h += '<div class="mt-row' + (due ? " due" : "") + '"><b>📅 ' + esc(fmtTime(m.t)) + "</b><span>" + esc(m.note || (en ? "Approve posts and replies with Joey and Monica" : "与 Joey、Monica 一起审批帖子和回复")) + '</span><button type="button" data-mstart="' + m.id + '">' + (due ? (en ? "Start now" : "现在开始") : (en ? "Start early" : "提前开始")) + '</button><button type="button" class="ghostx" data-mdel="' + m.id + '">×</button></div>'; });
+    var d = new Date(); d.setMinutes(d.getMinutes() + 30 - d.getMinutes() % 15, 0, 0);
+    var pad = function (n) { return String(n).padStart(2, "0"); }, val = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    h += '<div class="mt-book"><label for="mtWhen">' + (en ? "Book a review meeting" : "预约审批会") + '</label><input type="datetime-local" id="mtWhen" value="' + val + '"><button type="button" data-mq="18">' + (en ? "18:00" : "18:00") + '</button><button type="button" data-mq="t10">' + (en ? "Tomorrow 10:00" : "明天 10:00") + '</button><button type="button" class="mt-go" id="mtBook">' + (en ? "Book" : "预约") + "</button></div>";
+    return h;
+  }
+  function wireMeetings() {
+    var b = $("mtBook"); if (!b) return;
+    var book = function (t) { var m = meetings(); m.push({ id: "m" + Date.now(), t: t.toISOString(), done: false }); saveMeetings(m); activity("5", "Monica booked your review meeting for " + fmtTime(t)); refreshInbox(); };
+    b.onclick = function () { var v = $("mtWhen").value; if (v) book(new Date(v)); };
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mq]"), function (q) { q.onclick = function () { var d = new Date(); if (q.dataset.mq === "18") { d.setHours(18, 0, 0, 0); if (d < new Date()) d.setDate(d.getDate() + 1); } else { d.setDate(d.getDate() + 1); d.setHours(10, 0, 0, 0); } book(d); }; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mstart]"), function (x) { x.onclick = function () { startMeeting(x.dataset.mstart); }; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mdel]"), function (x) { x.onclick = function () { saveMeetings(meetings().filter(function (m) { return m.id !== x.dataset.mdel; })); refreshInbox(); }; });
+  }
+  var meetingOn = null;
+  function startMeeting(id) {
+    var m = meetings(); m.forEach(function (x) { if (x.id === id) x.done = true; }); saveMeetings(m);
+    meetingOn = id; $("inbox").hidden = true; gatherAll(true);
+    activity("5", "Monica opened your review meeting in the boardroom");
+    openReviewMeeting();
+  }
+  function openReviewMeeting(refresh) {
+    var en = state.lang === "en", pend = state.approvals.filter(function (a) { return a.status === "pending"; });
+    $("annTitle").textContent = en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室";
+    var box = $("announce").querySelector(".modal-in");
+    if (!box.dataset.orig) box.dataset.orig = box.innerHTML;
+    box.innerHTML = '<div class="modal-head"><b>' + (en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室") + '</b><button type="button" class="modal-x" id="rvX">×</button></div><p class="ann-sub">' + (en ? "Monica presents what the team wants to publish. Approve, edit or reject each one." : "Monica 汇报团队要发布的内容，请逐条批准、修改或不发。") + '</p><div class="inbox-body" id="rvBody">' + (pend.length ? pend.map(function (a) { return approvalCard(a, true); }).join("") : '<p class="ib-empty">' + (en ? "All done. Nothing left to approve." : "全部处理完毕。") + "</p>") + '</div><button type="button" class="ib-btn" id="rvEnd">' + (en ? "End meeting" : "结束会议") + "</button>";
+    $("announce").hidden = false;
+    wireApprovals($("rvBody"));
+    var end = function () { $("announce").hidden = true; box.innerHTML = box.dataset.orig; delete box.dataset.orig; rewireAnnounce(); if (meetingOn) { gatherAll(false); meetingOn = null; activity("5", "Review meeting finished"); } };
+    $("rvX").onclick = end; $("rvEnd").onclick = end;
+  }
+  // tell Aliya when a booked meeting is due
+  setInterval(function () {
+    var due = meetings().filter(function (m) { return !m.done && !m.told && new Date(m.t).getTime() <= Date.now(); })[0]; if (!due) return;
+    var all = meetings(); all.forEach(function (x) { if (x.id === due.id) x.told = true; }); saveMeetings(all);
+    activity("5", "Monica: your review meeting is starting now (" + pendingApprovals() + " items)");
+    var tk = $("liveTicker"); if (tk) { var chip = document.createElement("span"); chip.className = "tk-chip mt"; chip.innerHTML = "📅 <b>" + (state.lang === "en" ? "Review meeting now" : "审批会现在开始") + "</b><em> · " + (state.lang === "en" ? "tap to start" : "点击开始") + "</em>"; chip.onclick = function () { startMeeting(due.id); }; tk.prepend(chip); }
+  }, 20000);
+
+  // ---------- the team's real daily work (results go to the CEO desk) ----------
+  var WORK = [
+    { id: "4", at: 70, every: 12, label: { en: "drafting today's post", zh: "写今天的帖子" }, ask: { en: "Daily task: draft one WeChat Moments post for parents about UK study this week, with the preview tags.", zh: "每日任务：写一条本周关于英国留学、写给家长的朋友圈，带预览标记。" }, post: true },
+    { id: "5", at: 130, every: 30, label: { en: "preparing today's brief", zh: "准备今日简报" }, ask: { en: "Give me today's brief.", zh: "给我今天的简报。" }, report: { en: "Daily brief", zh: "今日简报" } },
+    { id: "6", at: 200, every: 30, label: { en: "checking the cost sheet", zh: "核对费用表" }, ask: { en: "Weekly task: check our cost sheet against the latest news and list anything to update.", zh: "每周任务：根据最新资讯核对费用表，列出需要更新的地方。" }, report: { en: "Cost sheet check", zh: "费用表核对" } }
+  ];
+  function runWork(w) {
+    if (!live.on || state.busy[w.id]) return Promise.resolve();
+    var b = BY_ID[w.id]; state.taskLabel[w.id] = w.label[state.lang]; setBusy(w.id, "task"); activity(w.id, b.name + " is " + w.label.en);
+    return ask(b, [{ role: "user", content: w.ask[state.lang] }], {}).then(function (res) {
+      if (state.busy[w.id] === "task") setBusy(w.id, null); flashDone(w.id);
+      if (w.post) addApproval({ kind: "post", from: w.id, where: state.lang === "en" ? "WeChat Moments" : "朋友圈", body: res.text, onDecide: function (ok) { if (ok) addReport("4", state.lang === "en" ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
+      else addReport(w.id, w.report[state.lang], res.text);
+    }, function (e) { if (state.busy[w.id] === "task") setBusy(w.id, null); activity(w.id, b.name + " couldn't finish: " + errText(e)); });
+  }
+  function startWork() { WORK.forEach(function (w) { live.timers.push(setTimeout(function loop() { runWork(w); live.timers.push(setTimeout(loop, w.every * 60000)); }, w.at * 1000)); }); }
+  // Phoebe prepares a document checklist for every new booking
+  function checklistFor(c) {
+    var ph = BY_ID["3"]; if (!live.on) return;
+    setTimeout(function () {
+      if (state.busy["3"] && state.busy["3"] !== "task") return;
+      state.taskLabel["3"] = state.lang === "en" ? "document checklist for " + c.name.en : "为" + c.name.zh + "准备材料清单"; setBusy("3", "task");
+      var last = (c.turns.filter(function (t) { return t.role === "assistant"; }).slice(-1)[0] || {}).content || "";
+      ask(ph, [{ role: "user", content: (state.lang === "en" ? "New booked client. Prepare a short document checklist for their consultation.\n\n" : "新登记客户，请为他们的咨询准备一份简短的材料清单。\n\n") + last }], {}).then(function (res) {
+        if (state.busy["3"] === "task") setBusy("3", null); flashDone("3"); addReport("3", (state.lang === "en" ? "Document checklist · " : "材料清单 · ") + liveName(c), res.text);
+      }, function () { if (state.busy["3"] === "task") setBusy("3", null); });
+    }, 6000);
+  }
   // ---------- announcement to the whole team ----------
   function openAnnounce() {
     var chips = $("annChips"); chips.textContent = "";
@@ -3871,6 +4028,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var msg = (state.lang === "en" ? "Team meeting: announcement from the CEO to the whole team: " : "团队会议：CEO 给全体同事的公告：") + text +
       (state.lang === "en" ? "\nRun a short meeting in the boardroom about it. Give each colleague one line with what they will do." : "\n请就此在会议室开个简短的会，每位同事用一句话说他们要做什么。");
     send(msg);
+  }
+  function rewireAnnounce() {
+    $("annX").onclick = function () { $("announce").hidden = true; };
+    $("annForm").addEventListener("submit", function (e) { e.preventDefault(); announce($("annBox").value); });
   }
   $("annX").onclick = function () { $("announce").hidden = true; };
   $("announce").onclick = function (e) { if (e.target === $("announce")) $("announce").hidden = true; };
@@ -4252,7 +4413,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   drawFeed();
   drawAll();
   buildPhoto();
-  liveStartArrivals();
+  liveStartArrivals(); startWork();
   var savedView = lsGet("glostudy-view", "photo");
   setView(savedView === "plan" || savedView === "3d" || savedView === "inside" ? savedView : "photo", true);
 })();
