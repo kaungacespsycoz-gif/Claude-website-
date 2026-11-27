@@ -3982,12 +3982,58 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function markBooked(c) {
     if (c.booked) return; c.booked = true; c.status = "booked"; drawLive();
     var en = state.lang === "en";
-    activity("9", "Chandler booked " + c.name.en + " into consult room " + (live.seq % 2 ? "A" : "B"));
+    c.slots = consultSlots(); c.room = live.seq % 2 ? "A" : "B";
+    activity("9", "Chandler offered " + c.name.en + " two consult slots (room " + c.room + "): " + c.slots.map(function (x) { return x.en; }).join(" or "));
+    c.turns.push({ kind: "note", good: true, text: (en ? "📅 Chandler offered two times: " : "📅 Chandler 提供两个时间：") + c.slots.map(function (x) { return x[state.lang]; }).join(en ? " or " : " 或 ") });
     brief("9", en ? "booking a consult room for " + c.name.en : "为" + c.name.zh + "安排咨询室", 3500);
     setTimeout(function () { activity("14", "Howard filed " + c.name.en + "'s record"); brief("14", en ? "filing " + c.name.en + "'s record" : "归档" + c.name.zh + "的资料", 3000); }, 1500);
     setTimeout(function () { activity("13", "Raj added " + c.name.en + "'s deadlines to the wall"); brief("13", en ? "checking " + c.name.en + "'s deadlines" : "核对" + c.name.zh + "的时间线", 3000); }, 4000);
-    setTimeout(function () { activity("11", "Ross is preparing the consult room for " + c.name.en); brief("11", en ? "preparing the consult room" : "准备咨询室", 6000); }, 9000);
     checklistFor(c);
+  }
+  // next two working-day slots at 10:00 and 15:00 Beijing time, shown with London time too
+  function consultSlots() {
+    var out = [], d = new Date(), hours = [10, 15];
+    for (var i = 1; out.length < 2 && i < 8; i++) {
+      var day = new Date(d.getTime() + i * 864e5), wd = Number(day.toLocaleString("en-GB", { timeZone: "Asia/Shanghai", weekday: "narrow" }) && new Date(day.toLocaleString("en-US", { timeZone: "Asia/Shanghai" })).getDay());
+      if (wd === 0 || wd === 6) continue;
+      var h = hours[out.length], bj = new Date(day.toLocaleString("en-US", { timeZone: "Asia/Shanghai" })); bj.setHours(h, 0, 0, 0);
+      var utc = new Date(Date.UTC(bj.getFullYear(), bj.getMonth(), bj.getDate(), h - 8, 0));
+      var ld = utc.toLocaleTimeString("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" }), dl = utc.toLocaleDateString("en-GB", { timeZone: "Asia/Shanghai", weekday: "short", day: "numeric", month: "short" }), dz = utc.toLocaleDateString("zh-CN", { timeZone: "Asia/Shanghai", weekday: "short", month: "numeric", day: "numeric" });
+      out.push({ en: dl + " " + h + ":00 Beijing (" + ld + " London)", zh: dz + " 北京时间 " + h + ":00（伦敦 " + ld + "）" });
+    }
+    return out;
+  }
+  // Ross turns the chat, Amy's checklist and the slots into a consult pack with talking points
+  function consultPack(c, checklist) {
+    var ross = BY_ID["11"], en = state.lang === "en";
+    if (state.busy["11"] && state.busy["11"] !== "task") return;
+    state.taskLabel["11"] = en ? "consult pack for " + c.name.en : "为" + c.name.zh + "准备咨询资料"; setBusy("11", "task"); pvCall("11", ["3"]);
+    var chat = c.turns.filter(function (t) { return t.role === "user" || t.role === "assistant"; }).slice(-8).map(function (t) { return (t.role === "user" ? "Client: " : "Us: ") + t.content; }).join("\n");
+    ask(ross, [{ role: "user", content: (en ? "Prepare talking points for tomorrow's consultation with " + c.name.en + ". Give 3 talking points for the consultant and 2 questions to ask. Chat:\n" : "为明天和" + c.name.zh + "的咨询准备谈话要点：给顾问 3 条要点和 2 个要问的问题。聊天记录：\n") + chat + (en ? "\nAmy's checklist:\n" : "\nAmy 的材料清单：\n") + (checklist || "-") }], {}).then(function (res) {
+      pvCallEnd("11"); if (state.busy["11"] === "task") setBusy("11", null); flashDone("11");
+      c.pack = res.text; activity("11", "Ross put " + c.name.en + "'s consult pack on Aliya's desk");
+      addReport("11", (en ? "Consult pack · " : "咨询资料 · ") + liveName(c), (c.slots ? (en ? "Slots offered: " : "提供的时间：") + c.slots.map(function (x) { return x[state.lang]; }).join(" / ") + (en ? " · Room " : " · 咨询室 ") + c.room + "\n\n" : "") + res.text);
+    }, function () { pvCallEnd("11"); if (state.busy["11"] === "task") setBusy("11", null); });
+  }
+  // a chat that ended without a booking gets one gentle follow-up from Monica (generic, so it goes out after the usual check)
+  function scheduleFollowUp(c) {
+    if (c.booked || c.kind === "comment" || c.followed || c.status === "human") return;
+    c.followed = "planned";
+    live.timers.push(setTimeout(function () {
+      if (c.booked || c.status === "human") return;
+      var mon = BY_ID["1"], en = state.lang === "en";
+      if (!freeFor("1")) { c.followed = null; return scheduleFollowUp(c); }
+      state.taskLabel["1"] = en ? "following up with " + c.name.en : "跟进" + c.name.zh; setBusy("1", "task");
+      var hist = c.turns.filter(function (t) { return t.role === "user" || t.role === "assistant"; }).slice(-8).map(function (t) { return { role: t.role, content: t.content }; });
+      hist.push({ role: "user", content: en ? "(Internal: the client went quiet without booking. Write ONE short, friendly follow-up message: no prices, no promises, offer the free consultation.)" : "（内部：客户没有预约就没回复了。写一条简短友好的跟进消息：不报价、不承诺，邀请免费咨询。）" });
+      ask(mon, hist, {}).then(function (res) {
+        if (state.busy["1"] === "task") setBusy("1", null); flashDone("1"); c.followed = "sent";
+        var t = res.text.replace(/【[^】]*】/g, "").trim();
+        if (isSensitive(t)) { var rep = { role: "assistant", content: t, by: mon.name }; c.turns.push(rep); holdChatReply(c, "1", rep, en ? "(follow-up)" : "（跟进）"); }
+        else c.turns.push({ role: "assistant", content: t, by: mon.name + (en ? " · follow-up" : " · 跟进") });
+        activity("1", "Monica followed up with " + c.name.en + " (no booking yet)"); drawLiveDetail();
+      }, function () { if (state.busy["1"] === "task") setBusy("1", null); c.followed = null; });
+    }, state.engine === "demo" ? 90000 : 24 * 3600000));
   }
   function liveZone(c) {
     if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval" || c.status === "checking") return "comments";
@@ -4069,6 +4115,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         await wait(1800);
       }
       if (c.status === "talking") c.status = c.booked ? "booked" : "done";
+      if (c.status === "done") scheduleFollowUp(c);
     } catch (e) {
       setBusy(aid, null); laneFail(c, aid, e);
     }
@@ -4939,7 +4986,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       state.taskLabel["3"] = state.lang === "en" ? "document checklist for " + c.name.en : "为" + c.name.zh + "准备材料清单"; setBusy("3", "task");
       var last = (c.turns.filter(function (t) { return t.role === "assistant"; }).slice(-1)[0] || {}).content || "";
       ask(ph, [{ role: "user", content: (state.lang === "en" ? "New booked client. Prepare a short document checklist for their consultation.\n\n" : "新登记客户，请为他们的咨询准备一份简短的材料清单。\n\n") + last }], {}).then(function (res) {
-        if (state.busy["3"] === "task") setBusy("3", null); flashDone("3"); addReport("3", (state.lang === "en" ? "Document checklist · " : "材料清单 · ") + liveName(c), res.text);
+        if (state.busy["3"] === "task") setBusy("3", null); flashDone("3"); addReport("3", (state.lang === "en" ? "Document checklist · " : "材料清单 · ") + liveName(c), res.text); consultPack(c, res.text);
       }, function () { if (state.busy["3"] === "task") setBusy("3", null); });
     }, 6000);
   }
