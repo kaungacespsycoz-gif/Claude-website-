@@ -32,3 +32,9 @@ const out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">' +
   page.slice(0, at) + '<script>' + three + '</script>\n' + bundle + page.slice(at) + '\n</body></html>\n';
 fs.writeFileSync(path.join(base, 'office.html'), out);
 console.log(`Built office.html (${Math.round(out.length / 1024)} KB, ${Object.keys(files).length} files inside)`);
+// demo.html: the same office with prepared answers (ai-office/demo/script.json) for showing without an AI key
+const demoFiles = Object.assign({}, files, { 'demo/script.json': fs.readFileSync(path.join(base, 'demo', 'script.json'), 'utf8') });
+const demoBundle = '<script type="application/json" id="bundle">' + JSON.stringify(demoFiles).replace(/</g, '\\u003c') + '</script>\n';
+const demo = out.replace(bundle, () => demoBundle).replace('<html lang="en"><head>', '<html lang="zh-CN"><head><title>Glostudy AI Office · Demo</title>');
+fs.writeFileSync(path.join(base, 'demo.html'), demo);
+console.log(`Built demo.html (${Math.round(demo.length / 1024)} KB)`);

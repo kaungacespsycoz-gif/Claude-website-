@@ -605,6 +605,46 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   .desk:not(.docked) .desk-sheet { left: calc(50% - 160px) !important; width: min(52vw, 700px) !important; top: 90px !important; }
   .desk.docked .desk-sheet { position: absolute; left: calc((100% - 420px) / 2) !important; width: min(calc(100% - 470px), 640px) !important; top: 56px !important; max-height: calc(100% - 110px) !important; }
 }
+
+/* ---------- realistic post previews ---------- */
+.post-prev { margin: 10px 0; white-space: normal; max-width: 380px; }
+.pp-label { font: 600 .7rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #8a94a0; margin-bottom: 6px; }
+.pv-logo { flex: none; width: 42px; height: 42px; border-radius: 6px; display: grid; place-items: center; background: linear-gradient(145deg, #f6e2b0, #d7a955); color: #3a2608; font: 700 1.25rem "Noto Serif SC", "Songti SC", serif; }
+.poster { position: relative; aspect-ratio: 3 / 4; border-radius: 6px; padding: 12px 12px 10px; color: #fff; display: flex; flex-direction: column; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+.poster::after { content: ""; position: absolute; right: -30%; top: -12%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.14); }
+.ps-brand { font: 600 .62rem var(--sans); opacity: .9; }
+.ps-big { margin-top: 18%; font: 900 1.7rem/1.12 "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; text-shadow: 0 3px 0 rgba(0,0,0,.18); position: relative; z-index: 1; overflow-wrap: anywhere; }
+.ps-sub { margin-top: 8px; font: 600 .8rem/1.3 "PingFang SC", "Noto Sans SC", sans-serif; background: rgba(255,255,255,.92); color: #c0392b; align-self: flex-start; padding: 3px 8px; border-radius: 4px; position: relative; z-index: 1; }
+.ps-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; background: #fff; color: #333; border-radius: 6px; padding: 7px 8px; font: 600 .66rem/1.3 var(--sans); position: relative; z-index: 1; }
+.ps-foot small { color: #e0463c; font-weight: 600; }
+.ps-qr { display: grid; grid-template-columns: repeat(5, 5px); gap: 1px; padding: 2px; border: 1px solid #ccc; }
+.ps-qr i { width: 5px; height: 5px; background: #fff; } .ps-qr i.on { background: #111; }
+.mm { background: #191919; color: #e8e8e8; border-radius: 14px; overflow: hidden; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+.mm-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #202020; font-size: .95rem; }
+.mm-bar span:first-child { font-size: 1.4rem; line-height: 1; }
+.mm-cam { width: 20px; height: 15px; border: 1.6px solid #e8e8e8; border-radius: 4px; position: relative; }
+.mm-cam::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border: 1.6px solid #e8e8e8; border-radius: 50%; }
+.mm-post { display: flex; gap: 10px; padding: 14px; border-top: 1px solid #262626; }
+.mm-main { flex: 1; min-width: 0; }
+.mm-name { display: block; color: #7d90c0; font-weight: 600; font-size: .95rem; margin-bottom: 4px; }
+.mm-main p { margin: 0 0 8px; font-size: .92rem; line-height: 1.45; white-space: pre-wrap; }
+.mm-main .poster { width: 62%; }
+.mm-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; color: #7a7a7a; font-size: .8rem; }
+.mm-dots { background: #2c2c2c; color: #7d90c0; border-radius: 4px; padding: 0 8px; font-weight: 700; letter-spacing: 2px; }
+.rn { background: #fff; color: #222; border-radius: 14px; overflow: hidden; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; box-shadow: 0 1px 0 rgba(0,0,0,.06); border: 1px solid #ececec; }
+.rn .poster { border-radius: 0; aspect-ratio: 3 / 3.4; }
+.rn-body { padding: 10px 14px 6px; }
+.rn-author { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.rn-author .pv-logo { width: 28px; height: 28px; border-radius: 50%; font-size: .85rem; }
+.rn-author b { flex: 1; font-size: .86rem; font-weight: 500; }
+.rn-author button { border: 1px solid #ff2442; color: #ff2442; background: #fff; border-radius: 999px; padding: 3px 12px; font-size: .78rem; }
+.rn-title { display: block; font-size: 1.02rem; margin-bottom: 6px; }
+.rn-body p { margin: 0 0 6px; font-size: .88rem; line-height: 1.55; white-space: pre-wrap; color: #333; }
+.rn-more { color: #576b95; }
+.rn-tags { color: #13386c !important; }
+.rn-date { color: #999; font-size: .74rem; }
+.rn-bar { display: flex; gap: 14px; align-items: center; padding: 8px 14px 12px; border-top: 1px solid #f1f1f1; color: #333; font-size: .82rem; }
+.rn-say { flex: 1; background: #f5f5f5; color: #999; border-radius: 999px; padding: 6px 12px; }
 </style>
 
 <div class="app">
@@ -812,6 +852,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     settingsOpen: false, filter: "all", tab: "chat", jobs: [], edits: {}, notes: {}, editing: {}, activity: []
   };
   var deep = { key: lsGet("glostudy-deepseek-key", ""), model: lsGet("glostudy-deepseek-model", "deepseek-chat") };
+  // demo link: prepared answers, no live AI (switch to DeepSeek in Settings to ask anything)
+  var DEMO_DATA = null; try { if (!IN_CLAUDE && BUNDLE && BUNDLE["demo/script.json"]) DEMO_DATA = JSON.parse(BUNDLE["demo/script.json"]); } catch (e) { DEMO_DATA = null; }
+  if (DEMO_DATA) { if (!deep.key) state.engine = "demo"; if (lsGet("glostudy-lang", "") === "") state.lang = "zh"; }
   var samplePromise = IN_CLAUDE ? window.claude.use("sample") : Promise.resolve(null);
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -918,14 +961,38 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function ask(bot, history, o) {
     return loadPrompt(bot).then(function (rules) {
       rules += state.lang === "en" ? EN_RULE : ZH_RULE;
-      o.effort = bot.effort;
+      o.effort = bot.effort; o.botId = bot.id;
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
       if (bot.id === "4") rules += "\n\n# 【今日资讯】\n" + intelText();
       if (o.extraRules) rules += o.extraRules;
       return rawAsk(rules, history, o);
     });
   }
-  function rawAsk(rules, history, o) { return state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o); }
+  function rawAsk(rules, history, o) { return state.engine === "demo" ? askDemo(rules, history, o) : state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o); }
+  function askDemo(rules, history, o) {
+    var text = String((history.filter(function (h) { return h.role === "user"; }).slice(-1)[0] || {}).content || ""), L = state.lang, out;
+    function rx(m) { try { return new RegExp(m, "i"); } catch (e) { return /$^/; } }
+    if (rules === ROUTER || rules === ROUTER_BOSS) {
+      var who = rules === ROUTER ? "1" : "5", rt = (DEMO_DATA.routes || []).filter(function (x) { return x.bot === who && rx(x.match).test(text); })[0];
+      return Promise.resolve({ text: JSON.stringify({ calls: rt ? rt.calls : [] }) });
+    }
+    if (rules.indexOf("这次是同事之间的内部请求") >= 0) {
+      var nm = (BY_ID[o.botId] || {}).name || ""; out = ((DEMO_DATA.notes || {})[nm.toLowerCase()] || {})[L] || "- ok";
+    } else {
+      var hit = (DEMO_DATA.answers || []).filter(function (x) { return x.bot === o.botId && rx(x.match).test(text); })[0];
+      out = hit ? hit[L] : DEMO_DATA.fallback[L];
+      var ann = (text.match(/whole team: ([^\n]+)|全体同事的公告：([^\n]+)/) || []); out = out.replace("{{ann}}", ann[1] || ann[2] || "");
+    }
+    return new Promise(function (resolve, reject) {
+      var i = 0, step = Math.max(12, Math.ceil(out.length / 40)), wait = 700 + Math.random() * 700;
+      function tick() {
+        if (o.signal && o.signal.aborted) { reject({ code: "cancelled", text: out.slice(0, i) }); return; }
+        i = Math.min(out.length, i + step); if (o.onText) o.onText(out.slice(0, i));
+        if (i < out.length) setTimeout(tick, 35); else resolve({ text: out });
+      }
+      setTimeout(tick, wait);
+    });
+  }
 
   // ---------- teamwork: Huan calls colleagues, they work in parallel, Huan answers briefly ----------
   var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6" };
@@ -970,7 +1037,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     return "\n\n# 【同事笔记】（客户看不到，按“和同事合作”的规则回答）\n" + calls.map(function (c, i) { return "## " + BY_ID[ids[i]].name + "（" + c.task + "）\n" + results[i]; }).join("\n\n");
   }
 
-  var EN_RULE = "\n\n# Test session language\nThe person testing you does not read Chinese. Write every reply in English for this whole conversation, while following every rule above. Field names in summaries may be in English. Keep these tags exactly as written whenever you use them: 【转人工】 【咨询登记】 【登记完成】.";
+  var EN_RULE = "\n\n# Test session language\nThe person testing you does not read Chinese. Write every reply in English for this whole conversation, while following every rule above. Field names in summaries may be in English. Keep these tags exactly as written whenever you use them: 【转人工】 【咨询登记】 【登记完成】 【朋友圈预览】 【/朋友圈预览】 【小红书预览】 【/小红书预览】 【简要】 【完整报告】.";
   var ZH_RULE = "\n\n# 测试语言\n本次测试请用简体中文回复。";
 
   // Same rule as tools/try_bot.py: text below "---" without its heading line, plus each knowledge file named above it.
@@ -2466,9 +2533,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("cReview").classList.toggle("hot", review > 0);
     $("tabNum").hidden = !review; $("tabNum").textContent = String(review);
     if (sceneReady && !(actors["2"] && actors["2"].el.classList.contains("carrying"))) drawTray(review);
-    $("engClaude").setAttribute("aria-pressed", String(state.engine === "claude"));
+    $("engClaude").setAttribute("aria-pressed", String(state.engine === "claude" || state.engine === "demo"));
+    if (DEMO_DATA) { $("engClaude").textContent = "Demo"; }
     $("engDeep").setAttribute("aria-pressed", String(state.engine === "deepseek"));
-    $("engClaude").disabled = !IN_CLAUDE;
+    $("engClaude").disabled = !IN_CLAUDE && !DEMO_DATA;
     $("engClaude").title = IN_CLAUDE ? "" : "Claude only works when the page is open on claude.ai";
     $("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
     $("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
@@ -2578,7 +2646,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function chat() { return state.chats[state.bot.id] || (state.chats[state.bot.id] = []); }
   function tasksFor(b) {
     var en = state.lang === "en";
-    if (b.id === "1") return [{ ask: DEMO[state.lang], demo: true }].concat(state.tests.map(function (t) {
+    if (b.id === "1") return [{ ask: DEMO[state.lang], demo: true }].concat(state.tests.filter(function (t) { return state.engine !== "demo" || ["greeting", "guarantee", "price", "visa", "who-submits"].indexOf(t.id) >= 0; }).map(function (t) {
       return { ask: en ? t.ask_en || t.ask : t.ask, expect: en ? t.expect_en || t.expect : t.expect,
         must: t.must || [], must_not: en ? t.must_not_en || [] : t.must_not || [], key: t.id + state.lang };
     }));
@@ -2632,7 +2700,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         d.className = "msg bot"; d.innerHTML = '<span class="typing" aria-label="Working"><i></i><i></i><i></i></span>';
       } else {
         d.className = "msg " + (t.role === "user" ? "user" : "bot");
-        if (t.role === "user") d.textContent = t.content; else d.innerHTML = render(t.content);
+        if (t.role === "user") d.textContent = t.content; else d.innerHTML = renderRich(t.content);
       }
       log.appendChild(d);
     });
@@ -2677,7 +2745,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       });
       reply.pending = false; reply.content = res.text; ok = true;
       if (res.truncated) turns.push({ kind: "note", text: "The answer was cut short. Ask it to continue, or ask for less at once." });
-      if (test) {
+      if (test && state.engine !== "demo") {
         var low = res.text.toLowerCase();
         var problems = test.must_not.filter(function (w) { return low.indexOf(w.toLowerCase()) >= 0; }).map(function (w) { return 'said "' + w + '"'; })
           .concat(test.must.filter(function (w) { return res.text.indexOf(w) < 0; }).map(function (w) { return w === "转人工" ? "didn't hand over to a person" : 'missing "' + w + '"'; }));
@@ -2851,7 +2919,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); }
   $("langEn").onclick = function () { setLang("en"); };
   $("langZh").onclick = function () { setLang("zh"); };
-  $("engClaude").onclick = function () { if (IN_CLAUDE) { state.engine = "claude"; state.settingsOpen = false; drawAll(); } };
+  $("engClaude").onclick = function () { if (IN_CLAUDE) { state.engine = "claude"; state.settingsOpen = false; drawAll(); } else if (DEMO_DATA) { state.engine = "demo"; state.settingsOpen = false; drawAll(); } };
   $("engDeep").onclick = function () {
     if (!IN_CLAUDE) state.engine = "deepseek";
     state.settingsOpen = !state.settingsOpen; drawAll();
@@ -3066,6 +3134,47 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var k = b.dataset.k, on = function (e) { e.preventDefault(); if (v3) v3.key(k, true); }, off = function () { if (v3) v3.key(k, false); };
     b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointerleave", off); b.addEventListener("pointercancel", off);
   });
+
+  // ---------- Spark's posts shown the way they will look on WeChat Moments and Xiaohongshu ----------
+  var POSTER_BG = ["linear-gradient(160deg,#ff9a3d,#ff4f4f)", "linear-gradient(160deg,#10284a,#1f5296)", "linear-gradient(160deg,#f7d774,#f59f6b)", "linear-gradient(160deg,#2bb3a3,#0e5965)", "linear-gradient(160deg,#6c6fe0,#2c2f7a)"];
+  function hashStr(t) { var h = 0; for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) | 0; return Math.abs(h); }
+  function postFields(body) {
+    var o = { title: "", big: "", sub: "", tags: "", text: [] }, mode = "";
+    body.trim().split("\n").forEach(function (l) {
+      var m = l.match(/^\s*(标题|Title|封面|配图|Cover|Image|正文|Body|标签|Tags)\s*[:：]\s*(.*)$/i);
+      if (m) {
+        var k = m[1].toLowerCase();
+        if (k === "标题" || k === "title") o.title = m[2];
+        else if (/封面|配图|cover|image/.test(k)) { var p = m[2].split(/[｜|]/); o.big = (p[0] || "").trim(); o.sub = (p[1] || "").trim(); }
+        else if (k === "标签" || k === "tags") o.tags = m[2];
+        else { mode = "text"; if (m[2]) o.text.push(m[2]); }
+      } else o.text.push(l);
+    });
+    o.text = o.text.join("\n").trim(); return o;
+  }
+  function posterHtml(o, seed) {
+    var big = o.big || o.title || "英国留学", bg = POSTER_BG[hashStr(seed) % POSTER_BG.length], qr = "";
+    for (var i = 0; i < 25; i++) qr += "<i" + ((hashStr(seed + i) % 3) ? " class=\"on\"" : "") + "></i>";
+    return '<div class="poster" style="background:' + bg + '"><span class="ps-brand">Glostudy 寰学 · 英国留学</span><b class="ps-big">' + esc(big) + "</b>" + (o.sub ? '<span class="ps-sub">' + esc(o.sub) + "</span>" : "") +
+      '<span class="ps-foot"><span>第一次咨询免费<br><small>微信 GlostudyUK</small></span><span class="ps-qr">' + qr + "</span></span></div>";
+  }
+  function postHtml(kind, body) {
+    var o = postFields(body), logo = '<span class="pv-logo">寰</span>';
+    if (kind === "朋友圈") return '<div class="post-prev"><div class="pp-label">Preview · WeChat Moments</div><div class="mm"><div class="mm-bar"><span>‹</span><b>Moments</b><span class="mm-cam"></span></div><div class="mm-post">' + logo +
+      '<div class="mm-main"><b class="mm-name">寰学 Glostudy英国留学</b><p>' + esc(o.text) + "</p>" + posterHtml(o, o.text) + '<div class="mm-meta"><span>Just now</span><span class="mm-dots">••</span></div></div></div></div></div>';
+    var lines = o.text.split("\n"), short = lines.slice(0, 8).join("\n");
+    return '<div class="post-prev"><div class="pp-label">Preview · Xiaohongshu (Red Note)</div><div class="rn">' + posterHtml(o, o.title + o.text) + '<div class="rn-body"><div class="rn-author">' + logo + '<b>Glostudy英国留学</b><button type="button" tabindex="-1">关注</button></div>' +
+      '<b class="rn-title">' + esc(o.title) + '</b><p>' + esc(short) + (lines.length > 8 ? '<span class="rn-more">… 展开</span>' : "") + '</p><p class="rn-tags">' + esc(o.tags) + '</p><small class="rn-date">刚刚 · 上海</small></div>' +
+      '<div class="rn-bar"><span class="rn-say">说点什么…</span><span>♡ 0</span><span>☆ 0</span><span>💬 0</span></div></div></div>';
+  }
+  function renderRich(text, fn) {
+    fn = fn || render; text = String(text || "");
+    var out = "", re = /【(朋友圈|小红书)预览】([\s\S]*?)【\/\1预览】/g, last = 0, m;
+    while ((m = re.exec(text))) { out += fn(text.slice(last, m.index)) + postHtml(m[1], m[2]); last = re.lastIndex; }
+    var rest = text.slice(last), open = rest.search(/【(朋友圈|小红书)预览】/);
+    if (open >= 0) out += fn(rest.slice(0, open)) + '<div class="pp-label">Laying out the post…</div>'; else out += fn(rest);
+    return out;
+  }
   // ---------- 1-on-1 desk chat: sit down with one officer ----------
   var DESK_RULE = "\n\n# 1-on-1 desk chat (face to face)\nThe boss is sitting at your desk talking to you. Start your reply with 【简要】 and then 2–3 short, natural spoken sentences that answer directly; they are read aloud, so no lists, tables or Markdown there. If the full answer needs more (figures, lists, steps, sources), put 【完整报告】 on its own line and then the full detail in Markdown. If it doesn't, write nothing after the short answer. Keep both tags exactly as written. Every other rule above still applies.";
   var deskSpoken = null, deskRec = null;
@@ -3112,7 +3221,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function openReport(b, rep) {
     $("sheetName").textContent = "On " + b.name + "'s screen"; $("sheetSub").textContent = b.title + " · presenting the full report";
-    $("sheetBody").innerHTML = reportHtml(rep); $("sheetBody").scrollTop = 0;
+    $("sheetBody").innerHTML = renderRich(rep, reportHtml); $("sheetBody").scrollTop = 0;
     $("sheetCopy").onclick = function () { copyText(rep, $("sheetCopy")); };
     $("deskSheet").hidden = false; $("sheetClose").focus();
   }
@@ -3167,7 +3276,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         if (t.pending) el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><span class="typing" aria-label="Working"><i></i><i></i><i></i></span></div>';
         else {
           var p = splitDesk(t.content), lines = p.rep ? p.rep.split("\n").filter(function (l) { return l.trim(); }).length : 0;
-          el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><div class="say-txt">' + render(p.sum) + "</div></div>";
+          el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><div class="say-txt">' + renderRich(p.sum) + "</div></div>";
           var acts = document.createElement("div"); acts.className = "dl-acts";
           if (p.rep) { var rb = document.createElement("button"); rb.type = "button"; rb.className = "rep"; rb.textContent = "🖥 Show on screen · " + lines + " lines"; rb.onclick = function () { openReport(b, p.rep); }; acts.appendChild(rb); }
           if (window.speechSynthesis) { var sb = document.createElement("button"); sb.type = "button"; sb.textContent = "🔊 Play"; sb.onclick = function () { localSpeak(p.sum); }; acts.appendChild(sb); }
@@ -3264,11 +3373,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   };
   $("foot").textContent = IN_CLAUDE
     ? "Running on Claude with the viewer's own Claude account; it doesn't open in mainland China. Don't enter real mainland clients' personal details here (China's PIPL limits sending them abroad): use the DeepSeek file for those. Everything the robots write is a draft: check it before it goes to a customer."
-    : "Running from a file on this computer. Robots use DeepSeek with your key; clients are kept in this browser only. Everything the robots write is a draft: check it before it goes to a customer.";
+    : DEMO_DATA ? "Demo: the robots give prepared answers to the suggested questions (演示版：机器人只回答预设问题). To ask anything, choose DeepSeek and add an API key. Everything the robots write is a draft: check it before it goes to a customer." : "Running from a file on this computer. Robots use DeepSeek with your key; clients are kept in this browser only. Everything the robots write is a draft: check it before it goes to a customer.";
 
   store.on(function () { drawHud(); if (state.tab === "clients") drawBoard(); });
   getFile("tests/customer-service-tests.json").then(function (t) { state.tests = typeof t === "string" ? JSON.parse(t) : t; drawChat(); }).catch(function () {});
-  if (!IN_CLAUDE && !deep.key) state.settingsOpen = true;
+  if (!IN_CLAUDE && !deep.key && !DEMO_DATA) state.settingsOpen = true;
   drawFeed();
   drawAll();
   buildPhoto();
