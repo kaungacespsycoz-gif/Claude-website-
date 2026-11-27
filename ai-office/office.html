@@ -948,6 +948,31 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 @media (max-width: 760px) { .scene-wrap.plan2 { grid-template-columns: minmax(0, 1fr); } }
 .photo-frame .hs .hs-tag { font-size: .62rem; padding: 2px 7px 2px 5px; }
 .photo-frame .hs:not(.selected):not(.working):not(:hover) .hs-tag em { display: none; }
+
+/* ---------- customers as glowing holograms: a hexagon with a person, coloured by channel ---------- */
+.live-pin, .live-bub, .pano-spots .live-pin, .pano-spots .live-bub { width: 24px; height: 28px; margin: -16px 0 0 -12px; border-radius: 0; background: none; box-shadow: none; transform: none; overflow: visible; filter: drop-shadow(0 0 5px var(--c)) drop-shadow(0 0 10px color-mix(in srgb, var(--c) 60%, transparent)); }
+.pano-spots .live-pin, .pano-spots .live-bub { margin: 0; transform: translate(-50%, -60%); }
+.live-pin::before, .live-bub::before { content: ""; position: absolute; inset: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(180deg, color-mix(in srgb, var(--c) 95%, #fff), var(--c)); }
+.live-pin .hx, .live-bub .hx { position: absolute; inset: 1.6px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28'%3E%3Ccircle cx='12' cy='10' r='4.4' fill='%23fff' fill-opacity='.85'/%3E%3Cpath d='M3.5 23c.8-5 4.3-7.6 8.5-7.6s7.7 2.6 8.5 7.6z' fill='%23fff' fill-opacity='.75'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
+    linear-gradient(165deg, color-mix(in srgb, var(--c) 55%, rgba(20,8,30,.55)), color-mix(in srgb, var(--c) 25%, rgba(10,4,20,.75))); }
+.live-bub .hx { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28'%3E%3Ccircle cx='12' cy='10.5' r='4' fill='%23fff' fill-opacity='.85'/%3E%3Cpath d='M4.5 22.5c.8-4.4 3.8-6.6 7.5-6.6s6.7 2.2 7.5 6.6z' fill='%23fff' fill-opacity='.75'/%3E%3Crect x='14.5' y='3' width='7' height='5' rx='1.6' fill='%23fff'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
+    linear-gradient(165deg, color-mix(in srgb, var(--c) 55%, rgba(20,8,30,.55)), color-mix(in srgb, var(--c) 25%, rgba(10,4,20,.75))); }
+.live-pin::after, .live-bub::after { content: ""; position: absolute; left: 50%; top: 100%; width: 26px; height: 16px; margin-left: -13px; border: 0; border-radius: 50%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--c) 70%, #fff) 0 12%, color-mix(in srgb, var(--c) 45%, transparent) 30%, transparent 70%); opacity: .85; pointer-events: none; }
+.live-pin > i, .live-bub > i, .pano-spots .live-pin > i { position: absolute; right: -8px; top: -6px; inset: auto -8px auto auto; transform: none; width: 15px; height: 15px; border-radius: 50%; background: rgba(12,14,18,.85); box-shadow: 0 0 0 1px var(--c); font: 400 8.5px/15px var(--sans); text-align: center; font-style: normal; z-index: 2; }
+.live-pin.talking, .live-bub.talking { box-shadow: none; filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px var(--c)); z-index: 5; }
+.live-pin.talking::after, .live-bub.talking::after { width: 36px; margin-left: -18px; opacity: 1; animation: breathe 1.2s ease-in-out infinite; }
+.live-pin.human, .live-bub.human { box-shadow: none; filter: grayscale(.6) drop-shadow(0 0 5px #bbb); }
+.live-pin.booked { box-shadow: none; filter: drop-shadow(0 0 6px #ffd98a) drop-shadow(0 0 12px #e8c17a); }
+.live-pin .ct-dots, .live-bub .ct-dots { transform: none; left: 16px; top: -18px; }
+.in-spots .live-pin, .in-spots .live-bub, .pano-spots .live-pin, .pano-spots .live-bub { width: 32px; height: 37px; }
+.in-spots .live-pin { margin: -22px 0 0 -16px; }
+.in-spots .live-pin::after, .in-spots .live-bub::after, .pano-spots .live-pin::after, .pano-spots .live-bub::after { width: 40px; height: 22px; margin-left: -20px; }
+.live-pin.mini, .live-bub.mini { width: 24px; height: 28px; margin: 0 8px 0 4px; }
+.live-pin.big, .live-bub.big { width: 36px; height: 42px; margin: 4px 10px 4px 4px; }
+.live-pin.mini::after, .live-bub.mini::after, .live-pin.big::after, .live-bub.big::after { display: none; }
+@keyframes pinBob { 50% { translate: 0 -4px; } }
 </style>
 
 <div class="app">
@@ -3434,8 +3459,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     { key: "amy", kind: "comment", plat: "xhs", q: 0, icon: "!", name: { en: "Amy", zh: "Amy" }, post: { en: "UK campus life, honestly", zh: "在英国读大学，真实的校园生活" }, text: { en: "You took my money and did nothing!", zh: "你们收钱不办事！" } }
   ];
   var LIVE_FIRST = [["chen", 3], ["lilymama", 9], ["wang", 18], ["mei", 28], ["xiaolu", 36], ["kevin", 46], ["zhang", 60], ["amy", 74], ["mao", 88]];
-  var PLAT = { xhs: { c: "#ff2442", en: "Xiaohongshu", zh: "小红书" }, wc: { c: "#07c160", en: "WeChat post", zh: "公众号" }, dy: { c: "#111", en: "Douyin", zh: "抖音" } };
-  var KIND = { wechat: { c: "#07c160", en: "WeChat chat", zh: "微信咨询" }, web: { c: "#3b82f6", en: "Website", zh: "官网表单" }, lead: { c: "#ff2442", en: "Lead from a comment", zh: "评论线索" } };
+  var PLAT = { xhs: { c: "#ff4f9a", en: "Xiaohongshu", zh: "小红书" }, wc: { c: "#3ee8a0", en: "WeChat post", zh: "公众号" }, dy: { c: "#2af0ea", en: "Douyin", zh: "抖音" } };
+  var KIND = { wechat: { c: "#3ee8a0", en: "WeChat chat", zh: "微信咨询" }, web: { c: "#5aa9ff", en: "Website", zh: "官网表单" }, lead: { c: "#c77dff", en: "Lead from a comment", zh: "评论线索" } };
   var live = { lane: {}, social: {}, on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
   function liveName(c) { return c.name[state.lang]; }
   var LANE = { wechat: "1", lead: "1", web: "7" };     // Monica: WeChat line and leads · Rachel: website & phone
@@ -3657,7 +3682,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         if (last) { el.className = "live-more"; el.textContent = "+" + (cs.length - i); el.onclick = function (e) { e.stopPropagation(); openLive(z); }; }
         else {
           el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", liveColor(c));
-          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.status === "checking" ? "🔍" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+          el.innerHTML = '<span class="hx"></span><i>' + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.status === "checking" ? "🔍" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
           el.setAttribute("aria-label", liveName(c) + " · " + (c.kind === "comment" ? PLAT[c.plat].en : KIND[c.kind].en)); el.title = liveName(c);
           el.onclick = function (e) { e.stopPropagation(); openLive(z, c.id); };
         }
@@ -3704,7 +3729,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     rows.forEach(function (c) {
       var it = document.createElement("button"); it.type = "button"; it.className = "ib-tk " + c.status + (sel && c.id === sel.id ? " sel" : "");
       var last = c.turns.filter(function (t) { return t.role; }).slice(-1)[0], snip = last ? (last.role === "assistant" ? (c.kind === "comment" ? "Emily: " : "Monica: ") : "") + String(last.content).replace(/【[^】]*】/g, "").replace(/\s+/g, " ").slice(0, 60) : (c.kind === "comment" ? c.text[L] : liveText(c.msgs[0]));
-      it.innerHTML = '<span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' mini" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><span class="tk-main"><b>' + esc(liveName(c)) + ' <small class="tk-ch">' + esc(c.kind === "comment" ? PLAT[c.plat][L] : KIND[c.kind][L]) + "</small></b><small>" + esc(snip) + '</small></span><span class="tk-st">' + esc(liveStatusText(c)) + "</span>";
+      it.innerHTML = '<span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' mini" style="--c:' + liveColor(c) + '"><span class="hx"></span><i>' + c.icon + '</i></span><span class="tk-main"><b>' + esc(liveName(c)) + ' <small class="tk-ch">' + esc(c.kind === "comment" ? PLAT[c.plat][L] : KIND[c.kind][L]) + "</small></b><small>" + esc(snip) + '</small></span><span class="tk-st">' + esc(liveStatusText(c)) + "</span>";
       it.onclick = function () { openLive(liveSel.zone, c.id); };
       list.firstChild.appendChild(it);
     });
@@ -3718,7 +3743,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var d = $("ibDetail"); if (!d || $("custModal").hidden && !d) return;
     var c = live.list.filter(function (x) { return x.id === liveSel.id; })[0]; if (!c) { if (d) d.innerHTML = ""; return; }
     var en = state.lang === "en", L = state.lang;
-    var head = (c.insight ? '<div class="dl-team">🔮 Anya: ' + esc(c.insight[state.lang]) + "</div>" : "") + '<div class="dt-head"><span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' big" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><div><b>' + esc(liveName(c)) + "</b><small>" + esc(c.kind === "comment" ? PLAT[c.plat][L] + " · " + c.post[L] : KIND[c.kind][L]) + '</small></div><span class="tk-st">' + esc(liveStatusText(c)) + "</span></div>";
+    var head = (c.insight ? '<div class="dl-team">🔮 Anya: ' + esc(c.insight[state.lang]) + "</div>" : "") + '<div class="dt-head"><span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' big" style="--c:' + liveColor(c) + '"><span class="hx"></span><i>' + c.icon + '</i></span><div><b>' + esc(liveName(c)) + "</b><small>" + esc(c.kind === "comment" ? PLAT[c.plat][L] + " · " + c.post[L] : KIND[c.kind][L]) + '</small></div><span class="tk-st">' + esc(liveStatusText(c)) + "</span></div>";
     var conv = c.turns.map(function (t) {
       if (t.kind === "team") return '<div class="dl-team">' + (t.items.some(function (it) { return it.note === null; }) ? "📞 Asking " : "✓ Checked with ") + t.items.map(function (it) { var b = BY_ID[it.id]; return '<b style="color:' + COLORS[b.color] + '">' + esc(b.name) + "</b>"; }).join(" & ") + "</div>";
       if (t.kind === "note") return '<div class="dl-note' + (t.good ? " good" : "") + '">' + esc(t.text) + "</div>";
