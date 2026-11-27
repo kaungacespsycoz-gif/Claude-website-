@@ -1014,6 +1014,20 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .fx-trail.draw path { opacity: .9; animation: dash 1s linear infinite; }
 .fx-spark { position: absolute; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px var(--c), 0 0 14px var(--c); z-index: 6; pointer-events: none; animation: fxSpark .65s ease-out forwards; }
 @keyframes fxSpark { from { transform: rotate(var(--a)) translateX(0); opacity: 1; } to { transform: rotate(var(--a)) translateX(26px); opacity: 0; } }
+
+/* ---------- calm name tags: name + a small activity light; details only on hover ---------- */
+.hs-tag em, .in-bot .hs-tag em, .pl-bot .hs-tag em { display: none !important; }
+.hs:hover .hs-tag em, .hs:focus-visible .hs-tag em, .in-bot:hover .hs-tag em, .in-bot:focus-visible .hs-tag em, .pl-bot:hover .hs-tag em { display: inline !important; }
+.hs:hover, .in-bot:hover, .pl-bot:hover { z-index: 8; }
+.hs.working .hs-tag i, .hs.calling .hs-tag i, .in-bot.working .hs-tag i, .pl-bot.working .hs-tag i { animation: tagPulse 1s ease-in-out infinite; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 35%, transparent), 0 0 10px var(--c); }
+@keyframes tagPulse { 50% { transform: scale(1.5); } }
+.hs.calling .hs-tag::before { content: "📞"; font-size: .7em; margin-right: 2px; }
+.in-bot .hs-tag, .pano-spots .in-bot .hs-tag { font-size: .7rem; padding: 2px 8px 2px 6px; }
+/* nobody looks selected until you pick an officer */
+body:not(.picked) .hs.selected::after, body:not(.picked) .in-bot.selected::after { opacity: 0; }
+body:not(.picked) .hs.selected .hs-tag { background: rgba(12,14,18,.78); color: #f2f5f7; }
+body:not(.picked) .photo-frame .hs.selected:not(.working):not(.calling):not(:hover) .hs-tag { opacity: 0; }
+body:not(.picked) .staff button[aria-pressed="true"] { border-color: var(--rule); background: inherit; }
 </style>
 
 <div class="app">
@@ -2870,6 +2884,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function pvCardUpdate() {
     var b = state.bot, card = $("pvCard");
+    if (!document.body.classList.contains("picked")) { card.hidden = true; return; }
     card.hidden = false; card.classList.remove("fade"); clearTimeout(pvCardUpdate.t); pvCardUpdate.t = setTimeout(function () { if (!card.matches(":hover")) card.classList.add("fade"); }, 6000);
     $("pvCardImg").src = imgURL(IMG[b.id]);
     $("pvCardName").textContent = b.name;
@@ -3020,7 +3035,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         var btn = document.createElement("button");
         btn.type = "button"; btn.id = "pick" + b.id;
         btn.innerHTML = '<span class="ava photo" style="background-color:var(' + b.color + ');background-image:url(' + imgURL(IMG[b.id]) + ')">' + esc(b.name[0]) + '</span><span class="who-txt"><b>' + esc(b.name) + '</b><small></small><em class="sk">' + esc(b.skills.join(" · ")) + '</em></span><span class="status"></span>';
-        btn.onclick = function () { selectBot(b); };
+        btn.onclick = function () { document.body.classList.add("picked"); selectBot(b); };
         bar.appendChild(btn);
       });
     }
@@ -4689,6 +4704,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   // on a phone the side chat is far below the office, so tapping an officer goes straight to their desk
   function pickOfficer(b, where) {
+    document.body.classList.add("picked");
     selectBot(b);
     if (where === "inside") { openDesk(b, $("insideView")); return; }
     if (state.view === "3d" && (v3mode === "photo" || (v3 && v3.isWalking()))) { openDesk(b, $("view3d")); return; }
