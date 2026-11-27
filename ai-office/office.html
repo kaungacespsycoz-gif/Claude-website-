@@ -670,6 +670,102 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .plat button[aria-pressed="true"] { background: #eaf6ff; color: #0b1620; }
 .dp-list button.next { border-color: #e8c17a; box-shadow: 0 0 16px rgba(232,193,122,.45); }
 .dp-list button.next span { white-space: normal; }
+
+/* ---------- the officer's own computer: report opens in their work app ---------- */
+.pc { position: fixed; inset: 0; z-index: 64; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 12px 0; overflow: hidden; background: #07090c; }
+.pc[hidden] { display: none; }
+.pc-bg { position: absolute; inset: -40px; background-size: cover; background-position: 70% 40%; filter: blur(14px) brightness(.55) saturate(1.1); transform: scale(1.25); }
+.pc::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 16%; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(40,28,18,.85) 30%, #2a1d12); pointer-events: none; }
+.pc-top { position: absolute; left: 0; right: 0; top: 0; z-index: 3; display: flex; align-items: center; gap: 8px; padding: 12px 14px; color: #fff; background: linear-gradient(180deg, rgba(0,0,0,.6), transparent); }
+.pc-top b { font: 600 .98rem var(--display); }
+.pc-top small { flex: 1; color: #c9d6e0; font-size: .74rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-top button { border: 1px solid rgba(255,255,255,.3); background: rgba(10,14,20,.55); color: #fff; border-radius: 999px; padding: 7px 13px; font: 600 .8rem var(--sans); cursor: pointer; backdrop-filter: blur(6px); }
+.pc-mon { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: min(96vw, 980px); animation: monIn .55s cubic-bezier(.2,.8,.2,1); }
+.pc-bezel { position: relative; width: 100%; padding: 10px 10px 22px; border-radius: 14px; background: linear-gradient(180deg, #2b2e33, #111316 40%, #0b0c0e); box-shadow: 0 0 0 1px #3a3e44, 0 30px 70px rgba(0,0,0,.7), 0 0 60px -20px var(--c); }
+.pc-bezel::before { content: ""; position: absolute; left: 50%; top: 4px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: #1c2a33; box-shadow: inset 0 0 2px #456; }
+.pc-led { position: absolute; right: 18px; bottom: 8px; width: 5px; height: 5px; border-radius: 50%; background: #5dfc9a; box-shadow: 0 0 6px #5dfc9a; }
+.pc-screen { position: relative; height: min(64vh, 560px); border-radius: 4px; overflow: hidden; background: #fff; }
+.pc-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.10), transparent 32%, transparent 70%, rgba(255,255,255,.04)); }
+.pc-neck { width: 70px; height: 46px; background: linear-gradient(90deg, #1a1c1f, #3a3d42 50%, #1a1c1f); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); }
+.pc-base { width: 240px; height: 12px; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: linear-gradient(180deg, #3a3d42, #141518); box-shadow: 0 10px 20px rgba(0,0,0,.6); }
+@keyframes monIn { from { opacity: 0; transform: translateY(24px) scale(.94); } }
+.app { height: 100%; display: flex; flex-direction: column; font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; color: #1f2328; background: #fff; }
+.app-bar { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px; background: var(--app, #e9ebee); color: #fff; font-size: .8rem; flex: none; }
+.app-bar b { flex: 1; text-align: center; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-dots { display: flex; gap: 6px; } .app-dots i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; } .app-dots i:nth-child(2) { background: #febc2e; } .app-dots i:nth-child(3) { background: #28c840; }
+.app-user { width: 22px; height: 22px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 1.5px rgba(255,255,255,.7); }
+.app-tool { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 6px 12px; font-size: .74rem; color: #444; background: #f6f7f8; border-bottom: 1px solid #e1e4e8; }
+.app-tool .tb { display: flex; gap: 14px; width: 100%; } .app-tool .tb span:first-child { font-weight: 600; color: var(--app); border-bottom: 2px solid var(--app); }
+.app-tool .fx { display: flex; align-items: center; gap: 8px; width: 100%; background: #fff; border: 1px solid #dfe3e8; border-radius: 3px; padding: 3px 8px; font-family: ui-monospace, Menlo, monospace; color: #333; }
+.app-tool .fx i { font-style: italic; color: #888; border-right: 1px solid #ddd; padding-right: 8px; }
+.app-tool .url { display: flex; align-items: center; gap: 8px; width: 100%; background: #fff; border: 1px solid #dfe3e8; border-radius: 999px; padding: 4px 12px; color: #333; }
+.app-body.sheet-body { flex: 1; overflow: auto; padding: 14px 18px 20px; color: #1f2328; font-size: .88rem; line-height: 1.55; white-space: pre-wrap; background: #fff; }
+.app-body strong { color: #111; }
+.app-status { flex: none; display: flex; justify-content: space-between; padding: 3px 12px; font-size: .68rem; color: #fff; background: var(--app); }
+.app-body table { width: 100%; border-collapse: collapse; margin: 4px 0 14px; font-size: .84rem; white-space: normal; background: #fff; box-shadow: none; border-radius: 0; }
+.app-body th, .app-body td { border: 1px solid #e3e6ea; padding: 6px 9px; text-align: left; }
+.app-body th { background: #f3f5f7; font-weight: 600; }
+.app-body td:not(:first-child), .app-body th:not(:first-child) { text-align: right; }
+.app.sheets td:nth-child(2), .app.sheets thead tr:not(.cols) th:nth-child(2) { text-align: left !important; }
+.app.browser table, .app.crm table { min-width: 540px; }
+/* spreadsheet (Penny) */
+.app.sheets .app-body { padding: 0 0 14px; }
+.app.sheets table { margin: 0 0 14px; font-family: -apple-system, "Segoe UI", sans-serif; }
+.app.sheets tr.cols th { background: #eef0f2; color: #666; font-weight: 500; text-align: center !important; font-size: .72rem; padding: 3px; }
+.app.sheets th.rn { width: 34px; background: #eef0f2; color: #666; font-weight: 500; text-align: center !important; font-size: .72rem; }
+.app.sheets thead tr:not(.cols) th:not(.rn) { background: #e6f2ea; color: #1d5c3a; }
+.app.sheets tbody tr:last-child td { font-weight: 700; background: #fbfcf2; }
+.app.sheets tbody tr:first-child td:nth-child(3) { outline: 2px solid var(--app); outline-offset: -2px; }
+.app.sheets .app-body > :not(table) { padding: 0 16px; }
+/* document editor (Quill) */
+.app.docs .app-body { background: #eef0f3; padding: 18px; }
+.app.docs .page { max-width: 640px; margin: 0 auto; background: #fff; padding: 34px 40px; box-shadow: 0 1px 3px rgba(0,0,0,.15); font-family: Georgia, "Songti SC", serif; min-height: 100%; }
+/* social studio (Spark) */
+.app.studio .app-body { background: #f3f3f5; }
+.app.studio .post-prev { margin: 0 auto 18px; }
+/* slides (Ling) */
+.app.slides .app-body { background: #e8eaee; padding: 18px; }
+.app.slides .page { max-width: 720px; margin: 0 auto; background: linear-gradient(160deg, #fff, #f6f2ea); padding: 28px 34px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.15); border-top: 6px solid var(--app); }
+@media (max-width: 899px) {
+  .pc { padding-top: 58px; }
+  .pc-bezel { padding: 7px 7px 16px; border-radius: 12px; }
+  .pc-screen { height: 66vh; }
+  .pc-neck { height: 26px; width: 50px; } .pc-base { width: 150px; }
+  .app-tool .tb span:nth-child(n+4) { display: none; }
+}
+
+/* ---------- projector: charts on the big screen ---------- */
+.pc-mode { display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(10,14,20,.55); border: 1px solid rgba(255,255,255,.25); }
+.pc-mode button { white-space: nowrap; border: 0 !important; background: transparent !important; padding: 5px 10px !important; }
+.pc-mode button[aria-pressed="true"] { background: #fff !important; color: #111 !important; }
+.pc[data-mode="proj"] .pc-mon { display: none; }
+.proj { position: relative; z-index: 2; width: min(96vw, 1180px); display: flex; flex-direction: column; align-items: center; animation: monIn .6s cubic-bezier(.2,.8,.2,1); }
+.proj[hidden] { display: none; }
+.proj-case { width: 100%; height: 14px; border-radius: 7px; background: linear-gradient(180deg, #e9e9e6, #b9bab6 60%, #8c8d8a); box-shadow: 0 6px 14px rgba(0,0,0,.5); }
+.proj-screen { position: relative; width: 97%; height: min(66vh, 620px); background: radial-gradient(120% 90% at 50% 35%, #f6f8fa, #e5e9ed 70%, #d7dce1); box-shadow: 0 20px 50px rgba(0,0,0,.6), inset 0 0 60px rgba(0,0,0,.08); overflow: hidden; }
+.proj-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 50% at 50% 40%, rgba(255,255,255,.35), transparent 70%); }
+.proj-bar { width: 99%; height: 10px; border-radius: 5px; background: linear-gradient(180deg, #8d8f92, #4e5154); position: relative; }
+.proj-bar i { position: absolute; left: 50%; top: 9px; width: 18px; height: 18px; margin-left: -9px; border: 2px solid #9a9da0; border-radius: 50%; }
+.proj-grid { position: absolute; inset: 0; padding: 2.2% 2.4%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 2.2%; font-family: "Segoe UI", -apple-system, "PingFang SC", sans-serif; color: #2b3340; }
+.pj-card { min-height: 0; display: flex; flex-direction: column; background: rgba(255,255,255,.72); border: 1px solid #cfd6de; border-radius: 6px; padding: 10px 14px 8px; }
+.pj-card h4 { margin: 0 0 4px; font: 400 clamp(.95rem, 1.6vw, 1.45rem) "Segoe UI", -apple-system, "PingFang SC", sans-serif; color: #232a33; }
+.pj-card svg { flex: 1; min-height: 0; width: 100%; }
+.pj-card text { font-family: "Segoe UI", -apple-system, "PingFang SC", sans-serif; fill: #4a5563; }
+.pj-kpis { display: flex; flex-wrap: wrap; gap: 10px; align-content: flex-start; }
+.pj-kpi { flex: 1 1 40%; background: #fff; border: 1px solid #dde3ea; border-radius: 6px; padding: 8px 10px; }
+.pj-kpi small { display: block; color: #66717f; font-size: .72rem; }
+.pj-kpi b { display: block; font: 600 clamp(1.1rem, 2.2vw, 1.8rem) "Segoe UI", -apple-system, sans-serif; color: #2b4ea2; }
+.pj-notes { margin: 0; padding-left: 18px; font-size: clamp(.72rem, 1.05vw, .92rem); line-height: 1.5; color: #333c48; overflow: hidden; }
+.proj-presenter { position: absolute; left: -11%; bottom: -16%; width: 22%; aspect-ratio: 1; background-size: cover; background-position: 50% 30%; filter: brightness(.75) saturate(.9) blur(.6px);
+  -webkit-mask-image: radial-gradient(70% 70% at 45% 55%, #000 55%, transparent 72%); mask-image: radial-gradient(70% 70% at 45% 55%, #000 55%, transparent 72%); pointer-events: none; z-index: 3; }
+@media (max-width: 899px) {
+  .proj-screen { height: 68vh; }
+  .proj-grid { grid-template-columns: minmax(0, 1fr); overflow-y: auto; grid-auto-rows: minmax(180px, auto); }
+  .proj-presenter { width: 30%; left: -8%; bottom: -14%; }
+  .pc-mode button { white-space: nowrap; font-size: .72rem !important; padding: 5px 8px !important; }
+  #sheetCopy { display: none; }
+  .pc-top small { display: none; }
+}
 </style>
 
 <div class="app">
@@ -831,9 +927,24 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       </section>
     </div>
   </div>
-  <div class="desk-sheet" id="deskSheet" hidden role="dialog" aria-labelledby="sheetTitle">
-    <div class="sheet-head"><b id="sheetTitle"><span class="scr-dot"></span><span id="sheetName">On screen</span><small id="sheetSub"></small></b><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
-    <div class="sheet-body" id="sheetBody"></div>
+  <div class="pc" id="deskSheet" hidden role="dialog" aria-labelledby="sheetName">
+    <div class="pc-bg" id="pcBg"></div>
+    <div class="pc-top"><span class="scr-dot"></span><b id="sheetName">On screen</b><small id="sheetSub"></small><span class="pc-mode" id="pcMode" role="group" aria-label="Show on"><button type="button" data-m="proj">📽 Projector</button><button type="button" data-m="pc">🖥 Computer</button></span><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
+    <div class="proj" id="proj" hidden>
+      <div class="proj-case"></div>
+      <div class="proj-screen"><div class="proj-grid" id="projGrid"></div></div>
+      <div class="proj-bar"><i></i></div>
+      <div class="proj-presenter" id="projPresenter"></div>
+    </div>
+    <div class="pc-mon" id="pcMon">
+      <div class="pc-bezel"><div class="pc-screen"><div class="app" id="pcApp">
+        <div class="app-bar"><span class="app-dots"><i></i><i></i><i></i></span><b id="appTitle"></b><span class="app-user" id="appUser"></span></div>
+        <div class="app-tool" id="appTool"></div>
+        <div class="sheet-body app-body" id="sheetBody"></div>
+        <div class="app-status" id="appStatus"></div>
+      </div></div><span class="pc-led"></span></div>
+      <div class="pc-neck"></div><div class="pc-base"></div>
+    </div>
   </div>
 </div>
 <script>/**
@@ -1658,6 +1769,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     host.appendChild(renderer.domElement);
     var scene = new T.Scene(); scene.background = new T.Color(0x0e0f12);
     var camera = new T.PerspectiveCamera(42, 1, .1, 200);
+    // soft studio reflections for every material (a small lit room rendered into an environment map)
+    (function () {
+      var pm = new T.PMREMGenerator(renderer), env = new T.Scene(), bm = function (r, g, b) { var m = new T.MeshBasicMaterial({ side: T.BackSide }); m.color.setRGB(r, g, b); return m; };
+      var room = new T.Mesh(new T.BoxGeometry(24, 9, 24), bm(.07, .06, .05)); room.position.y = 4; env.add(room);
+      [[-5, 8.4, -3, 6, .1, 1.2, [2.2, 1.9, 1.5]], [5, 8.4, 3, 6, .1, 1.2, [2.2, 1.9, 1.5]], [0, 4, -11.8, 14, 4, .1, [.9, 1.1, 1.5]], [-11.8, 3, 0, .1, 3, 8, [.7, .6, .5]]].forEach(function (p) {
+        var m = new T.Mesh(new T.BoxGeometry(p[3], p[4], p[5]), new T.MeshBasicMaterial()); m.material.color.setRGB(p[6][0], p[6][1], p[6][2]); m.position.set(p[0], p[1], p[2]); env.add(m);
+      });
+      var floor = new T.Mesh(new T.PlaneGeometry(24, 24), new T.MeshBasicMaterial()); floor.material.color.setRGB(.16, .13, .1); floor.rotation.x = -Math.PI / 2; env.add(floor);
+      scene.environment = pm.fromScene(env, .035).texture; pm.dispose();
+    })();
     var clock = new T.Clock(), running = true, raf = 0;
 
     // seeded random so the city looks the same every time
@@ -1731,7 +1852,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     // ----- the building: four floors like the photo, front wall removed (dollhouse view) -----
     // Rooms run from x -10 to 7.6; the lit staircase core is on the right (x 7.6 to 10.2). Back wall at z -4.5.
     var F2 = 3.6, LV = [0, F2, F2 * 2, F2 * 3], TOP = F2 * 4, RX = 7.6;
-    var frameM = mat(0x24262a, .7, .2), wallM = mat(0xd9d4cc, .9), ceilM = mat(0xb9b6b0, .95);
+    var frameM = mat(0x24262a, .7, .2), wallM = mat(0xd9d4cc, .9), ceilM = mat(0x8e8880, .95);
     var plankTex = canvasTex(512, 512, function (g) {
       for (var y = 0; y < 512; y += 32) { var x = -((y / 32) % 3) * 70; while (x < 512) { var w = 120 + rnd() * 160; g.fillStyle = "hsl(" + (27 + rnd() * 6) + "," + (40 + rnd() * 10) + "%," + (46 + rnd() * 8) + "%)"; g.fillRect(x, y, w, 31); g.fillStyle = "rgba(0,0,0,.25)"; g.fillRect(x + w - 1, y, 1, 31); x += w; } g.fillStyle = "rgba(0,0,0,.3)"; g.fillRect(0, y + 31, 512, 1); }
       g.globalAlpha = .07; for (var k = 0; k < 500; k++) { g.fillStyle = rnd() < .5 ? "#3a2210" : "#fff"; g.fillRect(rnd() * 512, rnd() * 512, 30 + rnd() * 50, 1); }
@@ -1742,10 +1863,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       g.strokeStyle = "rgba(0,0,0,.07)"; g.lineWidth = 1; for (var t = 0; t <= 512; t += 128) { g.beginPath(); g.moveTo(t, 0); g.lineTo(t, 512); g.moveTo(0, t); g.lineTo(512, t); g.stroke(); }
     }, [4, 2]);
     var concreteTex = canvasTex(256, 256, function (g) { g.fillStyle = "#a9abad"; g.fillRect(0, 0, 256, 256); for (var i = 0; i < 3000; i++) { g.fillStyle = rnd() < .5 ? "rgba(255,255,255,.08)" : "rgba(0,0,0,.08)"; g.fillRect(rnd() * 256, rnd() * 256, 1.5, 1.5); } }, [6, 3]);
-    var plankM = mat(0xffffff, .6, 0, { map: plankTex }), oakM = mat(0xffffff, .55, 0, { map: oakTex });
-    var marbleM = mat(0xffffff, .25, 0, { map: marbleTex }), concreteM = mat(0xffffff, .5, 0, { map: concreteTex }), slatM = mat(0xffffff, .7, 0, { map: slatTex });
+    var plankM = new T.MeshPhysicalMaterial({ map: plankTex, roughness: .42, clearcoat: .35, clearcoatRoughness: .25 }), oakM = mat(0xffffff, .5, 0, { map: oakTex });
+    var marbleM = new T.MeshPhysicalMaterial({ map: marbleTex, roughness: .18, clearcoat: 1, clearcoatRoughness: .06 }), concreteM = new T.MeshPhysicalMaterial({ map: concreteTex, roughness: .35, clearcoat: .6, clearcoatRoughness: .2 }), slatM = mat(0xffffff, .6, 0, { map: slatTex });
     function plane(w, h, m, x, y, z, rx, ry) { var o = add(new T.PlaneGeometry(w, h), m, x, y, z, null, false); o.rotation.set(rx || 0, ry || 0, 0); return o; }
-    var glassM = new T.MeshBasicMaterial({ color: 0xbfe3ee, transparent: true, opacity: .14, depthWrite: false, side: T.DoubleSide });
+    var glassM = new T.MeshPhysicalMaterial({ color: 0xd8eef4, metalness: 0, roughness: .04, transparent: true, opacity: .16, depthWrite: false, side: T.DoubleSide, envMapIntensity: 1.6 });
     // outside: city backdrop and ground
     var sky = new T.Mesh(new T.PlaneGeometry(180, 84), new T.MeshBasicMaterial({ map: skyTex, toneMapped: false })); sky.position.set(0, 22, -40); scene.add(sky);
     plane(160, 80, mat(0x55585c, .95), 0, -.32, 0, -Math.PI / 2);
@@ -1786,6 +1907,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var panel = glow(0xfff8ee), lamps = [];
     LV.forEach(function (y, k) {
       [[-7, -2.2], [-3, -2.2], [1, -2.2], [5, -2.2], [-7, 1.6], [-3, 1.6], [1, 1.6], [5, 1.6]].forEach(function (p) { if (k === 3 && p[0] === -3) return; box(1.4, .03, .5, panel, p[0], y + F2 - .42, p[1], null, false); });
+      box(17.2, .04, .06, glow(0xffd9a0), -1.2, y + F2 - .46, -4.35, null, false); box(.06, .04, 8.6, glow(0xffd9a0), -9.85, y + F2 - .46, 0, null, false);
+      [-6, 2].forEach(function (sx) { var sp = new T.SpotLight(0xffd2a0, .7, 6, .7, .6, 1.5); sp.position.set(sx, y + F2 - .5, -3.9); sp.target.position.set(sx, y, -4.4); scene.add(sp); scene.add(sp.target); });
       [[-6, 2.2, -1], [3, 2.2, -1]].forEach(function (p) { var pl = new T.PointLight(0xffd9a8, .7, 9, 1.8); pl.position.set(p[0], y + p[1], p[2]); scene.add(pl); lamps.push(pl); });
     });
 
@@ -1805,10 +1928,20 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       box(w - .2, .3, .02, top || oak, x, y + .5, z + .32);
     }
     function monitorBack(x, y, z, c) { box(.62, .38, .03, black, x, y + 1.05, z); box(.04, .22, .04, black, x, y + .86, z - .02); box(.66, .42, .01, glow(c), x, y + 1.05, z - .025, null, false).material = new T.MeshBasicMaterial({ color: c, transparent: true, opacity: .25, toneMapped: false }); }
+    var leafGeo = new T.SphereGeometry(1, 10, 6), leafM = new T.MeshStandardMaterial({ color: 0xffffff, roughness: .55, side: T.DoubleSide });
     function plant(x, y, z, s) {
       s = s || 1; var g = new T.Group(); g.position.set(x, y, z); g.scale.setScalar(s); scene.add(g);
-      cyl(.2, .16, .45, rnd() < .5 ? mat(0xeeeeea, .5) : black, 0, .225, 0, g);
-      for (var i = 0; i < 7; i++) { var l = add(new T.IcosahedronGeometry(.18 + rnd() * .14, 0), mat([0x2f7d52, 0x3f9a65, 0x4caf73][i % 3], .8), (rnd() - .5) * .4, .65 + rnd() * .8, (rnd() - .5) * .4, g); l.rotation.set(rnd() * 3, rnd() * 3, 0); }
+      var pot = cyl(.2, .15, .45, rnd() < .5 ? new T.MeshPhysicalMaterial({ color: 0xece9e2, roughness: .3, clearcoat: .6 }) : new T.MeshPhysicalMaterial({ color: 0x1b1c1e, roughness: .35, clearcoat: .5 }), 0, .225, 0, g);
+      cyl(.18, .18, .02, mat(0x2b1d14, 1), 0, .44, 0, g);
+      var n = 34, leaves = new T.InstancedMesh(leafGeo, leafM, n), m4 = new T.Matrix4(), q = new T.Quaternion(), e = new T.Euler(), c = new T.Color();
+      for (var i = 0; i < n; i++) {
+        var a = rnd() * Math.PI * 2, h = .55 + rnd() * .95, out = .08 + rnd() * .26, len = .14 + rnd() * .12;
+        e.set(-.4 - rnd() * .9, a, 0, "YXZ"); q.setFromEuler(e);
+        m4.compose(new T.Vector3(Math.sin(a) * out, h, Math.cos(a) * out), q, new T.Vector3(len * .38, .012, len)); leaves.setMatrixAt(i, m4);
+        leaves.setColorAt(i, c.setHSL(.3 + rnd() * .06, .45 + rnd() * .2, .22 + rnd() * .14));
+      }
+      leaves.castShadow = true; g.add(leaves);
+      for (var st = 0; st < 5; st++) { var sm = cyl(.008, .012, .9, mat(0x3d5a2a, .8), (rnd() - .5) * .12, .85, (rnd() - .5) * .12, g, 5); sm.rotation.set((rnd() - .5) * .5, 0, (rnd() - .5) * .5); }
     }
     function textPanel(w, h, draw, x, y, z, emissive) { var t = canvasTex(1024, Math.round(1024 * h / w), draw); var m = new T.Mesh(new T.PlaneGeometry(w, h), emissive ? new T.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false }) : mat(0xffffff, .4, 0, { map: t, transparent: true })); m.position.set(x, y, z); scene.add(m); return m; }
     function glassWall(x1, z1, x2, z2, y, h) {
@@ -1940,7 +2073,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     LV.forEach(function (y, k) { if (k) { box(.04, .04, 1.1, railM, 7.62, y + 1.0, 3.95, null, false); box(.04, .04, 2.9, railM, 7.62, y + 1.0, -3.05, null, false); } });
 
     // ----- lights -----
-    var hemi = new T.HemisphereLight(0xffe2c4, 0x3a2e25, .35); scene.add(hemi);
+    var hemi = new T.HemisphereLight(0xffe2c4, 0x3a2e25, .22); scene.add(hemi);
     var amb = new T.AmbientLight(0xffffff, .06); scene.add(amb);
     var sun = new T.DirectionalLight(0xffb27a, 1.1); sun.position.set(-14, 22, 16); sun.target.position.set(0, 6, 0); scene.add(sun); scene.add(sun.target);
     sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
@@ -2107,7 +2240,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     function clampWalk() { walkSt.gx = Math.max(-9.4, Math.min(7.3, walkSt.gx)); walkSt.gz = Math.max(-4.0, Math.min(4.3, walkSt.gz)); }
     function enterWalk(level, x, z, yaw) {
       walkSt.on = true; walkSt.level = level;
-      walkSt.x = walkSt.gx = x == null ? -1.2 : x; walkSt.z = walkSt.gz = z == null ? 3.9 : z; walkSt.yaw = walkSt.gyaw = yaw || 0; walkSt.pitch = -.06;
+      var START = [[5.6, 4.1, .55], [2.6, 4.1, .25], [2.4, 4.1, .2], [3.2, 4.1, .35]][level];
+      walkSt.x = walkSt.gx = x == null ? START[0] : x; walkSt.z = walkSt.gz = z == null ? START[1] : z; walkSt.yaw = walkSt.gyaw = yaw == null ? START[2] : yaw; walkSt.pitch = -.1;
       if (opts.onMode) opts.onMode("walk", level);
     }
     function leaveWalk() { walkSt.on = false; goal = Object.assign({}, HOME); if (opts.onMode) opts.onMode("orbit"); }
@@ -2117,11 +2251,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         if (k.f || k.b) { var dir = k.f ? 1 : -1; walkSt.gx += -Math.sin(walkSt.gyaw) * sp * dir; walkSt.gz += -Math.cos(walkSt.gyaw) * sp * dir; clampWalk(); }
         if (k.l) walkSt.gyaw += 1.8 * clockDt; if (k.r) walkSt.gyaw -= 1.8 * clockDt;
         walkSt.x += (walkSt.gx - walkSt.x) * .12; walkSt.z += (walkSt.gz - walkSt.z) * .12; walkSt.yaw += (walkSt.gyaw - walkSt.yaw) * .15;
+        if (camera.fov !== 62) { camera.fov = 62; camera.updateProjectionMatrix(); }
         var y = LV[walkSt.level] + 1.55, cp = Math.cos(walkSt.pitch);
         camera.position.set(walkSt.x, y, walkSt.z);
         camera.lookAt(walkSt.x - Math.sin(walkSt.yaw) * cp, y + Math.sin(walkSt.pitch), walkSt.z - Math.cos(walkSt.yaw) * cp);
         return;
       }
+      if (camera.fov !== 42) { camera.fov = 42; camera.updateProjectionMatrix(); }
       ["tx", "ty", "tz", "r", "th", "ph"].forEach(function (k) { cam[k] += (goal[k] - cam[k]) * (zoom.on ? .06 : .1); });
       camera.position.set(cam.tx + cam.r * Math.sin(cam.ph) * Math.sin(cam.th), cam.ty + cam.r * Math.cos(cam.ph), cam.tz + cam.r * Math.sin(cam.ph) * Math.cos(cam.th));
       camera.lookAt(cam.tx, cam.ty, cam.tz);
@@ -2254,9 +2390,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var mode = hour >= 8 && hour < 16 ? "day" : (hour >= 6 && hour < 8) || (hour >= 16 && hour < 19) ? "dusk" : "night";
       if (mode === skyMode) return; skyMode = mode;
       drawSky(mode);
-      if (mode === "day") { sun.color.set(0xfff1dc); sun.intensity = 1.0; sun.position.set(-14, 22, 16); hemi.color.set(0xdcefff); hemi.intensity = .45; renderer.toneMappingExposure = .95; }
-      else if (mode === "dusk") { sun.color.set(0xffa76c); sun.intensity = 1.5; sun.position.set(-18, 9, 12); hemi.color.set(0xffd2b0); hemi.intensity = .35; renderer.toneMappingExposure = .95; }
-      else { sun.color.set(0x8aa0ff); sun.intensity = .15; hemi.color.set(0x2a3a66); hemi.intensity = .25; renderer.toneMappingExposure = 1.0; }
+      if (mode === "day") { sun.color.set(0xfff1dc); sun.intensity = 1.0; sun.position.set(-14, 22, 16); hemi.color.set(0xdcefff); hemi.intensity = .45; renderer.toneMappingExposure = .8; }
+      else if (mode === "dusk") { sun.color.set(0xffa76c); sun.intensity = 1.5; sun.position.set(-18, 9, 12); hemi.color.set(0xffd2b0); hemi.intensity = .3; renderer.toneMappingExposure = .82; }
+      else { sun.color.set(0x8aa0ff); sun.intensity = .15; hemi.color.set(0x2a3a66); hemi.intensity = .2; renderer.toneMappingExposure = .9; }
       lamps.forEach(function (l) { l.intensity = mode === "night" ? .95 : mode === "dusk" ? .75 : .55; });
     }
 
@@ -3355,9 +3491,105 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     u.onstart = function () { d.classList.add("speaking"); }; u.onend = u.onerror = function () { d.classList.remove("speaking"); };
     speechSynthesis.speak(u);
   }
+
+  // ---------- projector: turn the report's tables into charts ----------
+  var PJ_COL = ["#3f63c8", "#5fb8b0", "#e8a33d", "#b0567a", "#6c6fe0"];
+  function pjNum(cell) {
+    var t = String(cell).replace(/\*|≈|~|约/g, "").replace(/,/g, "").trim();
+    if (!/^[£¥$€]?\s*\d/.test(t)) return null;
+    var m = t.match(/(\d+(?:\.\d+)?)\s*(k|万)?(?:\s*[–\-~至到]\s*[£¥$]?\s*(\d+(?:\.\d+)?)\s*(k|万)?)?/i);
+    if (!m) return null; var f = function (v, u) { v = +v; if (/k/i.test(u || "")) v *= 1000; if (u === "万") v *= 10000; return v; };
+    var a = f(m[1], m[2]); return m[3] ? (a + f(m[3], m[4] || m[2])) / 2 : a;
+  }
+  function pjTables(text) {
+    var out = [], cur = null;
+    String(text).split("\n").forEach(function (l) {
+      if (/^\s*\|/.test(l)) { if (!cur) out.push(cur = []); if (!/^\s*\|?\s*:?-{2,}/.test(l)) cur.push(l.trim().replace(/^\||\|$/g, "").split("|").map(function (c) { return c.replace(/\*\*/g, "").trim(); })); }
+      else cur = null;
+    });
+    return out.filter(function (t) { return t.length > 2; });
+  }
+  function pjBars(cats, series, names, money) {
+    var W = 520, H = 250, L = 52, B = 34, T = 10, max = 0;
+    series.forEach(function (s) { s.forEach(function (v) { if (v > max) max = v; }); });
+    var step = Math.pow(10, Math.floor(Math.log10(max || 1))), top = Math.ceil(max / step) * step; if (top / step < 4) { step /= 2; top = Math.ceil(max / step) * step; }
+    var g = "", n = cats.length, gw = (W - L - 10) / n, bw = Math.min(34, gw * .7 / series.length);
+    for (var v = 0; v <= top + .1; v += step) { var y = H - B - (v / top) * (H - B - T); g += '<line x1="' + L + '" x2="' + (W - 6) + '" y1="' + y + '" y2="' + y + '" stroke="#d5dbe2"/><text x="' + (L - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11">' + (money ? "£" : "") + (v >= 1000 ? (v / 1000) + "k" : v) + "</text>"; }
+    cats.forEach(function (c, i) {
+      var x0 = L + gw * i + (gw - bw * series.length) / 2;
+      series.forEach(function (s, k) { var h = ((s[i] || 0) / top) * (H - B - T); g += '<rect x="' + (x0 + k * bw) + '" y="' + (H - B - h) + '" width="' + (bw - 2) + '" height="' + h + '" fill="' + PJ_COL[k] + '"><animate attributeName="height" from="0" to="' + h + '" dur=".8s"/><animate attributeName="y" from="' + (H - B) + '" to="' + (H - B - h) + '" dur=".8s"/></rect>'; });
+      g += '<text x="' + (L + gw * i + gw / 2) + '" y="' + (H - B + 16) + '" text-anchor="middle" font-size="11">' + esc(c.length > 9 ? c.slice(0, 9) + "…" : c) + "</text>";
+    });
+    var lg = names.map(function (nm, k) { return '<rect x="' + (L + k * 110) + '" y="' + (H - 10) + '" width="10" height="10" fill="' + PJ_COL[k] + '"/><text x="' + (L + 14 + k * 110) + '" y="' + (H - 1) + '" font-size="11">' + esc(nm.slice(0, 14)) + "</text>"; }).join("");
+    return '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid meet">' + g + (names.length > 1 ? lg : "") + "</svg>";
+  }
+  function pjPie(cats, vals) {
+    var t0 = vals.reduce(function (a, b) { return a + (b || 0); }, 0) || 1, c2 = [], v2 = [], other = 0;
+    vals.forEach(function (v, i) { if ((v || 0) / t0 < .05) other += v || 0; else { c2.push(cats[i]); v2.push(v); } });
+    if (other) { c2.push(state.lang === "en" ? "Other" : "其他"); v2.push(other); }
+    cats = c2; vals = v2;
+    var tot = vals.reduce(function (a, b) { return a + (b || 0); }, 0) || 1, a0 = -Math.PI / 2, cx = 150, cy = 120, R = 92, g = "";
+    vals.forEach(function (v, i) {
+      var a1 = a0 + (v || 0) / tot * Math.PI * 2, big = a1 - a0 > Math.PI ? 1 : 0, col = ["#3f63c8", "#5fb8b0", "#7d93d8", "#9bd1cb", "#e8a33d", "#b0567a"][i % 6];
+      g += '<path d="M' + cx + " " + cy + " L" + (cx + R * Math.cos(a0)) + " " + (cy + R * Math.sin(a0)) + " A" + R + " " + R + " 0 " + big + " 1 " + (cx + R * Math.cos(a1)) + " " + (cy + R * Math.sin(a1)) + ' Z" fill="' + col + '" stroke="#fff" stroke-width="2"/>';
+      var am = (a0 + a1) / 2, lx = cx + (R + 18) * Math.cos(am), ly = cy + (R + 18) * Math.sin(am);
+      g += '<text x="' + lx + '" y="' + ly + '" font-size="11" text-anchor="' + (Math.cos(am) >= 0 ? "start" : "end") + '">' + esc(cats[i].slice(0, 10)) + " " + Math.round((v || 0) / tot * 100) + "%</text>";
+      a0 = a1;
+    });
+    return '<svg viewBox="-40 0 380 240" preserveAspectRatio="xMidYMid meet">' + g + "</svg>";
+  }
+  function projectorHtml(rep) {
+    var tabs = pjTables(rep), cards = [], kpis = [], money = /£|¥|\$/.test(rep);
+    tabs.forEach(function (t, ti) {
+      var head = t[0], rows = t.slice(1), totalRow = rows.filter(function (r) { return /total|合计|总计/i.test(r[0]); })[0];
+      rows = rows.filter(function (r) { return r !== totalRow; });
+      var cols = []; for (var c = 1; c < head.length; c++) if (rows.filter(function (r) { return pjNum(r[c]) != null; }).length >= Math.max(2, rows.length - 1)) cols.push(c);
+      if (!cols.length) return;
+      var cats = rows.map(function (r) { return r[0]; }), series = cols.map(function (c) { return rows.map(function (r) { return pjNum(r[c]) || 0; }); });
+      cards.push('<div class="pj-card"><h4>' + esc(head.slice(0, 1).join("") + (cols.length > 1 ? " · " + cols.map(function (c) { return head[c]; }).join(" / ") : " · " + head[cols[0]])) + "</h4>" + pjBars(cats, series, cols.map(function (c) { return head[c]; }), money) + "</div>");
+      if (ti === 0 && rows.length > 1) cards.push('<div class="pj-card"><h4>' + (state.lang === "en" ? "Share of the total" : "占比") + "</h4>" + pjPie(cats, series[series.length - 1]) + "</div>");
+      if (totalRow) cols.forEach(function (c) { kpis.push([head[0] + " · " + head[c], totalRow[c]]); });
+    });
+    if (!cards.length) return null;
+    var notes = String(rep).split("\n").filter(function (l) { return l.trim() && !/^\s*\|/.test(l) && !/【/.test(l); }).map(function (l) { return l.replace(/\*\*/g, "").replace(/^#+\s*|^[-•]\s*/, ""); }).slice(0, 6);
+    if (kpis.length) cards.push('<div class="pj-card"><h4>' + (state.lang === "en" ? "Totals" : "合计") + '</h4><div class="pj-kpis">' + kpis.slice(0, 4).map(function (k) { return '<div class="pj-kpi"><small>' + esc(k[0]) + "</small><b>" + esc(k[1].replace(/\*\*/g, "")) + "</b></div>"; }).join("") + "</div></div>");
+    if (notes.length && cards.length < 4) cards.push('<div class="pj-card"><h4>' + (state.lang === "en" ? "Key points" : "要点") + '</h4><ul class="pj-notes">' + notes.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul></div>");
+    return cards.slice(0, 4).join("");
+  }
+  function setPcMode(m) {
+    var pc = $("deskSheet"); if (m === "proj" && !pc.dataset.canProj) m = "pc";
+    pc.dataset.mode = m; $("proj").hidden = m !== "proj";
+    Array.prototype.forEach.call($("pcMode").children, function (b) { b.setAttribute("aria-pressed", String(b.dataset.m === m)); });
+  }
+  $("pcMode").onclick = function (e) { var b = e.target.closest("button"); if (b) setPcMode(b.dataset.m); };
+  var PC_APPS = {
+    "6": { cls: "sheets", color: "#1f7a4a", title: "Budget estimate.xlsx", tool: '<div class="tb"><span>Home</span><span>Insert</span><span>Formulas</span><span>Data</span><span>Review</span></div><div class="fx"><i>fx</i>=SUM(B2:B5)</div>', status: ["Ready", "Sheet1"] },
+    "2": { cls: "browser", color: "#2b6cb0", title: "Research · UK shortlist", tool: '<div class="url">🔒 research.glostudy.uk/shortlist</div>', status: ["Sources: university websites", "Saved"] },
+    "3": { cls: "docs", color: "#3f51b5", title: "Statement coaching.docx", tool: '<div class="tb"><span>Home</span><span>Insert</span><span>Layout</span><span>Review</span><span>View</span></div>', status: ["Page 1 of 1", "English (UK)"] },
+    "4": { cls: "studio", color: "#e2553a", title: "Post Studio · preview", tool: '<div class="tb"><span>Preview</span><span>WeChat</span><span>Xiaohongshu</span><span>Douyin</span><span>Schedule</span></div>', status: ["Draft · needs Aliya's approval", "Fact-check ✓"] },
+    "5": { cls: "slides", color: "#b0567a", title: "Brief for Aliya · Slides", tool: '<div class="tb"><span>Slide</span><span>Insert</span><span>Design</span><span>Present</span></div>', status: ["Slide 1 of 1", "Presenter view"] },
+    "1": { cls: "crm", color: "#b7791f", title: "Front desk · Client CRM", tool: '<div class="tb"><span>Inbox</span><span>Clients</span><span>Bookings</span><span>Templates</span></div>', status: ["WeChat connected", "Online"] }
+  };
   function openReport(b, rep) {
-    $("sheetName").textContent = "On " + b.name + "'s screen"; $("sheetSub").textContent = b.title + " · presenting the full report";
-    $("sheetBody").innerHTML = renderRich(rep, reportHtml); $("sheetBody").scrollTop = 0;
+    var A = PC_APPS[b.id] || PC_APPS["2"], app = $("pcApp"), pc = $("deskSheet");
+    $("sheetName").textContent = b.name + "'s computer"; $("sheetSub").textContent = b.title + " · showing you the full report";
+    pc.style.setProperty("--c", COLORS[b.color]); app.style.setProperty("--app", A.color); app.className = "app " + A.cls;
+    $("pcBg").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
+    $("appTitle").textContent = A.title; $("appTool").innerHTML = A.tool; $("appUser").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
+    $("appStatus").innerHTML = "<span>" + esc(A.status[0]) + "</span><span>" + esc(A.status[1]) + "</span>";
+    var html = renderRich(rep, reportHtml);
+    $("sheetBody").innerHTML = A.cls === "docs" || A.cls === "slides" ? '<div class="page">' + html + "</div>" : html;
+    if (A.cls === "sheets") Array.prototype.forEach.call($("sheetBody").querySelectorAll("table"), function (t, ti) {
+      var n = t.rows[0] ? t.rows[0].cells.length : 0, letters = "<tr class=\"cols\"><th class=\"rn\"></th>";
+      for (var i = 0; i < n; i++) letters += "<th>" + String.fromCharCode(65 + i) + "</th>";
+      t.tHead && t.tHead.insertAdjacentHTML("afterbegin", letters + "</tr>");
+      Array.prototype.forEach.call(t.rows, function (row, ri) { if (ri === 0) return; row.insertAdjacentHTML("afterbegin", '<th class="rn">' + ri + "</th>"); });
+    });
+    $("sheetBody").scrollTop = 0;
+    var pj = projectorHtml(rep); pc.dataset.canProj = pj ? "1" : "";
+    $("pcMode").hidden = !pj;
+    if (pj) { $("projGrid").innerHTML = pj; $("projPresenter").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")"; }
+    setPcMode(pj ? "proj" : "pc");
     $("sheetCopy").onclick = function () { copyText(rep, $("sheetCopy")); };
     $("deskSheet").hidden = false; $("sheetClose").focus();
   }

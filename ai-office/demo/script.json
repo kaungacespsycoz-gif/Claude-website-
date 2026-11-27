@@ -158,7 +158,7 @@
   },
   {
    "bot": "3",
-   "match": "Interview questions|面试问题",
+   "match": "Interview questions|面试问题|访谈提纲",
    "en": "【简要】Here are interview questions to practise, built around his games and coding competitions. He should answer in his own words; I can give feedback on his practice answers.\n【完整报告】\n1. Tell us about a game you made. What was the hardest bug and how did you fix it?\n2. Which algorithm from your competitions do you find most elegant, and why?\n3. How would you explain recursion to a 12-year-old?\n4. What is something in computer science you want to learn at university?\n5. Describe a time a team project went wrong. What did you do?\nTip: practise out loud, 1–2 minutes per answer, with one concrete example each.",
    "zh": "【简要】下面是围绕他做游戏和编程竞赛准备的面试练习题。答案要用他自己的话，我可以对他的练习回答给反馈。\n【完整报告】\n1. 介绍一个你做的游戏。最难的 bug 是什么？怎么解决的？\n2. 竞赛中你觉得最巧妙的算法是哪个？为什么？\n3. 你会怎么向 12 岁的孩子解释递归？\n4. 大学里你最想学计算机的哪一块？\n5. 说一次团队项目出问题的经历，你做了什么？\n建议：大声练习，每题 1–2 分钟，每个回答带一个具体例子。"
   },

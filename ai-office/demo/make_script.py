@@ -181,7 +181,7 @@ ans("2", r"London and Manchester|伦敦和曼彻斯特", """
 """)
 
 # ---------- Quill ----------
-ans("3", r"Interview questions|面试问题", """
+ans("3", r"Interview questions|面试问题|访谈提纲", """
 【简要】Here are interview questions to practise, built around his games and coding competitions. He should answer in his own words; I can give feedback on his practice answers.
 【完整报告】
 1. Tell us about a game you made. What was the hardest bug and how did you fix it?
