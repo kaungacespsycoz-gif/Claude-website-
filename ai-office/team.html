@@ -14,7 +14,7 @@
   --shell: #ffffff; --shell-edge: #c9d2d8; --face: #10202a; --wood: #c39c73; --wood-2: #a98258; --reception: #f4f5f6;
   --sofa: #586c8c; --plant: #2d7a57; --plant-2: #3f9a6e; --pot: #f4f4f2; --glass: rgba(140,195,212,.16); --glass-edge: rgba(100,145,160,.55);
   --screen: #0a1820; --screen-line: #47c3cd; --lamp: #f6d08a; --slab: #c3ccd2; --glass-tint: rgba(225,240,246,.45); --ground: #d3d9dd; --road: #8e989e;
-  --c1: #d9a441; --c2: #2bb3a3; --c3: #6c6fe0; --c4: #f06a4f; --c5: #e58fa6;
+  --c1: #d9a441; --c2: #2bb3a3; --c3: #6c6fe0; --c4: #f06a4f; --c5: #e58fa6; --c6: #2fae6b;
   --sans: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -136,6 +136,12 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .hs.boss .hs-tag em { color: #4a3a22; }
 .hs.boss .hs-tag i { background: #1a140c; box-shadow: none; }
 .hs-badge { position: absolute; right: 8%; top: 8%; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: #e0463c; color: #fff; font: 700 .78rem/22px var(--sans); text-align: center; box-shadow: 0 0 0 3px rgba(224,70,60,.3); }
+.call-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.call-lines line { stroke-width: 2.5; stroke-dasharray: 6 6; opacity: .9; filter: drop-shadow(0 0 4px currentColor); }
+.hs.calling .hs-tag::before { content: "☎"; margin-right: 2px; }
+.note-fly { position: absolute; width: 18px; height: 22px; margin: -11px 0 0 -9px; border-radius: 3px; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.4), 0 0 0 2.5px var(--c); pointer-events: none; z-index: 3;
+  background-image: repeating-linear-gradient(180deg, transparent 0 4px, #c7ccd1 4px 5px); background-size: 70% 70%; background-position: center; background-repeat: no-repeat; }
+@media (prefers-reduced-motion: no-preference) { .call-lines line { animation: dash .6s linear infinite; } @keyframes dash { to { stroke-dashoffset: -12; } } }
 .folder-fly { position: absolute; width: 30px; height: 22px; margin: -11px 0 0 -15px; border-radius: 3px; background: #f6d99b; border: 1.5px solid #c9902f; box-shadow: 0 4px 14px rgba(0,0,0,.45), 0 0 0 3px var(--c); pointer-events: none; z-index: 3; }
 .folder-fly::before { content: ""; position: absolute; left: -1.5px; top: -6px; width: 12px; height: 6px; background: #e3b25f; border-radius: 2px 2px 0 0; }
 .pv-card { position: absolute; right: 14px; bottom: 14px; display: flex; gap: 10px; align-items: center; background: rgba(12,14,18,.8); color: #f2f5f7; border-radius: 16px; padding: 8px 14px 8px 8px; backdrop-filter: blur(6px); max-width: 60%; }
@@ -200,6 +206,11 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .check.fail { background: var(--bad-soft); color: var(--bad); }
 .check small { display: block; color: var(--muted); }
 .note { align-self: center; font-size: .78rem; color: var(--muted); text-align: center; max-width: 46ch; }
+.team-notes { align-self: stretch; border: 1px dashed var(--rule); border-radius: 12px; padding: 7px 11px; font-size: .8rem; background: var(--panel-2); }
+.team-notes summary { color: var(--text); font-weight: 600; font-size: .8rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.team-notes em { font-style: normal; font-weight: 400; color: var(--muted); }
+.team-notes .tn { margin-top: 8px; border-top: 1px solid var(--rule); padding-top: 6px; }
+.team-notes small { color: var(--muted); }
 .note.good { color: var(--ok); }
 form.say { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--rule); }
 form.say textarea { flex: 1; min-width: 0; resize: none; padding: 10px 12px; height: 44px; }
@@ -425,7 +436,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
         { en: "What's waiting for my review?", zh: "现在有什么等我审核？" },
-        { en: "How is each robot doing today?", zh: "每个机器人今天表现怎么样？" }] }
+        { en: "How is each robot doing today?", zh: "每个机器人今天表现怎么样？" }] },
+    { id: "6", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
+      intro: "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.",
+      tasks: [
+        { en: "Budget check: undergraduate economics in London, family budget about ¥400,000 a year. Is it realistic?", zh: "预算评估：伦敦本科读经济，家庭预算每年约 40 万人民币，现实吗？" },
+        { en: "How much money does a student need to show for a UK student visa in London?", zh: "在伦敦读书，英国学生签证需要证明多少资金？" }] }
   ];
   var DEMO = {
     en: "I'm a parent. My daughter Lily is 16, in Grade 10 at a Shanghai high school. She wants to do A-levels in the UK and then study economics at university. IELTS 5.5 at the moment. We'd like her to start in September 2027. Budget is about ¥500,000 a year. My WeChat is lily_mum_sh, you can call me Mrs Wang. Yes, you can use these details to arrange a consultation.",
@@ -518,7 +534,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var sample = await samplePromise;
     if (!sample) throw { code: "no_claude" };
     return sample([{ role: "user", content: rules }].concat(history), {
-      cache: false, effort: o.effort, signal: o.signal, onText: function (u) { if (o.onText) o.onText(u.text); }
+      cache: false, effort: o.effort, signal: o.signal, modelTier: o.quick ? "quick" : undefined, onText: function (u) { if (o.onText) o.onText(u.text); }
     });
   }
   async function askDeepSeek(rules, history, o) {
@@ -557,8 +573,47 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       rules += state.lang === "en" ? EN_RULE : ZH_RULE;
       o.effort = bot.effort;
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
-      return state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o);
+      if (o.extraRules) rules += o.extraRules;
+      return rawAsk(rules, history, o);
     });
+  }
+  function rawAsk(rules, history, o) { return state.engine === "deepseek" ? askDeepSeek(rules, history, o) : askClaude(rules, history, o); }
+
+  // ---------- teamwork: Huan calls colleagues, they work in parallel, Huan answers briefly ----------
+  var TEAM_IDS = { scout: "2", quill: "3", penny: "6" };
+  var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
+    "Colleagues: scout = UK schools, universities, courses, rankings, entry routes and requirements; penny = tuition fees, living costs, budgets, money needed for the student visa; quill = personal statements, CVs, reference letters, application documents.\n" +
+    "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
+    "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
+  var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台小寰替客户来问你。只回复给小寰看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
+  async function routeQuestion(text, history) {
+    try {
+      var msgs = history.slice(-6, -1).concat([{ role: "user", content: "Client's latest message: " + text + "\n\nReply with the JSON only." }]);
+      var res = await rawAsk(ROUTER, msgs, { effort: "low", quick: true });
+      var t = res.text, a = t.indexOf("{"), b = t.lastIndexOf("}");
+      var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { return c && TEAM_IDS[String(c.who).toLowerCase()]; });
+      var seen = {};
+      return calls.filter(function (c) { var w = String(c.who).toLowerCase(); if (seen[w]) return false; seen[w] = 1; c.who = w; return true; }).slice(0, 3);
+    } catch (e) { return []; }
+  }
+  async function consultTeam(calls, text, notesTurn) {
+    var ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
+    pvCall("1", ids);
+    activity("1", "Huan asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + " for help");
+    var results = await Promise.all(calls.map(function (c, i) {
+      var id = ids[i], bot = BY_ID[id], mine = !state.busy[id];
+      if (mine) setBusy(id, "call");
+      return ask(bot, [{ role: "user", content: "Front desk question: " + c.task + "\n\nThe client's own words: " + text }], { extraRules: NOTE_RULE })
+        .then(function (r) { return r.text; }, function (e) { return "(" + bot.name + " couldn't answer: " + errText(e) + ")"; })
+        .then(function (note) {
+          if (mine) setBusy(id, null);
+          flashDone(id); pvReturn(id, "1");
+          notesTurn.items[i].note = note; if (state.bot.id === "1") drawLog();
+          return note;
+        });
+    }));
+    pvCallEnd("1");
+    return "\n\n# 【同事笔记】（客户看不到，按“和同事合作”的规则回答）\n" + calls.map(function (c, i) { return "## " + BY_ID[ids[i]].name + "（" + c.task + "）\n" + results[i]; }).join("\n\n");
   }
 
   var EN_RULE = "\n\n# Test session language\nThe person testing you does not read Chinese. Write every reply in English for this whole conversation, while following every rule above. Field names in summaries may be in English. Keep these tags exactly as written whenever you use them: 【转人工】 【咨询登记】 【登记完成】.";
@@ -604,11 +659,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var OY = { 2: 26, 1: 368 };
   var LIFT_IN = { x: 917, y: 168 }, LIFT_DOOR = { x: 917, y: 220 };
   function G(f, x, y) { return { x: x, y: y + OY[f], f: f }; }
-  var SEATS = { "1": G(1, 470, 142), "2": G(2, 160, 112), "3": G(2, 250, 112), "4": G(2, 340, 112), "5": G(1, 612, 150) };
+  var SEATS = { "1": G(1, 470, 142), "2": G(2, 160, 112), "3": G(2, 250, 112), "4": G(2, 340, 112), "5": G(1, 612, 150), "6": G(2, 612, 205) };
   var SPOTS = { coffee: G(2, 792, 244), water: G(1, 600, 92), scoutDrop: G(2, 160, 156), inbox: G(1, 722, 172) };
   var NS = "http://www.w3.org/2000/svg";
   var actors = {}, sceneReady = false, liftOwner = null;
-  var COLORS = { "--c1": "#d9a441", "--c2": "#2bb3a3", "--c3": "#6c6fe0", "--c4": "#f06a4f", "--c5": "#e58fa6" };
+  var COLORS = { "--c1": "#d9a441", "--c2": "#2bb3a3", "--c3": "#6c6fe0", "--c4": "#f06a4f", "--c5": "#e58fa6", "--c6": "#2fae6b" };
 
   // Obstacles per floor in local coordinates [x1, y1, x2, y2]
   var COMMON = [[862, 34, 880, 170], [862, 240, 880, 290], [880, 34, 958, 130], [884, 140, 950, 200], [880, 248, 958, 290]];
@@ -1313,6 +1368,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     desk(2, F2, -2.4, 1.6, walnut); chair(2, F2, -3.1, 0, leather);
     box(.3, .08, .22, mat(0x8c2f2f, .7), 1.4, F2 + .81, -2.35); box(.28, .06, .2, mat(0x2f4f8c, .7), 1.42, F2 + .88, -2.37);
     cyl(.02, .06, .32, gold, 2.6, F2 + .92, -2.5, null, 10); var shade = cyl(.06, .12, .1, mat(0x1f6b45, .4, .3), 2.6, F2 + 1.1, -2.45, null, 16); shade.rotation.x = .4;
+    // Penny's glass desk by the plant wall side
+    desk(5.6, F2, -2.3, 1.3, mat(0xdfe8ea, .1, .2, { transparent: true, opacity: .7 })); chair(5.6, F2, -3.0, 0); box(.18, .02, .12, black, 5.95, F2 + .775, -2.2, null, false);
     // Ling's secretary desk just outside your office
     desk(-2.5, F2, -2.3, 1.2, walnut); chair(-2.5, F2, -3.0, 0, leather); box(.24, .015, .32, black, -2.2, F2 + .775, -2.3, null, false);
     // your office: glass partition with a door, executive desk, sign, cabinet
@@ -1412,7 +1469,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       return r;
     }
     opts.bots.forEach(function (b) {
-      var seat = { "1": [4.6, 0, .45], "2": [2, F2, -3.1], "3": [-2.6, 0, -2.2], "4": [0, 0, -2.2], "5": [-2.5, F2, -3.0] }[b.id];
+      var seat = { "1": [4.6, 0, .45], "2": [2, F2, -3.1], "3": [-2.6, 0, -2.2], "4": [0, 0, -2.2], "5": [-2.5, F2, -3.0], "6": [5.6, F2, -3.0] }[b.id];
       makeRobot(b, seat[0], seat[1], seat[2]);
     });
 
@@ -1578,7 +1635,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     note.textContent = "Loading the 3D office…";
     v3loading = loadThree().then(function () {
       v3 = createOffice3D($("v3canvas"), {
-        bots: BOTS.map(function (b) { return Object.assign({}, b, { color3: COLORS[b.color], holo: { "1": "Front desk · bookings", "2": "Shortlist · UK schools", "3": "Statement outline", "4": "Posts this week", "5": "Daily brief" }[b.id] }); }),
+        bots: BOTS.map(function (b) { return Object.assign({}, b, { color3: COLORS[b.color], holo: { "1": "Front desk · bookings", "2": "Shortlist · UK schools", "3": "Statement outline", "4": "Posts this week", "5": "Daily brief", "6": "Budget · costs" }[b.id] }); }),
         color: function (id) { return COLORS[BY_ID[id].color]; },
         pending: pendingReview,
         onPick: function (id) { selectBot(BY_ID[id]); },
@@ -1596,21 +1653,21 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "images/office.jpg", "1": "images/huan.jpg", "2": "images/scout.jpg", "3": "images/quill.jpg", "4": "images/spark.jpg", "5": "images/ling.jpg" };
+  var IMG = { office: "images/office.jpg", "1": "images/huan.jpg", "2": "images/scout.jpg", "3": "images/quill.jpg", "4": "images/spark.jpg", "5": "images/ling.jpg", "6": "images/penny.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
-  var SPOTS_PV = { "5": [31.2, 18.6, 4.6, 27], "2": [56, 23.2, 5.6, 14], "3": [32.4, 62.2, 4.6, 14], "4": [49.4, 62.2, 4.6, 14], "1": [71.6, 57.4, 4.4, 13] };
-  var BOSS_PV = [9, 27, 18.5, 18];
+  var SPOTS_PV = { "5": [30.4, 20, 4.8, 28], "2": [50.4, 22.6, 4.8, 15], "6": [73.6, 22.4, 5.4, 25], "3": [31.2, 64.6, 4.6, 14], "4": [50.2, 64.6, 4.6, 14], "1": [72.4, 64.6, 4.4, 12] };
+  var BOSS_PV = [11, 28, 18, 19];
   var PATHS_PV = {
-    "1>scout": [[73.8, 68], [89, 86], [82.5, 53], [70, 46.5], [58.8, 35.5]],
-    "2>boss": [[58.8, 35.5], [45, 45], [33.5, 45], [27.5, 42], [19, 38]],
-    "5>boss": [[33.5, 40], [28, 42], [19, 38]]
+    "1>scout": [[74.6, 72], [91, 87], [84, 55], [68, 47], [52.8, 36]],
+    "2>boss": [[52.8, 36], [40, 47], [28, 45], [20, 40]],
+    "5>boss": [[32.8, 40], [27, 44], [20, 40]]
   };
   var pvReady = false;
   function buildPhoto() {
     $("officeImg").src = imgURL(IMG.office);
     var box = $("hotspots");
     BOTS.forEach(function (b) {
-      var s = SPOTS_PV[b.id], el = document.createElement("button");
+      var s = SPOTS_PV[b.id]; if (!s) return; var el = document.createElement("button");
       el.type = "button"; el.className = "hs"; el.id = "hs" + b.id;
       el.style.cssText = "left:" + s[0] + "%;top:" + s[1] + "%;width:" + s[2] + "%;height:" + s[3] + "%;--c:" + COLORS[b.color];
       el.setAttribute("aria-label", b.name + ", " + b.role + ". Click to chat");
@@ -1640,10 +1697,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function pvWorking(id, on) {
     if (!pvReady) return; var el = $("hs" + id); if (!el) return;
     el.classList.toggle("working", on);
-    el.querySelector("em").textContent = on ? (state.busy[id] === "job" ? "on a client" : "working") : "idle";
+    el.querySelector("em").textContent = on ? (state.busy[id] === "job" ? "on a client" : state.busy[id] === "call" ? "helping Huan" : "working") : "idle";
     pvCardUpdate();
   }
-  function pvDone(id) { if (!pvReady) return; var el = $("hs" + id); el.classList.add("just-done"); setTimeout(function () { el.classList.remove("just-done"); }, 2500); }
+  function pvDone(id) { if (!pvReady) return; var el = $("hs" + id); if (!el) return; el.classList.add("just-done"); setTimeout(function () { el.classList.remove("just-done"); }, 2500); }
   function pvInbox(n) {
     if (!pvReady) return;
     $("hsBadge").hidden = !n; $("hsBadge").textContent = String(n);
@@ -1651,7 +1708,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function pvSelect(id) {
     if (!pvReady) return;
-    BOTS.forEach(function (b) { $("hs" + b.id).classList.toggle("selected", b.id === id); });
+    BOTS.forEach(function (b) { var h = $("hs" + b.id); if (h) h.classList.toggle("selected", b.id === id); });
     pvCardUpdate();
   }
   function pvCardUpdate() {
@@ -1660,6 +1717,47 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("pvCardImg").src = imgURL(IMG[b.id]);
     $("pvCardName").textContent = b.name;
     $("pvCardRole").textContent = b.role + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
+  }
+  function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
+  function pvCall(fromId, ids) {
+    if (!pvReady) return;
+    pvCallEnd(fromId);
+    var a = hsCenter(fromId); if (!a) return;
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "call-lines"); svg.id = "callLines"; svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
+    ids.forEach(function (id) {
+      var b = hsCenter(id); if (!b) return;
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      l.setAttribute("x1", a[0]); l.setAttribute("y1", a[1]); l.setAttribute("x2", b[0]); l.setAttribute("y2", b[1]);
+      l.setAttribute("stroke", COLORS[BY_ID[id].color]); l.setAttribute("vector-effect", "non-scaling-stroke");
+      svg.appendChild(l);
+    });
+    $("hotspots").insertBefore(svg, $("hotspots").firstChild);
+    var el = $("hs" + fromId); if (el) { el.classList.add("calling"); el.querySelector("em").textContent = "calling " + ids.map(function (id) { return BY_ID[id].name; }).join(", ") + "…"; }
+  }
+  function pvCallEnd(fromId) {
+    var svg = $("callLines"); if (svg) svg.remove();
+    var el = $("hs" + fromId); if (el) el.classList.remove("calling");
+  }
+  function pvReturn(fromId, toId) {
+    if (!pvReady) return;
+    var a = hsCenter(fromId), b = hsCenter(toId); if (!a || !b) return;
+    flyChip([a, b], COLORS[BY_ID[fromId].color], "note-fly", 1600, null);
+  }
+  function flyChip(pts, color, cls, dur, done) {
+    var f = document.createElement("div"); f.className = cls; f.style.setProperty("--c", color);
+    $("hotspots").appendChild(f);
+    var lens = [], total = 0;
+    for (var i = 1; i < pts.length; i++) { var l = Math.hypot((pts[i][0] - pts[i - 1][0]) * 1.78, pts[i][1] - pts[i - 1][1]); lens.push(l); total += l; }
+    dur = REDUCED ? 1 : dur; var t0 = performance.now();
+    function step(now) {
+      var k = Math.min(1, (now - t0) / dur), d = k * total, j = 0;
+      while (j < lens.length - 1 && d > lens[j]) { d -= lens[j]; j++; }
+      var u = lens[j] ? Math.min(1, d / lens[j]) : 1;
+      f.style.left = (pts[j][0] + (pts[j + 1][0] - pts[j][0]) * u) + "%"; f.style.top = (pts[j][1] + (pts[j + 1][1] - pts[j][1]) * u) + "%";
+      if (k < 1) requestAnimationFrame(step); else setTimeout(function () { f.remove(); if (done) done(); }, 300);
+    }
+    requestAnimationFrame(step);
   }
   function pvDeliver(fromId, to) {
     if (!pvReady) return;
@@ -1719,7 +1817,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     BOTS.forEach(function (b) {
       var working = !!state.busy[b.id], btn = $("pick" + b.id);
       btn.setAttribute("aria-pressed", String(b === state.bot && state.tab === "chat"));
-      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : "Typing…") : state.done[b.id] ? "Done" : b.role;
+      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping Huan" : "Typing…") : state.done[b.id] ? "Done" : b.role;
       btn.querySelector(".status").className = "status" + (working ? " busy" : state.done[b.id] ? " done" : "");
       actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
@@ -1865,6 +1963,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         d.innerHTML = (t.ok ? "✓ Passed the automatic check" : "✗ Failed: " + esc(t.problems.join(", "))) + "<small>Should: " + esc(t.expect) + "</small>";
       } else if (t.kind === "note") {
         d.className = "note" + (t.good ? " good" : ""); d.textContent = t.text;
+      } else if (t.kind === "team") {
+        var waiting = t.items.filter(function (it) { return it.note === null; });
+        d.className = "team-notes";
+        d.innerHTML = '<details><summary>' + (waiting.length ? '<span class="typing"><i></i><i></i><i></i></span> Huan is asking ' : '✓ Team notes from ') +
+          esc(t.items.map(function (it) { return BY_ID[it.id].name; }).join(" and ")) + ' <em>(only you see these)</em></summary>' +
+          t.items.map(function (it) { var b = BY_ID[it.id]; return '<div class="tn"><b style="color:' + COLORS[b.color] + '">' + esc(b.name) + '</b> <small>' + esc(it.task) + '</small><div class="pre">' + (it.note === null ? "Working…" : render(it.note)) + "</div></div>"; }).join("") +
+          "</details>";
       } else if (t.pending) {
         d.className = "msg bot"; d.innerHTML = '<span class="typing" aria-label="Working"><i></i><i></i><i></i></span>';
       } else {
@@ -1896,7 +2001,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     try {
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
+      var extra = "";
+      if (bot.id === "1" && text.length > 12) {
+        var calls = await routeQuestion(text, history);
+        if (calls.length && !state.ctl[bot.id].signal.aborted) {
+          var notesTurn = { kind: "team", items: calls.map(function (c) { return { id: TEAM_IDS[c.who], task: c.task, note: null }; }) };
+          turns.splice(turns.indexOf(reply), 0, notesTurn); drawLog();
+          extra = await consultTeam(calls, text, notesTurn);
+        }
+      }
       var res = await ask(bot, history, {
+        extraRules: extra,
         signal: state.ctl[bot.id].signal,
         onText: function (txt) { reply.pending = false; reply.content = txt; if (state.bot === bot) drawLog(); }
       });
