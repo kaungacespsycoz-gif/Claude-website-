@@ -802,6 +802,23 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .proj-presenter { display: none !important; }
 .proj-grid { padding: 1.4% 1.6% !important; gap: 1.4% !important; }
 @media (max-width: 899px) { .pc { padding: 50px 1vw 1vh !important; } }
+
+/* ---------- 360° photo view (Street View style) ---------- */
+.pano { position: absolute; inset: 0; z-index: 1; background: #000; }
+.pano[hidden] { display: none; }
+.pano-canvas { position: absolute; inset: 0; cursor: grab; touch-action: none; }
+.pano-canvas canvas { display: block; }
+.pano-spots { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.pano-spots > * { pointer-events: auto; position: absolute; }
+.pano-spots .in-bot { transform: translate(-50%, -50%); }
+.pano-fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s; }
+.pano-fade.on { opacity: 1; }
+.view3d.photo .v3canvas { visibility: hidden; }
+.view3d:not(.photo) .pano { display: none; }
+.v3sep { width: 1px; background: rgba(255,255,255,.25); margin: 4px 2px; }
+.view3d.photo [data-lv="-1"] { display: none; }
+.in-floors button { white-space: nowrap; }
+@media (max-width: 899px) { .v3bar { left: 6px; right: 6px; overflow-x: auto; scrollbar-width: none; } .v3bar button { padding: 6px 9px; font-size: .74rem; } }
 </style>
 
 <div class="app">
@@ -847,9 +864,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           <p class="in-hint" id="inHint">Tap the glowing dots to move · tap an officer to talk</p>
           <button type="button" class="in-back" id="inBack" hidden>↩ Step back</button>
         </div>
-        <div class="view3d" id="view3d" hidden>
+        <div class="view3d photo" id="view3d" hidden>
           <div class="v3canvas" id="v3canvas"></div>
-          <div class="in-floors v3bar" id="v3bar" role="group" aria-label="3D camera"><button type="button" data-lv="-1" aria-pressed="true">Overview</button><button type="button" data-lv="3">Walk 4F</button><button type="button" data-lv="2">3F</button><button type="button" data-lv="1">2F</button><button type="button" data-lv="0">1F</button></div>
+          <div class="pano" id="panoView"><div class="pano-canvas" id="panoCanvas"></div><div class="pano-spots" id="panoSpots"></div><div class="pano-fade" id="panoFade"></div></div>
+          <div class="in-floors v3bar" id="v3bar" role="group" aria-label="3D camera"><button type="button" data-m="photo" aria-pressed="true">📷 360° photo</button><button type="button" data-m="model" aria-pressed="false">🧊 Model</button><span class="v3sep"></span><button type="button" data-lv="-1" aria-pressed="false">Overview</button><button type="button" data-lv="3">4F</button><button type="button" data-lv="2">3F</button><button type="button" data-lv="1">2F</button><button type="button" data-lv="0">1F</button></div>
           <div class="v3pad" id="v3pad" hidden><button type="button" data-k="f" aria-label="Forward">▲</button><button type="button" data-k="l" aria-label="Turn left">◀</button><button type="button" data-k="b" aria-label="Back">▼</button><button type="button" data-k="r" aria-label="Turn right">▶</button></div>
           <p class="v3hint" id="v3hint">Drag to look around · scroll or pinch to zoom · click a robot to talk</p>
           <p class="v3note" id="v3note" aria-live="polite"></p>
@@ -2700,7 +2718,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("vReset").hidden = v !== "3d";
     $("sceneWrap").hidden = v !== "plan";
     $("view3d").hidden = v !== "3d";
-    if (v === "3d") { start3D(); if (v3) v3.resume(); } else if (v3) v3.pause();
+    if (v === "3d") setV3Mode(v3mode); else { if (v3) v3.pause(); if (pano) pano.pause(); }
   }
 
   function selectBot(b) {
@@ -2921,7 +2939,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
@@ -3224,6 +3242,128 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (state.bot.id !== "4") selectBot(BY_ID["4"]);
     send(msg);
   });
+
+  // ---------- 360° photo: look around each floor like Street View ----------
+  var PANO = {
+    0: { img: "images/pano-1f.jpg", bots: { "1": [37, 34, 8, 17] }, dots: [[17, 66, "Lounge"], [62, 63, "Consult rooms"], [8, 84, "Entrance · customers", 0, "cust"], [90, 62, "↑ 2F", 1]] },
+    1: { img: "images/pano-2f.jpg", bots: { "4": [4, 34, 11, 46] }, dots: [[45, 72, "Studio"], [70, 76, "Podcast table"], [90, 60, "Hot desks"], [96, 30, "↑ 3F", 2], [60, 90, "↓ 1F", 0]] },
+    2: { img: "images/pano-3f.jpg", bots: { "2": [8, 32, 10, 30], "3": [41, 39, 9, 18], "6": [75, 36, 11, 36] }, dots: [[45, 82, "Aisle"], [94, 32, "↑ 4F", 3], [94, 80, "↓ 2F", 1]] },
+    3: { img: "images/pano-4f.jpg", boss: [33, 36, 25, 22], room: [60, 9, 39, 42], bots: { "5": [5, 30, 8, 20] }, dots: [[40, 82, "Lounge"], [62, 70, "Boardroom"], [92, 82, "↓ 3F", 2]] }
+  };
+  var pano = null, v3mode = "photo";
+  function createPano(host, spotsBox) {
+    var T = window.THREE, renderer = new T.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.outputEncoding = T.sRGBEncoding; host.appendChild(renderer.domElement);
+    var scene = new T.Scene(), camera = new T.PerspectiveCamera(60, 1, .1, 100), R = 10, ARC = 150 * Math.PI / 180, H = R * ARC / (16 / 9);
+    var mat = new T.MeshBasicMaterial({ side: T.BackSide, toneMapped: false }), mesh = new T.Mesh(new T.CylinderGeometry(R, R, H, 96, 1, true, Math.PI - ARC / 2, ARC), mat); scene.add(mesh);
+    var st = { yaw: 0, pitch: 0, fov: 62, gy: 0, gp: 0, gf: 62, floor: -1, running: true, raf: 0 }, loader = new T.TextureLoader(), cache = {}, spots = [];
+    function worldOf(x, y) { var th = Math.PI - ARC / 2 + (1 - x / 100) * ARC; return new T.Vector3(R * Math.sin(th), H * (.5 - y / 100), R * Math.cos(th)); }
+    function yawOf(x) { return (.5 - x / 100) * ARC; }
+    function limits() {
+      var asp = camera.aspect || 1, vmaxH = 2 * Math.atan(Math.tan(ARC * .49) / asp), vmaxV = 2 * Math.atan(H / 2 / R) * .98, fmax = Math.min(75, vmaxH * 180 / Math.PI, vmaxV * 180 / Math.PI);
+      st.gf = Math.max(24, Math.min(fmax, st.gf));
+      var vf = st.gf * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * asp), ym = Math.max(0, ARC / 2 - hf / 2), pm = Math.max(0, Math.atan(H / 2 / R) - vf / 2);
+      st.gy = Math.max(-ym, Math.min(ym, st.gy)); st.gp = Math.max(-pm, Math.min(pm, st.gp));
+    }
+    function tex(f, cb) { if (cache[f]) return cb(cache[f]); loader.load(imgURL(PANO[f].img), function (t) { t.encoding = T.sRGBEncoding; t.wrapS = T.RepeatWrapping; t.repeat.x = -1; t.offset.x = 1; t.anisotropy = 8; cache[f] = t; cb(t); }); }
+    function buildSpots(f) {
+      spotsBox.textContent = ""; spots = [];
+      var P = PANO[f];
+      function add(el, x, y) { spotsBox.appendChild(el); spots.push({ el: el, p: worldOf(x, y) }); }
+      if (P.room) { var rm = document.createElement("button"); rm.type = "button"; rm.className = "in-spot"; rm.style.width = "160px"; rm.style.height = "90px"; rm.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>Boardroom <em>announce to all</em></span>'; rm.onclick = openAnnounce; rm.style.transform = "translate(-50%,-50%)"; add(rm, P.room[0] + P.room[2] / 2, P.room[1] + P.room[3] / 2); }
+      if (P.boss) { var bs = document.createElement("button"); bs.type = "button"; bs.className = "in-spot"; bs.style.width = "170px"; bs.style.height = "80px"; bs.style.transform = "translate(-50%,-50%)"; bs.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>CEO desk · Aliya</span>'; bs.onclick = function () { look(P.boss[0] + P.boss[2] / 2, P.boss[1] + P.boss[3] / 2, 36); setTimeout(openInbox, 500); }; add(bs, P.boss[0] + P.boss[2] / 2, P.boss[1] + P.boss[3] / 2);
+        var fl = document.createElement("button"); fl.type = "button"; fl.className = "files"; fl.id = "panoFiles"; fl.onclick = openInbox; add(fl, P.boss[0] + P.boss[2] * .35, P.boss[1] + P.boss[3] * .3); }
+      Object.keys(P.bots).forEach(function (id) {
+        var b = BY_ID[id], p = P.bots[id], el = document.createElement("button"); el.type = "button"; el.className = "in-bot"; el.id = "panoBot" + id;
+        el.style.setProperty("--c", COLORS[b.color]); el.dataset.w = p[2]; el.dataset.h = p[3];
+        el.innerHTML = '<span class="hs-tag"><i></i>' + esc(b.name) + " <em></em></span>"; el.setAttribute("aria-label", b.name + ", " + b.title + ". Talk 1-on-1");
+        el.onclick = function () { look(p[0] + p[2] / 2 + (window.matchMedia("(max-width: 899px)").matches ? 0 : 7), p[1] + p[3] * .5, 40); setTimeout(function () { pickOfficer(b, "pano"); }, 450); };
+        add(el, p[0] + p[2] / 2, p[1] + p[3] / 2); spots[spots.length - 1].size = [p[2], p[3]];
+      });
+      P.dots.forEach(function (d) {
+        var el = document.createElement("button"); el.type = "button"; el.className = "in-dot" + (d[3] != null && d[4] !== "cust" ? " stairs" : ""); el.innerHTML = "<span>" + esc(d[2]) + "</span>";
+        el.onclick = function () { if (d[4] === "cust") { openCustomers(); return; } if (d[3] != null) { go(d[3], d[0]); return; } look(d[0], d[1] - 12, 38); };
+        add(el, d[0], d[1]);
+      });
+      refresh();
+    }
+    function look(x, y, fov) { st.gy = yawOf(x); st.gp = Math.atan(H * (.5 - y / 100) / R); st.gf = fov || st.gf; limits(); }
+    function show(f, keepView) {
+      $("panoFade").classList.add("on");
+      setTimeout(function () {
+        tex(f, function (t) {
+          mat.map = t; mat.needsUpdate = true; st.floor = f; buildSpots(f);
+          if (!keepView) { st.yaw = st.gy = 0; st.pitch = st.gp = 0; st.fov = 40; st.gf = 62; limits(); }
+          $("panoFade").classList.remove("on"); lsSet("glostudy-pano", String(f));
+          if (opts.onFloor) opts.onFloor(f);
+        });
+      }, 300);
+    }
+    function go(f, fromX) { if (fromX != null) { look(fromX, 50, 26); } setTimeout(function () { show(f); }, fromX != null ? 350 : 0); }
+    function refresh() {
+      spots.forEach(function (s) {
+        var el = s.el; if (!el.id || el.id.indexOf("panoBot") !== 0) return;
+        var id = el.id.slice(7), busy = state.busy[id];
+        el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === id); el.classList.toggle("away", !!state.gathered && st.floor !== 3);
+        el.querySelector("em").textContent = state.gathered ? "in the boardroom" : busy ? (busy === "call" ? "helping " + ((state.callFrom || {})[id] || "a colleague") : "working") : "idle";
+      });
+      var fl = $("panoFiles"); if (fl) { var n = unreadReports(), rv = pendingReview(); fl.hidden = !(n + rv); fl.innerHTML = "<i>📁</i>" + (n ? n + " report" + (n > 1 ? "s" : "") : "") + (n && rv ? " · " : "") + (rv ? rv + " to review" : ""); }
+    }
+    var v = new T.Vector3(), opts = {};
+    function frame() {
+      st.raf = 0; if (!st.running) return;
+      st.yaw += (st.gy - st.yaw) * .12; st.pitch += (st.gp - st.pitch) * .12; st.fov += (st.gf - st.fov) * .12;
+      if (Math.abs(camera.fov - st.fov) > .01) { camera.fov = st.fov; camera.updateProjectionMatrix(); }
+      camera.rotation.set(st.pitch, st.yaw, 0, "YXZ");
+      renderer.render(scene, camera);
+      var w = host.clientWidth, h = host.clientHeight, pxPerUnit = h / (2 * Math.tan(camera.fov * Math.PI / 360) * R);
+      spots.forEach(function (s) {
+        v.copy(s.p).project(camera); var vis = v.z < 1 && Math.abs(v.x) < 1.2 && Math.abs(v.y) < 1.2;
+        s.el.style.display = vis ? "" : "none"; if (!vis) return;
+        s.el.style.left = ((v.x + 1) / 2 * w) + "px"; s.el.style.top = ((1 - v.y) / 2 * h) + "px";
+        if (s.size) { s.el.style.width = (s.size[0] / 100 * ARC * R * pxPerUnit) + "px"; s.el.style.height = (s.size[1] / 100 * H * pxPerUnit) + "px"; }
+      });
+      st.raf = requestAnimationFrame(frame);
+    }
+    function resize() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); limits(); }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(host); resize();
+    var drag = null, pinch = 0, ptr = {}, el = renderer.domElement; el.style.touchAction = "none";
+    el.addEventListener("pointerdown", function (e) { el.setPointerCapture(e.pointerId); ptr[e.pointerId] = { x: e.clientX, y: e.clientY }; drag = { x: e.clientX, y: e.clientY }; });
+    el.addEventListener("pointermove", function (e) {
+      var p = ptr[e.pointerId]; if (!p) return; var ids = Object.keys(ptr), k = st.fov / 62 * .0032;
+      if (ids.length === 1) { st.gy += (e.clientX - p.x) * k; st.gp += (e.clientY - p.y) * k; limits(); }
+      p.x = e.clientX; p.y = e.clientY;
+      if (ids.length === 2) { var a = ptr[ids[0]], b2 = ptr[ids[1]], d = Math.hypot(a.x - b2.x, a.y - b2.y); if (pinch) { st.gf *= pinch / d; limits(); } pinch = d; }
+    });
+    function up(e) { delete ptr[e.pointerId]; pinch = 0; }
+    el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+    el.addEventListener("wheel", function (e) { e.preventDefault(); st.gf *= 1 + Math.max(-.25, Math.min(.25, e.deltaY * .001)); limits(); }, { passive: false });
+    window.addEventListener("keydown", function (e) { if (!st.running || state.view !== "3d" || v3mode !== "photo") return; var t = e.target; if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT")) return; if (e.key === "ArrowLeft") st.gy += .15; else if (e.key === "ArrowRight") st.gy -= .15; else if (e.key === "ArrowUp") st.gf *= .85; else if (e.key === "ArrowDown") st.gf /= .85; else return; e.preventDefault(); limits(); });
+    frame();
+    return {
+      show: show, go: go, look: look, refresh: refresh, floor: function () { return st.floor; }, opts: opts,
+      zoomHome: function () { st.gf = 62; st.gp = 0; limits(); },
+      pause: function () { st.running = false; if (st.raf) cancelAnimationFrame(st.raf); st.raf = 0; },
+      resume: function () { if (!st.running) { st.running = true; frame(); } }
+    };
+  }
+  function startPano() {
+    if (pano) { pano.resume(); return; }
+    loadThree().then(function () {
+      if (pano) return;
+      pano = createPano($("panoCanvas"), $("panoSpots"));
+      pano.opts.onFloor = function (f) { if (v3mode === "photo") Array.prototype.forEach.call($("v3bar").querySelectorAll("[data-lv]"), function (b) { b.setAttribute("aria-pressed", String(+b.dataset.lv === f)); }); };
+      pano.show(+lsGet("glostudy-pano", "0") || 0);
+      if (state.view !== "3d" || v3mode !== "photo") pano.pause();
+    });
+  }
+  function setV3Mode(m) {
+    v3mode = m; $("view3d").classList.toggle("photo", m === "photo");
+    Array.prototype.forEach.call($("v3bar").querySelectorAll("[data-m]"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.m === m)); });
+    if (state.desk && $("desk").classList.contains("docked") && $("desk").parentNode === $("view3d")) closeDesk();
+    if (m === "photo") { if (v3) v3.pause(); startPano(); $("v3pad").hidden = true; $("v3hint").textContent = "Drag to look around · scroll or pinch to zoom · tap the dots to move · tap an officer to talk"; if (pano) pano.opts.onFloor(pano.floor()); }
+    else { if (pano) pano.pause(); start3D(); if (v3) { v3.resume(); v3Mode(v3.isWalking() ? "walk" : "orbit"); } }
+  }
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   var INSIDE = {
     4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [4.5, 30, 8.5, 20] }, boss: [30.5, 34, 24, 21], room: [60, 6, 38, 52], files: [44, 41],
@@ -3324,7 +3464,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
   // ---------- zoom out to show who is calling whom ----------
   function callMap(fromId, ids, on) {
-    var host = state.view === "inside" ? $("insideView") : (state.desk && !$("desk").classList.contains("docked") ? document.querySelector(".desk-scene") : null);
+    var host = state.view === "inside" ? $("insideView") : state.view === "3d" && v3mode === "photo" ? $("view3d") : (state.desk && !$("desk").classList.contains("docked") ? document.querySelector(".desk-scene") : null);
     var old = document.querySelector(".call-map");
     if (!on) { if (old) { old.classList.remove("on"); setTimeout(function () { old.remove(); }, 600); } return; }
     if (old) old.remove();
@@ -3411,12 +3551,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
   // ---------- 3D: overview or walk inside a floor ----------
   $("v3bar").onclick = function (e) {
-    var b = e.target.closest("button"); if (!b) return; var lv = +b.dataset.lv;
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.m) { setV3Mode(b.dataset.m); return; }
+    var lv = +b.dataset.lv;
+    if (v3mode === "photo") { if (pano && lv >= 0) pano.go(lv); return; }
     start3D(); var go = function () { if (!v3) return; v3.walk(lv); };
     if (v3) go(); else if (v3loading) v3loading.then(go);
   };
   function v3Mode(mode, level) {
-    Array.prototype.forEach.call($("v3bar").children, function (b) { b.setAttribute("aria-pressed", String(mode === "walk" ? +b.dataset.lv === level : b.dataset.lv === "-1")); });
+    if (v3mode === "photo") return;
+    Array.prototype.forEach.call($("v3bar").querySelectorAll("[data-lv]"), function (b) { b.setAttribute("aria-pressed", String(mode === "walk" ? +b.dataset.lv === level : b.dataset.lv === "-1")); });
     $("v3pad").hidden = mode !== "walk";
     $("v3hint").textContent = mode === "walk" ? "Drag to look · tap the floor to walk there · arrows or WASD · tap an officer to talk" : "Drag to look around · scroll or pinch to zoom · click a robot to talk";
     if (mode !== "walk" && state.desk && $("desk").classList.contains("docked") && $("desk").parentNode === $("view3d")) closeDesk();
@@ -3505,6 +3649,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var wasDocked = $("desk").classList.contains("docked");
     state.desk = false; $("desk").hidden = true; $("deskSheet").hidden = true; document.body.style.overflow = "";
     if (wasDocked && state.view === "inside") inZoomHome();
+    if (wasDocked && state.view === "3d" && pano && v3mode === "photo") pano.zoomHome();
     if (window.speechSynthesis) speechSynthesis.cancel();
     if (deskRec) try { deskRec.stop(); } catch (e) {}
     drawChat();
@@ -3724,7 +3869,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function pickOfficer(b, where) {
     selectBot(b);
     if (where === "inside") { openDesk(b, $("insideView")); return; }
-    if (state.view === "3d" && v3 && v3.isWalking()) { openDesk(b, $("view3d")); return; }
+    if (state.view === "3d" && (v3mode === "photo" || (v3 && v3.isWalking()))) { openDesk(b, $("view3d")); return; }
     if (window.matchMedia("(max-width: 899px)").matches) openDesk(b);
   }
   $("pvOne").onclick = function (e) { e.stopPropagation(); openDesk(state.bot); };
