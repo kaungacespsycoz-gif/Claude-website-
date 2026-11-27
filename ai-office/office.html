@@ -1192,6 +1192,21 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .cr-card.active .cr-out { background: rgba(240,180,74,.15); color: #f0b44a; }
 .cr-empty { font-size: .8rem; color: var(--muted); }
 @media (max-width: 560px) { .cr-card { grid-template-columns: 28px minmax(0, 1fr); } .cr-out { grid-column: 2; justify-self: start; } }
+
+/* ---------- 1-on-1: status, live updates and questions inside the chat panel ---------- */
+.desk.fresh .desk-prompts { display: none !important; }
+.dl-status { display: flex; flex-direction: column; gap: 12px; padding: 4px 2px; }
+.dls-row { display: flex; align-items: center; gap: 8px; } .dls-row b { font-size: .95rem; } .dls-row small { margin-left: auto; color: #9fb6c8; font-size: .74rem; }
+.dls-dot { width: 9px; height: 9px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 8px #3ddc84; flex: none; }
+.dls-dot.on { background: #f0b44a; box-shadow: 0 0 8px #f0b44a; animation: tagPulse 1s ease-in-out infinite; }
+.dls-lab { display: block; font: 600 .66rem var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #8fb3cc; margin-bottom: 5px; }
+.dls-live p { margin: 0 0 4px; font-size: .8rem; color: #dbe9f3; line-height: 1.35; } .dls-live time { color: #8fb3cc; margin-right: 6px; font-size: .72rem; }
+.dls-list { display: flex; flex-direction: column; gap: 6px; }
+.dls-list button { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: 1px solid rgba(var(--holo), .4); background: rgba(14,34,54,.5); color: #e8f5ff; border-radius: 10px; padding: 8px 11px; font: 500 .84rem var(--sans); cursor: pointer; }
+.dls-list button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dls-list button.next { border-color: #e8c17a; }
+.desk.fresh .desk-chat { margin-top: auto; }
+@media (min-width: 900px) { .desk.fresh .desk-chat { margin-top: 18px; } }
 </style>
 
 <div class="app">
@@ -1512,7 +1527,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // ---------- activity feed ----------
   function activity(botId, text) {
     state.activity.unshift({ t: new Date(), bot: botId, text: text });
-    state.activity = state.activity.slice(0, 6);
+    state.activity = state.activity.slice(0, 40);
+    if (state.desk && state.bot && state.bot.id === botId && !chat().length) drawDesk();
     drawFeed();
   }
   function drawFeed() {
@@ -4912,7 +4928,12 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("deskStatus").innerHTML = '<span class="typing"><i></i><i></i><i></i></span>' + (waiting && waiting.length && busy ? esc(b.name) + " is asking " + esc(waiting.map(function (it) { return BY_ID[it.id].name; }).join(" & ")) + "…" : esc(b.name) + (b.id === "6" ? " is working out the numbers…" : " is thinking…"));
     // dialogue
     var log = $("deskLog"); log.textContent = "";
-    if (!turns.length) log.innerHTML = '<div class="dl-empty"><b>' + esc(b.name) + " is ready for you</b>" + esc(b.intro) + "<br><br>Tap a question below, type, or press the mic and speak.</div>";
+    if (!turns.length) {
+      var acts2 = state.activity.filter(function (a) { return a.bot === b.id; }).slice(0, 3);
+      log.innerHTML = '<div class="dl-status"><div class="dls-row"><span class="dls-dot' + (busy ? " on" : "") + '"></span><b>' + esc(busy ? busyText(b.id) : (state.lang === "en" ? "Available" : "空闲")) + '</b><small>' + esc(b.title) + "</small></div>" +
+        '<div class="dls-live"><span class="dls-lab">' + (state.lang === "en" ? "Live" : "实时") + "</span>" + (acts2.length ? acts2.map(function (a) { return "<p><time>" + hhmm(a.t) + "</time>" + esc(a.text) + "</p>"; }).join("") : "<p>" + esc(state.lang === "en" ? "Nothing yet today." : "今天还没有动态。") + "</p>") + "</div>" +
+        '<div class="dls-qs"><span class="dls-lab">' + (state.lang === "en" ? "Ask " + b.name : "问 " + b.name) + '</span><div class="dls-list" id="dlsList"></div></div></div>';
+    }
     var lastBot = -1; turns.forEach(function (t, i) { if (t.role === "assistant") lastBot = i; });
     turns.forEach(function (t, i) {
       var el = document.createElement("div");
@@ -4941,6 +4962,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     log.scrollTop = log.scrollHeight;
     // ready questions
     var chips = $("deskChips"); chips.textContent = "";
+    $("desk").classList.toggle("fresh", !turns.length);
     if (b.id === "1" || b.id === "4") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "📥 Live chats & comments" : "📥 实时咨询与评论") + "</span>"; cb2.onclick = function () { openLive(b.id === "4" ? "comments" : "all"); }; chips.appendChild(cb2); }
     if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
     tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
@@ -4949,6 +4971,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
       chips.appendChild(btn);
     });
+    var dl = $("dlsList"); if (dl) Array.prototype.forEach.call(chips.children, function (c) { var cl = c.cloneNode(true); cl.onclick = c.onclick; dl.appendChild(cl); });
     var s = $("deskSend"); s.textContent = busy === "chat" ? "Stop" : "Send";
     if (busy === "chat") s.setAttribute("data-stop", ""); else s.removeAttribute("data-stop");
     $("deskBox").placeholder = "Ask " + b.name + "…";
