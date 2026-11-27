@@ -997,6 +997,21 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .photo-frame .live-lab { font-size: .56rem; padding: 2px 6px 2px 3px; }
 .photo-frame .live-lab .zl-ico { width: 13px; height: 13px; } .photo-frame .live-lab .zl-ico svg { width: 9px; height: 9px; }
 .pano-spots .zone-rug { transform: translate(-50%, -50%); }
+
+/* ---------- sorting animation (scan & tag, then glide) ---------- */
+.fx-scan { position: absolute; left: -4px; right: -4px; height: 3px; top: 0; z-index: 3; border-radius: 2px; background: linear-gradient(90deg, transparent, #fff, transparent); box-shadow: 0 0 8px #fff, 0 0 14px #9fe8ff; animation: fxScan 1.1s ease-in-out infinite; }
+.fx-ghost.tagged .fx-scan { display: none; }
+@keyframes fxScan { 0%, 100% { top: 4%; } 50% { top: 88%; } }
+.fx-ghost { z-index: 6; pointer-events: none; --c0: #a3adb8; transition: filter .4s; }
+.fx-ghost:not(.tagged) { --c: #a3adb8 !important; }
+.fx-tag { position: absolute; z-index: 7; transform: translate(14px, -34px); white-space: nowrap; pointer-events: none; font: 700 .62rem var(--sans); color: #0b0f14; background: var(--c); padding: 2px 8px; border-radius: 999px; box-shadow: 0 0 12px var(--c); opacity: 0; animation: fxTag .35s ease-out .7s forwards; }
+.in-spots .fx-tag { font-size: .78rem; transform: translate(18px, -44px); }
+@keyframes fxTag { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+.fx-trail { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; overflow: visible; }
+.fx-trail path { fill: none; stroke-width: 2.2; stroke-dasharray: 5 5; opacity: 0; filter: drop-shadow(0 0 3px currentColor); }
+.fx-trail.draw path { opacity: .9; animation: dash 1s linear infinite; }
+.fx-spark { position: absolute; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px var(--c), 0 0 14px var(--c); z-index: 6; pointer-events: none; animation: fxSpark .65s ease-out forwards; }
+@keyframes fxSpark { from { transform: rotate(var(--a)) translateX(0); opacity: 1; } to { transform: rotate(var(--a)) translateX(26px); opacity: 0; } }
 </style>
 
 <div class="app">
@@ -3499,10 +3514,48 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     activity(INSIGHT, "Anya: " + c.name.en + " is " + m.en);
   }
   function toLead(c) {
-    c.status = "sorting"; drawLive();
-    brief(DISPATCH, state.lang === "en" ? "bringing " + c.name.en + " down to the bench" : "带" + c.name.zh + "到线索长椅", 2600).then(function () {
+    c.status = "moving"; drawLive();
+    brief(DISPATCH, state.lang === "en" ? "bringing " + c.name.en + " down to the bench" : "带" + c.name.zh + "到线索长椅", 600);
+    glideFx(c, "comments", "lead", (state.lang === "en" ? "Lead · Monica" : "线索 · 莫妮卡"), KIND.lead.c, function () {
       c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity(DISPATCH, "Joey brought " + c.name.en + " down to the leads bench for Monica"); drawLive(); drawLiveDetail();
     });
+  }
+  // sorting animation: tag pops up, a dotted trail is drawn and the hologram glides to its carpet, then sparkles
+  var FX_EXIT = { in1: [93, 24], in2: [88, 16] };
+  function glideFx(c, fromZ, toZ, label, color, done) {
+    var views = [];
+    if (pvReady && state.view === "photo") views.push(["photo", $("hotspots")]);
+    if (state.view === "inside" && typeof inS !== "undefined" && (inS.floor === 1 || inS.floor === 2)) views.push(["in" + inS.floor, $("inSpots")]);
+    var ran = 0;
+    views.forEach(function (v) {
+      var P = LIVE_POS[v[0]], box = v[1]; if (!P || !box) return;
+      var a = P[fromZ] && P[fromZ].pts[0], b = P[toZ] && P[toZ].pts[Math.min(P[toZ].pts.length - 1, live.list.filter(function (x) { return liveZone(x) === toZ; }).length)];
+      if (!a && !b) return; a = a || FX_EXIT[v[0]]; b = b || FX_EXIT[v[0]]; if (!a || !b) return;
+      ran++;
+      var g = document.createElement("span"); g.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " fx-ghost"; g.style.setProperty("--c", color);
+      g.innerHTML = '<span class="hx"></span><span class="fx-scan"></span><i>' + c.icon + "</i>"; g.style.left = a[0] + "%"; g.style.top = a[1] + "%";
+      var tag = document.createElement("span"); tag.className = "fx-tag"; tag.style.setProperty("--c", color); tag.textContent = label; tag.style.left = a[0] + "%"; tag.style.top = a[1] + "%";
+      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "fx-trail"); svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
+      var mx = (a[0] + b[0]) / 2, my = Math.min(a[1], b[1]) - 6;
+      svg.innerHTML = '<path d="M' + a[0] + " " + a[1] + " Q" + mx + " " + my + " " + b[0] + " " + b[1] + '" stroke="' + color + '" vector-effect="non-scaling-stroke"/>';
+      box.appendChild(svg); box.appendChild(g); box.appendChild(tag);
+      setTimeout(function () { g.classList.add("tagged"); }, REDUCED ? 0 : 700);
+      setTimeout(function () {
+        svg.classList.add("draw");
+        var t0 = performance.now(), dur = REDUCED ? 1 : 1200;
+        (function step(now) {
+          var k = Math.min(1, (now - t0) / dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          var x = (1 - e) * (1 - e) * a[0] + 2 * (1 - e) * e * mx + e * e * b[0], y = (1 - e) * (1 - e) * a[1] + 2 * (1 - e) * e * my + e * e * b[1];
+          g.style.left = x + "%"; g.style.top = y + "%"; tag.style.left = x + "%"; tag.style.top = y + "%";
+          if (k < 1) requestAnimationFrame(step);
+          else {
+            for (var i = 0; i < 6; i++) { var sp = document.createElement("span"); sp.className = "fx-spark"; sp.style.setProperty("--c", color); sp.style.left = b[0] + "%"; sp.style.top = b[1] + "%"; sp.style.setProperty("--a", (i * 60) + "deg"); box.appendChild(sp); (function (sp) { setTimeout(function () { sp.remove(); }, 700); })(sp); }
+            setTimeout(function () { g.remove(); tag.remove(); svg.remove(); }, 250);
+          }
+        })(performance.now());
+      }, REDUCED ? 0 : 1300);
+    });
+    setTimeout(done, ran && !REDUCED ? 2700 : 0);
   }
   function handover(c) {
     activity("10", "Phoebe took over " + c.name.en + "'s " + (c.kind === "comment" ? "comment" : "chat") + " and alerted a consultant");
@@ -3521,6 +3574,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function liveZone(c) {
     if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval" || c.status === "checking") return "comments";
     if (c.status === "sorting") return "joey";
+    if (c.status === "moving") return null;
     if (c.status === "talking") return (c.kind === "comment" ? "s" : "a") + c.agent;
     return { wechat: "wechat", web: "web", lead: "lead", comment: "comments" }[c.kind];
   }
@@ -3534,8 +3588,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (c.kind === "comment") {
       c.status = "sorting";
       brief(DISPATCH, state.lang === "en" ? "sorting " + c.name.en + "'s comment" : "分拣" + c.name.zh + "的评论", 2800).then(function () {
-        c.status = "waiting"; var to = BY_ID[SOCIAL[c.plat]];
-        activity(DISPATCH, "Joey took " + c.name.en + "'s " + PLAT[c.plat].en + " comment up to " + to.name); drawLive();
+        var to = BY_ID[SOCIAL[c.plat]];
+        c.status = "moving"; drawLive();
+        glideFx(c, "joey", "comments", PLAT[c.plat][state.lang] + " · " + to.name, liveColor(c), function () {
+          c.status = "waiting"; activity(DISPATCH, "Joey took " + c.name.en + "'s " + PLAT[c.plat].en + " comment up to " + to.name); drawLive();
+        });
       });
     }
     drawLive();
@@ -3705,8 +3762,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         var el = document.createElement("button"); el.type = "button";
         if (last) { el.className = "live-more"; el.textContent = "+" + (cs.length - i); el.onclick = function (e) { e.stopPropagation(); openLive(z); }; }
         else {
-          el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", liveColor(c));
-          el.innerHTML = '<span class="hx"></span><i>' + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.status === "checking" ? "🔍" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+          el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", c.status === "sorting" ? "#a3adb8" : liveColor(c));
+          el.innerHTML = '<span class="hx"></span>' + (c.status === "sorting" ? '<span class="fx-scan"></span>' : "") + '<i>' + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.status === "checking" ? "🔍" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
           el.setAttribute("aria-label", liveName(c) + " · " + (c.kind === "comment" ? PLAT[c.plat].en : KIND[c.kind].en)); el.title = liveName(c);
           el.onclick = function (e) { e.stopPropagation(); openLive(z, c.id); };
         }
@@ -3748,7 +3805,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var liveSel = { zone: "all", id: null };
   function liveStatusText(c) {
     var en = state.lang === "en";
-    return { waiting: en ? "waiting" : "等候中", talking: (c.agent ? BY_ID[c.agent].name : "AI") + (en ? " replying" : " 回复中"), sorting: en ? "Joey is sorting it" : "Joey 分拣中", booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", checking: en ? "expert checking" : "专家审核中", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
+    return { waiting: en ? "waiting" : "等候中", talking: (c.agent ? BY_ID[c.agent].name : "AI") + (en ? " replying" : " 回复中"), sorting: en ? "Joey is sorting it" : "Joey 分拣中", moving: en ? "on the way" : "转送中", booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", checking: en ? "expert checking" : "专家审核中", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
   }
   function openLive(zone, id, refresh) {
     var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
