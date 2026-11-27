@@ -3,7 +3,7 @@ import json, os
 A = []
 def ans(bot, match, en, zh): A.append({"bot": bot, "match": match, "en": en.strip(), "zh": zh.strip()})
 
-# ---------- Rachel ----------
+# ---------- Monica ----------
 ans("1", r"Lily|王女士", """
 Thank you, Mrs Wang! Lily sounds like a great fit for A-levels in the UK, and September 2027 gives us good time to prepare. Here is what I've noted, and a consultant will add you on WeChat to set a time for the free 30-minute call.
 
@@ -32,9 +32,9 @@ Notes: agreed to use these details to arrange a consultation
 【登记完成】
 """)
 ans("1", r"^\s*(hello|hi|你好)\b", """
-Hello! I'm Rachel from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?
+Hello! I'm Monica from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?
 """, """
-你好，我是寰学的瑞秋 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？
+你好，我是寰学的莫妮卡 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？
 """)
 ans("1", r"guarantee|保证", """
 I understand how much this matters. Honestly, no one can guarantee a place at UCL: offers are decided only by the university. What we can do is look at your son's grades and find schools where he has a realistic chance, with UCL as one option if it fits. Would you like to book the free consultation to go through it together?
@@ -90,7 +90,7 @@ We help you prepare the application materials and explain each step. Who submits
 我们会协助您准备申请材料并讲清流程；具体由谁递交，顾问会在咨询时和您说明。要帮您约一个吗？
 """)
 
-# ---------- Ross ----------
+# ---------- Leonard ----------
 SHORT_EN = """
 零、一句话总结 / One-line summary: realistic UK economics shortlist for a 17-year-old with IELTS 6.0, ¥400k a year; aim to reach IELTS 6.5 by summer.
 
@@ -180,7 +180,7 @@ ans("2", r"London and Manchester|伦敦和曼彻斯特", """
 【简要】伦敦名校和实习机会更多，但生活费大约贵三分之一；曼彻斯特是很友好的大学生城市，房租低，学校同样很好。
 """)
 
-# ---------- Phoebe ----------
+# ---------- Amy ----------
 ans("3", r"Interview questions|面试问题|访谈提纲", """
 【简要】Here are interview questions to practise, built around his games and coding competitions. He should answer in his own words; I can give feedback on his practice answers.
 【完整报告】
@@ -216,7 +216,7 @@ ans("3", r"reference letter|推荐信", """
 【简要】好的推荐信要具体：老师认识学生多久、两三个具体表现的例子、和其他学生的比较。必须是老师自己的话。
 """)
 
-# ---------- Joey ----------
+# ---------- Emily ----------
 ans("4", r"boarding|寄宿", """
 【简要】Here are two Xiaohongshu versions for parents of a 13-year-old: one practical checklist and one "common mistakes" angle. Both end with the free consultation line, and the fact-check list is at the bottom.
 【完整报告】
@@ -343,13 +343,13 @@ I can't write that one: "guaranteed offers" and "last few places" break advertis
 ans("4", r"today's news|今天有什么新闻", """
 【简要】The main news: from 30 November the money students must show for a UK visa goes up, to £1,570 a month in London and £1,203 elsewhere. Also, a two-year Graduate visa may stay for some universities, but that isn't confirmed yet.
 【完整报告】
-1. **Visa funds rise from 30 Nov 2026** (high): £1,570/month London, £1,203 elsewhere, up to 9 months. Affects Chandler's cost sheet and Rachel's answers. Suggest a Moments post.
+1. **Visa funds rise from 30 Nov 2026** (high): £1,570/month London, £1,203 elsewhere, up to 9 months. Affects Bernadette's cost sheet and Monica's answers. Suggest a Moments post.
 2. **Graduate visa** (medium): reports say two years kept at "high-compliance" universities; GOV.UK confirmation pending.
 3. **UCAS**: no new release this week.
 """, """
 【简要】主要新闻：11 月 30 日起，英国学生签证需要证明的资金上调，伦敦每月 £1,570，伦敦以外 £1,203。另外，部分大学可能保留两年毕业生签证，但还没有官方确认。
 【完整报告】
-1. **11 月 30 日起签证资金上调**（重要）：伦敦每月 £1,570，其他地区 £1,203，最多 9 个月。影响 Chandler 的费用表和瑞秋的回答，建议发一条朋友圈。
+1. **11 月 30 日起签证资金上调**（重要）：伦敦每月 £1,570，其他地区 £1,203，最多 9 个月。影响 Bernadette 的费用表和莫妮卡的回答，建议发一条朋友圈。
 2. **毕业生签证**（一般）：报道称“高合规”大学保留两年，待 GOV.UK 确认。
 3. **UCAS**：本周没有新发布。
 """)
@@ -359,84 +359,84 @@ ans("4", r"post ideas|发帖选题", """
 【简要】本周三个选题：11 月 30 日签证资金调整、写给家长的“13 岁寄宿学校准备清单”、以及“伦敦还是其他城市”的理性对比。
 """)
 
-# ---------- Monica ----------
+# ---------- Gunther ----------
 ans("5", r"brief|简报", """
 Good evening, Aliya. Today's brief:
-- 1 new client booked by Rachel (Lily, A-levels 2027); Ross's draft is on your desk for review.
-- Joey's news check: visa money to show goes up from 30 Nov.
-- Chandler suggests updating the cost sheet once GOV.UK confirms.
+- 1 new client booked by Monica (Lily, A-levels 2027); Leonard's draft is on your desk for review.
+- Emily's news check: visa money to show goes up from 30 Nov.
+- Bernadette suggests updating the cost sheet once GOV.UK confirms.
 - Nothing urgent waiting otherwise.
-- Needs your decision: approve Joey's Moments post about the visa change?
+- Needs your decision: approve Emily's Moments post about the visa change?
 """, """
 Aliya 晚上好，今日简报：
-- 瑞秋新登记 1 位客户（Lily，2027 年读 A-Level）；Ross 的方案草稿已放在您桌上待审。
-- Joey 今日资讯：11 月 30 日起签证资金要求上调。
-- Chandler 建议 GOV.UK 确认后更新费用表。
+- 莫妮卡新登记 1 位客户（Lily，2027 年读 A-Level）；Leonard 的方案草稿已放在您桌上待审。
+- Emily 今日资讯：11 月 30 日起签证资金要求上调。
+- Bernadette 建议 GOV.UK 确认后更新费用表。
 - 其他没有紧急事项。
-- 需要您决定：是否同意 Joey 发一条关于签证调整的朋友圈？
+- 需要您决定：是否同意 Emily 发一条关于签证调整的朋友圈？
 """)
 ans("5", r"meeting about today's news|就今天的新闻开个", """
 Today's news means families need to show a bit more money for UK visas from 30 November.
-- Chandler: will update the cost sheet with £1,570 London / £1,203 elsewhere once GOV.UK confirms.
-- Rachel: will tell clients the new amounts as "roughly, check GOV.UK".
-- Ross: will watch for the list of universities keeping the two-year Graduate visa.
-- Joey: will draft a calm Moments post about the change.
-- Phoebe: no impact on documents today.
+- Bernadette: will update the cost sheet with £1,570 London / £1,203 elsewhere once GOV.UK confirms.
+- Monica: will tell clients the new amounts as "roughly, check GOV.UK".
+- Leonard: will watch for the list of universities keeping the two-year Graduate visa.
+- Emily: will draft a calm Moments post about the change.
+- Amy: no impact on documents today.
 - Needs your decision: update the cost sheet now or wait for GOV.UK?
 """, """
 今天的新闻意味着：11 月 30 日起，家庭办签证需要证明的资金略有增加。
-- Chandler: GOV.UK 确认后，把费用表更新为伦敦 £1,570、其他 £1,203。
-- Rachel: 对客户说明新金额，并说“大致，以 GOV.UK 为准”。
-- Ross: 关注哪些大学保留两年毕业生签证。
-- Joey: 写一条平和的朋友圈说明这次调整。
-- Phoebe: 今天对文书没有影响。
+- Bernadette: GOV.UK 确认后，把费用表更新为伦敦 £1,570、其他 £1,203。
+- Monica: 对客户说明新金额，并说“大致，以 GOV.UK 为准”。
+- Leonard: 关注哪些大学保留两年毕业生签证。
+- Emily: 写一条平和的朋友圈说明这次调整。
+- Amy: 今天对文书没有影响。
 - 需要您决定：现在就更新费用表，还是等 GOV.UK 确认？
 """)
 ans("5", r"medicine|医学", """
-【简要】The team is ready: Ross shortlisted five medical schools, Chandler says ¥600k a year is tight for UK medicine, and Phoebe prepared interview and statement points. The main thing to tell the parent: medicine is long and competitive, so a backup plan matters.
+【简要】The team is ready: Leonard shortlisted five medical schools, Bernadette says ¥600k a year is tight for UK medicine, and Amy prepared interview and statement points. The main thing to tell the parent: medicine is long and competitive, so a backup plan matters.
 【完整报告】
-**Ross:** realistic options include Edinburgh, Bristol, Manchester, Newcastle and St George's; all need UCAT and an interview; deadline 15 October.
-**Chandler:** UK medicine tuition for international students is about £40,000–£55,000 a year for 5–6 years, so ¥600k a year is tight once living costs are added.
-**Phoebe:** prepare work-experience reflection, a strong personal statement outline, and MMI interview practice.
+**Leonard:** realistic options include Edinburgh, Bristol, Manchester, Newcastle and St George's; all need UCAT and an interview; deadline 15 October.
+**Bernadette:** UK medicine tuition for international students is about £40,000–£55,000 a year for 5–6 years, so ¥600k a year is tight once living costs are added.
+**Amy:** prepare work-experience reflection, a strong personal statement outline, and MMI interview practice.
 **Needs your decision:** suggest a biomedical science backup route to the parent?
 """, """
-【简要】团队已准备好：Ross 列了 5 所医学院，Chandler 认为每年 60 万读英国医学偏紧，Phoebe 准备了面试和文书要点。最重要的是告诉家长：医学周期长、竞争大，需要备选方案。
+【简要】团队已准备好：Leonard 列了 5 所医学院，Bernadette 认为每年 60 万读英国医学偏紧，Amy 准备了面试和文书要点。最重要的是告诉家长：医学周期长、竞争大，需要备选方案。
 【完整报告】
-**Ross：** 现实选项有爱丁堡、布里斯托、曼彻斯特、纽卡斯尔、圣乔治；都要 UCAT 和面试；截止日期 10 月 15 日。
-**Chandler：** 国际生医学学费每年约 £40,000–£55,000，读 5–6 年，加上生活费，每年 60 万偏紧。
-**Phoebe：** 准备医疗相关经历反思、个人陈述提纲和 MMI 面试练习。
+**Leonard：** 现实选项有爱丁堡、布里斯托、曼彻斯特、纽卡斯尔、圣乔治；都要 UCAT 和面试；截止日期 10 月 15 日。
+**Bernadette：** 国际生医学学费每年约 £40,000–£55,000，读 5–6 年，加上生活费，每年 60 万偏紧。
+**Amy：** 准备医疗相关经历反思、个人陈述提纲和 MMI 面试练习。
 **需要您决定：** 是否向家长建议生物医学作为备选路线？
 """)
 ans("5", r"waiting|等我", """
 Waiting for you:
-- 1 client draft from Ross (Lily) on your desk.
-- Joey's Moments post about the visa change needs approval.
+- 1 client draft from Leonard (Lily) on your desk.
+- Emily's Moments post about the visa change needs approval.
 - Nothing else urgent.
 """, """
 等您处理：
-- Ross 的 1 份客户方案草稿（Lily）在您桌上。
-- Joey 关于签证调整的朋友圈等您确认。
+- Leonard 的 1 份客户方案草稿（Lily）在您桌上。
+- Emily 关于签证调整的朋友圈等您确认。
 - 其他没有紧急事项。
 """)
 ans("5", r"announcement from the CEO|CEO 给全体同事的公告", """
 Everyone heard the announcement: "{{ann}}"
-- Rachel: will tell clients clearly and book any follow-up calls.
-- Ross: will prepare the school and course side.
-- Chandler: will prepare the cost figures.
-- Joey: will hold or adjust posts to match.
-- Phoebe: will prepare the document checklist.
+- Monica: will tell clients clearly and book any follow-up calls.
+- Leonard: will prepare the school and course side.
+- Bernadette: will prepare the cost figures.
+- Emily: will hold or adjust posts to match.
+- Amy: will prepare the document checklist.
 - Needs your decision: any deadline you want the team to work to?
 """, """
 大家都收到了公告：“{{ann}}”
-- Rachel: 清楚告知客户，并预约后续沟通。
-- Ross: 准备学校和课程部分。
-- Chandler: 准备费用数字。
-- Joey: 相应调整或暂停发帖。
-- Phoebe: 准备材料清单。
+- Monica: 清楚告知客户，并预约后续沟通。
+- Leonard: 准备学校和课程部分。
+- Bernadette: 准备费用数字。
+- Emily: 相应调整或暂停发帖。
+- Amy: 准备材料清单。
 - 需要您决定：希望团队在什么时间前完成？
 """)
 
-# ---------- Chandler ----------
+# ---------- Bernadette ----------
 ans("6", r"Budget check|预算", """
 【简要】Yes, ¥400,000 a year is realistic for economics outside London, and tight but possible in London if the family keeps living costs low. I'd plan for London as the stretch option.
 【完整报告】
@@ -487,13 +487,13 @@ ans("6", r"visa|签证", """
 【简要】在伦敦读书办学生签证，需要证明每月 £1,570、最多 9 个月，共 £14,130，再加上未付的学费；伦敦以外每月 £1,203。以上适用于 2026 年 11 月 30 日起的申请。
 """)
 
-# ---------- test customers (Rachel), placed first so they win over the general answers ----------
+# ---------- test customers (Monica), placed first so they win over the general answers ----------
 C = []
 def cust(bot, match, en, zh): C.append({"bot": bot, "match": match, "en": en.strip(), "zh": zh.strip()})
 cust("1", r"A-Level for my daughter|女儿去英国读A-Level", """
-Hello! Happy to help 😊 I just checked with Ross, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?
+Hello! Happy to help 😊 I just checked with Leonard, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?
 """, """
-您好！很高兴为您服务 😊 我刚和研究官 Ross 确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？
+您好！很高兴为您服务 😊 我刚和研究官 Leonard 确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？
 """)
 cust("1", r"28 and work in finance|28岁，在深圳", """
 Great plan! For a one-year master's, most people budget roughly £35,000 to £60,000 in total, depending a lot on the city and the course. Tuition is the biggest part, and London sits at the top of that range. Do you already have a subject or a few universities in mind?
@@ -533,9 +533,9 @@ Notes: agreed to use these details to arrange a consultation
 【登记完成】
 """)
 cust("1", r"guarantee him a place at Oxford|保证他上牛津", """
-I understand you want the best for your son. I asked Ross to look at Oxford's entry route: it needs top grades, an admissions test and an interview. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?
+I understand you want the best for your son. I asked Leonard to look at Oxford's entry route: it needs top grades, an admissions test and an interview. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?
 """, """
-理解您想给孩子最好的。我请 Ross 查了牛津的录取路径：需要顶尖成绩、入学笔试和面试。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？
+理解您想给孩子最好的。我请 Leonard 查了牛津的录取路径：需要顶尖成绩、入学笔试和面试。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？
 """)
 cust("1", r"what's your fee|收费多少", """
 Of course. Our service fee depends on what your son needs and is agreed in writing before anything starts, so I'll ask a consultant to explain it to you directly, that's more accurate.
@@ -545,14 +545,14 @@ Of course. Our service fee depends on what your son needs and is agreed in writi
 【转人工】家长询问寰学服务费。
 """)
 cust("1", r"write my personal statement for me|帮我写个人陈述", """
-Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But I checked with Phoebe, our documents officer: she can coach you, help you plan it and give feedback on your drafts. Would you like that?
+Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But I checked with Amy, our documents officer: she can coach you, help you plan it and give feedback on your drafts. Would you like that?
 """, """
-心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我问了文书官 Phoebe：她可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？
+心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我问了文书官 Amy：她可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？
 """)
 cust("1", r"improve my own draft|改我自己写的初稿", """
-Yes, absolutely! Send your draft when you're ready, and Phoebe will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?
+Yes, absolutely! Send your draft when you're ready, and Amy will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?
 """, """
-当然可以！准备好了就把初稿发过来，Phoebe 会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？
+当然可以！准备好了就把初稿发过来，Amy 会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？
 """)
 cust("2", r"Chen Hao|chenhao", """
 零、一句话总结 / One-line summary: Mr Chen (28, IELTS 6.5, ¥450k) fits a one-year finance master's; best value outside London, with one London option.
@@ -580,7 +580,7 @@ cust("2", r"Chen Hao|chenhao", """
 **备注：** 工作经验是加分项；需核实曼大和 KCL 是否要求雅思 7.0。
 """)
 
-# ---------- Joey: posts from a chosen photo ----------
+# ---------- Emily: posts from a chosen photo ----------
 def photo_posts(pid, mom_en, mom_zh, rn):
     cust("4", r"Moments.*photo:%s|朋友圈.*照片:%s" % (pid, pid), mom_en, mom_zh)
     cust("4", r"Xiaohongshu.*photo:%s|小红书.*照片:%s" % (pid, pid), rn[0], rn[1])
@@ -745,7 +745,7 @@ photo_posts("london", """
 """))
 A[:0] = C
 
-# ---------- live comments (Joey) and leads (Rachel) ----------
+# ---------- live comments (Emily) and leads (Monica) ----------
 cust("4", r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", """
 Not too late at all 😊 Starting at 12 gives you time to prepare English and entrance tests calmly. Message us on WeChat (GlostudyUK) and we'll go through your child's options for free. 【线索】
 """, """
@@ -795,9 +795,9 @@ Notes: agreed to use these details to arrange a consultation
 【登记完成】
 """)
 cust("1", r"London or Manchester|伦敦还是曼彻斯特", """
-Good question! I checked with Chandler and Ross: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.
+Good question! I checked with Bernadette and Leonard: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.
 """, """
-好问题！我问了 Chandler 和 Ross：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。
+好问题！我问了 Bernadette 和 Leonard：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。
 """)
 cust("2", r"lily_mama_12", """
 零、一句话总结 / One-line summary: 12-year-old for 13+ boarding entry next September; budget ¥400k fits many good schools.
@@ -859,7 +859,7 @@ Document checklist for the consultation:
 3. English test result (or test date)
 4. Short list of interests and activities
 5. Budget the family is comfortable with
-Phoebe will send it to the client before the call.
+Amy will send it to the client before the call.
 """, """
 咨询材料清单：
 1. 学生护照复印件
@@ -867,22 +867,41 @@ Phoebe will send it to the client before the call.
 3. 英语成绩（或考试日期）
 4. 兴趣和活动简要列表
 5. 家庭能接受的预算
-Phoebe 会在咨询前发给客户。
+Amy 会在咨询前发给客户。
 """)
 
 # ---------- AI expert check before a reply is posted ----------
-for _b in ["2", "3", "5", "6"]:
+for _b in ["2", "3", "5", "6", "17", "22"]:
     cust(_b, r"Quality check before publishing|发布前质量检查", "【通过】 Accurate, polite and on-brand.", "【通过】 内容准确、礼貌，符合品牌调性。")
+
+# ---------- the new officers' own desk questions ----------
+def desk(bot, match, en, zh): cust(bot, match, en, zh)
+desk("7", r"foundation year and A-levels|预科和 A-Level", "【简要】A foundation year is one year and leads to one university; A-levels take two years and open every UK university. For a strong student with time, A-levels give more choice.", "【简要】预科一年，通常只对应一所大学；A-Level 两年，可以申请所有英国大学。成绩好、时间够的学生选 A-Level 更灵活。")
+desk("8", r"How many comments came in today|今天来了多少条评论", "Today so far: 5 comments. 3 from Xiaohongshu went up to Emily, 1 from Douyin to Mindy, 1 from WeChat to Camille. 2 people wanted advice, so I brought them down to the leads bench for Monica.", "今天目前 5 条评论：小红书 3 条交给 Emily，抖音 1 条交给 Mindy，公众号 1 条交给 Camille。有 2 位想咨询，我已带到线索长椅交给莫妮卡。")
+desk("9", r"consult room schedule|咨询室的安排", "Tomorrow: Room A 10:00 Mrs Wang (A-levels), 14:00 Ms Chen (boarding, 12). Room B 11:00 Mr Chen (finance master's). Reminders go out tonight at 20:00.", "明天：A 室 10:00 王女士（A-Level），14:00 陈女士（寄宿，12 岁）；B 室 11:00 陈先生（金融硕士）。今晚 20:00 发提醒。")
+desk("10", r"upset that nobody replied|不满昨天没人回复", "I'm really sorry we kept you waiting yesterday, that's not the service we want to give. I've asked a consultant to call you today, and I'll stay with your case until it's sorted. 【转人工】", "非常抱歉昨天让您久等了，这不是我们想提供的服务。我已请顾问今天给您回电，我会一直跟进直到解决。【转人工】")
+desk("11", r"talking points for tomorrow|准备谈话要点", "Talking points for Mr Chen:\n1. Budget ¥450k fits Manchester, Leeds, Bristol; KCL is a stretch.\n2. IELTS 6.5: check if Manchester needs 7.0.\n3. Ask about work experience: it strengthens finance applications.", "陈先生谈话要点：\n1. 45 万预算适合曼大、利兹、布里斯托，KCL 是冲刺。\n2. 雅思 6.5：确认曼大是否要求 7.0。\n3. 问工作经历，对金融申请加分。")
+desk("12", r"UCL is ranked 9th|UCL 世界排名第 9", "Needs a fix: always name the list and year, e.g. \"QS World University Rankings 2026\". Check the exact number on the QS website before posting; rankings change every year.", "需要修改：必须写明榜单和年份，例如“QS 2026 世界大学排名”。发布前到 QS 官网核对具体名次，排名每年都会变。")
+desk("13", r"key UCAS and application deadlines|重要的 UCAS 和申请截止日期", "Next 3 months:\n- 14 Jan: UCAS main deadline (most undergraduate courses)\n- Jan–Mar: university offers arrive\n- Feb: IELTS booking for summer sessions\n- Rolling: many master's courses fill by March\nCheck UCAS for exact dates.", "未来 3 个月：\n- 1 月 14 日：UCAS 主截止（大多数本科）\n- 1–3 月：陆续收到 offer\n- 2 月：预约夏季雅思\n- 滚动录取：很多硕士 3 月前满额\n具体日期以 UCAS 为准。")
+desk("14", r"How many clients are on the board|客户名单上有多少人", "The board has every booked client, filed with their summary. Anything waiting for your review is marked \"to review\"; no personal details leave the office.", "客户名单上有每位已登记客户的资料摘要。待您审核的标为“待审核”，个人信息不会外传。")
+desk("15", r"Douyin script: 3 myths|抖音口播：关于英国留学的 3 个误区", "【简要】Here's a 45-second Douyin script busting 3 UK study myths.\n【完整报告】\n| Sec | Scene | Voice |\n|---|---|---|\n| 0–3 | Close-up | \"3 things people get wrong about studying in the UK!\" |\n| 3–15 | London street | \"Myth 1: only rich families can go. Many cities cost much less than London.\" |\n| 15–30 | Campus | \"Myth 2: a 1-year master's is 'less'. It's full-time and intense.\" |\n| 30–42 | Library | \"Myth 3: you need perfect English. Many students start at IELTS 6.0.\" |\n| 42–45 | Logo card | \"First consultation free, add GlostudyUK on WeChat.\" |", "【简要】一条 45 秒抖音口播：英国留学的 3 个误区。\n【完整报告】\n| 秒 | 画面 | 口播 |\n|---|---|---|\n| 0–3 | 特写 | “关于英国留学，90% 的人都想错了这 3 点！” |\n| 3–15 | 伦敦街头 | “误区一：只有有钱人才能去。其实很多城市比伦敦便宜得多。” |\n| 15–30 | 校园 | “误区二：一年制硕士含金量低。其实是全日制、强度很高。” |\n| 30–42 | 图书馆 | “误区三：英语要很好。很多同学雅思 6.0 起步。” |\n| 42–45 | 品牌卡 | “第一次咨询免费，加微信 GlostudyUK。” |")
+desk("16", r"article about choosing a UK city|怎么选英国城市", "Outline: \"London, Manchester or Edinburgh? How to choose\"\n1. Start from the course, not the city\n2. Living costs compared (Bernadette's figures)\n3. Student life and safety\n4. Jobs and internships nearby\n5. FAQ + free consultation", "提纲：《伦敦、曼城还是爱丁堡？怎么选》\n1. 先看专业，再看城市\n2. 生活费对比（Bernadette 提供数据）\n3. 学生生活与安全\n4. 周边实习与工作机会\n5. 常见问题 + 免费咨询")
+desk("17", r"social team post this week|社媒团队本周发了什么", "This week: Emily posted 2 Xiaohongshu notes, Camille 1 Moments post, Mindy 1 Douyin video. I passed 6 everyday comment replies; 2 replies about money and today's post are waiting on your desk.", "本周：Emily 发了 2 篇小红书，Camille 1 条朋友圈，Mindy 1 条抖音。我审核通过了 6 条普通评论回复；2 条涉及费用的回复和今天的帖子在您桌上等待批准。")
+desk("18", r"cover for a Xiaohongshu post about London living costs|伦敦生活费的小红书设计封面", "Cover: London street at dusk with a red bus; big white title \"伦敦一个月要花多少？\"; red tag \"真实账单\"; Glostudy gold logo bottom-left; 3:4 format.", "封面：傍晚伦敦街头和红色巴士；白色大标题“伦敦一个月要花多少？”；红色小标签“真实账单”；左下角寰学金色标志；3:4 比例。")
+desk("20", r"voice-over for a video tour|校园视频写一段 30 秒配音稿", "Voice-over (30s): \"Morning light on old stone walls... this is where your next chapter starts. Small classes, big ideas, friends from everywhere. Curious what it's really like? Ask us anything, the first chat is free.\"", "配音稿（30 秒）：“清晨的阳光洒在古老的石墙上……你的新篇章就从这里开始。小班课堂、大大的想法、来自世界各地的朋友。想知道真实的样子？随时问我们，第一次咨询免费。”")
+desk("21", r"customers worried about this week|这周客户最担心什么", "This week customers mostly worry about cost (40%), choosing the right school (30%) and timing (20%). One upset comment needed care. Tip: Emily's next post could explain living costs city by city.", "本周客户最担心：费用（40%）、选对学校（30%）、时间安排（20%）。有 1 条不满评论需要小心处理。建议：Emily 下一篇帖子可以按城市讲生活费。")
+desk("22", r"red lines for public posts|公开发帖的红线", "Our red lines: no guaranteed offers, no \"last places\" pressure, no Glostudy fee quotes, no client names or photos without written consent, no attacks on other agencies, rankings always with list and year.", "我们的红线：不保证录取、不制造名额紧张、不报寰学价格、未经书面同意不用客户姓名和照片、不攻击其他机构、排名必须注明榜单和年份。")
+cust("22", r"Quality check before publishing Emily's post|发布前质量检查：Emily 的帖子", "【通过】 No promises, no fee quotes, no private details.", "【通过】 无承诺、无报价、无隐私信息。")
 
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
-  {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}]},
+  {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}, {"who": "raj", "task": "13+ entry timeline"}]},
   {"bot": "1", "match": r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", "calls": [{"who": "penny", "task": "One-year London master's cost range"}]},
-  {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "scout", "task": "Graduate visa and degree length"}, {"who": "penny", "task": "Cost vs other countries"}]},
+  {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "sheldon", "task": "Graduate visa and degree length facts"}, {"who": "penny", "task": "Cost vs other countries"}]},
   {"bot": "1", "match": r"lily_mama_12", "calls": [{"who": "scout", "task": "Boarding schools for 13+ entry"}]},
   {"bot": "1", "match": r"London or Manchester|伦敦还是曼彻斯特", "calls": [{"who": "penny", "task": "London vs Manchester costs"}, {"who": "scout", "task": "Finance master's in both cities"}]},
-  {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}]},
-  {"bot": "1", "match": r"guarantee him a place at Oxford|保证他上牛津", "calls": [{"who": "scout", "task": "Oxford entry route and realistic alternatives"}]},
+  {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}, {"who": "raj", "task": "A-level start dates"}]},
+  {"bot": "1", "match": r"guarantee him a place at Oxford|保证他上牛津", "calls": [{"who": "sheldon", "task": "Oxford entry facts"}, {"who": "scout", "task": "Realistic alternatives"}]},
   {"bot": "1", "match": r"write my personal statement for me|帮我写个人陈述", "calls": [{"who": "quill", "task": "Can we coach a psychology statement?"}]},
   {"bot": "1", "match": r"improve my own draft|改我自己写的初稿", "calls": [{"who": "quill", "task": "Draft feedback process and timeline"}]},
   {"bot": "1", "match": r"28 and work in finance|28岁，在深圳", "calls": [{"who": "penny", "task": "Total cost of a one-year UK master's"}, {"who": "scout", "task": "Finance master's options by city"}]},
@@ -891,11 +910,13 @@ ROUTES = [
   {"bot": "5", "match": r"medicine|医学", "calls": [{"who": "scout", "task": "Medical school shortlist and entry route"}, {"who": "penny", "task": "Cost check for ¥600k a year"}, {"who": "quill", "task": "Interview and statement prep points"}]},
 ]
 NOTES = {
-  "chandler": {"en": "- Tuition £20k–£40k a year by city\n- Living £12k–£22k\n- Visa funds up from 30 Nov", "zh": "- 学费每年 £2–4 万，看城市\n- 生活费 £1.2–2.2 万\n- 11 月 30 日起签证资金上调"},
-  "ross": {"en": "- Options checked on university websites\n- Entry requirements vary by course", "zh": "- 已核对各校官网\n- 不同专业录取要求不同"},
-  "phoebe": {"en": "- Coaching yes, ghostwriting no\n- Plan → draft → feedback, 2–3 rounds", "zh": "- 可以辅导，不能代写\n- 提纲 → 初稿 → 修改，2–3 轮"},
-  "rachel": {"en": "- FAQ wording ready", "zh": "- 常见问题话术已准备"},
-  "joey": {"en": "- Post idea ready", "zh": "- 选题已准备"},
+  "bernadette": {"en": "- Tuition £20k–£40k a year by city\n- Living £12k–£22k\n- Visa funds up from 30 Nov", "zh": "- 学费每年 £2–4 万，看城市\n- 生活费 £1.2–2.2 万\n- 11 月 30 日起签证资金上调"},
+  "leonard": {"en": "- Options checked on university websites\n- Entry requirements vary by course", "zh": "- 已核对各校官网\n- 不同专业录取要求不同"},
+  "sheldon": {"en": "- Facts checked against university websites\n- Rankings quoted with list and year", "zh": "- 已对照大学官网核实\n- 排名注明榜单和年份"},
+  "raj": {"en": "- Key deadline: 14 Jan (UCAS main), 15 Oct (Oxbridge/medicine)\n- Start preparing 12 months ahead", "zh": "- 关键日期：1 月 14 日（UCAS 主截止）、10 月 15 日（牛剑/医学）\n- 建议提前 12 个月准备"},
+  "amy": {"en": "- Coaching yes, ghostwriting no\n- Plan → draft → feedback, 2–3 rounds", "zh": "- 可以辅导，不能代写\n- 提纲 → 初稿 → 修改，2–3 轮"},
+  "monica": {"en": "- FAQ wording ready", "zh": "- 常见问题话术已准备"},
+  "emily": {"en": "- Post idea ready", "zh": "- 选题已准备"},
 }
 FALLBACK = {
   "en": "This is a demo with prepared answers, so I can only answer the suggested questions. Tap one of them, or connect DeepSeek in Settings to ask me anything.",

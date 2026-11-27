@@ -1,6 +1,6 @@
 <title>Glostudy AI Office</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wghtEmily00;500;600;700&family=Space+Grotesk:wghtGunther00;600;700&family=Playfair+Display:ital,wghtMonica,500;1,600&display=swap">
 <style>
 /* Layout: app bar; the office scene (stage) on the left with staff + activity under it; a sticky side panel on the right with Chat / Clients tabs. */
 :root {
@@ -706,7 +706,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .app-body td:not(:first-child), .app-body th:not(:first-child) { text-align: right; }
 .app.sheets td:nth-child(2), .app.sheets thead tr:not(.cols) th:nth-child(2) { text-align: left !important; }
 .app.browser table, .app.crm table { min-width: 540px; }
-/* spreadsheet (Chandler) */
+/* spreadsheet (Bernadette) */
 .app.sheets .app-body { padding: 0 0 14px; }
 .app.sheets table { margin: 0 0 14px; font-family: -apple-system, "Segoe UI", sans-serif; }
 .app.sheets tr.cols th { background: #eef0f2; color: #666; font-weight: 500; text-align: center !important; font-size: .72rem; padding: 3px; }
@@ -715,13 +715,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .app.sheets tbody tr:last-child td { font-weight: 700; background: #fbfcf2; }
 .app.sheets tbody tr:first-child td:nth-child(3) { outline: 2px solid var(--app); outline-offset: -2px; }
 .app.sheets .app-body > :not(table) { padding: 0 16px; }
-/* document editor (Phoebe) */
+/* document editor (Amy) */
 .app.docs .app-body { background: #eef0f3; padding: 18px; }
 .app.docs .page { max-width: 640px; margin: 0 auto; background: #fff; padding: 34px 40px; box-shadow: 0 1px 3px rgba(0,0,0,.15); font-family: Georgia, "Songti SC", serif; min-height: 100%; }
-/* social studio (Joey) */
+/* social studio (Emily) */
 .app.studio .app-body { background: #f3f3f5; }
 .app.studio .post-prev { margin: 0 auto 18px; }
-/* slides (Monica) */
+/* slides (Gunther) */
 .app.slides .app-body { background: #e8eaee; padding: 18px; }
 .app.slides .page { max-width: 720px; margin: 0 auto; background: linear-gradient(160deg, #fff, #f6f2ea); padding: 28px 34px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.15); border-top: 6px solid var(--app); }
 @media (max-width: 899px) {
@@ -935,6 +935,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .tk-chip.mt { background: rgba(80,60,10,.9); border-color: #ffcf70; }
 #announce .modal-in { width: min(720px, 100%); }
 #rvBody { max-height: 60vh; margin-bottom: 10px; }
+
+/* ---------- floor plan: four realistic top-down floors ---------- */
+.scene-wrap.plan2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 10px; overflow: visible; background: #15181c; }
+.pl-floor { position: relative; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px #2a3038; }
+.pl-floor > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pl-tag { position: absolute; left: 8px; top: 8px; z-index: 3; background: rgba(12,14,18,.82); color: #f1f4f6; font: 600 .7rem var(--sans); padding: 3px 9px; border-radius: 999px; }
+.pl-bot .hs-tag { font-size: .62rem; padding: 2px 7px 2px 5px; }
+.pl-bot .hs-tag em { display: none; } .pl-bot.working .hs-tag em, .pl-bot:hover .hs-tag em { display: inline; }
+@media (max-width: 760px) { .scene-wrap.plan2 { grid-template-columns: minmax(0, 1fr); } }
+.photo-frame .hs .hs-tag { font-size: .62rem; padding: 2px 7px 2px 5px; }
+.photo-frame .hs:not(.selected):not(.working):not(:hover) .hs-tag em { display: none; }
 </style>
 
 <div class="app">
@@ -1046,7 +1057,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 <div class="modal" id="custModal" hidden role="dialog" aria-modal="true" aria-labelledby="custTitle">
   <div class="glass modal-in">
     <div class="modal-head"><b id="custTitle">👥 Test customers</b><button type="button" class="modal-x" id="custX" aria-label="Close">×</button></div>
-    <p class="ann-sub" id="custSub">Pick a customer. They walk in to reception and talk to Rachel; you tap their next message each time.</p>
+    <p class="ann-sub" id="custSub">Pick a customer. They walk in to reception and talk to Monica; you tap their next message each time.</p>
     <div class="cust-list" id="custList"></div>
   </div>
 </div>
@@ -1061,7 +1072,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 <div class="modal" id="announce" hidden role="dialog" aria-modal="true" aria-labelledby="annTitle">
   <div class="glass modal-in">
     <div class="modal-head"><b id="annTitle">📣 Announcement to all team</b><button type="button" class="modal-x" id="annX" aria-label="Close">×</button></div>
-    <p class="ann-sub">Everyone comes to the boardroom. Monica runs a short meeting and puts the minutes on your desk.</p>
+    <p class="ann-sub">Everyone comes to the boardroom. Gunther runs a short meeting and puts the minutes on your desk.</p>
     <div class="dp-list ann-chips" id="annChips"></div>
     <form id="annForm" class="ann-form"><label for="annBox" hidden>Announcement</label><textarea id="annBox" rows="3" placeholder="Type your announcement…"></textarea><button type="submit" class="desk-send" style="--c:#e8c17a">Gather the team</button></form>
   </div>
@@ -1122,36 +1133,100 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 (function () {
   "use strict";
   var BOTS = [
-    { id: "1", skills: ["WeChat customer chat", "Booking consultations", "FAQs in Chinese & English", "Passing questions to the right person"], title: "Receptionist", file: "agents/1-customer-service.md", name: "Rachel", role: "Front desk", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
-      intro: "Answers customers' questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person. A finished booking goes to Ross." },
-    { id: "2", skills: ["UK school & university shortlists", "Rankings (QS, Guardian)", "Entry routes: GCSE to Master's", "Application timelines"], title: "Research Officer", file: "agents/2-school-research.md", name: "Ross", role: "School research", who: "Team only", color: "--c2", prop: "books", effort: "medium",
+    { id: "1", skills: ["Urgent WeChat chats", "Booking consultations", "FAQs in Chinese & English", "Calling the right colleague"], title: "WeChat Priority Line", file: "agents/1-customer-service.md", name: "Monica", role: "Reception · Friends", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
+      intro: "Answers customers' questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person. A finished booking goes to Leonard." },
+    { id: "2", skills: ["UK school & university shortlists", "Rankings (QS, Guardian)", "Entry routes: GCSE to Master's", "Application timelines"], title: "Research Officer", file: "agents/2-school-research.md", name: "Leonard", role: "Research · Big Bang", who: "Team only", color: "--c2", prop: "books", effort: "medium",
       intro: "Drafts a shortlist of UK schools for each new client, and lists what still needs checking. You can also paste a profile here.",
       tasks: [
         { en: "Student profile:\nWho: parent\nStudent: 17, Grade 11 in China\nWants: UK undergraduate, economics or finance\nEnglish: IELTS 6.0 (aiming for 6.5)\nStart: September 2028\nBudget: up to ¥400,000 a year\nNotes: strong at maths, wants a big city",
           zh: "【咨询登记】\n身份：家长\n学生年龄/年级：17 岁，国内高二\n意向阶段/专业：英国本科，经济或金融\n英语水平：雅思 6.0（预计再考到 6.5）\n计划入学：2028 年 9 月\n预算：每年 40 万人民币以内\n备注：数学好，希望去大城市" }] },
-    { id: "3", skills: ["UCAS personal statement coaching", "CVs", "Reference letter outlines", "English editing"], title: "Documents Officer", file: "agents/3-documents.md", name: "Phoebe", role: "Documents", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
+    { id: "3", skills: ["UCAS personal statement coaching", "CVs", "Reference letter outlines", "English editing"], title: "Documents Officer", file: "agents/3-documents.md", name: "Amy", role: "Documents · Big Bang", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
       intro: "Writes interview questions, personal statement outlines and edits. It won't write a statement for the student.",
       tasks: [
         { en: "A. Interview questions: 17-year-old applying for computer science at UK universities; makes games and does coding competitions.", zh: "A. 访谈提纲：学生 17 岁，申请英国本科计算机科学，喜欢做游戏和参加信息学竞赛。" },
         { en: "Write a complete economics personal statement for the student that they can submit as it is.", zh: "直接帮学生写一篇完整的经济学个人陈述，可以直接提交。" }] },
-    { id: "4", skills: ["WeChat Moments", "Xiaohongshu (Red Note)", "WeChat Official Account articles", "Douyin scripts", "Daily UK news check"], title: "Marketing Officer", file: "agents/4-marketing.md", name: "Joey", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
+    { id: "4", skills: ["Xiaohongshu notes & covers", "Red Note comment replies", "WeChat Moments drafts", "Fact-check lists"], title: "Xiaohongshu Lead", file: "agents/4-marketing.md", name: "Emily", role: "Social · Emily in Paris", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
       intro: "Marketing officer. Checks UK university and policy news every morning, and drafts Xiaohongshu, WeChat, Moments and Douyin posts with a fact-check list.",
       tasks: [
         { en: "Xiaohongshu post for parents: our child is 13 and wants a UK boarding school. What should we prepare?", zh: "小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？" },
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] },
-    { id: "5", skills: ["Daily brief", "Coordinating the team", "Meeting minutes", "Following up tasks"], title: "Executive Secretary", file: "agents/5-secretary.md", name: "Monica", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
+    { id: "5", skills: ["Daily brief", "Coordinating the team", "Meeting minutes", "Following up tasks"], title: "Chief of Staff", file: "agents/5-secretary.md", name: "Gunther", role: "CEO suite", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
       intro: "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.",
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
         { en: "Hold a team meeting about today's news.", zh: "开个团队会，讲讲今天的新闻。" },
         { en: "A parent wants medicine at a top UK university for their son, budget ¥600k a year. Get the team ready for the consultation.", zh: "有位家长想让儿子去英国顶尖大学读医学，预算每年 60 万。让团队为咨询做好准备。" },
         { en: "What's waiting for my review?", zh: "现在有什么等我审核？" }] },
-    { id: "6", skills: ["Tuition & living-cost estimates", "Budget checks", "Visa money requirement", "RMB ↔ GBP conversions"], title: "Finance Officer", file: "agents/6-finance.md", name: "Chandler", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
+    { id: "6", skills: ["Tuition & living-cost estimates", "Budget checks", "Visa money requirement", "RMB ↔ GBP conversions"], title: "Finance Officer", file: "agents/6-finance.md", name: "Bernadette", role: "Finance · Big Bang", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
       intro: "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.",
       tasks: [
         { en: "Budget check: undergraduate economics in London, family budget about ¥400,000 a year. Is it realistic?", zh: "预算评估：伦敦本科读经济，家庭预算每年约 40 万人民币，现实吗？" },
-        { en: "How much money does a student need to show for a UK student visa in London?", zh: "在伦敦读书，英国学生签证需要证明多少资金？" }] }
+        { en: "How much money does a student need to show for a UK student visa in London?", zh: "在伦敦读书，英国学生签证需要证明多少资金？" }] },
+    { id: "7", demoAs: "1", name: "Rachel", title: "Front Desk Host", role: "Reception · Friends", who: "Talks to customers", file: "agents/1-customer-service.md", color: "--c7", prop: "headset", effort: "low",
+      skills: ["Website & phone enquiries", "Greeting visitors", "Booking consultations"], intro: "Hosts the lobby: answers website and phone enquiries on the sofa, and helps Monica when the WeChat line gets busy.",
+      persona: "你在一楼大堂接待通过官网表单和电话来的客户；微信排队太多时帮莫妮卡分担。",
+      tasks: [{ en: "A website visitor asks: what's the difference between a foundation year and A-levels?", zh: "官网访客问：预科和 A-Level 有什么区别？" }] },
+    { id: "8", demoAs: "1", name: "Joey", title: "Comment Dispatcher", role: "Reception · Friends", who: "Team only", file: "agents/1-customer-service.md", color: "--c8", prop: "megaphone", effort: "low",
+      skills: ["Sorting comments from every channel", "Handing them to Emily, Mindy or Camille", "Bringing leads down to the bench"], intro: "Collects every comment from Xiaohongshu, Douyin and WeChat, sorts it and walks it up to the right social officer; brings anyone who wants advice back down to the leads bench.",
+      persona: "你不直接回复客户。你负责把各平台的评论分类，交给楼上负责该平台的同事（小红书 Emily、抖音 Mindy、公众号 Camille），并把想咨询的人带回一楼线索长椅。",
+      tasks: [{ en: "How many comments came in today, and who did you hand them to?", zh: "今天来了多少条评论？都交给谁了？" }] },
+    { id: "9", demoAs: "1", name: "Chandler", title: "Bookings & Consult Rooms", role: "Reception · Friends", who: "Team only", file: "agents/1-customer-service.md", color: "--c9", prop: "calculator", effort: "low",
+      skills: ["Consultation bookings", "Consult room schedule", "Reminders"], intro: "Looks after the booked nook: books every confirmed customer into consult room A or B and sends reminders.",
+      persona: "你负责咨询预约：把已登记的客户安排进 A、B 咨询室，并提醒客户和顾问。",
+      tasks: [{ en: "What's the consult room schedule for tomorrow?", zh: "明天咨询室的安排是怎样的？" }] },
+    { id: "10", demoAs: "1", name: "Phoebe", title: "Customer Care", role: "Reception · Friends", who: "Talks to customers", file: "agents/1-customer-service.md", color: "--c10", prop: "headset", effort: "low",
+      skills: ["Complaints", "Handovers to a real consultant", "Calming upset customers"], intro: "Runs the human desk: takes over complaints, fee and visa questions, calms people down and alerts a real consultant.",
+      persona: "你负责客户关怀：处理投诉、退款、费用和签证类需要真人处理的问题，安抚客户并通知真人顾问。",
+      tasks: [{ en: "A parent is upset that nobody replied yesterday. How do you answer?", zh: "一位家长不满昨天没人回复，你怎么回？" }] },
+    { id: "11", demoAs: "2", name: "Ross", title: "Consultation Prep", role: "Reception · Friends", who: "Team only", file: "agents/2-school-research.md", color: "--c11", prop: "books", effort: "medium",
+      skills: ["Client folders", "Consult room set-up", "Talking points for consultants"], intro: "Prepares each consult room: puts the client's folder, Leonard's shortlist and Amy's checklist on the table before the meeting.",
+      persona: "你负责咨询前准备：把客户档案、Leonard 的匹配清单和 Amy 的材料清单整理好，给顾问写 3 条谈话要点。",
+      tasks: [{ en: "Prepare talking points for tomorrow's consultation with Mr Chen.", zh: "为明天和陈先生的咨询准备谈话要点。" }] },
+    { id: "12", demoAs: "2", name: "Sheldon", title: "Head of Research", role: "Research · Big Bang", who: "Team only", file: "agents/2-school-research.md", color: "--c12", prop: "books", effort: "medium",
+      skills: ["Fact-checking", "Rankings (QS, Guardian)", "Entry rules"], intro: "Head of research and the strictest fact-checker in the building: everyone asks him before quoting a ranking or an entry rule.",
+      persona: "你是研究主管，最严格的事实核查员：核对排名、入学要求和数字，指出哪里需要官网核实。",
+      tasks: [{ en: "Check this claim: 'UCL is ranked 9th in the world'.", zh: "核查这句话：“UCL 世界排名第 9”。" }] },
+    { id: "13", demoAs: "2", name: "Raj", title: "Admissions Timelines", role: "Research · Big Bang", who: "Team only", file: "agents/2-school-research.md", color: "--c13", prop: "books", effort: "low",
+      skills: ["UCAS deadlines", "Application calendars", "Interview and test dates"], intro: "Keeps the deadline wall: UCAS dates, admissions tests and interview seasons for every client.",
+      persona: "你负责申请时间线：UCAS 截止日期、入学考试和面试时间，为每位客户排日程。",
+      tasks: [{ en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }] },
+    { id: "14", demoAs: "2", name: "Howard", title: "Client Records", role: "Research · Big Bang", who: "Team only", file: "agents/2-school-research.md", color: "--c14", prop: "paper", effort: "low",
+      skills: ["Client files", "Board tidy-up", "Data privacy"], intro: "Keeps client records tidy and private: files every booking and checks nothing sensitive leaves the office.",
+      persona: "你负责客户档案：整理和归档每位客户的资料，注意隐私，不对外泄露。",
+      tasks: [{ en: "How many clients are on the board, and what's waiting?", zh: "客户名单上有多少人？有什么待处理？" }] },
+    { id: "15", demoAs: "4", name: "Mindy", title: "Douyin & Video", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c15", prop: "megaphone", effort: "medium",
+      skills: ["Douyin scripts", "Live-stream outlines", "Douyin comment replies"], intro: "Runs Douyin: short-video scripts, live-stream outlines and replies to Douyin comments.",
+      persona: "你负责抖音和视频：写短视频口播脚本、直播大纲，回复抖音评论。",
+      tasks: [{ en: "Write a 45-second Douyin script: 3 myths about studying in the UK.", zh: "写一条 45 秒抖音口播：关于英国留学的 3 个误区。" }] },
+    { id: "16", demoAs: "4", name: "Camille", title: "WeChat Official Account", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c16", prop: "paper", effort: "medium",
+      skills: ["Official Account articles", "WeChat Moments", "WeChat comment replies"], intro: "Runs our WeChat Official Account and Moments, and answers comments on our WeChat posts.",
+      persona: "你负责微信公众号和朋友圈：写文章、朋友圈，回复公众号评论。",
+      tasks: [{ en: "Outline this week's Official Account article about choosing a UK city.", zh: "为本周公众号文章列提纲：怎么选英国城市。" }] },
+    { id: "17", demoAs: "4", name: "Sylvie", title: "Marketing Director", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c17", prop: "megaphone", effort: "medium",
+      skills: ["Checks every reply before it posts", "Brand voice", "Decides what needs the CEO"], intro: "Marketing director: checks every public reply and post. Everyday replies she passes go out; money, visas or guarantees go to your desk.",
+      persona: "你是市场总监：审核团队的每条公开回复和帖子，判断是否可以发布，涉及费用、签证或保证的交给 CEO。",
+      tasks: [{ en: "What did the social team post this week, and what's waiting for approval?", zh: "社媒团队本周发了什么？有什么等待批准？" }] },
+    { id: "18", demoAs: "4", name: "Julien", title: "Design & Covers", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c18", prop: "paper", effort: "low",
+      skills: ["Cover images", "Posters", "Brand colours"], intro: "Designs the cover image for every post, in Glostudy's colours.",
+      persona: "你负责设计：为每条帖子设计封面文字和版式（用文字描述设计方案）。",
+      tasks: [{ en: "Describe a cover for a Xiaohongshu post about London living costs.", zh: "为一篇关于伦敦生活费的小红书设计封面方案。" }] },
+    { id: "19", demoAs: "4", name: "Luc", title: "Daily News Check", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c19", prop: "paper", effort: "low",
+      skills: ["UK university & policy news", "Visa rule changes", "News-to-post ideas"], intro: "Reads UK university and policy news every morning and tells the team what changed.",
+      persona: "你负责每日资讯：看英国大学和政策新闻，告诉团队发生了什么、对谁有影响。",
+      tasks: [{ en: "What's today's news?", zh: "今天有什么新闻？" }] },
+    { id: "20", demoAs: "4", name: "Ado", title: "Bilibili & Voice-overs", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c20", prop: "headset", effort: "low",
+      skills: ["Bilibili videos", "Voice-over scripts", "Music for videos"], intro: "Runs Bilibili and records the voice-overs and music for the team's videos.",
+      persona: "你负责 B 站和配音：写 B 站视频脚本和配音稿。",
+      tasks: [{ en: "Write a 30-second voice-over for a video tour of a UK campus.", zh: "为英国校园视频写一段 30 秒配音稿。" }] },
+    { id: "21", demoAs: "5", name: "Anya", title: "Customer Insights", role: "CEO suite · Spy x Family", who: "Reports to you", file: "agents/5-secretary.md", color: "--c21", prop: "tablet", effort: "low",
+      skills: ["Reads what customers really want", "Priority tags", "Mood of the day"], intro: "Reads every new customer and comment and tags what they really want (cost worries, dream school, upset), so the team knows who to help first.",
+      persona: "你负责客户洞察：读懂每位客户和评论背后真正的需求和情绪，告诉团队谁该优先。",
+      tasks: [{ en: "What are customers worried about this week?", zh: "这周客户最担心什么？" }] },
+    { id: "22", demoAs: "5", name: "Kuuga", title: "Brand Guardian", role: "CEO suite", who: "Reports to you", file: "agents/5-secretary.md", color: "--c22", prop: "tablet", effort: "low",
+      skills: ["Safety check before publishing", "No guarantees or fee quotes", "Privacy rules"], intro: "Guards the brand: does the last safety check on every post (no guarantees, no fee quotes, no private details) before it reaches your desk.",
+      persona: "你是品牌守护者：发布前做最后的安全检查，确保没有保证录取、没有报价、没有泄露隐私。",
+      tasks: [{ en: "What are our red lines for public posts?", zh: "我们公开发帖的红线是什么？" }] }
   ];
   var DEMO = {
     en: "I'm a parent. My daughter Lily is 16, in Grade 10 at a Shanghai high school. She wants to do A-levels in the UK and then study economics at university. IELTS 5.5 at the moment. We'd like her to start in September 2027. Budget is about ¥500,000 a year. My WeChat is lily_mum_sh, you can call me Mrs Wang. Yes, you can use these details to arrange a consultation.",
@@ -1195,7 +1270,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function drawFeed() {
     var ul = $("feed"); ul.textContent = "";
-    if (!state.activity.length) { ul.innerHTML = '<li class="feed-empty">Nothing yet. Click Rachel and try the demo booking.</li>'; return; }
+    if (!state.activity.length) { ul.innerHTML = '<li class="feed-empty">Nothing yet. Click Monica and try the demo booking.</li>'; return; }
     state.activity.forEach(function (a) {
       var li = document.createElement("li");
       li.innerHTML = '<time>' + hhmm(a.t) + '</time><span class="dotc" style="background:' + (a.bot ? "var(" + BY_ID[a.bot].color + ")" : "var(--ink)") + '"></span><span></span>';
@@ -1286,7 +1361,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       rules += state.lang === "en" ? EN_RULE : ZH_RULE;
       o.effort = bot.effort; o.botId = bot.id;
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
-      if (bot.id === "4") rules += "\n\n# 【今日资讯】\n" + intelText();
+      if (bot.id === "4" || bot.id === "19") rules += "\n\n# 【今日资讯】\n" + intelText();
+      if (bot.persona) rules += "\n\n# 你的身份（以此为准，覆盖上文的名字和岗位）\n你叫「" + bot.name + "」，岗位：" + bot.title + "。" + bot.persona;
       if (o.extraRules) rules += o.extraRules;
       return rawAsk(rules, history, o);
     });
@@ -1302,7 +1378,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (rules.indexOf("这次是同事之间的内部请求") >= 0) {
       var nm = (BY_ID[o.botId] || {}).name || ""; out = ((DEMO_DATA.notes || {})[nm.toLowerCase()] || {})[L] || "- ok"; o.slow = true;
     } else {
-      var hit = (DEMO_DATA.answers || []).filter(function (x) { return x.bot === o.botId && rx(x.match).test(text); })[0];
+      var as = (BY_ID[o.botId] || {}).demoAs, hit = (DEMO_DATA.answers || []).filter(function (x) { return x.bot === o.botId && rx(x.match).test(text); })[0] || (DEMO_DATA.answers || []).filter(function (x) { return x.bot === as && rx(x.match).test(text); })[0];
       out = hit ? hit[L] : DEMO_DATA.fallback[L];
       var ann = (text.match(/whole team: ([^\n]+)|全体同事的公告：([^\n]+)/) || []); out = out.replace("{{ann}}", ann[1] || ann[2] || "");
     }
@@ -1317,23 +1393,23 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     });
   }
 
-  // ---------- teamwork: Rachel calls colleagues, they work in parallel, Rachel answers briefly ----------
-  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", rachel: "1", ross: "2", phoebe: "3", joey: "4", chandler: "6", monica: "5" };
-  var ROUTER_BOSS = "You are the coordinator for Monica, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: huan = front desk, client messages and FAQ wording; scout = UK schools, universities, courses, rankings, entry routes; quill = personal statements, CVs, application documents; spark = WeChat Moments, Xiaohongshu (Red Note), WeChat Official Account articles, Douyin scripts, today's university and policy news; penny = tuition, living costs, budgets, visa money.\n" +
-    "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Monica can answer from the office data.\n" +
-    "Reply with JSON only: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
+  // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", gunther: "5", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15" };
+  var ROUTER_BOSS = "You are the coordinator for Gunther, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
+    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money.\n" +
+    "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Gunther can answer from the office data.\n" +
+    "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
-    "Colleagues: scout = UK schools, universities, courses, rankings, entry routes and requirements; penny = tuition fees, living costs, budgets, money needed for the student visa, RMB/GBP conversions; quill = personal statements, CVs, reference letters, English editing of application documents.\n" +
+    "Colleagues: leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry requirements; raj = application deadlines and timelines; bernadette = tuition fees, living costs, budgets, money needed for the student visa, RMB/GBP conversions; amy = personal statements, CVs, reference letters, English editing of application documents.\n" +
     "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
-    "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"scout\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
-  var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台瑞秋替客户来问你。只回复给瑞秋看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
+    "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
+  var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台莫妮卡替客户来问你。只回复给莫妮卡看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
   async function routeQuestion(text, history, forBoss) {
     try {
       var msgs = history.slice(-6, -1).concat([{ role: "user", content: "Client's latest message: " + text + "\n\nReply with the JSON only." }]);
       var res = await rawAsk(forBoss ? ROUTER_BOSS : ROUTER, msgs, { effort: "low", quick: true });
       var t = res.text, a = t.indexOf("{"), b = t.lastIndexOf("}");
-      var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { var w = c && String(c.who).toLowerCase(); return w && TEAM_IDS[w] && (forBoss || ["2", "3", "6"].indexOf(TEAM_IDS[w]) >= 0); });
+      var calls = (JSON.parse(t.slice(a, b + 1)).calls || []).filter(function (c) { var w = c && String(c.who).toLowerCase(); return w && TEAM_IDS[w] && (forBoss || ["2", "3", "6", "12", "13"].indexOf(TEAM_IDS[w]) >= 0); });
       var seen = {};
       return calls.filter(function (c) { var w = String(c.who).toLowerCase(), id = TEAM_IDS[w]; if (seen[id]) return false; seen[id] = 1; c.who = w; return true; }).slice(0, 3);
     } catch (e) { return []; }
@@ -1341,14 +1417,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   async function consultTeam(calls, text, notesTurn, fromId) {
     fromId = fromId || "1";
     var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
-    if (fromId === "1") custMet(ids);
+    custMet(fromId, ids);
     pvCall(fromId, ids); callMap(fromId, ids, true); if (v3) v3.call(fromId, ids);
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
       var id = ids[i], bot = BY_ID[id], mine = !state.busy[id] || state.busy[id] === "task";
       state.callFrom = state.callFrom || {}; state.callFrom[id] = from.name;
       if (mine) setBusy(id, "call");
-      return ask(bot, [{ role: "user", content: (fromId === "5" ? "Task from Monica (the boss's request): " + c.task + "\n\nThe boss's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: fromId === "5" ? NOTE_RULE.replace("前台瑞秋替客户来问你", "秘书莫妮卡替老板来分配任务") : NOTE_RULE })
+      return ask(bot, [{ role: "user", content: (fromId === "5" ? "Task from Gunther (the boss's request): " + c.task + "\n\nThe boss's own words: " : "Front desk question: " + c.task + "\n\nThe client's own words: ") + text }], { extraRules: fromId === "5" ? NOTE_RULE.replace("前台莫妮卡替客户来问你", "秘书冈瑟替老板来分配任务") : NOTE_RULE })
         .then(function (r) { return r.text; }, function (e) { return "(" + bot.name + " couldn't answer: " + errText(e) + ")"; })
         .then(function (note) {
           if (mine) setBusy(id, null);
@@ -1408,23 +1484,25 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var SPOTS = { coffee: G(2, 792, 244), water: G(1, 340, 92), scoutDrop: G(3, 150, 156), inbox: G(4, 432, 170) };
   var NS = "http://www.w3.org/2000/svg";
   var actors = {}, sceneReady = false, liftOwner = null;
-  var COLORS = { "--c1": "#d9a441", "--c2": "#2bb3a3", "--c3": "#6c6fe0", "--c4": "#f06a4f", "--c5": "#e58fa6", "--c6": "#2fae6b" };
+  var COLORS = { "--c1": "#3ddc84", "--c2": "#4a90e2", "--c3": "#9b6bd6", "--c4": "#ff4f6d", "--c5": "#e8c17a", "--c6": "#2fae6b", "--c7": "#d9a441", "--c8": "#f08a3c",
+    "--c9": "#2bb3a3", "--c10": "#8fd16a", "--c11": "#7fb2e8", "--c12": "#3c7be0", "--c13": "#f2c14e", "--c14": "#57c7d4", "--c15": "#d94fd1", "--c16": "#c9a27a",
+    "--c17": "#c0c4cc", "--c18": "#e0a33c", "--c19": "#8aa6c8", "--c20": "#3a6dff", "--c21": "#ff8fb8", "--c22": "#e0392f" };
 
   // Obstacles per floor in local coordinates [x1, y1, x2, y2]
   var COMMON = [[862, 34, 880, 170], [862, 240, 880, 290], [880, 34, 958, 130], [884, 140, 950, 200], [880, 248, 958, 290]];
   var OBST = {
     4: COMMON.concat([
-      [90, 118, 170, 148],                                       // Monica's marble desk
+      [90, 118, 170, 148],                                       // Gunther's marble desk
       [212, 64, 308, 104],                                       // lounge armchairs
       [404, 112, 516, 140],                                      // CEO desk
       [620, 34, 624, 200], [624, 196, 700, 200], [740, 196, 862, 200], [660, 88, 830, 122] // boardroom
     ]),
     3: COMMON.concat([
       [42, 60, 62, 282],                                         // library shelf
-      [110, 104, 190, 134], [400, 104, 480, 134], [660, 104, 740, 134] // Ross, Phoebe, Chandler
+      [110, 104, 190, 134], [400, 104, 480, 134], [660, 104, 740, 134] // Leonard, Amy, Bernadette
     ]),
     2: COMMON.concat([
-      [80, 104, 160, 134],                                       // Joey's desk
+      [80, 104, 160, 134],                                       // Emily's desk
       [360, 60, 480, 96], [420, 152, 440, 174], [380, 140, 392, 156], [480, 140, 492, 156], // studio: sofa, camera, ring lights
       [526, 142, 594, 196],                                      // podcast table
       [690, 104, 770, 134], [690, 194, 770, 224],                // hot desks
@@ -1666,7 +1744,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     // a robot's own desk: chair behind (robot sits there), desk in front
     function seatDesk(f, id, x, y, top) { frontItem(OY[f] + y + 7, T(f, gamingChair(x + 40, y + 8, col(id)))); frontItem(OY[f] + y + 30, T(f, deskSvg(x, y, col(id), true, "st" + id, top))); }
     function armchair(x, y) { return box(x - 17, y - 18, 34, 34, 9, "#d8cbb5", "#b9a98e") + rect(x - 17, y - 22, 34, 9, "#c9b99c", ' rx="4"'); }
-    // 4F: Monica's marble desk, lounge, CEO desk, boardroom
+    // 4F: Gunther's marble desk, lounge, CEO desk, boardroom
     seatDesk(4, "5", 90, 118, "#f1ece4");
     frontItem(OY[4] + 104, T(4, armchair(232, 86) + armchair(290, 86) + '<circle cx="261" cy="96" r="9" fill="var(--timber)"/>'));
     frontItem(OY[4] + 122, T(4, box(660, 88, 170, 34, 8, "var(--timber)", "var(--timber-2)") + rect(672, 98, 14, 9, "#ffffff", ' rx="1"') + rect(760, 100, 14, 9, "#ffffff", ' rx="1"')));
@@ -1682,14 +1760,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       rect(436, 126, 48, 11, "#14181c", ' rx="3"') + '<text class="label-sm" x="460" y="134.5" text-anchor="middle" fill="#e8c17a">ALIYA</text>' +
       rect(394, 84, 132, 70, "transparent", ' class="hit"')),
       function (g) { g.removeAttribute("pointer-events"); g.setAttribute("class", "bossdesk"); g.id = "bossdesk"; g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", "CEO desk: open the clients waiting for review"); });
-    // 3F: library with Ross, Phoebe under the map, Chandler's glass desk by the plant wall
+    // 3F: library with Leonard, Amy under the map, Bernadette's glass desk by the plant wall
     frontItem(OY[3] + 282, T(3, box(42, 60, 20, 222, 6, "#3b2a1f", "#2a1d14") + [70, 100, 130, 160, 190, 220, 250].map(function (yy, i) { return rect(45, yy, 14, 22, ["#8c2f2f", "#2f4f8c", "#2f6b4f", "#c9a24b"][i % 4], ' rx="1.5"'); }).join("")));
     seatDesk(3, "2", 110, 104, "#8a5c3c");
     frontItem(OY[3] + 135, T(3, '<circle cx="182" cy="108" r="5" fill="#2f9a5a"/><circle cx="182" cy="108" r="9" fill="#ffd88f" opacity=".25" filter="url(#fBlur)"/>'));
     seatDesk(3, "3", 400, 104, "#9a7a5a");
     seatDesk(3, "6", 660, 104, "#d9eef0");
     frontItem(OY[3] + 135, T(3, rect(724, 96, 14, 10, "#0b0d0f", ' rx="1.5"') + rect(726, 98, 10, 6, "#2fae6b", ' opacity=".8"')));
-    // 2F: Joey's desk, content studio, podcast table, hot desks, coffee
+    // 2F: Emily's desk, content studio, podcast table, hot desks, coffee
     seatDesk(2, "4", 80, 104, "#6a4a33");
     frontItem(OY[2] + 96, T(2, box(360, 66, 120, 30, 10, "#5a5d66", "#43464d") + rect(360, 60, 120, 10, "#6a6d76", ' rx="5"')));
     frontItem(OY[2] + 156, T(2, [386, 486].map(function (x) { return rect(x - 1.5, 142, 3, 14, "#1a1d21") + '<circle cx="' + x + '" cy="140" r="8" fill="none" stroke="#fff7e6" stroke-width="2.5"/>'; }).join("")));
@@ -2133,7 +2211,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       books.count = bi; books.castShadow = true; scene.add(books);
     }
 
-    // ----- 1F: reception (Rachel), lounge with the purple sofa, two consult rooms -----
+    // ----- 1F: reception (Monica), lounge with the purple sofa, two consult rooms -----
     var y0 = LV[0];
     for (var a = -2; a <= 2; a++) { var ang = a * .38, rx = -6.2 + Math.sin(ang) * 1.05, rz = -1.6 + Math.cos(ang) * 1.05;
       var seg = box(.42, 1.0, .2, walnut, rx, .5, rz); seg.rotation.y = ang; var tp = box(.46, .05, .42, white, -6.2 + Math.sin(ang) * .95, 1.03, -1.6 + Math.cos(ang) * .95); tp.rotation.y = ang;
@@ -2157,7 +2235,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     });
     plant(-9.3, 0, 3.9, 1.1); plant(.6, 0, 3.9, .9);
 
-    // ----- 2F: Joey's marketing desk, content studio, podcast table, hot desks -----
+    // ----- 2F: Emily's marketing desk, content studio, podcast table, hot desks -----
     var y1 = LV[1];
     desk(-7.6, y1, -2.2, 1.7, walnut); chair(-7.6, y1, -2.9, 0); monitorBack(-7.6, y1, -2.32, "#f06a4f");
     var rocket = textPanel(1.0, 1.0, function (g, W, H) { g.strokeStyle = "#ff5a5a"; g.lineWidth = 18; g.shadowColor = "#ff3030"; g.shadowBlur = 40; g.lineJoin = "round"; g.beginPath(); g.moveTo(W * .5, H * .08); g.quadraticCurveTo(W * .78, H * .35, W * .66, H * .72); g.lineTo(W * .34, H * .72); g.quadraticCurveTo(W * .22, H * .35, W * .5, H * .08); g.stroke(); g.beginPath(); g.moveTo(W * .36, H * .6); g.lineTo(W * .2, H * .86); g.moveTo(W * .64, H * .6); g.lineTo(W * .8, H * .86); g.moveTo(W * .5, H * .76); g.lineTo(W * .5, H * .94); g.stroke(); }, -9.2, 2.0, -4.48, true);
@@ -2176,7 +2254,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     textPanel(2.4, .2, function (g, W, H) { g.fillStyle = "#c58cff"; g.shadowColor = "#a060ff"; g.shadowBlur = 30; g.fillRect(0, H * .3, W, H * .4); }, 5.5, y1 + 2.4, -4.47, true).rotation.z = .3;
     plant(-4.4, y1, -3.9, .9); plant(4.0, y1, 3.8, .9); plant(-9.3, y1, 3.8, .9);
 
-    // ----- 3F: library with Ross, Phoebe under the world map, Chandler by the plant wall -----
+    // ----- 3F: library with Leonard, Amy under the world map, Bernadette by the plant wall -----
     var y2 = LV[2];
     bookshelf(-10, -3.8, y2, -4.28);
     var lad = new T.Group(); lad.position.set(-4.6, y2, -3.75); lad.rotation.x = -.18; scene.add(lad);
@@ -2198,7 +2276,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     [4.05, 4.75].forEach(function (x) { box(.62, .38, .03, black, x, y2 + 1.05, -2.36); textPanel(.58, .34, function (g, W, H) { g.fillStyle = "#06141a"; g.fillRect(0, 0, W, H); g.strokeStyle = "#2fe08b"; g.lineWidth = 8; g.beginPath(); g.moveTo(0, H * .7); for (var p = 1; p < 12; p++) g.lineTo(p * W / 11, H * (.7 - .4 * p / 11) + Math.sin(p * 2.1) * 30); g.stroke(); }, x, y2 + 1.05, -2.34, true); });
     plant(-3.2, y2, -3.9, .9); plant(6.8, y2, 3.8, 1.0); plant(-9.3, y2, 3.8, .9);
 
-    // ----- 4F: Monica's marble desk, lounge, CEO suite with the gold GLOSTUDY wall, glass boardroom -----
+    // ----- 4F: Gunther's marble desk, lounge, CEO suite with the gold GLOSTUDY wall, glass boardroom -----
     var y3 = LV[3];
     box(1.8, .98, .7, marbleM, -8, y3 + .49, -2.0); box(1.84, .04, .74, white, -8, y3 + 1.0, -2.0); box(1.8, .03, .02, glow(0xffe2b0), -8, y3 + .06, -1.64, null, false);
     chair(-8, y3, -2.8, 0, leather); box(.3, .02, .22, black, -7.6, y3 + 1.03, -2.0, null, false);
@@ -2312,6 +2390,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     }
     opts.bots.forEach(function (b) {
       var seat = { "1": [-6.2, LV[0], -1.65], "2": [-7.2, LV[2], -2.9], "3": [-1.2, LV[2], -2.9], "4": [-7.6, LV[1], -2.9], "5": [-8, LV[3], -2.8], "6": [4.4, LV[2], -2.9] }[b.id];
+      if (!seat) return;
       makeRobot(b, seat[0], seat[1], seat[2]);
     });
 
@@ -2617,7 +2696,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "", "1": "images/huan.jpg", "2": "images/scout.jpg", "3": "images/quill.jpg", "4": "images/spark.jpg", "5": "images/ling.jpg", "6": "images/penny.jpg" };
+  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/gunther.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/camille.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "20": "images/team/ado.jpg", "21": "images/team/anya.jpg", "22": "images/team/kuuga.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
   var LAYOUTS = {
     "3f": { img: "previews/office-3f.jpg",
@@ -2633,12 +2712,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       floors: [4.8, 38.6, 68.4],
       paths: { "1>scout": [[23.5, 76], [60, 93], [93, 87], [88, 61], [60, 64], [26, 56]], "2>boss": [[26, 56], [60, 64], [90, 62], [88, 33], [60, 33], [47, 28]], "5>boss": [[14, 26], [30, 31], [45, 28]] } }
   };
-  LAYOUTS.f4 = { img: "images/office-4f.jpg", aspect: "1024 / 1280", maxW: 760,
-    spots: { "5": [7.4, 12.4, 5.2, 9], "2": [17.6, 33.6, 5.6, 9.6], "3": [40.6, 33.6, 5.8, 11], "6": [68.4, 34, 5.6, 12.6], "4": [11.6, 57.4, 5.8, 8.6], "1": [22.4, 80.4, 4, 5.4] },
-    boss: [34, 10.6, 26, 14.6], ceoPlate: [46.9, 22.6], glow: [47, 17, 36, 18], room: [76, 19], meet: [60, 6.5],
-    plates: { "5": [12.6, 23.4], "2": [20.2, 45], "3": [45.8, 45.4], "6": [74.2, 46.2], "4": [17.8, 67.8], "1": [24.2, 88.4] },
-    floorTags: [["4F · CEO Suite & Boardroom", 5.4], ["3F · Research & Finance", 29.2], ["2F · Marketing", 51.6], ["1F · Reception & Consult rooms", 73.6]],
-    paths: { "1>scout": [[23, 82], [50, 94], [90, 93], [92, 72], [90, 50], [60, 49], [21, 44]], "2>boss": [[21, 44], [60, 49], [90, 48], [90, 26], [60, 25], [47, 22]], "5>boss": [[11, 19], [30, 24], [45, 22]] } };
+  LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 1440", maxW: 820,
+    spots: {
+      "5": [6.5, 9, 6, 7.5], "21": [27.5, 12, 5, 5.5], "22": [59.5, 7.5, 6, 10.5],
+      "12": [8, 35, 5.5, 9], "2": [22.5, 35, 5.5, 9], "3": [36.5, 35, 5, 9], "13": [49.5, 32, 6, 11], "14": [63.5, 35, 6, 9], "6": [80, 35, 6, 10],
+      "17": [4, 60, 7, 10], "4": [21.5, 60.5, 6, 9.5], "15": [31, 58.5, 6, 11.5], "16": [45, 60.5, 7, 9.5], "20": [61, 60, 6, 10], "18": [73, 60.5, 6, 9.5], "19": [88, 60.5, 7, 9.5],
+      "1": [15.5, 83.5, 4, 5], "10": [31, 85, 4.5, 8], "7": [43, 83.5, 5, 12], "9": [58.5, 85.5, 4, 6], "11": [75.5, 84, 4, 8.5], "8": [88.5, 84, 4.5, 11]
+    },
+    boss: [35, 11, 23, 8], ceoPlate: [46.5, 19.6], glow: [46.5, 15, 28, 9], room: [79, 12.5], meet: [62, 1.5], plates: {},
+    floorTags: [["4F · CEO Suite · Gunther, Anya & Kuuga", 3.4], ["3F · Research & Finance · the Big Bang team", 28.4], ["2F · Social & Marketing · the Emily in Paris team", 53.4], ["1F · Reception · the Friends team", 78.4]],
+    paths: { "1>scout": [[17.5, 88], [50, 95], [95, 93], [95, 70], [95, 45], [60, 44], [25, 40]], "2>boss": [[25, 40], [60, 44], [95, 44], [95, 20], [60, 18], [46.5, 16]], "5>boss": [[9.5, 13], [30, 18], [46.5, 16]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
   var pvReady = false;
@@ -2676,7 +2759,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     bo.innerHTML = '<span class="hs-tag"><i></i>CEO Suite · Aliya <em id="hsBossTxt">nothing to review</em></span><span class="hs-badge" id="hsBadge" hidden>0</span>';
     bo.onclick = openInbox;
     var pf = document.createElement("button"); pf.type = "button"; pf.className = "files"; pf.id = "pvFiles"; pf.hidden = true; pf.style.left = (LAY.ceoPlate[0] - 6) + "%"; pf.style.top = (LAY.ceoPlate[1] - 4.5) + "%"; pf.onclick = openInbox; box.appendChild(pf);
-    if (LAY.room) { var rs = document.createElement("button"); rs.type = "button"; rs.className = "hs room-spot"; rs.style.cssText = "left:" + (LAY.room[0] - 14) + "%;top:" + (LAY.room[1] - 12) + "%;width:28%;height:20%;--c:#e8c17a"; rs.setAttribute("aria-label", "Boardroom: make an announcement to the whole team"); rs.innerHTML = '<span class="hs-tag"><i></i>Boardroom <em>announce</em></span>'; rs.onclick = openAnnounce; box.appendChild(rs); }
+    if (LAY.room) { var rs = document.createElement("button"); rs.type = "button"; rs.className = "hs room-spot"; rs.style.cssText = "left:" + (LAY.room[0] - 9) + "%;top:" + (LAY.room[1] - 5) + "%;width:18%;height:10%;--c:#e8c17a"; rs.setAttribute("aria-label", "Boardroom: make an announcement to the whole team"); rs.innerHTML = '<span class="hs-tag"><i></i>Boardroom <em>announce</em></span>'; rs.onclick = openAnnounce; box.appendChild(rs); }
     box.appendChild(bo);
     // gentle parallax so the picture feels alive
     var frame = $("photoFrame"), img = $("officeImg");
@@ -2756,7 +2839,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     }
     requestAnimationFrame(step);
   }
-  // Team meeting: everyone "joins" the meeting room, Monica presents, minutes appear on a card there
+  // Team meeting: everyone "joins" the meeting room, Gunther presents, minutes appear on a card there
   var ROOM_PV = LAY.room;
   function pvMeeting(on) {
     if (!pvReady) return;
@@ -2777,7 +2860,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     card = document.createElement("div"); card.className = "meet-card"; card.id = "meetCard"; card.style.left = LAY.meet[0] + "%"; card.style.top = LAY.meet[1] + "%";
     card.innerHTML = '<div class="meet-head"><b>Team meeting</b><button type="button" class="meet-x" aria-label="Close meeting notes">×</button></div>' +
       '<div class="meet-faces">' + BOTS.map(function (b) { return '<span title="' + esc(b.name) + '" style="background-image:url(' + imgURL(IMG[b.id]) + ');--c:' + COLORS[b.color] + '"></span>'; }).join("") + '</div>' +
-      '<div class="meet-body" id="meetBody"><span class="typing"><i></i><i></i><i></i></span> Monica is presenting today\'s news…</div>';
+      '<div class="meet-body" id="meetBody"><span class="typing"><i></i><i></i><i></i></span> Gunther is presenting today\'s news…</div>';
     card.querySelector(".meet-x").onclick = function () { card.remove(); };
     $("hotspots").appendChild(card);
   }
@@ -2795,8 +2878,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         else out += '<div class="meet-line decide"><p><b>You</b> ' + esc(m[2]) + "</p></div>";
       } else if (!summary) summary = l;
     });
-    body.innerHTML = (summary ? '<p class="meet-sum">' + esc(summary) + "</p>" : "") + (out || '<p class="meet-sum">See Monica\'s chat for the minutes.</p>');
-    activity("5", "Team meeting finished: " + (summary || "minutes in Monica's chat").slice(0, 80));
+    body.innerHTML = (summary ? '<p class="meet-sum">' + esc(summary) + "</p>" : "") + (out || '<p class="meet-sum">See Gunther\'s chat for the minutes.</p>');
+    activity("5", "Team meeting finished: " + (summary || "minutes in Gunther's chat").slice(0, 80));
   }
   function pvIntel() {
     if (!pvReady) return;
@@ -2853,7 +2936,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
 
   function drawFloor() {
-    if (!sceneReady) buildScene();
+    if (!$("sceneWrap").children.length) buildPlan();
     var bar = $("staff");
     if (!bar.children.length) {
       BOTS.forEach(function (b) {
@@ -2867,9 +2950,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     BOTS.forEach(function (b) {
       var working = !!state.busy[b.id], btn = $("pick" + b.id);
       btn.setAttribute("aria-pressed", String(b === state.bot && state.tab === "chat"));
-      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping " + ((state.callFrom || {})[b.id] || "Rachel") : "Typing…") : state.done[b.id] ? "Done" : b.title;
+      btn.querySelector("small").textContent = working ? busyText(b.id) : state.done[b.id] ? "Done" : b.title;
       btn.querySelector(".status").className = "status" + (working ? " busy" : state.done[b.id] ? " done" : "");
-      actors[b.id].el.classList.toggle("selected", b === state.bot);
+      if (actors[b.id]) actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
   }
 
@@ -2955,16 +3038,16 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       .replace(/【咨询登记】/g, '<span class="flag book">Booking summary</span>')
       .replace(/\n?【登记完成】/g, "");
   }
-  // Joey's morning news check is filed into the shared "intel" list by the daily task (claude.ai version)
+  // Emily's morning news check is filed into the shared "intel" list by the daily task (claude.ai version)
   state.intel = [];
   if (!IN_CLAUDE && BUNDLE) state.intel = Object.keys(BUNDLE).filter(function (k) { return k.indexOf("intel/") === 0; }).sort().reverse().map(function (k) { try { return JSON.parse(BUNDLE[k]); } catch (e) { return null; } }).filter(Boolean);
-  if (!IN_CLAUDE && state.intel.length) { var t0 = state.intel[0]; setTimeout(function () { activity("4", "Joey's news check (" + t0.date + "): " + (t0.items || []).length + " findings"); }, 0); }
+  if (!IN_CLAUDE && state.intel.length) { var t0 = state.intel[0]; setTimeout(function () { activity("4", "Emily's news check (" + t0.date + "): " + (t0.items || []).length + " findings"); }, 0); }
   if (IN_CLAUDE) window.claude.use("db").then(function (db) {
     if (!db) return;
     db.collection("intel").orderBy("date", "desc").limit(5).onSnapshot(function (snap) {
       state.intel = snap.docs.map(function (d) { return d.data(); });
       var today = state.intel[0];
-      if (today && !state.intelSeen) { state.intelSeen = true; var n = (today.items || []).length; activity("4", "Joey's news check (" + today.date + "): " + (n ? n + " finding" + (n > 1 ? "s" : "") : "nothing important")); }
+      if (today && !state.intelSeen) { state.intelSeen = true; var n = (today.items || []).length; activity("4", "Emily's news check (" + today.date + "): " + (n ? n + " finding" + (n > 1 ? "s" : "") : "nothing important")); }
       pvIntel();
     }, function () {});
   });
@@ -2974,7 +3057,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       return d.date + " — " + (d.summary || "") + "\n" + (d.items || []).map(function (it) { return "- [" + (it.importance || "") + "] " + it.title + " (" + (it.source || "") + ") " + (it.what || "") + " | affects: " + [].concat(it.who || []).join(", ") + " | " + (it.url || ""); }).join("\n");
     }).join("\n\n");
   }
-  // What Monica knows: the client board, today's activity, test results and who is busy
+  // What Gunther knows: the client board, today's activity, test results and who is busy
   function officeData() {
     var now = new Date(), items = store.items(), lines = [];
     lines.push("Now (Beijing): " + now.toLocaleString("en-GB", { timeZone: "Asia/Shanghai" }) + " · London: " + now.toLocaleTimeString("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" }));
@@ -2986,10 +3069,10 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     lines.push("Activity (newest first):"); state.activity.forEach(function (a) { lines.push("- " + hhmm(a.t) + " " + a.text); });
     if (!state.activity.length) lines.push("- none yet today");
     var tests = Object.keys(state.results);
-    lines.push("Automatic tests run on Rachel this session: " + tests.length + " (" + tests.filter(function (k) { return state.results[k] === "pass"; }).length + " passed, " + tests.filter(function (k) { return state.results[k] === "fail"; }).join(", ").replace(/en|zh/g, "") + " failed)");
+    lines.push("Automatic tests run on Monica this session: " + tests.length + " (" + tests.filter(function (k) { return state.results[k] === "pass"; }).length + " passed, " + tests.filter(function (k) { return state.results[k] === "fail"; }).join(", ").replace(/en|zh/g, "") + " failed)");
     lines.push("Busy right now: " + (Object.keys(state.busy).map(function (id) { return BY_ID[id].name; }).join(", ") || "nobody"));
     lines.push("Engine: " + state.engine + " · reply language: " + state.lang);
-    lines.push("\n【今日资讯】Joey's daily news check:\n" + intelText());
+    lines.push("\n【今日资讯】Emily's daily news check:\n" + intelText());
     return lines.join("\n");
   }
   function chat() { return state.chats[state.bot.id] || (state.chats[state.bot.id] = []); }
@@ -3041,7 +3124,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       } else if (t.kind === "team") {
         var waiting = t.items.filter(function (it) { return it.note === null; });
         d.className = "team-notes";
-        d.innerHTML = '<details><summary>' + (waiting.length ? '<span class="typing"><i></i><i></i><i></i></span> ' + esc(t.from || "Rachel") + ' is asking ' : '✓ Team notes from ') +
+        d.innerHTML = '<details><summary>' + (waiting.length ? '<span class="typing"><i></i><i></i><i></i></span> ' + esc(t.from || "Monica") + ' is asking ' : '✓ Team notes from ') +
           esc(t.items.map(function (it) { return BY_ID[it.id].name; }).join(" and ")) + ' <em>(only you see these)</em></summary>' +
           t.items.map(function (it) { var b = BY_ID[it.id]; return '<div class="tn"><b style="color:' + COLORS[b.color] + '">' + esc(b.name) + '</b> <small>' + esc(it.task) + '</small><div class="pre">' + (it.note === null ? "Working…" : render(it.note)) + "</div></div>"; }).join("") +
           "</details>";
@@ -3057,7 +3140,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
@@ -3079,7 +3162,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var history = turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; })
         .slice(-20).map(function (t) { return { role: t.role, content: t.content }; });
       var extra = "", meeting = bot.id === "5" && /meeting|开会|会议/i.test(text);
-      if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Monica called a team meeting in the boardroom"); }
+      if (meeting) { pvMeeting(true); gatherAll(true); activity("5", "Gunther called a team meeting in the boardroom"); }
       if ((bot.id === "1" || (bot.id === "5" && !meeting && !/brief|简报/i.test(text))) && text.length > 12) {
         var calls = await routeQuestion(text, history, bot.id === "5");
         if (calls.length && !state.ctl[bot.id].signal.aborted) {
@@ -3104,7 +3187,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         activity(bot.id, bot.name + (problems.length ? " failed a test" : " passed a test"));
       }
       if (bot.id === "1") await maybeSaveBooking(res.text, turns);
-      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Monica put today's brief on Aliya's desk"); deliver("5", "boss"); setTimeout(function () { addReport("5", state.lang === "en" ? "Daily brief" : "今日简报", res.text); }, REDUCED ? 0 : 3500); }
+      if (bot.id === "5" && /brief|简报/i.test(text)) { activity("5", "Gunther put today's brief on Aliya's desk"); deliver("5", "boss"); setTimeout(function () { addReport("5", state.lang === "en" ? "Daily brief" : "今日简报", res.text); }, REDUCED ? 0 : 3500); }
       if (meeting) { pvMeetingMinutes(res.text); addReport("5", (state.lang === "en" ? "Meeting minutes: " : "会议纪要：") + text.replace(/^Team meeting: announcement from the CEO to the whole team: |^团队会议：CEO 给全体同事的公告：/, "").split("\n")[0].slice(0, 60), res.text); setTimeout(function () { gatherAll(false); }, REDUCED ? 0 : 9000); }
     } catch (e) {
       reply.pending = false;
@@ -3119,7 +3202,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     }
   }
 
-  // ---------- Rachel -> client board -> Ross ----------
+  // ---------- Monica -> client board -> Leonard ----------
   function extractBooking(text) {
     var i = text.indexOf("【咨询登记】"); if (i < 0) return null;
     var j = text.indexOf("【登记完成】", i);
@@ -3131,23 +3214,24 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (m) { var n = m[1].replace(/\*\*/g, "").split(/[\/／,，|]/)[0].trim(); if (n) return n.slice(0, 40); }
     return "New client";
   }
-  async function maybeSaveBooking(text, turns) {
+  async function maybeSaveBooking(text, turns, agentId) {
+    agentId = agentId || "1"; var me = BY_ID[agentId];
     var summary = extractBooking(text); if (!summary) return;
-    var existing = state.chatClient["1"] && store.get(state.chatClient["1"]);
+    var existing = state.chatClient[agentId] && store.get(state.chatClient[agentId]);
     var name = guessName(summary);
     try {
       if (existing) {
         if (existing.summary === summary) return;
         await store.update(existing.id, { summary: summary, name: name, updated: new Date().toISOString() });
         turns.push({ kind: "note", good: true, text: "Updated " + name + " on the client board." });
-        activity("1", "Rachel updated " + name + "'s booking");
+        activity(agentId, me.name + " updated " + name + "'s booking");
         if (existing.status !== "approved" && existing.status !== "rejected") queueJob(existing.id);
       } else {
         var id = await store.add({ name: name, summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
-        state.chatClient["1"] = id;
-        turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Rachel is taking the folder to Ross." });
-        activity("1", "Rachel booked " + name + " and took the folder to Ross");
-        custBooked();
+        state.chatClient[agentId] = id;
+        turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Monica is taking the folder to Leonard." });
+        activity(agentId, me.name + " booked " + name + " and took the folder to Leonard");
+        custBooked(agentId);
         deliver("1", "scout");
         setTimeout(function () { queueJob(id); }, REDUCED ? 0 : 1800);
       }
@@ -3176,11 +3260,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var res = await ask(scout, [{ role: "user", content: msg }], {});
       await store.update(c.id, { status: "review", draft: res.text, updated: new Date().toISOString() });
       flashDone("2");
-      activity("2", "Ross finished a shortlist for " + (c.name || "a client") + " and took it to Aliya's desk");
+      activity("2", "Leonard finished a shortlist for " + (c.name || "a client") + " and took it to Aliya's desk");
       setTimeout(function () { deliver("2", "boss"); }, 600);
     } catch (e) {
       try { await store.update(c.id, { status: "new", error: errText(e) }); } catch (e2) {}
-      activity("2", "Ross couldn't finish " + (c.name || "a client") + "'s shortlist");
+      activity("2", "Leonard couldn't finish " + (c.name || "a client") + "'s shortlist");
     } finally {
       setBusy("2", null);
       runJobs();
@@ -3188,7 +3272,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
 
   // ---------- client board ----------
-  var STATUS = { "new": ["New", ""], researching: ["Ross is working", "busy"], review: ["Waiting for your review", "busy"], approved: ["Approved", "done"], rejected: ["Rejected", "bad"] };
+  var STATUS = { "new": ["New", ""], researching: ["Leonard is working", "busy"], review: ["Waiting for your review", "busy"], approved: ["Approved", "done"], rejected: ["Rejected", "bad"] };
   function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " + hhmm(d); } catch (e) { return ""; } }
 
   function drawBoard() {
@@ -3201,7 +3285,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var items = store.items().filter(function (c) { return state.filter === "review" ? c.status === "review" : true; });
     box.textContent = "";
     if (!items.length) {
-      box.innerHTML = '<div class="board-empty">' + (state.filter === "review" ? "Nothing waiting for review." : "No clients yet. Chat with Rachel and try the demo booking: the client appears here.") + "</div>";
+      box.innerHTML = '<div class="board-empty">' + (state.filter === "review" ? "Nothing waiting for review." : "No clients yet. Chat with Monica and try the demo booking: the client appears here.") + "</div>";
       return;
     }
     items.forEach(function (c) {
@@ -3210,13 +3294,13 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       var h = '<div class="client-top"><b>' + esc(c.name || "New client") + '</b><span class="pill ' + st[1] + '">' + st[0] + "</span><small>" + esc(when(c.created)) + "</small></div>";
       if (c.error) h += '<div class="note" style="align-self:flex-start;text-align:left">' + esc(c.error) + "</div>";
       h += '<details><summary>Booking summary</summary><div class="pre">' + esc(c.summary || "") + "</div></details>";
-      if (c.status === "researching") h += '<div><span class="typing" aria-label="Ross is working"><i></i><i></i><i></i></span></div>';
+      if (c.status === "researching") h += '<div><span class="typing" aria-label="Leonard is working"><i></i><i></i><i></i></span></div>';
       if (c.draft && c.status !== "researching") {
         if (state.editing[c.id]) {
-          h += '<label class="label" for="ed' + c.id + '">Edit Ross\'s draft</label><textarea id="ed' + c.id + '" data-edit="' + c.id + '">' + esc(state.edits[c.id] != null ? state.edits[c.id] : c.draft) + "</textarea>" +
+          h += '<label class="label" for="ed' + c.id + '">Edit Leonard\'s draft</label><textarea id="ed' + c.id + '" data-edit="' + c.id + '">' + esc(state.edits[c.id] != null ? state.edits[c.id] : c.draft) + "</textarea>" +
             '<div class="acts"><button class="btn" type="button" data-act="saveEdit" data-id="' + c.id + '">Save edit</button><button class="ghost" type="button" data-act="cancelEdit" data-id="' + c.id + '">Cancel</button></div>';
         } else {
-          h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Ross\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
+          h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Leonard\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
         }
       }
       var acts = "";
@@ -3225,12 +3309,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
           '<button class="ghost" type="button" data-act="edit" data-id="' + c.id + '">Edit</button>' +
           '<button class="ghost danger" type="button" data-act="reject" data-id="' + c.id + '">Reject</button>';
       }
-      if (c.status === "new") acts += '<button class="btn" type="button" data-act="scout" data-id="' + c.id + '"' + (state.busy["2"] ? " disabled" : "") + ">Send to Ross</button>";
+      if (c.status === "new") acts += '<button class="btn" type="button" data-act="scout" data-id="' + c.id + '"' + (state.busy["2"] ? " disabled" : "") + ">Send to Leonard</button>";
       if (c.status === "approved") acts += '<button class="ghost" type="button" data-act="copy" data-id="' + c.id + '">Copy draft</button><button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
       if (c.status === "rejected") acts += '<button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
       if (acts) h += '<div class="acts">' + acts + "</div>";
       if (c.status === "review" && !state.editing[c.id]) {
-        h += '<div class="row"><label for="nt' + c.id + '" hidden>Feedback for Ross</label><input id="nt' + c.id + '" data-note="' + c.id + '" placeholder="Feedback, e.g. add more London options" value="' + esc(state.notes[c.id] || "") + '">' +
+        h += '<div class="row"><label for="nt' + c.id + '" hidden>Feedback for Leonard</label><input id="nt' + c.id + '" data-note="' + c.id + '" placeholder="Feedback, e.g. add more London options" value="' + esc(state.notes[c.id] || "") + '">' +
           '<button class="ghost" type="button" data-act="redo" data-id="' + c.id + '">Send back</button></div>';
       }
       card.innerHTML = h;
@@ -3258,8 +3342,8 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     else if (act === "scout") queueJob(id);
     else if (act === "redo") {
       var note = (state.notes[id] || "").trim();
-      if (!note) { var inp = $("nt" + id); if (inp) { inp.focus(); inp.placeholder = "Write what Ross should change first"; } return; }
-      delete state.notes[id]; queueJob(id, note); activity(null, "You sent " + name + "'s shortlist back to Ross");
+      if (!note) { var inp = $("nt" + id); if (inp) { inp.focus(); inp.placeholder = "Write what Leonard should change first"; } return; }
+      delete state.notes[id]; queueJob(id, note); activity(null, "You sent " + name + "'s shortlist back to Leonard");
     } else if (act === "copy") {
       try { navigator.clipboard.writeText(c.draft || "").then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Couldn't copy"; }); } catch (e) { b.textContent = "Couldn't copy"; }
     }
@@ -3285,7 +3369,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 
 
 
-  // user bubbles: a customer's name, and the photo picked for Joey
+  // user bubbles: a customer's name, and the photo picked for Emily
   function userBubble(el, t, max) {
     var txt = String(t.content), pm = txt.match(/\[(?:photo|照片)[:：](\w+)\]/), ph = pm && POST_PHOTOS[pm[1]];
     txt = txt.replace(/\s*\[(?:photo|照片)[:：]\w+\]/, "");
@@ -3293,7 +3377,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     el.innerHTML = (t.who ? '<span class="cust">' + esc(t.who) + "</span>" : "") + esc(txt) + (ph ? '<img class="up" alt="" src="' + imgURL(ph.img) + '">' : "");
   }
 
-  // ---------- test customers: walk in, talk to Rachel step by step ----------
+  // ---------- test customers: walk in, talk to Monica step by step ----------
 
   // what an officer is doing right now, for the name tags
   var DAILY = {
@@ -3310,14 +3394,14 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (k === "task") return state.taskLabel[id] || "working";
     if (k === "call") return "helping " + ((state.callFrom || {})[id] || "a colleague");
     if (k === "job") return "on a client";
-    if (k === "cust") return id === "4" ? "replying to a comment" : "chatting with a customer";
+    if (k === "cust") return ["4", "15", "16"].indexOf(id) >= 0 ? "replying to a comment" : "chatting with a customer";
     return "working";
   }
   function freeFor(id) { return !state.busy[id] || state.busy[id] === "task"; }
 
   // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
-  // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Joey, bench by the stairs),
-  //       web (website form / phone, lounge sofa), comment (on our posts, 2F comments lounge, Joey replies)
+  // kind: wechat (WeChat chat, stands at reception, served first), lead (sent down by Emily, bench by the stairs),
+  //       web (website form / phone, lounge sofa), comment (on our posts, 2F comments lounge, Emily replies)
   var LIVE_TPL = [
     { key: "chen", kind: "wechat", icon: "💷", name: { en: "Mr Chen", zh: "陈先生" }, msgs: [
       { en: "Hi, I'm 28 and work in finance in Shenzhen. I'm thinking about a one-year master's in the UK. How much would it cost in total?", zh: "你好，我28岁，在深圳做金融。想去英国读一年硕士，总共大概要多少钱？" },
@@ -3342,11 +3426,48 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var LIVE_FIRST = [["chen", 3], ["lilymama", 9], ["wang", 18], ["mei", 28], ["xiaolu", 36], ["kevin", 46], ["zhang", 60], ["amy", 74], ["mao", 88]];
   var PLAT = { xhs: { c: "#ff2442", en: "Xiaohongshu", zh: "小红书" }, wc: { c: "#07c160", en: "WeChat post", zh: "公众号" }, dy: { c: "#111", en: "Douyin", zh: "抖音" } };
   var KIND = { wechat: { c: "#07c160", en: "WeChat chat", zh: "微信咨询" }, web: { c: "#3b82f6", en: "Website", zh: "官网表单" }, lead: { c: "#ff2442", en: "Lead from a comment", zh: "评论线索" } };
-  var live = { on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
+  var live = { lane: {}, social: {}, on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
   function liveName(c) { return c.name[state.lang]; }
+  var LANE = { wechat: "1", lead: "1", web: "7" };     // Monica: WeChat line and leads · Rachel: website & phone
+  var SOCIAL = { xhs: "4", dy: "15", wc: "16" };       // Emily: Xiaohongshu · Mindy: Douyin · Camille: WeChat posts
+  var CHECKER = "17", GUARD = "22", DISPATCH = "8", INSIGHT = "21";
+  // a short, visible step of the workflow (it follows a real event)
+  function brief(id, label, ms) {
+    if (state.busy[id] && state.busy[id] !== "task") return wait(ms);
+    state.taskLabel[id] = label; setBusy(id, "task");
+    return wait(ms).then(function () { if (state.busy[id] === "task") setBusy(id, null); });
+  }
+  var INSIGHTS = { "💷": { en: "worried about cost", zh: "担心费用" }, "🎓": { en: "wants the right school", zh: "想选对学校" }, "✍️": { en: "needs help with documents", zh: "需要文书帮助" }, "🏛️": { en: "under dream-school pressure", zh: "名校压力大" },
+    "?": { en: "curious and could become a lead", zh: "有兴趣，可能成为线索" }, "♥": { en: "a happy fan", zh: "忠实粉丝" }, "!": { en: "upset: handle with care", zh: "情绪不满，需小心处理" } };
+  function readMood(c) {
+    var m = INSIGHTS[c.icon] || INSIGHTS["?"]; c.insight = m;
+    brief(INSIGHT, state.lang === "en" ? "reading " + c.name.en + "'s mind" : "读懂" + c.name.zh + "的心思", 2400);
+    activity(INSIGHT, "Anya: " + c.name.en + " is " + m.en);
+  }
+  function toLead(c) {
+    c.status = "sorting"; drawLive();
+    brief(DISPATCH, state.lang === "en" ? "bringing " + c.name.en + " down to the bench" : "带" + c.name.zh + "到线索长椅", 2600).then(function () {
+      c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity(DISPATCH, "Joey brought " + c.name.en + " down to the leads bench for Monica"); drawLive(); drawLiveDetail();
+    });
+  }
+  function handover(c) {
+    activity("10", "Phoebe took over " + c.name.en + "'s " + (c.kind === "comment" ? "comment" : "chat") + " and alerted a consultant");
+    brief("10", state.lang === "en" ? "handling " + c.name.en + "'s case" : "处理" + c.name.zh + "的问题", 6000);
+  }
+  function markBooked(c) {
+    if (c.booked) return; c.booked = true; c.status = "booked"; drawLive();
+    var en = state.lang === "en";
+    activity("9", "Chandler booked " + c.name.en + " into consult room " + (live.seq % 2 ? "A" : "B"));
+    brief("9", en ? "booking a consult room for " + c.name.en : "为" + c.name.zh + "安排咨询室", 3500);
+    setTimeout(function () { activity("14", "Howard filed " + c.name.en + "'s record"); brief("14", en ? "filing " + c.name.en + "'s record" : "归档" + c.name.zh + "的资料", 3000); }, 1500);
+    setTimeout(function () { activity("13", "Raj added " + c.name.en + "'s deadlines to the wall"); brief("13", en ? "checking " + c.name.en + "'s deadlines" : "核对" + c.name.zh + "的时间线", 3000); }, 4000);
+    setTimeout(function () { activity("11", "Ross is preparing the consult room for " + c.name.en); brief("11", en ? "preparing the consult room" : "准备咨询室", 6000); }, 9000);
+    checklistFor(c);
+  }
   function liveZone(c) {
     if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval" || c.status === "checking") return "comments";
-    if (c.status === "talking") return c.kind === "comment" ? "joey" : "rachel";
+    if (c.status === "sorting") return "joey";
+    if (c.status === "talking") return (c.kind === "comment" ? "s" : "a") + c.agent;
     return { wechat: "wechat", web: "web", lead: "lead", comment: "comments" }[c.kind];
   }
   function liveColor(c) { return c.kind === "comment" ? PLAT[c.plat].c : KIND[c.kind].c; }
@@ -3354,7 +3475,15 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var t = LIVE_TPL.filter(function (x) { return x.key === key; })[0]; if (!t) return;
     var c = Object.assign({}, t, { id: "c" + (++live.seq), step: 0, status: "waiting", turns: [], met: {}, t: Date.now(), msgs: (t.msgs || []).slice() });
     live.list.push(c);
-    activity(c.kind === "comment" ? "4" : "1", (c.kind === "comment" ? "New " + PLAT[c.plat].en + " comment from " : "New " + KIND[c.kind].en + " from ") + c.name.en);
+    activity(c.kind === "comment" ? DISPATCH : LANE[c.kind], (c.kind === "comment" ? "New " + PLAT[c.plat].en + " comment from " : "New " + KIND[c.kind].en + " from ") + c.name.en);
+    readMood(c);
+    if (c.kind === "comment") {
+      c.status = "sorting";
+      brief(DISPATCH, state.lang === "en" ? "sorting " + c.name.en + "'s comment" : "分拣" + c.name.zh + "的评论", 2800).then(function () {
+        c.status = "waiting"; var to = BY_ID[SOCIAL[c.plat]];
+        activity(DISPATCH, "Joey took " + c.name.en + "'s " + PLAT[c.plat].en + " comment up to " + to.name); drawLive();
+      });
+    }
     drawLive();
   }
   function liveStartArrivals() {
@@ -3363,12 +3492,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function liveText(m) { return m === "DEMO" ? DEMO[state.lang] : m[state.lang]; }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
-  // Rachel serves the reception queues: WeChat line first, then leads from Joey, then the website sofa
-  async function serveDirect(c) {
-    var rachel = BY_ID["1"];
-    if (state.busy["1"] === "task") setBusy("1", null);
-    live.serving = c; c.status = "talking"; delete state.chatClient["1"]; setBusy("1", "cust"); drawLive();
-    activity("1", "Rachel is chatting with " + c.name.en + (c.kind === "wechat" ? " on WeChat" : c.kind === "lead" ? " (lead from " + PLAT[c.plat].en + ")" : " (website)"));
+  // Monica serves the reception queues: WeChat line first, then leads from Emily, then the website sofa
+  async function serveDirect(c, aid) {
+    var rachel = BY_ID[aid];
+    if (state.busy[aid] === "task") setBusy(aid, null);
+    live.lane[aid] = c; c.agent = aid; c.status = "talking"; delete state.chatClient[aid]; setBusy(aid, "cust"); drawLive();
+    activity(aid, rachel.name + " is chatting with " + c.name.en + (c.kind === "wechat" ? " on WeChat" : c.kind === "lead" ? " (lead from " + PLAT[c.plat].en + ")" : " (website)"));
     try {
       for (; c.step < c.msgs.length; c.step++) {
         if (!live.on || c.status !== "talking") break;
@@ -3379,118 +3508,128 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         var extra = "";
         if (text.length > 12) {
           var calls = await routeQuestion(text, hist, false);
-          if (calls.length) { var nt = { kind: "team", from: "Rachel", items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, "1"); }
+          if (calls.length) { var nt = { kind: "team", from: rachel.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, aid); }
         }
-        var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
+        var reply = { role: "assistant", content: "", pending: true, by: rachel.name }; c.turns.push(reply); drawLiveDetail();
         var res = await ask(rachel, hist, { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
-        reply.pending = false; reply.content = res.text; flashDone("1");
-        if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns); }
-        if (/【转人工】/.test(res.text)) { c.status = "human"; activity("1", c.name.en + " needs a real consultant"); }
+        reply.pending = false; reply.content = res.text; flashDone(aid);
+        if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); markBooked(c); }
+        if (/【转人工】/.test(res.text)) { c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
       }
       if (c.status === "talking") c.status = c.booked ? "booked" : "done";
     } catch (e) {
-      setBusy("1", null); c.status = "waiting"; live.on = false; c.turns.push({ kind: "note", text: errText(e) }); activity("1", "Auto-reply paused: " + errText(e));
+      setBusy(aid, null); c.status = "waiting"; live.on = false; c.turns.push({ kind: "note", text: errText(e) }); activity(aid, "Auto-reply paused: " + errText(e));
     }
     if (c.status === "booked") live.timers.push(setTimeout(function () { c.status = "done"; drawLive(); }, 45000));
-    if (state.busy["1"] === "cust") setBusy("1", null);
-    live.serving = null; drawLive(); drawLiveDetail();
+    if (state.busy[aid] === "cust") setBusy(aid, null);
+    live.lane[aid] = null; drawLive(); drawLiveDetail();
   }
-  // Joey answers comments on our posts: questions before praise; people who want advice are sent down to Rachel
-  async function serveComment(c) {
-    var joey = BY_ID["4"], en = state.lang === "en", pl = PLAT[c.plat];
-    if (state.busy["4"] === "task") setBusy("4", null);
-    live.joey = c; c.status = "talking"; setBusy("4", "cust"); drawLive();
+  // Emily answers comments on our posts: questions before praise; people who want advice go to the leads bench
+  async function serveComment(c, oid) {
+    var joey = BY_ID[oid], en = state.lang === "en", pl = PLAT[c.plat];
+    if (state.busy[oid] === "task") setBusy(oid, null);
+    live.social[oid] = c; c.agent = oid; c.status = "talking"; setBusy(oid, "cust"); drawLive();
     try {
       await wait(1200);
       c.turns.push({ role: "user", content: c.text[state.lang], who: liveName(c) + " · " + pl[state.lang] }); drawLiveDetail();
       var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[state.lang] +
         (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or something you must not answer, end with 【转人工】."
             : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是投诉、退款或你不能回答的问题，在末尾加【转人工】。");
-      if (state.busy["4"] === "task") setBusy("4", null);
-      setBusy("4", "cust");
+      if (state.busy[oid] === "task") setBusy(oid, null);
+      setBusy(oid, "cust");
       var extra = "";
       if (c.q === 0) {
         var calls = await routeQuestion(c.text[state.lang], [], false);
-        if (calls.length) { var nt = { kind: "team", from: "Joey", items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, c.text[state.lang], nt, "4"); }
+        if (calls.length) { var nt = { kind: "team", from: joey.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, c.text[state.lang], nt, oid); }
       }
-      var reply = { role: "assistant", content: "", pending: true }; c.turns.push(reply); drawLiveDetail();
+      var reply = { role: "assistant", content: "", pending: true, by: joey.name }; c.turns.push(reply); drawLiveDetail();
       var res = await ask(joey, [{ role: "user", content: msg }], { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
-      reply.pending = false; reply.content = res.text; setBusy("4", null); flashDone("4");
-      if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
+      reply.pending = false; reply.content = res.text; setBusy(oid, null); flashDone(oid);
+      if (/【转人工】/.test(res.text)) { c.status = "human"; handover(c); }
       else {
         var isLead = /【线索】/.test(res.text) && c.lead, clean = res.text.replace(/\s*【线索】\s*/g, "");
         var publish = function (who) {
           c.turns.push({ kind: "note", good: true, text: (state.lang === "en" ? "✓ Checked by " + who + " · posted automatically:\n" : "✓ " + who + " 已审核 · 自动发布：\n") + clean });
-          activity("4", "Joey's reply to " + c.name.en + " was checked by " + who + " and posted");
-          if (isLead) { c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", c.name.en + " messaged us: sent down to Rachel as a lead"); } else c.status = "done";
+          activity(oid, joey.name + "'s reply to " + c.name.en + " was checked by " + who + " and posted");
+          if (isLead) toLead(c); else c.status = "done";
           drawLive(); drawLiveDetail();
         };
         // generic replies: an AI expert checks them and they go out; money, visas and guarantees need Aliya
         var sensitive = /£|¥|\$|\d[\d,，]{3,}|费用|价格|学费|price|fee|cost|visa|签证|保证|guarantee/i.test(clean), why = "";
         if (!sensitive) {
-          var exId = (c.turns.filter(function (t) { return t.kind === "team"; })[0] || { items: [{ id: "5" }] }).items[0].id, ex = BY_ID[exId];
-          c.status = "checking"; drawLive(); setBusy("4", null);
-          var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = state.lang === "en" ? "checking Joey's reply" : "审核 Joey 的回复"; setBusy(exId, "task"); }
-          pvCall("4", [exId]); callMap("4", [exId], true);
-          var chk = await ask(ex, [{ role: "user", content: (state.lang === "en" ? "Quality check before publishing Joey's public reply.\nComment: " : "发布前质量检查：Joey 的公开回复。\n评论：") + c.text[state.lang] + (state.lang === "en" ? "\nReply: " : "\n回复：") + clean +
+          var exId = CHECKER, ex = BY_ID[exId];
+          c.status = "checking"; drawLive(); setBusy(oid, null);
+          var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = state.lang === "en" ? "checking " + joey.name + "'s reply" : "审核 " + joey.name + " 的回复"; setBusy(exId, "task"); }
+          pvCall(oid, [exId]); callMap(oid, [exId], true);
+          var chk = await ask(ex, [{ role: "user", content: (state.lang === "en" ? "Quality check before publishing " + joey.name + "'s public reply.\nComment: " : "发布前质量检查：" + joey.name + " 的公开回复。\n评论：") + c.text[state.lang] + (state.lang === "en" ? "\nReply: " : "\n回复：") + clean +
             (state.lang === "en" ? "\nAnswer 【通过】 if it is accurate, polite, makes no promises and quotes no Glostudy fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果准确、礼貌、不承诺、不报寰学价格，回答【通过】；否则回答【需CEO】并写一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
-          pvCallEnd("4"); callMap("4", [exId], false); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
-          if (/【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text)) { publish(ex.name); live.joey = null; drawLive(); drawLiveDetail(); return; }
+          pvCallEnd(oid); callMap(oid, [exId], false); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
+          if (/【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text)) { publish(ex.name); live.social[oid] = null; drawLive(); drawLiveDetail(); return; }
           why = chk.text.replace(/【需CEO】/g, "").trim();
         } else why = state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
         c.status = "approval";
-        addApproval({ why: why, kind: "reply", from: "4", where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
+        addApproval({ why: why, kind: "reply", from: oid, where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
           c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") });
-          if (ok && isLead) { c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Reply posted. " + c.name.en + " messaged us: sent down to Rachel as a lead"); }
+          if (ok && isLead) toLead(c);
           else c.status = "done";
           drawLive(); drawLiveDetail();
         } });
       }
-    } catch (e) { setBusy("4", null); c.status = "waiting"; live.on = false; activity("4", "Auto-reply paused: " + errText(e)); }
-    live.joey = null; drawLive(); drawLiveDetail();
+    } catch (e) { setBusy(oid, null); c.status = "waiting"; live.on = false; activity(oid, "Auto-reply paused: " + errText(e)); }
+    live.social[oid] = null; drawLive(); drawLiveDetail();
   }
   setInterval(function () {
     if (!live.on || document.hidden) return;
-    if (!live.serving && freeFor("1")) {
-      var pr = { wechat: 0, lead: 1, web: 2 }, next = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment"; }).sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
-      if (next) serveDirect(next);
-    }
-    if (!live.joey && freeFor("4")) {
-      var nc = live.list.filter(function (c) { return c.status === "waiting" && c.kind === "comment"; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
-      if (nc) serveComment(nc);
-    }
+    var pr = { wechat: 0, lead: 1, web: 2 };
+    ["1", "7"].forEach(function (aid) {
+      if (live.lane[aid] || !freeFor(aid)) return;
+      var mine = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment" && LANE[c.kind] === aid; });
+      if (!mine.length && aid === "7" && live.lane["1"]) mine = live.list.filter(function (c) { return c.status === "waiting" && (c.kind === "wechat" || c.kind === "lead"); });
+      var next = mine.sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
+      if (next) { if (aid === "7" && next.kind !== "web") activity("7", "Rachel is helping Monica with the WeChat line"); serveDirect(next, aid); }
+    });
+    Object.keys(SOCIAL).forEach(function (p) {
+      var oid = SOCIAL[p]; if (live.social[oid] || !freeFor(oid)) return;
+      var nc = live.list.filter(function (c) { return c.status === "waiting" && c.kind === "comment" && c.plat === p; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
+      if (nc) serveComment(nc, oid);
+    });
   }, 1500);
   // the hooks the rest of the office calls
-  function custMet(ids) { var c = live.serving; if (c) ids.forEach(function (id) { c.met[id] = 1; }); }
-  function custBooked() { var c = live.serving; if (c) { c.booked = true; c.status = "booked"; checklistFor(c); activity("1", c.name.en + " is booked and waiting in the booked nook"); drawLive(); } }
+  function custMet(fromId, ids) { var c = live.lane[fromId] || live.social[fromId]; if (c) ids.forEach(function (id) { c.met[id] = 1; }); }
+  function custBooked() {}
   function openCustomers() { openLive("all"); }
 
   // ----- where pins sit, per view (percent of each picture) -----
   var LIVE_POS = {
     photo: {
-      wechat: { pts: [[17, 92.4], [20, 93], [23, 92.4], [26, 93], [29, 92.4]], label: [20, 95.3], n: "①" },
-      lead: { pts: [[86, 89.3], [88.6, 89.8], [91.2, 89.3]], label: [86, 92.2], n: "②" },
-      web: { pts: [[48, 89.2], [52, 89.8], [56, 89.2], [60, 89.8]], label: [50, 92.6], n: "③" },
-      booked: { pts: [[66, 91.2], [70, 91.8], [74, 91.2]], label: [66, 94.4], n: "④" },
-      human: { pts: [[37.5, 89.5], [41, 90]], label: [36, 92.6], n: "⑤" },
-      comments: { pts: [[47, 64], [51, 65.4], [55, 64], [59, 65.4], [63, 64]], label: [47, 61], n: "🗨" },
-      rachel: { pts: [[26.6, 86.2]] }, joey: { pts: [[17, 62.8]] }
+      wechat: { pts: [[10.5, 94], [13, 94.5], [15.5, 94], [18, 94.5], [20.5, 94]], label: [9, 96.4], n: "①" },
+      human: { pts: [[28.5, 94], [31, 94.5]], label: [25.5, 96.4], n: "⑤" },
+      web: { pts: [[38.5, 91.2], [41, 91.8], [50.5, 91.8], [53, 91.2]], label: [38, 96.4], n: "③" },
+      booked: { pts: [[55.5, 93], [64, 93], [66.5, 93.6]], label: [55, 96.4], n: "④" },
+      lead: { pts: [[93.5, 93], [95.6, 93.6], [97.6, 93]], label: [86, 96.4], n: "②" },
+      joey: { pts: [[86.5, 89], [86.5, 91.5]] },
+      comments: { pts: [[37, 72.3], [40, 72.8], [43, 72.3], [56, 72.8], [59, 72.3]], label: [37, 70.4], n: "🗨" },
+      a1: { pts: [[19.8, 89.8]] }, a7: { pts: [[48.5, 90]] }, s4: { pts: [[27.8, 66]] }, s15: { pts: [[37.6, 65]] }, s16: { pts: [[52.4, 66]] }
     },
     in1: {
-      wechat: { pts: [[30, 52], [34, 54], [38, 52], [42, 54], [46, 52]], label: [30, 46], n: "①" },
-      lead: { pts: [[86, 52], [87.5, 58], [89, 64]], label: [80, 46], n: "②" },
-      web: { pts: [[53, 41], [58, 42], [63, 41], [68, 42]], label: [55, 34], n: "③" },
-      booked: { pts: [[57, 80], [64, 82], [71, 80]], label: [58, 73], n: "④" },
-      human: { pts: [[12, 66], [18, 68]], label: [6, 60], n: "⑤" },
-      rachel: { pts: [[30, 40]] }
+      wechat: { pts: [[22, 60], [25, 62], [28, 60], [31, 62], [34, 60]], label: [21, 54], n: "①" },
+      human: { pts: [[7, 92], [12, 93]], label: [3, 97], n: "⑤" },
+      web: { pts: [[55, 60], [61, 63], [67, 63], [73, 60]], label: [56, 54], n: "③" },
+      booked: { pts: [[53, 45], [57, 46], [69, 45]], label: [52, 39.5], n: "④" },
+      lead: { pts: [[81, 79], [84.5, 81], [88, 79]], label: [79, 73], n: "②" },
+      joey: { pts: [[86, 46], [86, 52]] },
+      a1: { pts: [[36, 44]] }, a7: { pts: [[49, 47]] }
     },
-    in2: { comments: { pts: [[54, 64], [58, 66], [62, 64], [66, 66], [70, 64]], label: [53, 58], n: "🗨" }, joey: { pts: [[17, 60]] } },
-    pano2: { comments: { pts: [[62, 66], [66, 68], [70, 66], [74, 68]], label: [60, 60], n: "🗨" }, joey: { pts: [[17, 64]] } }
+    in2: {
+      comments: { pts: [[38, 66], [43, 67], [48, 66], [53, 67], [58, 66]], label: [37, 60.5], n: "🗨" },
+      s4: { pts: [[31.5, 52]] }, s15: { pts: [[45, 50]] }, s16: { pts: [[61.5, 52]] }
+    }
   };
+  LIVE_POS.pano2 = LIVE_POS.in2;
   LIVE_POS.pano1 = LIVE_POS.in1;
-  var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Joey", zh: "评论区 · Joey" } };
+  var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Emily, Mindy, Camille", zh: "评论区 · 社媒团队" } };
   function liveTokens(view) {
     var P = LIVE_POS[view], out = [], groups = {};
     live.list.forEach(function (c) { var z = liveZone(c); if (z && P[z]) (groups[z] = groups[z] || []).push(c); });
@@ -3532,7 +3671,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var items = live.list.filter(function (c) { return c.status === "talking" || c.status === "waiting"; }).slice(-3).reverse();
     tk.innerHTML = items.map(function (c) {
       var last = c.turns.filter(function (t) { return t.role === "user"; }).slice(-1)[0], txt = last ? last.content : (c.kind === "comment" ? c.text[state.lang] : liveText(c.msgs[0] || ""));
-      return '<span class="tk-chip" data-id="' + c.id + '"><span class="dot" style="background:' + liveColor(c) + '"></span><b>' + esc((c.kind === "comment" ? PLAT[c.plat][state.lang] : KIND[c.kind][state.lang]) + " · " + liveName(c)) + "</b><em>" + esc(String(txt).slice(0, 26)) + "…</em>" + esc(c.status === "talking" ? (c.kind === "comment" ? " · Joey replying" : " · Rachel replying") : " · waiting") + "</span>";
+      return '<span class="tk-chip" data-id="' + c.id + '"><span class="dot" style="background:' + liveColor(c) + '"></span><b>' + esc((c.kind === "comment" ? PLAT[c.plat][state.lang] : KIND[c.kind][state.lang]) + " · " + liveName(c)) + "</b><em>" + esc(String(txt).slice(0, 26)) + "…</em>" + esc(c.status === "talking" ? (" · " + (c.agent ? BY_ID[c.agent].name : "AI") + " replying") : " · waiting") + "</span>";
     }).join("");
     Array.prototype.forEach.call(tk.children, function (el) { el.onclick = function () { openLive("all", el.dataset.id); }; });
   }
@@ -3540,11 +3679,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var liveSel = { zone: "all", id: null };
   function liveStatusText(c) {
     var en = state.lang === "en";
-    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", checking: en ? "expert checking" : "专家审核中", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
+    return { waiting: en ? "waiting" : "等候中", talking: (c.agent ? BY_ID[c.agent].name : "AI") + (en ? " replying" : " 回复中"), sorting: en ? "Joey is sorting it" : "Joey 分拣中", booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", checking: en ? "expert checking" : "专家审核中", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
   }
   function openLive(zone, id, refresh) {
     var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
-    var rows = live.list.filter(function (c) { var z = liveZone(c); return liveSel.zone === "all" || z === liveSel.zone || (liveSel.zone === "comments" && (z === "joey")) || ((liveSel.zone === "wechat" || liveSel.zone === "web" || liveSel.zone === "lead") && z === "rachel" && c.kind === liveSel.zone); }).slice().reverse();
+    var rows = live.list.filter(function (c) { var z = liveZone(c); return liveSel.zone === "all" || z === liveSel.zone || (liveSel.zone === "comments" && (z === "joey" || /^s\d/.test(z))) || ((liveSel.zone === "wechat" || liveSel.zone === "web" || liveSel.zone === "lead") && /^a\d/.test(z) && c.kind === liveSel.zone); }).slice().reverse();
     if (!rows.length) rows = live.list.slice().reverse();
     var sel = live.list.filter(function (c) { return c.id === liveSel.id; })[0] || rows[0];
     $("custTitle").textContent = (en ? "📥 Live chats & comments" : "📥 实时咨询与评论") + " · " + live.list.filter(function (c) { return c.status === "waiting" || c.status === "talking"; }).length + (en ? " open" : " 进行中");
@@ -3554,7 +3693,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (!live.list.length) list.firstChild.innerHTML = '<p class="ib-empty">' + (en ? "No chats yet. New customers arrive by themselves every minute or so." : "还没有咨询，新客户会陆续自动到来。") + "</p>";
     rows.forEach(function (c) {
       var it = document.createElement("button"); it.type = "button"; it.className = "ib-tk " + c.status + (sel && c.id === sel.id ? " sel" : "");
-      var last = c.turns.filter(function (t) { return t.role; }).slice(-1)[0], snip = last ? (last.role === "assistant" ? (c.kind === "comment" ? "Joey: " : "Rachel: ") : "") + String(last.content).replace(/【[^】]*】/g, "").replace(/\s+/g, " ").slice(0, 60) : (c.kind === "comment" ? c.text[L] : liveText(c.msgs[0]));
+      var last = c.turns.filter(function (t) { return t.role; }).slice(-1)[0], snip = last ? (last.role === "assistant" ? (c.kind === "comment" ? "Emily: " : "Monica: ") : "") + String(last.content).replace(/【[^】]*】/g, "").replace(/\s+/g, " ").slice(0, 60) : (c.kind === "comment" ? c.text[L] : liveText(c.msgs[0]));
       it.innerHTML = '<span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' mini" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><span class="tk-main"><b>' + esc(liveName(c)) + ' <small class="tk-ch">' + esc(c.kind === "comment" ? PLAT[c.plat][L] : KIND[c.kind][L]) + "</small></b><small>" + esc(snip) + '</small></span><span class="tk-st">' + esc(liveStatusText(c)) + "</span>";
       it.onclick = function () { openLive(liveSel.zone, c.id); };
       list.firstChild.appendChild(it);
@@ -3569,12 +3708,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var d = $("ibDetail"); if (!d || $("custModal").hidden && !d) return;
     var c = live.list.filter(function (x) { return x.id === liveSel.id; })[0]; if (!c) { if (d) d.innerHTML = ""; return; }
     var en = state.lang === "en", L = state.lang;
-    var head = '<div class="dt-head"><span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' big" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><div><b>' + esc(liveName(c)) + "</b><small>" + esc(c.kind === "comment" ? PLAT[c.plat][L] + " · " + c.post[L] : KIND[c.kind][L]) + '</small></div><span class="tk-st">' + esc(liveStatusText(c)) + "</span></div>";
+    var head = (c.insight ? '<div class="dl-team">🔮 Anya: ' + esc(c.insight[state.lang]) + "</div>" : "") + '<div class="dt-head"><span class="' + (c.kind === "comment" ? "live-bub" : "live-pin") + ' big" style="--c:' + liveColor(c) + '"><i>' + c.icon + '</i></span><div><b>' + esc(liveName(c)) + "</b><small>" + esc(c.kind === "comment" ? PLAT[c.plat][L] + " · " + c.post[L] : KIND[c.kind][L]) + '</small></div><span class="tk-st">' + esc(liveStatusText(c)) + "</span></div>";
     var conv = c.turns.map(function (t) {
       if (t.kind === "team") return '<div class="dl-team">' + (t.items.some(function (it) { return it.note === null; }) ? "📞 Asking " : "✓ Checked with ") + t.items.map(function (it) { var b = BY_ID[it.id]; return '<b style="color:' + COLORS[b.color] + '">' + esc(b.name) + "</b>"; }).join(" & ") + "</div>";
       if (t.kind === "note") return '<div class="dl-note' + (t.good ? " good" : "") + '">' + esc(t.text) + "</div>";
       if (t.role === "user") return '<div class="lv-msg cust"><small>' + esc(t.who || "") + "</small>" + esc(t.content) + "</div>";
-      if (t.role === "assistant") return '<div class="lv-msg ai"><small>' + (c.kind === "comment" && !c.lead || c.turns.indexOf(t) < 3 && c.kind !== "wechat" && c.kind !== "web" && c.plat ? "Joey" : "Rachel") + "</small>" + (t.pending ? '<span class="typing"><i></i><i></i><i></i></span>' : renderRich(t.content.replace(/【线索】/g, en ? "\n→ sent to Rachel as a lead" : "\n→ 转给瑞秋作为线索"))) + "</div>";
+      if (t.role === "assistant") return '<div class="lv-msg ai"><small>' + esc(t.by || "AI") + "</small>" + (t.pending ? '<span class="typing"><i></i><i></i><i></i></span>' : renderRich(t.content.replace(/【线索】/g, en ? "\n→ sent to Monica as a lead" : "\n→ 转给莫妮卡作为线索"))) + "</div>";
       return "";
     }).join("") || '<p class="ib-empty">' + (en ? "Waiting for an officer to pick this up." : "等待同事接待。") + "</p>";
     d.innerHTML = head + '<div class="lv-conv">' + conv + '</div><div class="dt-acts"></div>';
@@ -3590,7 +3729,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   $("custX").onclick = function () { $("custModal").hidden = true; };
   $("custModal").onclick = function (e) { if (e.target === $("custModal")) $("custModal").hidden = true; };
 
-  // ---------- Joey: write a post from a chosen photo ----------
+  // ---------- Emily: write a post from a chosen photo ----------
   var photoPick = { id: "campus", plat: "moments" };
   function openPhotoPost() {
     var g = $("photoGrid"); g.textContent = "";
@@ -3616,12 +3755,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   });
 
   // ---------- 360° photo: look around each floor like Street View ----------
-  var PANO = {
-    0: { img: "images/pano-1f.jpg", bots: { "1": [23, 21, 6, 15] }, dots: [[66, 36, "Consult rooms"], [8, 56, "Entrance · live chats", 0, "cust"], [93, 34, "↑ 2F", 1]] },
-    1: { img: "images/pano-2f.jpg", bots: { "4": [4, 34, 11, 46] }, dots: [[45, 72, "Studio"], [70, 76, "Podcast table"], [90, 60, "Hot desks"], [96, 30, "↑ 3F", 2], [60, 90, "↓ 1F", 0]] },
-    2: { img: "images/pano-3f.jpg", bots: { "2": [8, 32, 10, 30], "3": [41, 39, 9, 18], "6": [75, 36, 11, 36] }, dots: [[45, 82, "Aisle"], [94, 32, "↑ 4F", 3], [94, 80, "↓ 2F", 1]] },
-    3: { img: "images/pano-4f.jpg", boss: [33, 36, 25, 22], room: [60, 9, 39, 42], bots: { "5": [5, 30, 8, 20] }, dots: [[40, 82, "Lounge"], [62, 70, "Boardroom"], [92, 82, "↓ 3F", 2]] }
-  };
+  // the 360° view uses the same photo of each floor (floor index 0–3)
+  var PANO = {};
+  function fillPano() { [1, 2, 3, 4].forEach(function (n) { var F = INSIDE[n]; PANO[n - 1] = { img: "images/inside-" + n + "f.jpg", bots: F.bots, boss: F.boss, room: F.room, dots: F.dots.map(function (d) { return d[3] ? [d[0], d[1], d[2], d[3] - 1, d[4]] : d; }) }; }); }
   var pano = null, v3mode = "photo";
   function createPano(host, spotsBox) {
     var T = window.THREE, renderer = new T.WebGLRenderer({ antialias: true });
@@ -3738,18 +3874,47 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     if (m === "photo") { if (v3) v3.pause(); startPano(); $("v3pad").hidden = true; $("v3hint").textContent = "Drag to look around · scroll or pinch to zoom · tap the dots to move · tap an officer to talk"; if (pano) pano.opts.onFloor(pano.floor()); }
     else { if (pano) pano.pause(); start3D(); if (v3) { v3.resume(); v3Mode(v3.isWalking() ? "walk" : "orbit"); } }
   }
+
+  // ---------- floor plan: a realistic top-down picture of every floor ----------
+  var PLAN = {
+    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [12, 25, 5, 9], "21": [21, 65, 6, 9], "22": [69.5, 53, 4.5, 8] }, boss: [34, 18, 20, 22], room: [69, 10, 25, 35] },
+    3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [16, 20, 6, 9], "2": [15.5, 53, 6, 8], "3": [42, 17, 5, 9], "13": [60, 12, 5, 12], "14": [47.5, 49, 6, 9], "6": [75.5, 29, 5.5, 9] } },
+    2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [16, 10, 6, 9], "4": [36, 12, 5, 9], "16": [48.5, 12, 5, 9], "15": [17.5, 45, 5, 11], "20": [12, 74, 6, 12], "18": [47.5, 77, 5, 10], "19": [77, 19, 5, 9] } },
+    1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [20, 13, 6, 9], "10": [41, 14, 6, 9], "7": [39.5, 43, 5.5, 11], "9": [49.5, 63, 5, 8], "11": [69, 10, 6, 9], "8": [79.5, 72, 5.5, 9] } }
+  };
+  function buildPlan() {
+    var w = $("sceneWrap"); w.innerHTML = ""; w.classList.add("plan2");
+    [4, 3, 2, 1].forEach(function (f) {
+      var P = PLAN[f], fl = document.createElement("div"); fl.className = "pl-floor";
+      fl.innerHTML = '<img alt="Floor plan, ' + esc(P.name) + '" src="' + imgURL(P.img) + '"><span class="pl-tag">' + esc(P.name) + "</span>";
+      if (P.boss) { var bs = document.createElement("button"); bs.type = "button"; bs.className = "in-spot"; bs.style.cssText = "left:" + P.boss[0] + "%;top:" + P.boss[1] + "%;width:" + P.boss[2] + "%;height:" + P.boss[3] + "%"; bs.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>CEO desk · Aliya</span>'; bs.onclick = openInbox; fl.appendChild(bs); }
+      if (P.room) { var rm = document.createElement("button"); rm.type = "button"; rm.className = "in-spot"; rm.style.cssText = "left:" + P.room[0] + "%;top:" + P.room[1] + "%;width:" + P.room[2] + "%;height:" + P.room[3] + "%"; rm.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>Boardroom <em>announce</em></span>'; rm.onclick = openAnnounce; fl.appendChild(rm); }
+      Object.keys(P.bots).forEach(function (id) {
+        var b = BY_ID[id], p = P.bots[id], el = document.createElement("button"); el.type = "button"; el.className = "in-bot pl-bot"; el.id = "plBot" + id;
+        el.style.cssText = "left:" + p[0] + "%;top:" + p[1] + "%;width:" + p[2] + "%;height:" + p[3] + "%;--c:" + COLORS[b.color];
+        el.setAttribute("aria-label", b.name + ", " + b.title + ". Talk 1-on-1");
+        el.innerHTML = '<span class="hs-tag"><i></i>' + esc(b.name) + " <em></em></span>"; el.onclick = function () { pickOfficer(b); };
+        fl.appendChild(el);
+      });
+      w.appendChild(fl);
+    });
+    planRefresh();
+  }
+  function planRefresh() {
+    BOTS.forEach(function (b) { var el = $("plBot" + b.id); if (!el) return; var busy = state.busy[b.id]; el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === b.id); el.querySelector("em").textContent = busy ? busyText(b.id) : "idle"; });
+  }
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   var INSIDE = {
-    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [4.5, 30, 8.5, 20] }, boss: [30.5, 34, 24, 21], room: [60, 6, 38, 52], files: [44, 41],
-      dots: [[47, 76, "Lounge"], [57, 60, "CEO desk"], [72, 64, "Boardroom"], [86, 82, "↓ 3F", 3]],
-      seats: [[66, 47], [70, 46], [74, 45], [78, 44], [82, 46], [86, 48]] },
-    3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: { "2": [11, 32, 10, 28], "3": [41.5, 30, 8.5, 19], "6": [67.5, 34, 11, 31] },
-      dots: [[46, 84, "Aisle"], [30, 66, "Library"], [62, 74, "Finance"], [94, 30, "↑ 4F", 4], [92, 78, "↓ 2F", 2]] },
-    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Marketing", bots: { "4": [0.5, 33, 15, 39] },
-      dots: [[42, 64, "Studio"], [62, 72, "Podcast table"], [80, 58, "Hot desks"], [93, 34, "↑ 3F", 3], [86, 90, "↓ 1F", 1]] },
-    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: { "1": [23, 21, 6, 15] },
-      dots: [[8, 56, "Entrance · live chats", 0, "cust"], [66, 36, "Consult rooms"], [93, 34, "↑ 2F", 2]] }
+    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [0.5, 13, 10.5, 37], "21": [26, 39, 6, 21], "22": [72, 21, 8, 36] }, boss: [37, 34, 29, 24], room: [82, 15, 18, 40], files: [48, 40],
+      dots: [[30, 72, "Lounge"], [55, 70, "CEO desk"], [80, 66, "Boardroom"], [92, 86, "↓ 3F", 3]], seatBox: [83, 34, 15, 16] },
+    3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: { "12": [4, 31, 10, 19], "2": [20, 35, 14, 22], "3": [38, 30, 7, 25], "13": [51, 21, 9, 31], "14": [63, 31, 8, 29], "6": [78, 45, 14, 50] },
+      dots: [[55, 78, "Aisle"], [90, 30, "↑ 4F", 4], [96, 52, "↓ 2F", 2]] },
+    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: { "17": [0.5, 25, 11, 57], "4": [23, 34, 8, 17], "15": [35, 27, 10, 35], "16": [53, 35, 8, 18], "20": [74, 23, 8, 22], "18": [76, 45, 13, 30], "19": [91, 33, 9, 27] },
+      dots: [[48, 84, "Podcast table"], [88, 14, "↑ 3F", 3], [97, 42, "↓ 1F", 1]] },
+    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: { "10": [3, 33, 13, 55], "1": [29.5, 24, 6, 14], "7": [36.5, 21, 11, 54], "9": [60, 29, 6, 13], "11": [75.5, 20, 6.5, 16], "8": [88, 41, 11, 53] },
+      dots: [[14, 72, "Entrance · live chats", 0, "cust"], [70, 52, "Consult rooms"], [92, 22, "↑ 2F", 2]] }
   };
+  fillPano();
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
   function inLayout() {
     var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight, F = INSIDE[inS.floor]; if (!Wv || !Hv) return;
@@ -3767,7 +3932,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight;
     inS.s = s; inS.tx = (screenX == null ? Wv / 2 : screenX) - px / 100 * inS.W * s; inS.ty = Hv * .55 - py / 100 * inS.H * s; inApply();
   }
-  var IN_FOCUS = { 4: 38, 3: 45, 2: 32, 1: 42 };
+  var IN_FOCUS = { 4: 45, 3: 45, 2: 45, 1: 48 };
   function inHomeX() { var Wv = $("inStage").clientWidth; return Wv / 2 - IN_FOCUS[inS.floor] / 100 * inS.W; }
   function inZoomHome() { inS.s = 1; inS.tx = inHomeX(); inS.ty = 0; inApply(); }
   function inBuild(floor) {
@@ -3824,7 +3989,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var fl = $("inFiles"); if (fl) filesLabel(fl);
     // the team around the boardroom table during a meeting
     Array.prototype.slice.call(document.querySelectorAll("#inSpots .in-tok")).forEach(function (t) { t.remove(); });
-    if (state.gathered && F.seats) BOTS.forEach(function (b, i) { var t = document.createElement("span"); t.className = "in-tok"; t.style.cssText = "left:" + F.seats[i][0] + "%;top:" + F.seats[i][1] + "%;--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ")"; t.title = b.name; $("inSpots").appendChild(t); });
+    if (state.gathered && F.seatBox) BOTS.forEach(function (b, i) { var sb = F.seatBox, t = document.createElement("span"); t.className = "in-tok"; t.style.cssText = "left:" + (sb[0] + (i % 6) * sb[2] / 6) + "%;top:" + (sb[1] + Math.floor(i / 6) * sb[3] / 4) + "%;--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ")"; t.title = b.name; $("inSpots").appendChild(t); });
   }
   (function () {
     var st = $("inStage"), drag = null;
@@ -3863,7 +4028,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         var t = $("pvTok" + b.id), c = hsCenter(b.id); if (!c) return;
         if (on) {
           if (!t) { t = document.createElement("span"); t.className = "pv-tok"; t.id = "pvTok" + b.id; t.style.cssText = "--c:" + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ");left:" + c[0] + "%;top:" + c[1] + "%"; $("hotspots").appendChild(t); }
-          setTimeout(function () { t.style.left = (room[0] - 12 + i * 4.6) + "%"; t.style.top = (room[1] + (i % 2 ? 2 : -2)) + "%"; }, 30 + i * 120);
+          setTimeout(function () { t.style.left = (room[0] - 8 + (i % 8) * 2.3) + "%"; t.style.top = (room[1] - 2.5 + Math.floor(i / 8) * 2.4) + "%"; }, 30 + i * 80);
         } else if (t) { t.style.left = c[0] + "%"; t.style.top = c[1] + "%"; setTimeout(function () { t.remove(); }, 1700); }
       });
     }
@@ -3893,12 +4058,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function openInbox() {
     var rv = pendingReview(), html = approvalsHtml() + meetingsHtml() + '<div class="ib-sec">Reports from the team</div>';
-    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Monica for your daily brief, or hold a team meeting.</p>';
+    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Gunther for your daily brief, or hold a team meeting.</p>';
     state.reports.forEach(function (r, i) {
       var b = BY_ID[r.from] || BY_ID["5"];
       html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
     });
-    html += '<div class="ib-sec">Clients</div>' + (rv ? '<p class="ib-empty">' + rv + " client draft" + (rv > 1 ? "s" : "") + ' from Ross waiting for your review.</p><button type="button" class="ib-btn" id="ibClients">Open the client board</button>' : '<p class="ib-empty">Nothing waiting for review.</p>');
+    html += '<div class="ib-sec">Clients</div>' + (rv ? '<p class="ib-empty">' + rv + " client draft" + (rv > 1 ? "s" : "") + ' from Leonard waiting for your review.</p><button type="button" class="ib-btn" id="ibClients">Open the client board</button>' : '<p class="ib-empty">Nothing waiting for review.</p>');
     var keepScroll = $("inboxBody").scrollTop; $("inboxBody").innerHTML = html; if (!openInbox.refreshing) $("inbox").hidden = false; else $("inboxBody").scrollTop = keepScroll;
     Array.prototype.forEach.call(document.querySelectorAll("#inboxBody details"), function (d) { var mark = function () { if (d.open) { var r = state.reports[+d.dataset.i]; if (r && !r.read) { r.read = true; saveReports(); deskFilesChanged(); var dot = d.querySelector("summary i"); if (dot) dot.remove(); } } }; d.addEventListener("toggle", mark); mark(); });
     var cb = $("ibClients"); if (cb) cb.onclick = function () { $("inbox").hidden = true; state.filter = "review"; setTab("clients"); $("side").scrollIntoView({ behavior: "smooth" }); };
@@ -3932,7 +4097,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var h = '<div class="ib-sec">' + (en ? "Needs your approval before it's published" : "发布前需要您批准") + " · " + pend.length + '</div><p class="ib-empty">' + (en ? "Only new posts and replies about money, visas or guarantees come here. Everyday replies are checked by an AI expert and posted automatically." : "只有新帖子，以及涉及费用、签证或保证的回复会来这里；普通回复由 AI 专家审核后自动发布。") + '</p><div class="ap-mode">' + (en ? "Approve:" : "批准方式：") +
       '<button type="button" data-apm="desk" aria-pressed="' + (mode === "desk") + '">' + (en ? "Right here, any time" : "随时在这里批") + '</button><button type="button" data-apm="meeting" aria-pressed="' + (mode === "meeting") + '">' + (en ? "At my review meeting" : "在审批会上统一批") + "</button></div>";
     if (mode === "meeting" && pend.length) h += '<p class="ib-empty">' + (next ? (en ? "Saved for your review meeting at " : "留到您的审批会：") + fmtTime(next.t) : (en ? "No review meeting booked yet: book one below." : "还没有预约审批会，请在下方预约。")) + "</p>";
-    if (!pend.length) h += '<p class="ib-empty">' + (en ? "Nothing waiting. Joey's posts and public comment replies will appear here." : "暂时没有。Joey 的帖子和评论回复会出现在这里。") + "</p>";
+    if (!pend.length) h += '<p class="ib-empty">' + (en ? "Nothing waiting. Emily's posts and public comment replies will appear here." : "暂时没有。Emily 的帖子和评论回复会出现在这里。") + "</p>";
     pend.forEach(function (a) { h += approvalCard(a, true); });
     if (done.length) h += '<details class="ap-done"><summary>' + (en ? "Recently decided" : "最近处理") + "</summary>" + done.map(function (a) { return approvalCard(a, false); }).join("") + "</details>";
     return h;
@@ -3963,7 +4128,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function meetingsHtml() {
     var en = state.lang === "en", list = meetings().filter(function (m) { return !m.done; });
     var h = '<div class="ib-sec">' + (en ? "Review meetings" : "审批会") + "</div>";
-    list.forEach(function (m) { var due = new Date(m.t).getTime() <= Date.now(); h += '<div class="mt-row' + (due ? " due" : "") + '"><b>📅 ' + esc(fmtTime(m.t)) + "</b><span>" + esc(m.note || (en ? "Approve posts and replies with Joey and Monica" : "与 Joey、Monica 一起审批帖子和回复")) + '</span><button type="button" data-mstart="' + m.id + '">' + (due ? (en ? "Start now" : "现在开始") : (en ? "Start early" : "提前开始")) + '</button><button type="button" class="ghostx" data-mdel="' + m.id + '">×</button></div>'; });
+    list.forEach(function (m) { var due = new Date(m.t).getTime() <= Date.now(); h += '<div class="mt-row' + (due ? " due" : "") + '"><b>📅 ' + esc(fmtTime(m.t)) + "</b><span>" + esc(m.note || (en ? "Approve posts and replies with Emily and Gunther" : "与 Emily、Gunther 一起审批帖子和回复")) + '</span><button type="button" data-mstart="' + m.id + '">' + (due ? (en ? "Start now" : "现在开始") : (en ? "Start early" : "提前开始")) + '</button><button type="button" class="ghostx" data-mdel="' + m.id + '">×</button></div>'; });
     var d = new Date(); d.setMinutes(d.getMinutes() + 30 - d.getMinutes() % 15, 0, 0);
     var pad = function (n) { return String(n).padStart(2, "0"); }, val = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
     h += '<div class="mt-book"><label for="mtWhen">' + (en ? "Book a review meeting" : "预约审批会") + '</label><input type="datetime-local" id="mtWhen" value="' + val + '"><button type="button" data-mq="18">' + (en ? "18:00" : "18:00") + '</button><button type="button" data-mq="t10">' + (en ? "Tomorrow 10:00" : "明天 10:00") + '</button><button type="button" class="mt-go" id="mtBook">' + (en ? "Book" : "预约") + "</button></div>";
@@ -3971,7 +4136,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function wireMeetings() {
     var b = $("mtBook"); if (!b) return;
-    var book = function (t) { var m = meetings(); m.push({ id: "m" + Date.now(), t: t.toISOString(), done: false }); saveMeetings(m); activity("5", "Monica booked your review meeting for " + fmtTime(t)); refreshInbox(); };
+    var book = function (t) { var m = meetings(); m.push({ id: "m" + Date.now(), t: t.toISOString(), done: false }); saveMeetings(m); activity("5", "Gunther booked your review meeting for " + fmtTime(t)); refreshInbox(); };
     b.onclick = function () { var v = $("mtWhen").value; if (v) book(new Date(v)); };
     Array.prototype.forEach.call(document.querySelectorAll("[data-mq]"), function (q) { q.onclick = function () { var d = new Date(); if (q.dataset.mq === "18") { d.setHours(18, 0, 0, 0); if (d < new Date()) d.setDate(d.getDate() + 1); } else { d.setDate(d.getDate() + 1); d.setHours(10, 0, 0, 0); } book(d); }; });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mstart]"), function (x) { x.onclick = function () { startMeeting(x.dataset.mstart); }; });
@@ -3981,7 +4146,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function startMeeting(id) {
     var m = meetings(); m.forEach(function (x) { if (x.id === id) x.done = true; }); saveMeetings(m);
     meetingOn = id; $("inbox").hidden = true; gatherAll(true);
-    activity("5", "Monica opened your review meeting in the boardroom");
+    activity("5", "Gunther opened your review meeting in the boardroom");
     openReviewMeeting();
   }
   function openReviewMeeting(refresh) {
@@ -3989,7 +4154,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     $("annTitle").textContent = en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室";
     var box = $("announce").querySelector(".modal-in");
     if (!box.dataset.orig) box.dataset.orig = box.innerHTML;
-    box.innerHTML = '<div class="modal-head"><b>' + (en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室") + '</b><button type="button" class="modal-x" id="rvX">×</button></div><p class="ann-sub">' + (en ? "Monica presents what the team wants to publish. Approve, edit or reject each one." : "Monica 汇报团队要发布的内容，请逐条批准、修改或不发。") + '</p><div class="inbox-body" id="rvBody">' + (pend.length ? pend.map(function (a) { return approvalCard(a, true); }).join("") : '<p class="ib-empty">' + (en ? "All done. Nothing left to approve." : "全部处理完毕。") + "</p>") + '</div><button type="button" class="ib-btn" id="rvEnd">' + (en ? "End meeting" : "结束会议") + "</button>";
+    box.innerHTML = '<div class="modal-head"><b>' + (en ? "📅 Review meeting · boardroom" : "📅 审批会 · 会议室") + '</b><button type="button" class="modal-x" id="rvX">×</button></div><p class="ann-sub">' + (en ? "Gunther presents what the team wants to publish. Approve, edit or reject each one." : "Gunther 汇报团队要发布的内容，请逐条批准、修改或不发。") + '</p><div class="inbox-body" id="rvBody">' + (pend.length ? pend.map(function (a) { return approvalCard(a, true); }).join("") : '<p class="ib-empty">' + (en ? "All done. Nothing left to approve." : "全部处理完毕。") + "</p>") + '</div><button type="button" class="ib-btn" id="rvEnd">' + (en ? "End meeting" : "结束会议") + "</button>";
     $("announce").hidden = false;
     wireApprovals($("rvBody"));
     var end = function () { $("announce").hidden = true; box.innerHTML = box.dataset.orig; delete box.dataset.orig; rewireAnnounce(); if (meetingOn) { gatherAll(false); meetingOn = null; activity("5", "Review meeting finished"); } };
@@ -3999,7 +4164,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   setInterval(function () {
     var due = meetings().filter(function (m) { return !m.done && !m.told && new Date(m.t).getTime() <= Date.now(); })[0]; if (!due) return;
     var all = meetings(); all.forEach(function (x) { if (x.id === due.id) x.told = true; }); saveMeetings(all);
-    activity("5", "Monica: your review meeting is starting now (" + pendingApprovals() + " items)");
+    activity("5", "Gunther: your review meeting is starting now (" + pendingApprovals() + " items)");
     var tk = $("liveTicker"); if (tk) { var chip = document.createElement("span"); chip.className = "tk-chip mt"; chip.innerHTML = "📅 <b>" + (state.lang === "en" ? "Review meeting now" : "审批会现在开始") + "</b><em> · " + (state.lang === "en" ? "tap to start" : "点击开始") + "</em>"; chip.onclick = function () { startMeeting(due.id); }; tk.prepend(chip); }
   }, 20000);
 
@@ -4007,19 +4172,38 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var WORK = [
     { id: "4", at: 70, every: 12, label: { en: "drafting today's post", zh: "写今天的帖子" }, ask: { en: "Daily task: draft one WeChat Moments post for parents about UK study this week, with the preview tags.", zh: "每日任务：写一条本周关于英国留学、写给家长的朋友圈，带预览标记。" }, post: true },
     { id: "5", at: 130, every: 30, label: { en: "preparing today's brief", zh: "准备今日简报" }, ask: { en: "Give me today's brief.", zh: "给我今天的简报。" }, report: { en: "Daily brief", zh: "今日简报" } },
-    { id: "6", at: 200, every: 30, label: { en: "checking the cost sheet", zh: "核对费用表" }, ask: { en: "Weekly task: check our cost sheet against the latest news and list anything to update.", zh: "每周任务：根据最新资讯核对费用表，列出需要更新的地方。" }, report: { en: "Cost sheet check", zh: "费用表核对" } }
+    { id: "6", at: 200, every: 30, label: { en: "checking the cost sheet", zh: "核对费用表" }, ask: { en: "Weekly task: check our cost sheet against the latest news and list anything to update.", zh: "每周任务：根据最新资讯核对费用表，列出需要更新的地方。" }, report: { en: "Cost sheet check", zh: "费用表核对" } },
+    { id: "19", at: 100, every: 20, label: { en: "checking today's UK news", zh: "查看今日英国资讯" }, ask: { en: "What's today's news?", zh: "今天有什么新闻？" }, report: { en: "Today's news", zh: "今日资讯" } },
+    { id: "13", at: 165, every: 45, label: { en: "updating the deadline wall", zh: "更新截止日期墙" }, ask: { en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }, report: { en: "Deadlines for the next 3 months", zh: "未来 3 个月截止日期" } }
   ];
   function runWork(w) {
     if (!live.on || state.busy[w.id]) return Promise.resolve();
     var b = BY_ID[w.id]; state.taskLabel[w.id] = w.label[state.lang]; setBusy(w.id, "task"); activity(w.id, b.name + " is " + w.label.en);
     return ask(b, [{ role: "user", content: w.ask[state.lang] }], {}).then(function (res) {
       if (state.busy[w.id] === "task") setBusy(w.id, null); flashDone(w.id);
-      if (w.post) addApproval({ kind: "post", from: w.id, where: state.lang === "en" ? "WeChat Moments" : "朋友圈", body: res.text, onDecide: function (ok) { if (ok) addReport("4", state.lang === "en" ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
+      if (w.post) return postPipeline(w, res);
+      if (false) addApproval({ kind: "post", from: w.id, where: state.lang === "en" ? "WeChat Moments" : "朋友圈", body: res.text, onDecide: function (ok) { if (ok) addReport("4", state.lang === "en" ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
       else addReport(w.id, w.report[state.lang], res.text);
     }, function (e) { if (state.busy[w.id] === "task") setBusy(w.id, null); activity(w.id, b.name + " couldn't finish: " + errText(e)); });
   }
+  // a post goes Emily → Julien (cover) → Kuuga (safety check) → the CEO desk
+  function postPipeline(w, res) {
+    var en = state.lang === "en";
+    activity("18", "Julien is designing the cover for Emily's post");
+    return brief("18", en ? "designing the cover" : "设计封面", 3500).then(function () {
+      var g = BY_ID[GUARD]; state.taskLabel[GUARD] = en ? "safety-checking the post" : "发布前安全检查"; setBusy(GUARD, "task"); pvCall("4", [GUARD]);
+      return ask(g, [{ role: "user", content: (en ? "Quality check before publishing Emily's post.\nPost: " : "发布前质量检查：Emily 的帖子。\n帖子：") + res.text + (en ? "\nAnswer 【通过】 if it makes no promises, quotes no Glostudy fees and shares no private details. Otherwise answer 【需CEO】 and one short reason." : "\n如果不承诺、不报寰学价格、不泄露隐私，回答【通过】；否则回答【需CEO】并写一句原因。") }], {})
+        .catch(function () { return { text: "【需CEO】" }; }).then(function (chk) {
+          pvCallEnd("4"); if (state.busy[GUARD] === "task") setBusy(GUARD, null); flashDone(GUARD);
+          var ok = /【通过】/.test(chk.text);
+          activity(GUARD, ok ? "Kuuga checked Emily's post: safe, sent to Aliya's desk" : "Kuuga flagged Emily's post for Aliya");
+          addApproval({ kind: "post", from: "4", where: en ? "WeChat Moments" : "朋友圈", why: ok ? (en ? "New posts always need you · Kuuga's safety check passed" : "新帖子都需要您批准 · Kuuga 安全检查通过") : chk.text.replace(/【需CEO】/g, "").trim(), body: res.text,
+            onDecide: function (yes) { if (yes) addReport("4", en ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
+        });
+    });
+  }
   function startWork() { WORK.forEach(function (w) { live.timers.push(setTimeout(function loop() { runWork(w); live.timers.push(setTimeout(loop, w.every * 60000)); }, w.at * 1000)); }); }
-  // Phoebe prepares a document checklist for every new booking
+  // Amy prepares a document checklist for every new booking
   function checklistFor(c) {
     var ph = BY_ID["3"]; if (!live.on) return;
     setTimeout(function () {
@@ -4079,7 +4263,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointerleave", off); b.addEventListener("pointercancel", off);
   });
 
-  // ---------- Joey's posts shown the way they will look on WeChat Moments and Xiaohongshu ----------
+  // ---------- Emily's posts shown the way they will look on WeChat Moments and Xiaohongshu ----------
   var POSTER_BG = ["linear-gradient(160deg,#ff9a3d,#ff4f4f)", "linear-gradient(160deg,#10284a,#1f5296)", "linear-gradient(160deg,#f7d774,#f59f6b)", "linear-gradient(160deg,#2bb3a3,#0e5965)", "linear-gradient(160deg,#6c6fe0,#2c2f7a)"];
   function hashStr(t) { var h = 0; for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) | 0; return Math.abs(h); }
   function postFields(body) {

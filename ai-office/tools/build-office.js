@@ -15,9 +15,13 @@ files['tests/customer-service-tests.json'] = fs.readFileSync(path.join(base, 'te
 const intelDir = path.join(base, 'intel');
 if (fs.existsSync(intelDir)) fs.readdirSync(intelDir).filter(f => f.endsWith('.json')).sort().slice(-3).forEach(f => { files['intel/' + f] = fs.readFileSync(path.join(intelDir, f), 'utf8'); });
 // office pictures, inlined as data URLs so the file works on its own
-for (const f of fs.readdirSync(path.join(base, 'images')).sort()) {
-  if (f.endsWith('.jpg')) files['images/' + f] = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(base, 'images', f)).toString('base64');
-}
+(function walk(dir, rel) {
+  for (const f of fs.readdirSync(dir).sort()) {
+    const full = path.join(dir, f);
+    if (fs.statSync(full).isDirectory()) walk(full, rel + f + '/');
+    else if (f.endsWith('.jpg')) files['images/' + rel + f] = 'data:image/jpeg;base64,' + fs.readFileSync(full).toString('base64');
+  }
+})(path.join(base, 'images'), '');
 
 const page = fs.readFileSync(path.join(base, 'team.html'), 'utf8');
 const bundle = '<script type="application/json" id="bundle">' + JSON.stringify(files).replace(/</g, '\\u003c') + '</script>\n';
