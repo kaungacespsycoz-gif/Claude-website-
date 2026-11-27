@@ -1709,11 +1709,18 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       floors: [4.8, 38.6, 68.4],
       paths: { "1>scout": [[23.5, 76], [60, 93], [93, 87], [88, 61], [60, 64], [26, 56]], "2>boss": [[26, 56], [60, 64], [90, 62], [88, 33], [60, 33], [47, 28]], "5>boss": [[14, 26], [30, 31], [45, 28]] } }
   };
-  var PIC = "ceo", LAY = LAYOUTS[PIC];
+  LAYOUTS.f4 = { img: "images/office-4f.jpg", aspect: "1024 / 1280", maxW: 760,
+    spots: { "5": [7.4, 12.4, 5.2, 9], "2": [17.6, 33.6, 5.6, 9.6], "3": [40.6, 33.6, 5.8, 11], "6": [68.4, 34, 5.6, 12.6], "4": [11.6, 57.4, 5.8, 8.6], "1": [20.2, 78.4, 5.2, 6.4] },
+    boss: [34, 10.6, 26, 14.6], ceoPlate: [46.9, 22.6], glow: [47, 17, 36, 18], room: [76, 19], meet: [60, 6.5],
+    plates: { "5": [12.6, 23.4], "2": [20.2, 45], "3": [45.8, 45.4], "6": [74.2, 46.2], "4": [17.8, 67.8], "1": [24.4, 88.8] },
+    floorTags: [["4F · CEO Suite & Boardroom", 5.4], ["3F · Research & Finance", 29.2], ["2F · Marketing", 51.6], ["1F · Reception & Consult rooms", 73.6]],
+    paths: { "1>scout": [[23, 82], [50, 94], [90, 93], [92, 72], [90, 50], [60, 49], [21, 44]], "2>boss": [[21, 44], [60, 49], [90, 48], [90, 26], [60, 25], [47, 22]], "5>boss": [[11, 19], [30, 24], [45, 22]] } };
+  var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
   var pvReady = false;
   function buildPhoto() {
     $("officeImg").src = imgURL(LAY.img);
+    if (LAY.aspect) { $("photoFrame").style.aspectRatio = LAY.aspect; $("photoFrame").style.maxWidth = LAY.maxW + "px"; $("photoFrame").style.minWidth = "560px"; }
     var box = $("hotspots");
     BOTS.forEach(function (b) {
       var s = SPOTS_PV[b.id]; if (!s) return; var el = document.createElement("button");
@@ -1735,7 +1742,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     glowEl.style.cssText = "left:" + LAY.glow[0] + "%;top:" + LAY.glow[1] + "%;width:" + LAY.glow[2] + "%;height:" + LAY.glow[3] + "%"; box.insertBefore(glowEl, box.firstChild);
     var you = document.createElement("div"); you.className = "plate ceo-plate"; you.style.left = LAY.ceoPlate[0] + "%"; you.style.top = LAY.ceoPlate[1] + "%";
     you.innerHTML = "<i>✦</i><b>Aliya</b><span>Chief Executive Officer</span>"; box.appendChild(you);
-    [["3F · CEO Suite & Boardroom", LAY.floors[0]], ["2F · Research & Finance", LAY.floors[1]], ["1F · Front office & Marketing", LAY.floors[2]]].forEach(function (f) {
+    (LAY.floorTags || [["3F · CEO Suite & Boardroom", LAY.floors[0]], ["2F · Research & Finance", LAY.floors[1]], ["1F · Front office & Marketing", LAY.floors[2]]]).forEach(function (f) {
       var fl = document.createElement("div"); fl.className = "floor-tag"; fl.style.top = f[1] + "%"; fl.textContent = f[0]; box.appendChild(fl);
     });
     var bo = document.createElement("button");
