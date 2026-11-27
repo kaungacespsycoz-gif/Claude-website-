@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-27",
+  "summary": "Visa living-cost funds rise for applications from 30 Nov 2026; Budget news on a two-year Graduate visa at 'high-compliance' universities still needs GOV.UK confirmation; no new UCAS release.",
+  "items": [
+    {
+      "importance": "high",
+      "title": "Student visa maintenance funds rise from 30 Nov 2026",
+      "source": "News reports (verify on GOV.UK)",
+      "what": "Applications from 30 Nov 2026 must show £1,570/month in London (was £1,529) and £1,203/month outside London (was £1,171); 9-month maximum £14,130 / £10,827. Applications before 30 Nov use the old amounts. Visa fee £558; IHS £776/year.",
+      "who": ["penny", "huan", "spark"],
+      "url": "https://academiamag.com/news/uk-student-visa-gets-costlier-from-november-30/"
+    },
+    {
+      "importance": "medium",
+      "title": "Budget: two-year Graduate visa kept for 'high-compliance' universities; £925 levy confirmed for Aug 2028",
+      "source": "Times Higher Education / Amber Student (needs GOV.UK confirmation)",
+      "what": "Reports say the 28 Oct 2026 Budget keeps two-year Graduate visas only at high-compliance universities; the standard route was set to fall to 18 months from Jan 2027. Start date and definition not confirmed. £925 per-student levy on universities from Aug 2028.",
+      "who": ["huan", "scout", "penny", "boss"],
+      "url": "https://timeshighereducation.com/news/budget-longer-graduate-visas-high-compliance-universities"
+    },
+    {
+      "importance": "low",
+      "title": "UCAS: no new release this week",
+      "source": "UCAS",
+      "what": "Latest figures are from the Jan 2026 deadline: 124,830 international applicants (+5.1%); China remains the largest early-deadline market.",
+      "who": ["scout", "spark"],
+      "url": "https://www.ucas.com/corporate/news-and-key-documents/news"
+    }
+  ]
+}
