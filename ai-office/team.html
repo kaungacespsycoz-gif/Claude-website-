@@ -1235,6 +1235,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .photo-frame .hs { z-index: 1; }
 .photo-frame .hs:not(.boss):not(.room-spot) .hs-tag { display: none; }
 @media (max-width: 640px) { .photo-frame .plate.wall-plate span { font-size: clamp(4.5px, 1.05cqw, .48rem); } }
+.dls-log { max-height: 92px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; }
 </style>
 
 <div class="app">
@@ -1548,8 +1549,47 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function activity(botId, text) {
     state.activity.unshift({ t: new Date(), bot: botId, text: text });
     state.activity = state.activity.slice(0, 40);
+    logWork(botId, text);
     deskLive();
     drawFeed();
+  }
+  // ---------- work log: who did what, kept day by day; Amy files it at the end of each day ----------
+  var WLOG_KEY = "glostudy-worklog";
+  function dayKey(d) { d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function wlog() { try { return JSON.parse(lsGet(WLOG_KEY, "{}")) || {}; } catch (e) { return {}; } }
+  function logWork(botId, text) {
+    var L = wlog(), k = dayKey(); (L[k] = L[k] || []).push({ t: hhmm(new Date()), bot: botId || "ceo", text: text });
+    var days = Object.keys(L).sort(); while (days.length > 60) delete L[days.shift()];
+    lsSet(WLOG_KEY, JSON.stringify(L));
+  }
+  function logFor(id, day) { return (wlog()[day || dayKey()] || []).filter(function (e) { return e.bot === id; }); }
+  function fmtDay(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString(state.lang === "en" ? "en-GB" : "zh-CN", { weekday: "short", day: "numeric", month: "short" }); }
+  function workLogText(day) {
+    var en = state.lang === "en", list = wlog()[day] || [], by = {};
+    list.forEach(function (e) { (by[e.bot] = by[e.bot] || []).push(e); });
+    var ids = BOTS.map(function (b) { return b.id; }).filter(function (id) { return by[id]; });
+    var sum = (en ? "Work log for " : "工作日志 · ") + fmtDay(day) + (en ? ": " + list.length + " tasks by " + ids.length + " officers." : "：" + ids.length + " 位同事共 " + list.length + " 项工作。");
+    var rep = "| " + (en ? "Officer | Role | Tasks" : "同事 | 职位 | 工作数") + " |\n|---|---|---|\n" + ids.map(function (id) { return "| " + BY_ID[id].name + " | " + BY_ID[id].title + " | " + by[id].length + " |"; }).join("\n");
+    ids.forEach(function (id) { rep += "\n\n**" + BY_ID[id].name + "** · " + BY_ID[id].title + "\n" + by[id].map(function (e) { return "- " + e.t + " " + e.text; }).join("\n"); });
+    if (by.ceo) rep += "\n\n**Aliya** · CEO\n" + by.ceo.map(function (e) { return "- " + e.t + " " + e.text; }).join("\n");
+    return { sum: sum, rep: rep, n: list.length };
+  }
+  // Amy files each finished day (and today after 18:00) onto Aliya's desk, once
+  function fileWorkLogs() {
+    var L = wlog(), filed = (lsGet("glostudy-worklog-filed", "") || "").split(","), today = dayKey(), late = new Date().getHours() >= 18;
+    Object.keys(L).sort().forEach(function (k) {
+      if (filed.indexOf(k) >= 0 || !L[k].length || (k === today && !late)) return;
+      filed.push(k); lsSet("glostudy-worklog-filed", filed.slice(-60).join(","));
+      var w = workLogText(k); addReport("3", (state.lang === "en" ? "Daily work log · " : "每日工作日志 · ") + fmtDay(k), w.sum + "\n\n" + w.rep);
+      if (k === today) activity("3", "Amy filed today's work log on Aliya's desk (" + w.n + " tasks)");
+    });
+  }
+  setTimeout(fileWorkLogs, 4000); setInterval(fileWorkLogs, 60000);
+  function openWorkLog(b, day) {
+    var days = Object.keys(wlog()).sort().reverse(); day = day || days[0] || dayKey();
+    var w = workLogText(day), en = state.lang === "en";
+    var past = days.slice(0, 14).map(function (k) { return "- " + fmtDay(k) + ": " + (wlog()[k] || []).length + (en ? " tasks" : " 项"); }).join("\n");
+    openReport(b, w.sum + "\n\n" + w.rep + (days.length > 1 ? "\n\n**" + (en ? "Kept days" : "已存档日期") + "**\n" + past : ""));
   }
   function drawFeed() {
     var ul = $("feed"); ul.textContent = "";
@@ -3765,13 +3805,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (k === "cust") return ["4", "15", "16"].indexOf(id) >= 0 ? "replying to a comment" : "chatting with a customer";
     return "working";
   }
-  function actsFor(b) { return state.activity.filter(function (a) { return a.bot === b.id || (a.text && a.text.indexOf(b.name) >= 0); }).slice(0, 3); }
+  function actsFor(b) { return logFor(b.id).slice().reverse(); }
   function dlsRowHtml(b) { var busy = state.busy[b.id]; return '<span class="dls-dot' + (busy ? " on" : "") + '"></span><b>' + esc(busy ? busyText(b.id) : (state.lang === "en" ? "Available" : "空闲")) + '</b><small>' + esc(b.title) + "</small>"; }
-  function dlsLiveHtml(acts) { return '<span class="dls-lab">' + (state.lang === "en" ? "Live" : "实时") + "</span>" + (acts.length ? acts.map(function (a) { return "<p><time>" + hhmm(a.t) + "</time>" + esc(a.text) + "</p>"; }).join("") : "<p>" + esc(state.lang === "en" ? "Nothing yet today." : "今天还没有动态。") + "</p>"); }
+  function dlsLiveHtml(acts) { var en = state.lang === "en"; return '<span class="dls-lab">' + (en ? "Today's log · " + acts.length + " task" + (acts.length === 1 ? "" : "s") : "今日日志 · " + acts.length + " 项") + '</span><div class="dls-log">' + (acts.length ? acts.map(function (a) { return "<p><time>" + a.t + "</time>" + esc(a.text) + "</p>"; }).join("") : "<p>" + esc(en ? "Nothing logged yet today." : "今天还没有记录。") + "</p>") + "</div>"; }
   // update the open desk's status + live lines in place (keeps the question wheel where it is)
   function deskLive() {
     if (!state.desk || !state.bot) return; var b = state.bot, row = $("dlsRow"), lv = $("dlsLive"); if (!row || !lv) return;
-    row.innerHTML = dlsRowHtml(b); lv.innerHTML = dlsLiveHtml(actsFor(b));
+    var lg = lv.querySelector(".dls-log"), st = lg ? lg.scrollTop : 0; row.innerHTML = dlsRowHtml(b); lv.innerHTML = dlsLiveHtml(actsFor(b)); lg = lv.querySelector(".dls-log"); if (lg) lg.scrollTop = st;
     var busy = state.busy[b.id]; $("deskRole").textContent = b.title + " · " + (busy ? busyText(b.id) + "…" : "1-on-1"); $("desk").classList.toggle("working", !!busy);
   }
   function inOneOnOne(id) { return state.desk && state.bot && state.bot.id === id && chat().length > 0; }
@@ -4999,6 +5039,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var chips = $("deskChips"); chips.textContent = "";
     $("desk").classList.toggle("fresh", !turns.length);
     if (b.id === "1" || b.id === "4") { var cb2 = document.createElement("button"); cb2.type = "button"; cb2.className = "next"; cb2.innerHTML = DESK_ICONS[4] + "<span>" + (state.lang === "en" ? "📥 Live chats & comments" : "📥 实时咨询与评论") + "</span>"; cb2.onclick = function () { openLive(b.id === "4" ? "comments" : "all"); }; chips.appendChild(cb2); }
+    if (b.id === "3") {
+      var wl1 = document.createElement("button"); wl1.type = "button"; wl1.className = "next"; wl1.innerHTML = "<span>" + (state.lang === "en" ? "📒 Today's team work log" : "📒 今天的团队工作日志") + "</span>"; wl1.onclick = function () { openWorkLog(b, dayKey()); }; chips.appendChild(wl1);
+      var wl2 = document.createElement("button"); wl2.type = "button"; wl2.className = "next"; wl2.innerHTML = "<span>" + (state.lang === "en" ? "📚 Last filed work log" : "📚 最近存档的工作日志") + "</span>"; wl2.onclick = function () { var d = Object.keys(wlog()).sort().reverse().filter(function (k) { return k !== dayKey(); })[0]; openWorkLog(b, d || dayKey()); }; chips.appendChild(wl2);
+    }
     if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
     tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";
