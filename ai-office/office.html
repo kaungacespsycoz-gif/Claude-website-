@@ -920,7 +920,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .ap-head { display: flex; align-items: center; gap: 10px; } .ap-head b { flex: 1; font-size: .9rem; } .ap-head small { display: block; color: #a9c6dc; font-weight: 500; font-size: .74rem; }
 .ap-av { width: 30px; height: 30px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c); flex: none; }
 .ap-st { font-size: .72rem; color: #cfe3f2; }
-.ap-ctx { font-size: .8rem; color: #cfe3f2; background: rgba(255,255,255,.06); border-radius: 8px; padding: 6px 9px; }
+.ap-ctx { white-space: pre-wrap; font-size: .8rem; color: #cfe3f2; background: rgba(255,255,255,.06); border-radius: 8px; padding: 6px 9px; }
 .ap-body { font-size: .86rem; line-height: 1.5; white-space: pre-wrap; color: #f2f6f9; max-height: 340px; overflow: auto; }
 .ap-body textarea { width: 100%; box-sizing: border-box; border-radius: 8px; border: 1px solid rgba(var(--holo), .5); background: rgba(5,15,25,.7); color: #fff; padding: 8px; font: 400 .86rem var(--sans); }
 .ap-acts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -3355,7 +3355,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var live = { on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
   function liveName(c) { return c.name[state.lang]; }
   function liveZone(c) {
-    if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval") return "comments";
+    if (c.status === "booked") return "booked"; if (c.status === "human") return "human"; if (c.status === "done") return null; if (c.status === "approval" || c.status === "checking") return "comments";
     if (c.status === "talking") return c.kind === "comment" ? "joey" : "rachel";
     return { wechat: "wechat", web: "web", lead: "lead", comment: "comments" }[c.kind];
   }
@@ -3430,9 +3430,28 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       reply.pending = false; reply.content = res.text; setBusy("4", null); flashDone("4");
       if (/【转人工】/.test(res.text)) { c.status = "human"; activity("4", c.name.en + "'s comment needs a real person"); }
       else {
-        var isLead = /【线索】/.test(res.text) && c.lead;
+        var isLead = /【线索】/.test(res.text) && c.lead, clean = res.text.replace(/\s*【线索】\s*/g, "");
+        var publish = function (who) {
+          c.turns.push({ kind: "note", good: true, text: (state.lang === "en" ? "✓ Checked by " + who + " · posted automatically:\n" : "✓ " + who + " 已审核 · 自动发布：\n") + clean });
+          activity("4", "Joey's reply to " + c.name.en + " was checked by " + who + " and posted");
+          if (isLead) { c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", c.name.en + " messaged us: sent down to Rachel as a lead"); } else c.status = "done";
+          drawLive(); drawLiveDetail();
+        };
+        // generic replies: an AI expert checks them and they go out; money, visas and guarantees need Aliya
+        var sensitive = /£|¥|\$|\d[\d,，]{3,}|费用|价格|学费|price|fee|cost|visa|签证|保证|guarantee/i.test(clean), why = "";
+        if (!sensitive) {
+          var exId = (c.turns.filter(function (t) { return t.kind === "team"; })[0] || { items: [{ id: "5" }] }).items[0].id, ex = BY_ID[exId];
+          c.status = "checking"; drawLive(); setBusy("4", null);
+          var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = state.lang === "en" ? "checking Joey's reply" : "审核 Joey 的回复"; setBusy(exId, "task"); }
+          pvCall("4", [exId]); callMap("4", [exId], true);
+          var chk = await ask(ex, [{ role: "user", content: (state.lang === "en" ? "Quality check before publishing Joey's public reply.\nComment: " : "发布前质量检查：Joey 的公开回复。\n评论：") + c.text[state.lang] + (state.lang === "en" ? "\nReply: " : "\n回复：") + clean +
+            (state.lang === "en" ? "\nAnswer 【通过】 if it is accurate, polite, makes no promises and quotes no Glostudy fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果准确、礼貌、不承诺、不报寰学价格，回答【通过】；否则回答【需CEO】并写一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
+          pvCallEnd("4"); callMap("4", [exId], false); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
+          if (/【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text)) { publish(ex.name); live.joey = null; drawLive(); drawLiveDetail(); return; }
+          why = chk.text.replace(/【需CEO】/g, "").trim();
+        } else why = state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
         c.status = "approval";
-        addApproval({ kind: "reply", from: "4", where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
+        addApproval({ why: why, kind: "reply", from: "4", where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
           c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") });
           if (ok && isLead) { c.kind = "lead"; c.status = "waiting"; c.msgs = c.lead.slice(); c.step = 0; activity("4", "Reply posted. " + c.name.en + " messaged us: sent down to Rachel as a lead"); }
           else c.status = "done";
@@ -3499,7 +3518,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         if (last) { el.className = "live-more"; el.textContent = "+" + (cs.length - i); el.onclick = function (e) { e.stopPropagation(); openLive(z); }; }
         else {
           el.className = (c.kind === "comment" ? "live-bub" : "live-pin") + " " + c.status; el.style.setProperty("--c", liveColor(c));
-          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
+          el.innerHTML = "<i>" + (c.status === "booked" ? "✓" : c.status === "human" ? "🙋" : c.status === "approval" ? "⏳" : c.status === "checking" ? "🔍" : c.icon) + "</i>" + (c.status === "talking" ? '<span class="ct-dots"><i></i><i></i><i></i></span>' : "");
           el.setAttribute("aria-label", liveName(c) + " · " + (c.kind === "comment" ? PLAT[c.plat].en : KIND[c.kind].en)); el.title = liveName(c);
           el.onclick = function (e) { e.stopPropagation(); openLive(z, c.id); };
         }
@@ -3531,7 +3550,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   var liveSel = { zone: "all", id: null };
   function liveStatusText(c) {
     var en = state.lang === "en";
-    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
+    return { waiting: en ? "waiting" : "等候中", talking: en ? (c.kind === "comment" ? "Joey replying" : "AI replying") : (c.kind === "comment" ? "Joey 回复中" : "AI 回复中"), booked: en ? "booked · CEO desk" : "已登记 · CEO 桌上", checking: en ? "expert checking" : "专家审核中", approval: en ? "awaiting CEO approval" : "等待 CEO 批准", human: en ? "needs a person" : "转人工", done: en ? "done" : "已完成" }[c.status];
   }
   function openLive(zone, id, refresh) {
     var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
@@ -3920,7 +3939,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   function approvalsHtml() {
     var en = state.lang === "en", pend = state.approvals.filter(function (a) { return a.status === "pending"; }), done = state.approvals.filter(function (a) { return a.status !== "pending"; }).slice(0, 4);
     var mode = lsGet("glostudy-apprmode", "desk"), next = nextMeeting();
-    var h = '<div class="ib-sec">' + (en ? "Needs your approval before it's published" : "发布前需要您批准") + " · " + pend.length + '</div><div class="ap-mode">' + (en ? "Approve:" : "批准方式：") +
+    var h = '<div class="ib-sec">' + (en ? "Needs your approval before it's published" : "发布前需要您批准") + " · " + pend.length + '</div><p class="ib-empty">' + (en ? "Only new posts and replies about money, visas or guarantees come here. Everyday replies are checked by an AI expert and posted automatically." : "只有新帖子，以及涉及费用、签证或保证的回复会来这里；普通回复由 AI 专家审核后自动发布。") + '</p><div class="ap-mode">' + (en ? "Approve:" : "批准方式：") +
       '<button type="button" data-apm="desk" aria-pressed="' + (mode === "desk") + '">' + (en ? "Right here, any time" : "随时在这里批") + '</button><button type="button" data-apm="meeting" aria-pressed="' + (mode === "meeting") + '">' + (en ? "At my review meeting" : "在审批会上统一批") + "</button></div>";
     if (mode === "meeting" && pend.length) h += '<p class="ib-empty">' + (next ? (en ? "Saved for your review meeting at " : "留到您的审批会：") + fmtTime(next.t) : (en ? "No review meeting booked yet: book one below." : "还没有预约审批会，请在下方预约。")) + "</p>";
     if (!pend.length) h += '<p class="ib-empty">' + (en ? "Nothing waiting. Joey's posts and public comment replies will appear here." : "暂时没有。Joey 的帖子和评论回复会出现在这里。") + "</p>";
@@ -3930,6 +3949,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   }
   function approvalCard(a, live) {
     var b = BY_ID[a.from], en = state.lang === "en";
+    if (a.why && !a.context2) { a.context2 = 1; a.context = (a.context ? a.context + "\n" : "") + (en ? "Why it needs you: " : "需要您批准的原因：") + a.why; }
     return '<div class="ap-card ' + a.status + '" data-ap="' + a.id + '"><div class="ap-head"><span class="ap-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(KIND_AP[a.kind][state.lang]) + "<small>" + esc(b.name + " · " + a.where) + "</small></b>" +
       (live ? "" : '<span class="ap-st">' + (a.status === "approved" ? (en ? "✓ published" : "✓ 已发布") : (en ? "✗ not published" : "✗ 未发布")) + "</span>") + "</div>" +
       (a.context ? '<div class="ap-ctx">' + esc(a.context) + "</div>" : "") +

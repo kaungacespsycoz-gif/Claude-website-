@@ -67,6 +67,30 @@
    "zh": "咨询材料清单：\n1. 学生护照复印件\n2. 最近的成绩单（附翻译）\n3. 英语成绩（或考试日期）\n4. 兴趣和活动简要列表\n5. 家庭能接受的预算\nPhoebe 会在咨询前发给客户。"
   },
   {
+   "bot": "2",
+   "match": "Quality check before publishing|发布前质量检查",
+   "en": "【通过】 Accurate, polite and on-brand.",
+   "zh": "【通过】 内容准确、礼貌，符合品牌调性。"
+  },
+  {
+   "bot": "3",
+   "match": "Quality check before publishing|发布前质量检查",
+   "en": "【通过】 Accurate, polite and on-brand.",
+   "zh": "【通过】 内容准确、礼貌，符合品牌调性。"
+  },
+  {
+   "bot": "5",
+   "match": "Quality check before publishing|发布前质量检查",
+   "en": "【通过】 Accurate, polite and on-brand.",
+   "zh": "【通过】 内容准确、礼貌，符合品牌调性。"
+  },
+  {
+   "bot": "6",
+   "match": "Quality check before publishing|发布前质量检查",
+   "en": "【通过】 Accurate, polite and on-brand.",
+   "zh": "【通过】 内容准确、礼貌，符合品牌调性。"
+  },
+  {
    "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
    "en": "Hello! Happy to help 😊 I just checked with Ross, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",

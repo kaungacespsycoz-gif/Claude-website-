@@ -870,6 +870,10 @@ Phoebe will send it to the client before the call.
 Phoebe 会在咨询前发给客户。
 """)
 
+# ---------- AI expert check before a reply is posted ----------
+for _b in ["2", "3", "5", "6"]:
+    cust(_b, r"Quality check before publishing|发布前质量检查", "【通过】 Accurate, polite and on-brand.", "【通过】 内容准确、礼貌，符合品牌调性。")
+
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
   {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}]},
