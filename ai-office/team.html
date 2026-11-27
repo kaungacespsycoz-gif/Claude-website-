@@ -1223,6 +1223,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .dls-list button.mid::after { font-size: .64rem; padding: 2px 7px; }
 .dls-qs::before { height: 34px; margin-top: -17px; }
 .dls-qs::before { display: none; }
+.desk.fresh .desk-status { display: none !important; }
 </style>
 
 <div class="app">
@@ -1536,7 +1537,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function activity(botId, text) {
     state.activity.unshift({ t: new Date(), bot: botId, text: text });
     state.activity = state.activity.slice(0, 40);
-    if (state.desk && state.bot && state.bot.id === botId && !chat().length) drawDesk();
+    deskLive();
     drawFeed();
   }
   function drawFeed() {
@@ -3489,7 +3490,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) drawChat(); }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) { drawChat(); deskLive(); } }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
@@ -3498,7 +3499,12 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (!text) return;
     var bot = state.bot, turns = chat(); state.asking = bot.id;
     if (state.busy[bot.id] === "task") setBusy(bot.id, null);
-    if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
+    if (state.busy[bot.id]) {
+      var note = { kind: "note", text: bot.name + " is finishing " + busyText(bot.id) + ", then answers you first." }; turns.push(note); drawLog();
+      for (var w8 = 0; w8 < 60 && state.busy[bot.id] && state.busy[bot.id] !== "task"; w8++) await wait(500);
+      turns.splice(turns.indexOf(note), 1); if (state.busy[bot.id] === "task") setBusy(bot.id, null);
+      if (state.busy[bot.id]) { turns.push({ kind: "note", text: bot.name + " is busy right now. Wait a moment, then try again." }); drawLog(); return; }
+    }
     if (needsKey()) { state.settingsOpen = true; drawSettings(); turns.push({ kind: "note", text: COPY.no_key }); drawLog(); return; }
     turns.push({ role: "user", content: text, who: meta && meta.who });
     var reply = { role: "assistant", content: "", pending: true };
@@ -3748,7 +3754,16 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (k === "cust") return ["4", "15", "16"].indexOf(id) >= 0 ? "replying to a comment" : "chatting with a customer";
     return "working";
   }
-  function inOneOnOne(id) { return state.desk && state.bot && state.bot.id === id; }
+  function actsFor(b) { return state.activity.filter(function (a) { return a.bot === b.id || (a.text && a.text.indexOf(b.name) >= 0); }).slice(0, 3); }
+  function dlsRowHtml(b) { var busy = state.busy[b.id]; return '<span class="dls-dot' + (busy ? " on" : "") + '"></span><b>' + esc(busy ? busyText(b.id) : (state.lang === "en" ? "Available" : "空闲")) + '</b><small>' + esc(b.title) + "</small>"; }
+  function dlsLiveHtml(acts) { return '<span class="dls-lab">' + (state.lang === "en" ? "Live" : "实时") + "</span>" + (acts.length ? acts.map(function (a) { return "<p><time>" + hhmm(a.t) + "</time>" + esc(a.text) + "</p>"; }).join("") : "<p>" + esc(state.lang === "en" ? "Nothing yet today." : "今天还没有动态。") + "</p>"); }
+  // update the open desk's status + live lines in place (keeps the question wheel where it is)
+  function deskLive() {
+    if (!state.desk || !state.bot) return; var b = state.bot, row = $("dlsRow"), lv = $("dlsLive"); if (!row || !lv) return;
+    row.innerHTML = dlsRowHtml(b); lv.innerHTML = dlsLiveHtml(actsFor(b));
+    var busy = state.busy[b.id]; $("deskRole").textContent = b.title + " · " + (busy ? busyText(b.id) + "…" : "1-on-1"); $("desk").classList.toggle("working", !!busy);
+  }
+  function inOneOnOne(id) { return state.desk && state.bot && state.bot.id === id && chat().length > 0; }
   function freeFor(id) { return !inOneOnOne(id) && (!state.busy[id] || state.busy[id] === "task"); }
 
   // ---------- live customers: chats and post comments arrive by themselves; the AI team serves them ----------
@@ -3787,6 +3802,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function brief(id, label, ms) {
     if (inOneOnOne(id) || (state.busy[id] && state.busy[id] !== "task")) return wait(ms);
     state.taskLabel[id] = label; setBusy(id, "task");
+    var last = state.activity[0]; if (!(last && last.bot === id && Date.now() - last.t < 1500)) activity(id, BY_ID[id].name + (state.lang === "en" ? " is " : " 正在") + label);
     return wait(ms).then(function () { if (state.busy[id] === "task") setBusy(id, null); });
   }
   var INSIGHTS = { "💷": { en: "worried about cost", zh: "担心费用" }, "🎓": { en: "wants the right school", zh: "想选对学校" }, "✍️": { en: "needs help with documents", zh: "需要文书帮助" }, "🏛️": { en: "under dream-school pressure", zh: "名校压力大" },
@@ -4937,9 +4953,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     // dialogue
     var log = $("deskLog"); log.textContent = "";
     if (!turns.length) {
-      var acts2 = state.activity.filter(function (a) { return a.bot === b.id; }).slice(0, 3);
-      log.innerHTML = '<div class="dl-status"><div class="dls-row"><span class="dls-dot' + (busy ? " on" : "") + '"></span><b>' + esc(busy ? busyText(b.id) : (state.lang === "en" ? "Available" : "空闲")) + '</b><small>' + esc(b.title) + "</small></div>" +
-        '<div class="dls-live"><span class="dls-lab">' + (state.lang === "en" ? "Live" : "实时") + "</span>" + (acts2.length ? acts2.map(function (a) { return "<p><time>" + hhmm(a.t) + "</time>" + esc(a.text) + "</p>"; }).join("") : "<p>" + esc(state.lang === "en" ? "Nothing yet today." : "今天还没有动态。") + "</p>") + "</div>" +
+      var acts2 = actsFor(b);
+      log.innerHTML = '<div class="dl-status"><div class="dls-row" id="dlsRow">' + dlsRowHtml(b) + "</div>" +
+        '<div class="dls-live" id="dlsLive">' + dlsLiveHtml(acts2) + "</div>" +
         '<div class="dls-qs"><span class="dls-lab">' + (state.lang === "en" ? "Ask " + b.name : "问 " + b.name) + '</span><div class="dls-list" id="dlsList"></div></div></div>';
     }
     var lastBot = -1; turns.forEach(function (t, i) { if (t.role === "assistant") lastBot = i; });
