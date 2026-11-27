@@ -371,59 +371,78 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .one-or { text-align: center; color: var(--muted); font-size: .76rem; margin: 10px 0 auto; }
 .pv-card { cursor: pointer; }
 .pv-card .one { margin-left: 6px; border: 0; border-radius: 999px; padding: 7px 12px; background: #f2f5f7; color: #101318; font: 600 .78rem var(--sans); cursor: pointer; white-space: nowrap; }
-.desk { position: fixed; inset: 0; z-index: 60; background: #08090b; color: #eef1f4; display: flex; }
+.desk { position: fixed; inset: 0; z-index: 60; background: #050608; color: #eaf6ff; display: flex; --holo: 150, 215, 255; }
 .desk[hidden] { display: none; }
-.desk-in { flex: 1; display: grid; grid-template-rows: minmax(240px, 46vh) minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); min-height: 0; min-width: 0; }
-.desk-talk, .desk-scene { min-width: 0; }
-.desk-scene { position: relative; overflow: hidden; background: #000; }
-.desk-bg { position: absolute; inset: -40px; background-size: cover; background-position: center; filter: blur(28px) brightness(.45); }
-.desk-img { position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); object-fit: cover; aspect-ratio: 1; max-width: none; transform-origin: 50% 40%; }
-.desk-scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.25) 16%, transparent 26%, transparent 70%, rgba(8,9,11,.95)); pointer-events: none; }
-.desk-top { position: absolute; left: 0; right: 0; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
-.desk-back, .desk-sound { border: 1px solid rgba(255,255,255,.22); background: rgba(12,14,18,.55); color: #fff; border-radius: 999px; padding: 7px 12px; font: 600 .8rem var(--sans); cursor: pointer; backdrop-filter: blur(6px); }
+.desk-in { position: relative; flex: 1; min-width: 0; min-height: 0; overflow: hidden; }
+.desk-scene { position: absolute; inset: 0; overflow: hidden; background: #000; }
+.desk-bg { position: absolute; inset: -60px; background-size: cover; background-position: center; filter: blur(30px) brightness(.5) saturate(1.1); }
+.desk-img { position: absolute; left: 50%; top: 0; width: min(100vw, 100%); aspect-ratio: 1; height: auto; transform: translateX(-50%); object-fit: cover; transform-origin: 50% 35%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent), linear-gradient(180deg, #000 80%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent), linear-gradient(180deg, #000 80%, transparent); mask-composite: intersect; }
+.desk-scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.7), rgba(0,0,0,.15) 14%, transparent 24%); pointer-events: none; }
+.desk-ring { position: absolute; inset: 0; pointer-events: none; transition: box-shadow .4s; }
+.desk.working .desk-ring, .desk.speaking .desk-ring { box-shadow: inset 0 0 80px -16px var(--c); }
+.desk-plate { display: none; left: 50%; top: auto; bottom: 7%; transform: translateX(-50%); z-index: 1; }
+.desk-plate b { font-size: .92rem; } .desk-plate span { font-size: .64rem; }
+.desk-ui { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 10px; }
+.desk-top { display: flex; align-items: center; gap: 10px; }
+.desk-back, .desk-sound { border: 1px solid rgba(var(--holo), .4); background: rgba(10,20,30,.45); color: #fff; border-radius: 999px; padding: 7px 12px; font: 600 .8rem var(--sans); cursor: pointer; backdrop-filter: blur(8px); }
 .desk-sound[aria-pressed="false"] { opacity: .6; }
 .desk-who { flex: 1; text-align: center; line-height: 1.15; text-shadow: 0 1px 3px rgba(0,0,0,.9), 0 0 14px rgba(0,0,0,.8); }
 .desk-who b { display: block; font: 600 1.05rem var(--display); }
-.desk-who small { color: #c3ccd3; font-size: .74rem; }
+.desk-who small { color: #cfe3f2; font-size: .74rem; }
 .desk-who i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 6px; box-shadow: 0 0 8px var(--c); vertical-align: 1px; }
-.desk-plate { left: 50%; top: auto; bottom: 18px; transform: translateX(-50%); z-index: 2; }
-.desk-plate b { font-size: .92rem; }
-.desk-plate span { font-size: .64rem; }
-.desk-status { position: absolute; left: 50%; top: 58px; transform: translateX(-50%); z-index: 2; display: none; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(12,14,18,.7); border: 1px solid var(--c); box-shadow: 0 0 18px -4px var(--c); font: 500 .78rem var(--sans); white-space: nowrap; backdrop-filter: blur(6px); }
+.desk-status { align-self: center; display: none; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(10,20,30,.6); border: 1px solid var(--c); box-shadow: 0 0 18px -4px var(--c); font: 500 .78rem var(--sans); white-space: nowrap; backdrop-filter: blur(8px); }
 .desk.working .desk-status { display: inline-flex; }
 .desk-status .typing i { background: var(--c); }
-.desk-ring { position: absolute; inset: 0; z-index: 1; pointer-events: none; box-shadow: inset 0 0 0 0 var(--c); transition: box-shadow .4s; }
-.desk.working .desk-ring, .desk.speaking .desk-ring { box-shadow: inset 0 0 60px -10px var(--c); }
-.desk-talk { display: flex; flex-direction: column; min-height: 0; background: #0d0f12; }
-.desk-log { flex: 1; overflow-y: auto; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 10px; }
-.dl-you { align-self: flex-end; max-width: 82%; background: #2a2f36; border-radius: 16px 16px 4px 16px; padding: 8px 12px; font-size: .9rem; white-space: pre-wrap; }
-.dl-bot { align-self: stretch; background: linear-gradient(180deg, #171b20, #13161a); border: 1px solid #262b31; border-left: 3px solid var(--c); border-radius: 4px 16px 16px 16px; padding: 10px 14px 12px; }
-.dl-bot.now { border-color: color-mix(in srgb, var(--c) 45%, #262b31); box-shadow: 0 8px 30px -14px var(--c); }
-.dl-bot .who { font: 600 .74rem var(--sans); color: var(--c); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-.dl-bot .say-txt { font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
-.dl-bot.now .say-txt { font-size: 1.06rem; }
-.dl-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.dl-acts button { border: 1px solid #343a42; background: #1c2026; color: #e9edf0; border-radius: 999px; padding: 6px 12px; font: 500 .8rem var(--sans); cursor: pointer; }
+/* holographic glass panels */
+.glass { position: relative; background: linear-gradient(160deg, rgba(120,190,240,.16), rgba(30,60,90,.22) 45%, rgba(20,40,70,.3)); border: 1px solid rgba(var(--holo), .55); border-radius: 14px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 0 26px rgba(var(--holo), .22), inset 0 0 40px rgba(var(--holo), .08); backdrop-filter: blur(9px) saturate(1.25); -webkit-backdrop-filter: blur(9px) saturate(1.25); }
+.glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.14), transparent 30%); }
+.glass h3 { margin: 0 0 10px; font: 600 .82rem var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #dff1ff; text-align: center; text-shadow: 0 0 10px rgba(var(--holo), .7); }
+.desk-prompts { padding: 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.desk-prompts::before { display: none; }
+.desk-prompts h3 { display: none; }
+.dp-list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.dp-list button { flex: none; display: flex; align-items: center; gap: 8px; max-width: 270px; border: 1px solid rgba(var(--holo), .5); background: rgba(14,34,54,.5); color: #e8f5ff; border-radius: 10px; padding: 8px 12px; font: 500 .82rem var(--sans); cursor: pointer; text-align: left;
+  box-shadow: 0 0 14px rgba(var(--holo), .15), inset 0 0 14px rgba(var(--holo), .08); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.dp-list button:hover, .dp-list button:focus-visible { border-color: rgba(var(--holo), .95); box-shadow: 0 0 20px rgba(var(--holo), .4), inset 0 0 18px rgba(var(--holo), .15); outline: none; }
+.dp-list button svg { flex: none; opacity: .9; }
+.dp-list button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.desk-chat { display: flex; flex-direction: column; min-height: 0; max-height: 52vh; padding: 10px 12px 8px; }
+.dc-head { display: flex; align-items: center; justify-content: space-between; font: 500 .95rem var(--sans); color: #dff1ff; padding: 2px 4px 8px; border-bottom: 1px solid rgba(var(--holo), .25); text-shadow: 0 0 10px rgba(var(--holo), .6); }
+.dc-head b { font-weight: 600; }
+.desk-log { flex: 1; overflow-y: auto; padding: 10px 2px 6px; display: flex; flex-direction: column; gap: 10px; min-height: 60px; }
+.dl-you { align-self: flex-end; max-width: 86%; background: rgba(20,45,70,.55); border: 1px solid rgba(var(--holo), .45); border-radius: 10px; padding: 8px 12px; font-size: .9rem; white-space: pre-wrap; }
+.dl-bot { align-self: stretch; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; }
+.dl-bot .av { width: 34px; height: 34px; border-radius: 50%; background-size: cover; background-position: 50% 20%; border: 1px solid rgba(var(--holo), .6); box-shadow: 0 0 10px rgba(var(--holo), .4); }
+.dl-bot .bub { background: rgba(14,30,48,.55); border: 1px solid rgba(var(--holo), .45); border-radius: 10px; padding: 9px 12px 10px; min-width: 0; }
+.dl-bot.now .bub { border-color: color-mix(in srgb, var(--c) 70%, rgb(var(--holo))); box-shadow: 0 0 18px -6px var(--c); }
+.dl-bot .who { font: 600 .7rem var(--sans); color: var(--c); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
+.dl-bot .say-txt { font-size: .95rem; line-height: 1.5; white-space: pre-wrap; }
+.dl-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.dl-acts button { border: 1px solid rgba(var(--holo), .4); background: rgba(10,25,40,.5); color: #e8f5ff; border-radius: 999px; padding: 5px 11px; font: 500 .78rem var(--sans); cursor: pointer; }
 .dl-acts button.rep { background: var(--c); border-color: transparent; color: #0d0f12; font-weight: 600; }
-.dl-team { align-self: flex-start; font-size: .78rem; color: #aeb8c0; background: #14171b; border: 1px dashed #2d333a; border-radius: 999px; padding: 4px 10px; }
+.dl-team { align-self: flex-start; font-size: .76rem; color: #cfe3f2; background: rgba(10,25,40,.5); border: 1px dashed rgba(var(--holo), .45); border-radius: 999px; padding: 4px 10px; }
 .dl-team b { font-weight: 600; }
-.dl-note { align-self: center; font-size: .78rem; color: #c9d1d7; background: #1a1e23; border-radius: 10px; padding: 5px 10px; text-align: center; }
+.dl-note { align-self: center; font-size: .76rem; color: #dbe9f3; background: rgba(10,25,40,.55); border-radius: 10px; padding: 5px 10px; text-align: center; }
 .dl-note.good { color: #9fe3bd; }
-.dl-empty { margin: auto; text-align: center; color: #9aa5ad; font-size: .9rem; max-width: 300px; }
-.dl-empty b { display: block; color: #eef1f4; font: 600 1.05rem var(--display); margin-bottom: 4px; }
-.desk-chips { display: flex; gap: 8px; overflow-x: auto; padding: 8px 14px; scrollbar-width: none; }
-.desk-chips button { flex: none; border: 1px solid #343a42; background: #15181c; color: #e9edf0; border-radius: 999px; padding: 7px 12px; font: 500 .82rem var(--sans); cursor: pointer; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.desk-say { display: flex; align-items: flex-end; gap: 8px; padding: 8px 12px calc(12px + env(safe-area-inset-bottom)); }
-.desk-say textarea { flex: 1; resize: none; min-height: 44px; max-height: 120px; border: 1px solid #343a42; background: #15181c; color: #fff; border-radius: 22px; padding: 11px 16px; font: 400 .95rem var(--sans); }
+.dl-empty { margin: auto; text-align: center; color: #cfe3f2; font-size: .88rem; max-width: 320px; }
+.dl-empty b { display: block; color: #fff; font: 600 1rem var(--display); margin-bottom: 4px; }
+.desk-say { display: flex; align-items: flex-end; gap: 8px; padding-top: 8px; border-top: 1px solid rgba(var(--holo), .25); }
+.desk-say textarea { flex: 1; min-width: 0; resize: none; min-height: 42px; max-height: 110px; border: 1px solid rgba(var(--holo), .45); background: rgba(5,15,25,.55); color: #fff; border-radius: 21px; padding: 10px 15px; font: 400 .95rem var(--sans); }
+.desk-say textarea::placeholder { color: #9fb6c8; }
 .desk-say textarea:focus { outline: 2px solid var(--c); outline-offset: 1px; }
-.desk-mic, .desk-send { flex: none; height: 44px; border-radius: 22px; border: 0; cursor: pointer; font: 600 .85rem var(--sans); }
-.desk-mic { width: 44px; background: #1c2026; color: #fff; border: 1px solid #343a42; display: grid; place-items: center; }
+.desk-mic, .desk-send { flex: none; height: 42px; border-radius: 21px; border: 0; cursor: pointer; font: 600 .85rem var(--sans); }
+.desk-mic { width: 42px; background: rgba(10,25,40,.6); color: #fff; border: 1px solid rgba(var(--holo), .45); display: grid; place-items: center; }
 .desk-mic.on { background: #e5484d; border-color: #e5484d; animation: breathe 1.2s ease-in-out infinite; }
 .desk-mic[hidden] { display: none; }
-.desk-send { padding: 0 18px; background: var(--c); color: #0d0f12; }
+.desk-send { padding: 0 16px; background: var(--c); color: #0d0f12; }
 .desk-send[data-stop] { background: #e5484d; color: #fff; }
-.desk-hint { margin: 0; padding: 0 16px 8px; font-size: .74rem; color: #8f9aa3; min-height: 0; }
+.desk-hint { margin: 4px 0 0; font-size: .72rem; color: #b9cfe0; }
 .desk-hint:empty { display: none; }
+/* phone: robot on top, prompts and chat glass panels at the bottom */
+.desk-status { margin-top: auto; }
+.desk:not(.working) .desk-prompts { margin-top: auto; }
 .desk-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 82vh; display: flex; flex-direction: column; background: #f7f5f1; color: #1b1f24; border-radius: 20px 20px 0 0; box-shadow: 0 -20px 60px rgba(0,0,0,.6); }
 .desk-sheet[hidden] { display: none; }
 .sheet-head { display: flex; align-items: center; gap: 8px; padding: 14px 16px 10px; border-bottom: 1px solid #e3ded5; }
@@ -438,16 +457,28 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .sheet-body tr:last-child td { border-bottom: 0; }
 .sheet-body .tbl { display: block; overflow-x: auto; font: .8rem/1.5 ui-monospace, Menlo, monospace; background: #fff; border: 1px solid #e3ded5; border-radius: 8px; padding: 8px 10px; }
 @media (min-width: 900px) {
-  .desk { padding: 24px; background: rgba(4,5,7,.86); backdrop-filter: blur(6px); }
-  .desk-in { max-width: 1180px; margin: auto; width: 100%; height: min(820px, calc(100vh - 48px)); grid-template-rows: none; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); border-radius: 22px; overflow: hidden; border: 1px solid #262b31; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
-  .desk-img { width: 100%; height: 100%; left: 0; transform: none; }
-  .desk-scene::after { background: linear-gradient(180deg, rgba(0,0,0,.5), transparent 20%, transparent 78%, rgba(0,0,0,.6)); }
+  .desk { padding: 22px; background: rgba(4,5,7,.88); backdrop-filter: blur(6px); }
+  .desk-in { max-width: 1320px; margin: auto; width: 100%; height: min(820px, calc(100vh - 44px)); border-radius: 22px; border: 1px solid #1f2a33; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .desk-img { width: auto; height: 100%; }
+  .desk-plate { display: flex; }
+  .desk-ui { display: grid; grid-template-columns: minmax(250px, 300px) 1fr minmax(360px, 420px); grid-template-rows: auto auto 1fr; padding: 16px 20px 20px; gap: 14px 20px; }
+  .desk-top { grid-column: 1 / -1; }
+  .desk-status { grid-column: 2; grid-row: 2; margin: 0; justify-self: center; }
+  .desk-prompts { grid-column: 1; grid-row: 2 / 4; align-self: center; padding: 16px 14px; margin: 0 !important; background: linear-gradient(160deg, rgba(120,190,240,.12), rgba(20,40,70,.22)); border: 1px solid rgba(var(--holo), .5); box-shadow: 0 0 26px rgba(var(--holo), .2), inset 0 0 40px rgba(var(--holo), .06); backdrop-filter: blur(9px) saturate(1.2); -webkit-backdrop-filter: blur(9px) saturate(1.2); }
+  .desk-prompts::before { display: block; }
+  .desk-prompts h3 { display: block; }
+  .dp-list { flex-direction: column; overflow: visible; gap: 10px; }
+  .dp-list button { max-width: none; width: 100%; padding: 10px 12px; }
+  .dp-list button span { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .desk-chat { grid-column: 3; grid-row: 2 / 4; align-self: stretch; max-height: none; margin-top: 18px; }
   .desk-sheet { left: auto; right: 24px; bottom: 24px; top: 24px; width: min(560px, 46vw); max-height: none; border-radius: 20px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .desk:not([hidden]) .desk-img { animation: deskDrift 18s ease-in-out infinite alternate; }
   .desk.speaking .desk-img { animation: deskTalk 1.1s ease-in-out infinite; }
+  .glass, .dp-list button { animation: holoIn .5s ease-out both; }
 }
+@keyframes holoIn { from { opacity: 0; transform: translateY(6px) scale(.98); filter: brightness(1.8); } }
 @keyframes deskDrift { from { scale: 1; } to { scale: 1.045; } }
 @keyframes deskTalk { 0%, 100% { scale: 1.02; } 50% { scale: 1.035; } }
 </style>
@@ -547,24 +578,30 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       <div class="desk-bg" id="deskBg"></div>
       <img class="desk-img" id="deskImg" alt="">
       <div class="desk-ring"></div>
+      <div class="plate desk-plate" id="deskPlate"><b></b><span></span></div>
+    </div>
+    <div class="desk-ui">
       <div class="desk-top">
         <button type="button" class="desk-back" id="deskBack">← Office</button>
         <div class="desk-who"><b id="deskName"></b><small id="deskRole"></small></div>
         <button type="button" class="desk-sound" id="deskSound" aria-pressed="true" title="Read answers aloud">🔊 Voice</button>
       </div>
       <div class="desk-status" id="deskStatus"></div>
-      <div class="plate desk-plate" id="deskPlate"><b></b><span></span></div>
-    </div>
-    <div class="desk-talk">
-      <div class="desk-log" id="deskLog" aria-live="polite"></div>
-      <div class="desk-chips" id="deskChips" aria-label="Ready questions"></div>
-      <form class="desk-say" id="deskForm">
-        <button type="button" class="desk-mic" id="deskMic" aria-label="Speak your question" title="Speak"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-        <label for="deskBox" hidden>Your question</label>
-        <textarea id="deskBox" rows="1" placeholder="Ask…"></textarea>
-        <button type="submit" class="desk-send" id="deskSend">Send</button>
-      </form>
-      <p class="desk-hint" id="deskHint"></p>
+      <section class="glass desk-prompts" aria-labelledby="dpTitle">
+        <h3 id="dpTitle">Suggested prompts</h3>
+        <div class="dp-list" id="deskChips"></div>
+      </section>
+      <section class="glass desk-chat" aria-label="Conversation">
+        <header class="dc-head"><span>Chat with: <b id="dcName"></b></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h12v8H9l-4 3v-3H4z"/><path d="M16 9h4v8h-1v3l-4-3h-5v-2"/></svg></header>
+        <div class="desk-log" id="deskLog" aria-live="polite"></div>
+        <form class="desk-say" id="deskForm">
+          <button type="button" class="desk-mic" id="deskMic" aria-label="Speak your question" title="Speak"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+          <label for="deskBox" hidden>Your question</label>
+          <textarea id="deskBox" rows="1" placeholder="Ask…"></textarea>
+          <button type="submit" class="desk-send" id="deskSend">Send</button>
+        </form>
+        <p class="desk-hint" id="deskHint"></p>
+      </section>
     </div>
   </div>
   <div class="desk-sheet" id="deskSheet" hidden role="dialog" aria-labelledby="sheetTitle">
@@ -2566,6 +2603,11 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   // ---------- 1-on-1 desk chat: sit down with one officer ----------
   var DESK_RULE = "\n\n# 1-on-1 desk chat (face to face)\nThe boss is sitting at your desk talking to you. Start your reply with 【简要】 and then 2–3 short, natural spoken sentences that answer directly; they are read aloud, so no lists, tables or Markdown there. If the full answer needs more (figures, lists, steps, sources), put 【完整报告】 on its own line and then the full detail in Markdown. If it doesn't, write nothing after the short answer. Keep both tags exactly as written. Every other rule above still applies.";
   var deskSpoken = null, deskRec = null;
+  var DESK_ICONS = ['<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 12h7M9 16h7"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v11H9l-5 4z"/></svg>'];
   function splitDesk(text) {
     var t = String(text || ""), i = t.indexOf("【完整报告】"), sum = (i < 0 ? t : t.slice(0, i)).replace("【简要】", "").trim(), rep = i < 0 ? "" : t.slice(i + 6).trim();
     if (!rep && sum.length > 420) { var cut = sum.split(/\n\s*\n/)[0]; if (cut.length < sum.length) { rep = sum; sum = cut.length > 420 ? cut.slice(0, 400) + "…" : cut; } }
@@ -2627,7 +2669,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     d.style.setProperty("--c", c);
     var src = imgURL(IMG[b.id]);
     if ($("deskImg").getAttribute("src") !== src) { $("deskImg").src = src; $("deskImg").alt = b.name + " at the desk"; $("deskBg").style.backgroundImage = "url(" + src + ")"; }
-    $("deskName").innerHTML = '<i></i>' + esc(b.name);
+    $("deskName").innerHTML = '<i></i>' + esc(b.name); $("dcName").textContent = b.name;
     $("deskRole").textContent = b.title + " · " + (busy ? "working…" : "1-on-1");
     $("deskPlate").firstChild.textContent = b.name; $("deskPlate").lastChild.textContent = b.title;
     var voiceOn = lsGet("glostudy-voice", "on") === "on";
@@ -2649,15 +2691,15 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         el.className = "dl-team"; el.innerHTML = (w.length ? "📞 Asking " : "✓ Checked with ") + t.items.map(function (it) { var tb = BY_ID[it.id]; return '<b style="color:' + COLORS[tb.color] + '">' + esc(tb.name) + "</b>"; }).join(" & ");
       } else if (t.role === "assistant") {
         el.className = "dl-bot" + (i === lastBot ? " now" : "");
-        if (t.pending) el.innerHTML = '<div class="who">' + esc(b.name) + '</div><span class="typing" aria-label="Working"><i></i><i></i><i></i></span>';
+        if (t.pending) el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><span class="typing" aria-label="Working"><i></i><i></i><i></i></span></div>';
         else {
           var p = splitDesk(t.content), lines = p.rep ? p.rep.split("\n").filter(function (l) { return l.trim(); }).length : 0;
-          el.innerHTML = '<div class="who">' + esc(b.name) + '</div><div class="say-txt">' + render(p.sum) + "</div>";
+          el.innerHTML = '<div class="av" style="background-image:url(' + src + ')"></div><div class="bub"><div class="who">' + esc(b.name) + '</div><div class="say-txt">' + render(p.sum) + "</div></div>";
           var acts = document.createElement("div"); acts.className = "dl-acts";
           if (p.rep) { var rb = document.createElement("button"); rb.type = "button"; rb.className = "rep"; rb.textContent = "📄 Full report · " + lines + " lines"; rb.onclick = function () { openReport(b, p.rep); }; acts.appendChild(rb); }
           if (window.speechSynthesis) { var sb = document.createElement("button"); sb.type = "button"; sb.textContent = "🔊 Play"; sb.onclick = function () { localSpeak(p.sum); }; acts.appendChild(sb); }
           var cb = document.createElement("button"); cb.type = "button"; cb.textContent = "Copy"; cb.onclick = function () { copyText(p.rep ? p.sum + "\n\n" + p.rep : p.sum, cb); }; acts.appendChild(cb);
-          el.appendChild(acts);
+          el.lastChild.appendChild(acts);
           if (i === lastBot && !busy && deskSpoken !== t) { if (deskSpoken !== null || turns.length > 1) speak(p.sum); deskSpoken = t; }
         }
       } else return;
@@ -2666,9 +2708,9 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     log.scrollTop = log.scrollHeight;
     // ready questions
     var chips = $("deskChips"); chips.textContent = "";
-    tasksFor(b).concat(deskQuestions(b)).forEach(function (q) {
+    tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";
-      var first = q.ask.split("\n")[0]; btn.textContent = q.demo ? "Demo booking" : first; btn.title = q.ask;
+      var first = q.ask.split("\n")[0]; btn.innerHTML = DESK_ICONS[k % DESK_ICONS.length] + "<span>[" + esc(q.demo ? "Demo booking" : first) + "]</span>"; btn.title = q.ask;
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
       chips.appendChild(btn);
     });
