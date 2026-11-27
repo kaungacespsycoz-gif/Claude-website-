@@ -1072,6 +1072,13 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
 .beam-pt { position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px var(--c); pointer-events: none; z-index: 6; }
 .call-map.ceo .beam-pt { box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px #ffcf5a; }
 .fx-trail ~ .beam-pt { display: none; }
+
+/* ---------- softer glowing rings ---------- */
+.call-map .cm-ring { width: 6.5% !important; margin: -3.25% 0 0 -3.25% !important; border: 1.5px solid color-mix(in srgb, var(--c) 85%, #fff) !important; box-shadow: 0 0 6px color-mix(in srgb, var(--c) 55%, transparent) !important; animation: none !important; background: radial-gradient(circle, color-mix(in srgb, var(--c) 18%, transparent), transparent 70%); }
+.call-map .cm-ring::after { content: ""; position: absolute; inset: -1.5px; border-radius: 50%; border: 1px solid var(--c); opacity: .6; animation: ringRipple 2.2s ease-out infinite; }
+.call-map.ceo .cm-ring { --c: #ffd36a !important; box-shadow: 0 0 6px rgba(255,207,90,.55) !important; }
+@keyframes ringRipple { from { transform: scale(1); opacity: .6; } to { transform: scale(1.9); opacity: 0; } }
+.photo-frame .hs.calling::after, .photo-frame .hs.working::after { opacity: 0 !important; }
 </style>
 
 <div class="app">
