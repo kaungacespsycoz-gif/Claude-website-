@@ -1058,6 +1058,20 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
 .desk-scene .call-map .cm-frame { height: min(52vh, 560px); width: auto; aspect-ratio: 1080 / 1440; max-width: 88%; }
 .call-map .cm-cap { white-space: normal; text-align: center; width: max-content; max-width: 92%; font-size: .72rem; }
 @media (min-width: 900px) { .desk-scene .call-map .cm-frame { max-height: 78%; } }
+
+/* ---------- communication lines: solid glowing beam + travelling light pulse ---------- */
+.beam path { stroke-linecap: round; stroke-dasharray: none; animation: none; }
+.beam-glow { stroke-width: 9; opacity: .32; filter: blur(3px); }
+.beam-core { stroke-width: 2.4; opacity: .95; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px currentColor); }
+.beam-dot { stroke-width: 9; stroke-dasharray: .1 99.9 !important; filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 10px #ffe39a); animation: beamDot 1.5s cubic-bezier(.4,0,.2,1) infinite !important; }
+@keyframes beamDot { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+.call-lines.ceo .beam-core, .call-map.ceo .beam-core { stroke: #ffd36a; stroke-width: 3; }
+.call-lines.ceo .beam-glow, .call-map.ceo .beam-glow { stroke: #ffb92e; opacity: .45; }
+.fx-trail .beam { opacity: 0; transition: opacity .3s; } .fx-trail.draw .beam { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .beam-dot { animation: none !important; opacity: 0; } }
+.beam-pt { position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px var(--c); pointer-events: none; z-index: 6; }
+.call-map.ceo .beam-pt { box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px #ffcf5a; }
+.fx-trail ~ .beam-pt { display: none; }
 </style>
 
 <div class="app">
@@ -2916,6 +2930,39 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
   }
   function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
+
+  // communication lines: a smooth glowing beam with a bright pulse travelling from the asker to the helper
+  function beamify(svg) {
+    if (!svg) return;
+    var NS2 = "http://www.w3.org/2000/svg";
+    Array.prototype.slice.call(svg.querySelectorAll("line, path")).forEach(function (el, i) {
+      if (el.closest(".beam")) return;
+      var d = el.tagName === "line" ? "M" + el.getAttribute("x1") + " " + el.getAttribute("y1") + " L" + el.getAttribute("x2") + " " + el.getAttribute("y2") : el.getAttribute("d");
+      var c = el.getAttribute("stroke") || "#ffd36a", g = document.createElementNS(NS2, "g"); g.setAttribute("class", "beam");
+      [["beam-glow", c], ["beam-core", c]].forEach(function (k) {
+        var p = document.createElementNS(NS2, "path"); p.setAttribute("d", d); p.setAttribute("class", k[0]); p.setAttribute("stroke", k[1]);
+        p.setAttribute("fill", "none"); p.setAttribute("vector-effect", "non-scaling-stroke"); p.setAttribute("pathLength", "100");
+        g.appendChild(p);
+        if (k[0] === "beam-core") BEAMS.push({ path: p, svg: svg, off: i * .3, color: c, dot: null });
+      });
+      el.parentNode.replaceChild(g, el);
+    });
+    if (!beamLoop.on) { beamLoop.on = true; requestAnimationFrame(beamLoop); }
+  }
+  // one bright pulse per line, travelling from the asker to the helper
+  var BEAMS = [];
+  function beamLoop(now) {
+    BEAMS = BEAMS.filter(function (b) {
+      if (!b.path.isConnected) { if (b.dot) b.dot.remove(); return false; }
+      var host = b.svg.parentNode; if (!host) return true;
+      if (!b.dot) { b.dot = document.createElement("span"); b.dot.className = "beam-pt"; b.dot.style.setProperty("--c", b.color); host.appendChild(b.dot); b.len = b.path.getTotalLength(); }
+      if (REDUCED) { b.dot.style.display = "none"; return true; }
+      var k = ((now / 1500) + b.off) % 1, e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, pt = b.path.getPointAtLength(e * b.len);
+      b.dot.style.left = pt.x + "%"; b.dot.style.top = pt.y + "%"; b.dot.style.opacity = String(Math.min(1, Math.min(k, 1 - k) * 8));
+      return true;
+    });
+    if (BEAMS.length) requestAnimationFrame(beamLoop); else beamLoop.on = false;
+  }
   function pvCall(fromId, ids) {
     if (!pvReady) return;
     pvCallEnd(fromId);
@@ -2930,7 +2977,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
       if (state.asking === fromId) svg.classList.add("ceo");
       svg.appendChild(l);
     });
-    $("hotspots").insertBefore(svg, $("hotspots").firstChild);
+    beamify(svg); $("hotspots").insertBefore(svg, $("hotspots").firstChild);
     var el = $("hs" + fromId); if (el) { el.classList.add("calling"); el.querySelector("em").textContent = "calling " + ids.map(function (id) { return BY_ID[id].name; }).join(", ") + "…"; }
   }
   function pvCallEnd(fromId) {
@@ -2973,7 +3020,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
       l.setAttribute("stroke", COLORS[b.color]); l.setAttribute("vector-effect", "non-scaling-stroke"); svg.appendChild(l);
       var h = $("hs" + b.id); if (h) { h.classList.add("meeting"); h.querySelector("em").textContent = "in meeting"; }
     });
-    $("hotspots").insertBefore(svg, $("hotspots").firstChild);
+    beamify(svg); $("hotspots").insertBefore(svg, $("hotspots").firstChild);
     if (card) card.remove();
     card = document.createElement("div"); card.className = "meet-card"; card.id = "meetCard"; card.style.left = LAY.meet[0] + "%"; card.style.top = LAY.meet[1] + "%";
     card.innerHTML = '<div class="meet-head"><b>Team meeting</b><button type="button" class="meet-x" aria-label="Close meeting notes">×</button></div>' +
@@ -3590,7 +3637,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
       var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "fx-trail"); svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
       var mx = (a[0] + b[0]) / 2, my = Math.min(a[1], b[1]) - 6;
       svg.innerHTML = '<path d="M' + a[0] + " " + a[1] + " Q" + mx + " " + my + " " + b[0] + " " + b[1] + '" stroke="' + color + '" vector-effect="non-scaling-stroke"/>';
-      box.appendChild(svg); box.appendChild(g); box.appendChild(tag);
+      beamify(svg); box.appendChild(svg); box.appendChild(g); box.appendChild(tag);
       setTimeout(function () { g.classList.add("tagged"); }, REDUCED ? 0 : 700);
       setTimeout(function () {
         svg.classList.add("draw");
@@ -4191,7 +4238,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     var lines = ids.map(function (id) { var b = hsCenter(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
     var rings = [fromId].concat(ids).map(function (id) { var c = hsCenter(id); return c ? '<span class="cm-ring" style="left:' + c[0] + "%;top:" + c[1] + "%;--c:" + COLORS[BY_ID[id].color] + '"></span>' : ""; }).join("");
     m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">' + "📞 " + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
-    host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
+    beamify(m.querySelector("svg")); host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
   }
 
   // ---------- the whole team gathers in the boardroom ----------
