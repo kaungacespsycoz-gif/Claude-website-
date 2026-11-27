@@ -1,6 +1,6 @@
 <title>Glostudy AI Office</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap">
 <style>
 /* Layout: app bar; the office scene (stage) on the left with staff + activity under it; a sticky side panel on the right with Chat / Clients tabs. */
 :root {
@@ -155,11 +155,16 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .meet-line.decide { background: rgba(232,193,122,.15); border-radius: 8px; padding: 4px 8px; }
 .hs.meeting .hs-tag { box-shadow: 0 0 0 1.5px var(--c); }
 .hs-badge.intel { right: auto; left: 92%; top: -2%; background: #2f6fe0; box-shadow: 0 0 0 3px rgba(47,111,224,.3); white-space: nowrap; }
-.plate { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; padding: 2px 9px 3px; border-radius: 3px; pointer-events: none;
-  background: linear-gradient(180deg, #f1d79a, #c99a4b); color: #2a1d0b; box-shadow: 0 2px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.6); white-space: nowrap; z-index: 2; }
-.plate b { font: 700 .66rem/1.1 var(--display); letter-spacing: .02em; }
-.plate span { font: 600 .56rem/1.1 var(--sans); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
-.plate.gold-you { background: linear-gradient(180deg, #2b2f35, #121417); color: #f1d79a; }
+.plate { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; padding: 2px 10px 4px; pointer-events: none; z-index: 2; white-space: nowrap;
+  /* clear acrylic block, engraved text, LED strip in the base */
+  background: linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.07) 45%, rgba(255,255,255,.12) 100%);
+  border: 1px solid rgba(255,255,255,.5); border-radius: 2px; backdrop-filter: blur(2px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), inset 1px 0 0 rgba(255,255,255,.35), inset -1px 0 0 rgba(255,255,255,.35), 0 6px 14px rgba(0,0,0,.4); }
+.plate::after { content: ""; position: absolute; left: -1px; right: -1px; bottom: -3px; height: 3px; border-radius: 0 0 2px 2px; background: #fff3dc;
+  box-shadow: 0 0 6px 2px rgba(255,226,170,.85), 0 0 16px 4px rgba(255,214,150,.45); }
+.plate b { font: italic 600 .66rem/1.15 "Playfair Display", Georgia, serif; color: rgba(255,255,255,.94); text-shadow: 0 0 6px rgba(255,236,200,.85), 0 1px 0 rgba(0,0,0,.3); }
+.plate span { font: italic 500 .5rem/1.2 "Playfair Display", Georgia, serif; color: rgba(255,255,255,.85); text-shadow: 0 0 5px rgba(255,236,200,.7), 0 1px 0 rgba(0,0,0,.3); }
+.plate.gold-you b, .plate.gold-you span { color: #ffe6b0; text-shadow: 0 0 7px rgba(255,205,120,.9), 0 1px 0 rgba(0,0,0,.3); }
 .floor-tag { position: absolute; right: 1%; transform: translateY(-50%); background: rgba(12,14,18,.78); color: #f1f4f6; font: 600 .7rem var(--sans); letter-spacing: .06em; padding: 3px 9px; border-radius: 999px; pointer-events: none; backdrop-filter: blur(4px); }
 .folder-fly { position: absolute; width: 30px; height: 22px; margin: -11px 0 0 -15px; border-radius: 3px; background: #f6d99b; border: 1.5px solid #c9902f; box-shadow: 0 4px 14px rgba(0,0,0,.45), 0 0 0 3px var(--c); pointer-events: none; z-index: 3; }
 .folder-fly::before { content: ""; position: absolute; left: -1.5px; top: -6px; width: 12px; height: 6px; background: #e3b25f; border-radius: 2px 2px 0 0; }
