@@ -4022,6 +4022,26 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function liveText(m) { return m === "DEMO" ? DEMO[state.lang] : m[state.lang]; }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
   // Monica serves the reception queues: WeChat line first, then leads from Emily, then the website sofa
+  var fails = [];
+  function laneFail(c, id, e) {
+    c.status = "waiting"; c.holdUntil = Date.now() + 30000; c.turns.push({ kind: "note", text: errText(e) + (state.lang === "en" ? " · retrying in 30 s" : " · 30 秒后重试") });
+    fails = fails.filter(function (t) { return Date.now() - t < 300000; }); fails.push(Date.now());
+    if (fails.length >= 3) { live.on = false; activity(id, "Auto-reply paused after 3 errors: " + errText(e)); }
+    else activity(id, BY_ID[id].name + " hit an error with " + c.name.en + ", retrying in 30 s");
+  }
+  // money, visa or promise in a private chat: the draft waits for Aliya, the customer gets a polite holding line
+  function holdChatReply(c, aid, reply, question) {
+    var en = state.lang === "en", draft = reply.content;
+    reply.content = en ? "Good question. Let me confirm the exact figures with our consultant, and I'll come back to you here shortly." : "好问题！具体数字我先和顾问确认一下，稍后在这里回复您。";
+    reply.held = true; c.held = (c.held || 0) + 1;
+    addApproval({ kind: "chat", from: aid, where: (c.kind === "web" ? (en ? "Website chat" : "官网咨询") : (en ? "WeChat chat" : "微信私聊")) + " · " + liveName(c), context: liveName(c) + ": " + question,
+      why: en ? "Private reply mentions money, visas or promises" : "私聊回复涉及费用、签证或承诺", risk: "high", body: draft.replace(/【[^】]*】/g, "").trim(), custId: c.id,
+      onDecide: function (ok, text, note) {
+        c.turns.push(ok ? { role: "assistant", content: text, by: BY_ID[aid].name } : { kind: "note", text: (en ? "✗ Aliya held this reply back" : "✗ Aliya 没有发送这条回复") + (note ? " (" + note + ")" : "") + (en ? ". A consultant will follow up." : "。顾问会跟进。") });
+        drawLiveDetail();
+      } });
+    activity(aid, BY_ID[aid].name + " held a reply to " + c.name.en + " for Aliya (money/visa/promise)");
+  }
   async function serveDirect(c, aid) {
     var rachel = BY_ID[aid];
     if (state.busy[aid] === "task") setBusy(aid, null);
@@ -4040,8 +4060,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           if (calls.length) { var nt = { kind: "team", from: rachel.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, aid); }
         }
         var reply = { role: "assistant", content: "", pending: true, by: rachel.name }; c.turns.push(reply); drawLiveDetail();
-        var res = await ask(rachel, hist, { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
+        var res = await ask(rachel, hist, { extraRules: extra });
         reply.pending = false; reply.content = res.text; flashDone(aid);
+        if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); markBooked(c); }
         if (/【转人工】/.test(res.text)) { c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
@@ -4049,7 +4070,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       }
       if (c.status === "talking") c.status = c.booked ? "booked" : "done";
     } catch (e) {
-      setBusy(aid, null); c.status = "waiting"; live.on = false; c.turns.push({ kind: "note", text: errText(e) }); activity(aid, "Auto-reply paused: " + errText(e));
+      setBusy(aid, null); laneFail(c, aid, e);
     }
     if (c.status === "booked") live.timers.push(setTimeout(function () { c.status = "done"; drawLive(); }, 45000));
     if (state.busy[aid] === "cust") setBusy(aid, null);
@@ -4106,7 +4127,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           drawLive(); drawLiveDetail();
         } });
       }
-    } catch (e) { setBusy(oid, null); c.status = "waiting"; live.on = false; activity(oid, "Auto-reply paused: " + errText(e)); }
+    } catch (e) { setBusy(oid, null); laneFail(c, oid, e); }
     live.social[oid] = null; drawLive(); drawLiveDetail();
   }
   setInterval(function () {
@@ -4114,14 +4135,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var pr = { wechat: 0, lead: 1, web: 2 };
     ["1", "7"].forEach(function (aid) {
       if (live.lane[aid] || !freeFor(aid)) return;
-      var mine = live.list.filter(function (c) { return c.status === "waiting" && c.kind !== "comment" && LANE[c.kind] === aid; });
+      var mine = live.list.filter(function (c) { return c.status === "waiting" && !(c.holdUntil > Date.now()) && c.kind !== "comment" && LANE[c.kind] === aid; });
       if (!mine.length && aid === "7" && (live.lane["1"] || !freeFor("1"))) mine = live.list.filter(function (c) { return c.status === "waiting" && (c.kind === "wechat" || c.kind === "lead"); });
       var next = mine.sort(function (a, b) { return pr[a.kind] - pr[b.kind] || a.t - b.t; })[0];
       if (next) { if (aid === "7" && next.kind !== "web") activity("7", "Rachel is helping Monica with the WeChat line"); serveDirect(next, aid); }
     });
     Object.keys(SOCIAL).forEach(function (p) {
       var oid = SOCIAL[p]; if (live.social[oid] || !freeFor(oid)) return;
-      var nc = live.list.filter(function (c) { return c.status === "waiting" && c.kind === "comment" && c.plat === p; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
+      var nc = live.list.filter(function (c) { return c.status === "waiting" && !(c.holdUntil > Date.now()) && c.kind === "comment" && c.plat === p; }).sort(function (a, b) { return a.q - b.q || a.t - b.t; })[0];
       if (nc) serveComment(nc, oid);
     });
   }, 1500);
@@ -4670,11 +4691,16 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- CEO approval: nothing is published without Aliya ----------
   state.approvals = [];
-  var apSeq = 0, KIND_AP = { reply: { en: "Public reply to a comment", zh: "评论公开回复" }, post: { en: "New post", zh: "新帖子" } };
+  var apSeq = 0, KIND_AP = { reply: { en: "Public reply to a comment", zh: "评论公开回复" }, post: { en: "New post", zh: "新帖子" }, chat: { en: "Private chat reply", zh: "私聊回复" } };
+  var AP_KEY = "glostudy-approvals";
+  function saveApprovals() { lsSet(AP_KEY, JSON.stringify(state.approvals.slice(0, 80).map(function (a) { var o = {}; Object.keys(a).forEach(function (k) { if (k !== "onDecide") o[k] = a[k]; }); return o; }))); }
+  // after a reload the original customer is gone, so a decision just records the outcome (posts are filed as published)
+  function restoredDecide(a) { return function (ok, text) { if (ok && a.kind === "post") addReport(a.from, state.lang === "en" ? "Published: " + a.where + " post" : "已发布：" + a.where, text); }; }
+  (function () { try { var saved = JSON.parse(lsGet(AP_KEY, "[]")) || []; saved.forEach(function (a) { if (a.status === "revising") a.status = "pending"; a.onDecide = restoredDecide(a); apSeq = Math.max(apSeq, +String(a.id).slice(1) || 0); }); state.approvals = saved; } catch (e) {} })();
   function addApproval(item) {
     item.id = "a" + (++apSeq); item.status = "pending"; item.t = Date.now(); state.approvals.unshift(item);
     var b = BY_ID[item.from]; activity(item.from, b.name + " sent a " + KIND_AP[item.kind].en.toLowerCase() + " to your desk for approval");
-    deskFilesChanged(true); refreshInbox();
+    saveApprovals(); deskFilesChanged(true); refreshInbox();
   }
   // ---------- CEO decision desk: approve, edit, send back to the team with a note, or reject with a reason ----------
   var FB_KEY = "glostudy-ceo-feedback";
@@ -4713,16 +4739,16 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       activity(a.from, "Aliya rejected " + b.name + "'s " + what + (note ? " (" + note + ")" : "") + ": not published");
       if (a.onDecide) a.onDecide(false, a.body, note);
     }
-    deskFilesChanged(); refreshInbox(); drawLive();
+    saveApprovals(); deskFilesChanged(); refreshInbox(); drawLive();
   }
   function commitApproval(a) {
     var b = BY_ID[a.from];
     activity(a.from, "Aliya approved " + b.name + "'s " + KIND_AP[a.kind].en.toLowerCase() + (a.edited ? " with her edits" : "") + ": published");
-    flashDone(a.from); if (a.onDecide) a.onDecide(true, a.body, a.note); refreshInbox(); drawLive();
+    flashDone(a.from); if (a.onDecide) a.onDecide(true, a.body, a.note); saveApprovals(); refreshInbox(); drawLive();
   }
   function undoApproval(id) {
     var a = state.approvals.filter(function (x) { return x.id === id; })[0]; if (!a || !undoT[id]) return;
-    clearTimeout(undoT[id]); delete undoT[id]; a.status = "pending"; a.decidedAt = null; deskFilesChanged(); refreshInbox();
+    clearTimeout(undoT[id]); delete undoT[id]; a.status = "pending"; a.decidedAt = null; saveApprovals(); deskFilesChanged(); refreshInbox();
   }
   function toastUndo(a) {
     var en = state.lang === "en", old = $("apToast"); if (old) old.remove();
@@ -4746,7 +4772,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       : ask(b, [{ role: "user", content: (en ? "Aliya (CEO) sent your " + KIND_AP[a.kind].en.toLowerCase() + " back.\nHer note: " : "Aliya（CEO）把你的" + KIND_AP[a.kind].zh + "退回修改。\n她的意见：") + (a.note || "") + (a.context ? "\n" + (en ? "Context: " : "背景：") + a.context : "") + (en ? "\nYour draft:\n" : "\n你的稿子：\n") + a.body + (en ? "\n\nRewrite it following her note. Reply with the new text only." : "\n\n按她的意见重写，只回复新的正文。") }], {});
     p.then(function (res) {
       if (state.busy[a.from] === "task") setBusy(a.from, null); flashDone(a.from);
-      a.status = "revised";
+      a.status = "revised"; saveApprovals();
       activity(a.from, b.name + " revised the " + KIND_AP[a.kind].en.toLowerCase() + " and sent it back to Aliya's desk");
       addApproval({ kind: a.kind, from: a.from, where: a.where, context: a.context, risk: a.risk, checked: a.checked, onDecide: a.onDecide, parent: a.id, version: (a.version || 1) + 1, prev: a.body, why: (en ? "Revised after your note: " : "已按您的意见修改：") + (a.note || ""), body: String(res.text || "").replace(/【[^】]*】/g, "").trim() || a.body });
     }, function (e) {
