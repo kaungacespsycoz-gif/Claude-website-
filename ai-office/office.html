@@ -786,6 +786,24 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 .pj-doc table { width: 100%; border-collapse: collapse; white-space: normal; margin: 6px 0 12px; background: #fff; } .pj-doc th, .pj-doc td { border: 1px solid #d5dbe2; padding: 6px 9px; text-align: left; } .pj-doc th { background: #eef2f6; }
 .pj-doc .post-prev { display: inline-block; vertical-align: top; margin: 6px 12px 12px 0; width: min(300px, 100%); white-space: normal; }
 @media (max-width: 899px) { .proj-presenter { display: none !important; } .pc-mode button { padding: 5px 7px !important; font-size: .68rem !important; } }
+
+/* screen takes almost the whole view */
+.pc { padding: 46px 1vw 1vh !important; justify-content: flex-start !important; }
+.pc::after { display: none; }
+.pc-top { padding: 8px 10px !important; }
+.pc-top .pc-av { width: 28px; height: 28px; border-radius: 50%; background-size: cover; background-position: 50% 22%; box-shadow: 0 0 0 2px var(--c); flex: none; }
+.proj, .pc-mon { width: 98vw !important; max-width: none !important; flex: 1; min-height: 0; }
+.proj-screen { width: 99% !important; height: auto !important; flex: 1; }
+.pc[data-mode="tv"] .proj-screen { width: 100% !important; }
+.proj { height: calc(100vh - 56px); }
+.proj-case { height: 10px; } .proj-bar { height: 8px; } .proj-bar i { display: none; }
+.pc-mon { display: flex; flex-direction: column; height: calc(100vh - 56px); }
+.pc-bezel { flex: 1; display: flex; flex-direction: column; padding: 7px 7px 14px !important; min-height: 0; }
+.pc-screen { flex: 1; height: auto !important; }
+.pc-neck { height: 14px !important; width: 60px !important; } .pc-base { height: 6px !important; width: 160px !important; }
+.proj-presenter { display: none !important; }
+.proj-grid { padding: 1.4% 1.6% !important; gap: 1.4% !important; }
+@media (max-width: 899px) { .pc { padding: 50px 1vw 1vh !important; } }
 </style>
 
 <div class="app">
@@ -949,7 +967,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   </div>
   <div class="pc" id="deskSheet" hidden role="dialog" aria-labelledby="sheetName">
     <div class="pc-bg" id="pcBg"></div>
-    <div class="pc-top"><span class="scr-dot"></span><b id="sheetName">On screen</b><small id="sheetSub"></small><span class="pc-mode" id="pcMode" role="group" aria-label="Show on"><button type="button" data-m="pc">🖥 Monitor</button><button type="button" data-m="proj">📽 Projector</button><button type="button" data-m="tv">📺 Big screen</button></span><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
+    <div class="pc-top"><span class="pc-av" id="pcAv"></span><b id="sheetName">On screen</b><small id="sheetSub"></small><span class="pc-mode" id="pcMode" role="group" aria-label="Show on"><button type="button" data-m="pc">🖥 Monitor</button><button type="button" data-m="proj">📽 Projector</button><button type="button" data-m="tv">📺 Big screen</button></span><button type="button" id="sheetCopy">Copy</button><button type="button" id="sheetClose">Close</button></div>
     <div class="proj" id="proj" hidden>
       <div class="proj-case"></div>
       <div class="proj-screen"><div class="proj-grid" id="projGrid"></div></div>
@@ -3595,7 +3613,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var A = PC_APPS[b.id] || PC_APPS["2"], app = $("pcApp"), pc = $("deskSheet");
     $("sheetName").textContent = b.name + "'s computer"; $("sheetSub").textContent = b.title + " · showing you the full report";
     pc.style.setProperty("--c", COLORS[b.color]); app.style.setProperty("--app", A.color); app.className = "app " + A.cls;
-    $("pcBg").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
+    $("pcBg").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")"; $("pcAv").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
     $("appTitle").textContent = A.title; $("appTool").innerHTML = A.tool; $("appUser").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
     $("appStatus").innerHTML = "<span>" + esc(A.status[0]) + "</span><span>" + esc(A.status[1]) + "</span>";
     var html = renderRich(rep, reportHtml);
