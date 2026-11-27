@@ -1257,6 +1257,33 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 }
 @keyframes titleIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
 @media (max-width: 640px) { .photo-frame .fx-tag { font-size: .5rem; padding: 1px 5px; transform: translate(-50%, -26px); } }
+
+/* ---------- CEO decision desk ---------- */
+.ib-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.ib-tile { text-align: left; border: 1px solid rgba(var(--holo), .3); background: rgba(8,20,32,.6); color: #cfe3f2; border-radius: 10px; padding: 7px 9px; cursor: pointer; font: inherit; display: grid; gap: 1px; min-width: 0; }
+.ib-tile span { font-size: .68rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ib-tile b { font-size: 1.25rem; line-height: 1.1; color: #fff; } .ib-tile small { font-size: .62rem; color: #8fb3cc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ib-tile.on { border-color: #eaf6ff; background: rgba(234,246,255,.12); } .ib-tile.hot b { color: #ffb45c; }
+@media (max-width: 560px) { .ib-tile { padding: 6px 6px; text-align: center; } .ib-tile span { font-size: .6rem; } .ib-tile b { font-size: 1.05rem; } .ib-tile small { display: none; } }
+.ap-zero { border: 1px dashed rgba(61,220,132,.5); border-radius: 12px; padding: 12px; color: #bff3d4; font-weight: 600; } .ap-zero small { display: block; font-weight: 400; color: #a9c6dc; margin-top: 4px; font-size: .76rem; }
+.ap-bulk { border: 1px solid rgba(61,220,132,.6); background: rgba(10,40,24,.55); color: #bff3d4; border-radius: 10px; padding: 8px 12px; font: 600 .8rem var(--sans); cursor: pointer; text-align: left; }
+.ap-card.r-high { border-left: 4px solid #ff6b5c; } .ap-card.r-care { border-left: 4px solid #ffb45c; } .ap-card.r-low { border-left: 4px solid #3ddc84; }
+.ap-card.revising, .ap-card.revised { border-color: rgba(120,170,255,.5); background: rgba(12,24,48,.45); }
+.ap-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex: none; }
+.ap-risk { font: 600 .64rem var(--sans); padding: 2px 7px; border-radius: 99px; } .ap-risk.high { background: rgba(255,107,92,.2); color: #ffb1a8; } .ap-risk.care { background: rgba(255,180,92,.2); color: #ffd29a; } .ap-risk.low { background: rgba(61,220,132,.18); color: #a9f0c8; }
+.ap-age { font-size: .64rem; color: #8fb3cc; } .ap-v { font-style: normal; font-size: .66rem; background: rgba(120,170,255,.25); color: #cfe0ff; border-radius: 6px; padding: 0 5px; margin-left: 4px; }
+.ap-why { font-size: .78rem; color: #ffd9a8; } .ap-note { font-size: .78rem; color: #cfe0ff; background: rgba(120,170,255,.1); border-radius: 8px; padding: 5px 8px; }
+.ap-body.clip { max-height: 150px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
+.ap-more { align-self: flex-start; border: 0; background: none; color: #8fc4ff; font: 600 .76rem var(--sans); cursor: pointer; padding: 0; }
+.ap-acts .ap-back { background: rgba(120,170,255,.2); color: #dbe7ff; } .ap-acts .ap-undo { background: #eaf6ff; color: #0b1620; }
+.ap-ask { display: grid; gap: 6px; border-top: 1px solid rgba(255,255,255,.12); padding-top: 8px; }
+.ap-chips { display: flex; flex-wrap: wrap; gap: 5px; } .ap-chips button { border: 1px solid rgba(var(--holo), .35); background: rgba(8,20,32,.6); color: #dbe9f3; border-radius: 99px; padding: 4px 9px; font: .72rem var(--sans); cursor: pointer; }
+.ap-row { display: flex; gap: 6px; flex-wrap: wrap; } .ap-in { flex: 1 1 180px; min-width: 0; border-radius: 8px; border: 1px solid rgba(var(--holo), .5); background: rgba(5,15,25,.7); color: #fff; padding: 7px 9px; font: .82rem var(--sans); }
+.ap-row button { border: 0; border-radius: 99px; padding: 7px 12px; font: 600 .78rem var(--sans); cursor: pointer; } .ap-send.revise { background: #8fb8ff; color: #0b1620; } .ap-send.reject { background: #ff8a7c; color: #1a0b08; } .ap-cancel { background: rgba(255,255,255,.1); color: #dbe9f3; }
+.ap-toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 200; display: flex; gap: 12px; align-items: center; background: #0f1b26; color: #eaf6ff; border: 1px solid rgba(61,220,132,.6); border-radius: 99px; padding: 8px 10px 8px 16px; font: 600 .82rem var(--sans); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.ap-toast button { border: 0; background: #eaf6ff; color: #0b1620; border-radius: 99px; padding: 5px 12px; font: 700 .78rem var(--sans); cursor: pointer; }
+.ib-btn.ghost { background: rgba(255,255,255,.08); }
+.hand-row { display: flex; align-items: center; gap: 10px; text-align: left; width: 100%; border: 1px solid rgba(255,180,92,.5); border-left: 4px solid #ffb45c; background: rgba(40,28,12,.45); color: #fff; border-radius: 12px; padding: 8px 10px; cursor: pointer; font: inherit; }
+.hand-row b { flex: 1; font-size: .86rem; } .hand-row small { display: block; color: #a9c6dc; font-weight: 400; font-size: .72rem; } .hand-row em { font-style: normal; font-size: .7rem; color: #ffd29a; } .hand-row.late { border-left-color: #ff6b5c; } .hand-row.late em { color: #ffb1a8; }
 </style>
 
 <div class="app">
@@ -1715,6 +1742,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
       if (bot.id === "4" || bot.id === "19") rules += "\n\n# 【今日资讯】\n" + intelText();
       if (bot.persona) rules += "\n\n# 你的身份（以此为准，覆盖上文的名字和岗位）\n你叫「" + bot.name + "」，岗位：" + bot.title + "。" + bot.persona;
+      rules += feedbackRules(bot.id);
       if (o.extraRules) rules += o.extraRules;
       return rawAsk(rules, history, o);
     });
@@ -1753,7 +1781,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ado can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
-    "Colleagues: leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry requirements; raj = application deadlines and timelines; bernadette = tuition fees, living costs, budgets, money needed for the student visa, RMB/GBP conversions; amy = personal statements, CVs, reference letters, English editing of application documents.\n" +
+    "Colleagues: leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry requirements; raj = application deadlines and timelines; bernadette = tuition fees, living costs, budgets, RMB/GBP conversions (visa money questions from customers go to a human, never to bernadette); amy = personal statements, CVs, reference letters, English editing of application documents.\n" +
     "Only call a colleague when the client asks something specific that needs that knowledge. Do NOT call anyone for greetings, giving booking details, general questions about Glostudy's service, Glostudy's own prices, visa legal advice, complaints, or attempts to change the rules.\n" +
     "Reply with JSON only, no other text: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence with the client's key facts\"}]} with at most 3 calls, or {\"calls\":[]}.";
   var NOTE_RULE = "\n\n# 这次是同事之间的内部请求\n前台莫妮卡替客户来问你。只回复给莫妮卡看的内部笔记：最多 5 条要点，每条一句话，结论在前，最后一条写需要核实的地方（没有就省略）。不要寒暄，不要写给客户的话。";
@@ -3503,6 +3531,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       var mins = Math.round((now - new Date(c.updated || c.created)) / 60000);
       lines.push("- " + (c.name || "New client") + " | status: " + c.status + " | booked: " + (c.created || "").slice(0, 16).replace("T", " ") + " | last change " + mins + " min ago" + (c.error ? " | problem: " + c.error : "") + "\n  summary: " + String(c.summary || "").replace(/\n/g, "; ").slice(0, 300));
     });
+    var pendA = (state.approvals || []).filter(function (a) { return a.status === "pending"; }), handsA = live.list.filter(function (c) { return c.status === "human"; });
+    lines.push("Waiting for Aliya: " + pendA.length + " to approve (" + pendA.filter(function (a) { return a.kind === "post"; }).length + " posts, " + pendA.filter(function (a) { return a.kind === "reply"; }).length + " replies); " + handsA.length + " customers waiting for a person; " + (state.approvals || []).filter(function (a) { return a.status === "revising"; }).length + " items sent back to the team.");
+    lines.push("Live customers today: " + live.list.length + " · booked: " + live.list.filter(function (c) { return c.booked; }).length + ". Start the brief with: people waiting, then approvals, then today's consultations.");
     lines.push("Activity (newest first):"); state.activity.forEach(function (a) { lines.push("- " + hhmm(a.t) + " " + a.text); });
     if (!state.activity.length) lines.push("- none yet today");
     var tests = Object.keys(state.results);
@@ -3944,6 +3975,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     setTimeout(done, ran && !REDUCED ? 2700 : 0);
   }
   function handover(c) {
+    c.handAt = c.handAt || Date.now(); deskFilesChanged(true); refreshInbox();
     activity("10", "Phoebe took over " + c.name.en + "'s " + (c.kind === "comment" ? "comment" : "chat") + " and alerted a consultant");
     brief("10", state.lang === "en" ? "handling " + c.name.en + "'s case" : "处理" + c.name.zh + "的问题", 6000);
   }
@@ -4054,7 +4086,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           drawLive(); drawLiveDetail();
         };
         // generic replies: an AI expert checks them and they go out; money, visas and guarantees need Aliya
-        var sensitive = /£|¥|\$|\d[\d,，]{3,}|费用|价格|学费|price|fee|cost|visa|签证|保证|guarantee/i.test(clean), why = "";
+        var sensitive = isSensitive(clean), why = "";
         if (!sensitive) {
           var exId = CHECKER, ex = BY_ID[exId];
           c.status = "checking"; drawLive(); setBusy(oid, null);
@@ -4067,8 +4099,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           why = chk.text.replace(/【需CEO】/g, "").trim();
         } else why = state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
         c.status = "approval";
-        addApproval({ why: why, kind: "reply", from: oid, where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
-          c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") });
+        addApproval({ why: why, checked: !!exId && why !== (state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证"), kind: "reply", from: oid, where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
+          c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") + (arguments[2] ? " (" + arguments[2] + ")" : "") });
           if (ok && isLead) toLead(c);
           else c.status = "done";
           drawLive(); drawLiveDetail();
@@ -4582,10 +4614,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- reports on the CEO desk ----------
   state.reports = (function () { try { return JSON.parse(lsGet("glostudy-reports", "[]")) || []; } catch (e) { return []; } })();
-  function saveReports() { lsSet("glostudy-reports", JSON.stringify(state.reports.slice(0, 20))); }
+  function saveReports() { lsSet("glostudy-reports", JSON.stringify(state.reports.slice(0, 60))); }
   function unreadReports() { return state.reports.filter(function (r) { return !r.read; }).length; }
   function addReport(fromId, title, text) {
-    state.reports.unshift({ from: fromId, title: title, text: text, t: new Date().toISOString(), read: false }); state.reports = state.reports.slice(0, 20); saveReports();
+    state.reports.unshift({ from: fromId, title: title, text: text, t: new Date().toISOString(), read: false }); state.reports = state.reports.slice(0, 60); saveReports();
     deskFilesChanged(true);
   }
   function pendingApprovals() { return (state.approvals || []).filter(function (a) { return a.status === "pending"; }).length; }
@@ -4601,20 +4633,38 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     inRefresh(); if (pano) pano.refresh();
   }
   function openInbox() {
-    var rv = pendingReview(), html = approvalsHtml() + meetingsHtml() + '<div class="ib-sec">Reports from the team</div>';
-    if (!state.reports.length) html += '<p class="ib-empty">No reports yet. Ask Ado for your daily brief, or hold a team meeting.</p>';
-    state.reports.forEach(function (r, i) {
-      var b = BY_ID[r.from] || BY_ID["5"];
-      html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
-    });
-    html += '<div class="ib-sec">Clients</div>' + (rv ? '<p class="ib-empty">' + rv + " client draft" + (rv > 1 ? "s" : "") + ' from Leonard waiting for your review.</p><button type="button" class="ib-btn" id="ibClients">Open the client board</button>' : '<p class="ib-empty">Nothing waiting for review.</p>');
+    var en = state.lang === "en", rv = pendingReview(), pend = state.approvals.filter(function (a) { return a.status === "pending"; }).length;
+    var withTeam = state.approvals.filter(function (a) { return a.status === "revising"; }).length, unread = unreadReports();
+    var tab = state.ibTab || (pend ? "decide" : unread ? "reports" : "decide"); state.ibTab = tab;
+    var oldest = pendingSorted()[0];
+    var tiles = [["decide", "✍", en ? "To decide" : "待决定", pend, oldest ? (en ? "oldest " : "最久 ") + ageText(oldest.t) : (en ? "all clear" : "已清空")],
+      ["team", "↩", en ? "With the team" : "团队修改中", withTeam, en ? "sent back" : "已退回"],
+      ["reports", "📄", en ? "Reports" : "报告", unread, en ? state.reports.length + " in total" : "共 " + state.reports.length + " 份"],
+      ["clients", "👥", en ? "Clients & meetings" : "客户与会议", rv, en ? "to review" : "待审核"]];
+    var html = '<div class="ib-tiles">' + tiles.map(function (t) { return '<button type="button" class="ib-tile' + (t[0] === tab ? " on" : "") + (t[0] === "decide" && t[3] ? " hot" : "") + '" data-ibt="' + t[0] + '"><span>' + t[1] + " " + esc(t[2]) + "</span><b>" + t[3] + "</b><small>" + esc(t[4]) + "</small></button>"; }).join("") + "</div>";
+    var hands = live.list.filter(function (c) { return c.status === "human"; });
+    if (tab === "decide" && hands.length) html += '<div class="ib-sec">' + (en ? "Waiting for a person · " : "等待真人处理 · ") + hands.length + "</div>" + hands.map(function (c) { var m = Math.round((Date.now() - (c.handAt || Date.now())) / 60000); return '<button type="button" class="hand-row' + (m >= 120 ? " late" : "") + '" data-hand="' + c.id + '"><span>🙋</span><b>' + esc(liveName(c)) + "<small>" + esc(c.kind === "comment" ? PLAT[c.plat][state.lang] : KIND[c.kind][state.lang]) + " · " + (en ? "with Phoebe" : "Phoebe 跟进中") + "</small></b><em>⏱ " + esc(ageText(c.handAt || Date.now())) + "</em></button>"; }).join("");
+    if (tab === "decide") html += approvalsHtml() + '<details class="ap-done"><summary>' + (en ? "Decided recently" : "最近处理") + "</summary>" + doneHtml() + "</details>";
+    else if (tab === "team") { var tm = state.approvals.filter(function (a) { return a.status === "revising" || a.status === "revised" || a.status === "rejected"; }); html += tm.length ? tm.map(function (a) { return approvalCard(a, false); }).join("") : '<p class="ib-empty">' + (en ? "Nothing sent back. When you send something back, the officer revises it and it returns to “To decide”." : "暂无退回。退回后同事会修改，再回到“待决定”。") + "</p>"; }
+    else if (tab === "reports") {
+      html += (unread ? '<button type="button" class="ib-btn ghost" id="ibReadAll">' + (en ? "Mark all as read" : "全部标为已读") + "</button>" : "");
+      if (!state.reports.length) html += '<p class="ib-empty">' + (en ? "No reports yet. Ask Ado for your daily brief, or hold a team meeting." : "还没有报告。可以让 Ado 做今日简报。") + "</p>";
+      state.reports.forEach(function (r, i) {
+        var b = BY_ID[r.from] || BY_ID["5"];
+        html += '<details class="ib-item" data-i="' + i + '"' + (i === 0 && !r.read ? " open" : "") + '><summary><span style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(r.title) + '<br><small>' + esc(b.name) + " · " + esc(new Date(r.t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) + "</small></b>" + (r.read ? "" : "<i title=\"New\"></i>") + '</summary><div class="ib-text">' + reportHtml(String(r.text).replace(/【简要】|【完整报告】/g, "")) + "</div></details>";
+      });
+    } else html += '<div class="ib-sec">' + (en ? "Clients" : "客户") + "</div>" + (rv ? '<p class="ib-empty">' + rv + (en ? " client draft" + (rv > 1 ? "s" : "") + " from Leonard waiting for your review." : " 份 Leonard 的客户方案待审核。") + '</p><button type="button" class="ib-btn" id="ibClients">' + (en ? "Open the client board" : "打开客户名单") + "</button>" : '<p class="ib-empty">' + (en ? "Nothing waiting for review." : "没有待审核。") + "</p>") + meetingsHtml();
     var keepScroll = $("inboxBody").scrollTop; $("inboxBody").innerHTML = html; if (!openInbox.refreshing) $("inbox").hidden = false; else $("inboxBody").scrollTop = keepScroll;
-    Array.prototype.forEach.call(document.querySelectorAll("#inboxBody details"), function (d) { var mark = function () { if (d.open) { var r = state.reports[+d.dataset.i]; if (r && !r.read) { r.read = true; saveReports(); deskFilesChanged(); var dot = d.querySelector("summary i"); if (dot) dot.remove(); } } }; d.addEventListener("toggle", mark); mark(); });
+    Array.prototype.forEach.call(document.querySelectorAll("#inboxBody [data-ibt]"), function (t) { t.onclick = function () { state.ibTab = t.dataset.ibt; $("inboxBody").scrollTop = 0; openInbox.refreshing = true; openInbox(); openInbox.refreshing = false; }; });
+    Array.prototype.forEach.call(document.querySelectorAll("#inboxBody details.ib-item"), function (d) { var mark = function () { if (d.open) { var r = state.reports[+d.dataset.i]; if (r && !r.read) { r.read = true; saveReports(); deskFilesChanged(); var dot = d.querySelector("summary i"); if (dot) dot.remove(); } } }; d.addEventListener("toggle", mark); mark(); });
+    var ra = $("ibReadAll"); if (ra) ra.onclick = function () { state.reports.forEach(function (r) { r.read = true; }); saveReports(); deskFilesChanged(); refreshInbox(); };
     var cb = $("ibClients"); if (cb) cb.onclick = function () { $("inbox").hidden = true; state.filter = "review"; setTab("clients"); $("side").scrollIntoView({ behavior: "smooth" }); };
+    Array.prototype.forEach.call(document.querySelectorAll("#inboxBody [data-hand]"), function (h) { h.onclick = function () { $("inbox").hidden = true; openLive("human", h.dataset.hand); }; });
     wireApprovals($("inboxBody")); wireMeetings();
-    if (!$("inbox").hidden) $("inboxX").focus({ preventScroll: true });
+    if (!$("inbox").hidden && !openInbox.refreshing) $("inboxX").focus({ preventScroll: true });
   }
   $("inboxX").onclick = function () { $("inbox").hidden = true; };
+  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
 
 
@@ -4626,42 +4676,144 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var b = BY_ID[item.from]; activity(item.from, b.name + " sent a " + KIND_AP[item.kind].en.toLowerCase() + " to your desk for approval");
     deskFilesChanged(true); refreshInbox();
   }
-  function decideApproval(id, ok, text) {
+  // ---------- CEO decision desk: approve, edit, send back to the team with a note, or reject with a reason ----------
+  var FB_KEY = "glostudy-ceo-feedback";
+  function feedback() { try { return JSON.parse(lsGet(FB_KEY, "[]")) || []; } catch (e) { return []; } }
+  function addFeedback(bot, kind, verdict, note) { if (!note) return; var f = feedback(); f.push({ bot: bot, kind: kind, verdict: verdict, note: note, t: Date.now() }); lsSet(FB_KEY, JSON.stringify(f.slice(-60))); }
+  function feedbackRules(id) {
+    var f = feedback().filter(function (x) { return x.bot === id; }).slice(-6); if (!f.length) return "";
+    return "\n\n# Aliya（CEO）最近对你工作的反馈（以后照做）\n" + f.map(function (x) { return "- " + (x.verdict === "reject" ? "退回不发：" : x.verdict === "revise" ? "要求修改：" : "批准时说明：") + x.note; }).join("\n");
+  }
+  function riskOf(a) {
+    if (a.risk) return a.risk;
+    var t = (a.why || "") + " " + (a.context || "") + " " + (a.body || "");
+    return isSensitive(t) ? "high" : /upset|complain|不满|投诉|收钱不办事/i.test(t) ? "care" : "low";
+  }
+  // one shared test for money, visas, promises and contracts (no bare numbers, so years like 2027 don't trip it)
+  function isSensitive(t) { return /£|¥|\$\s?\d|\d\s*(万|元|镑)|学费|费用|价格|报价|收费|多少钱|签证|visa|guarant|保证|包录|包过|肯定录取|稳录|refund|退款|合同|contract|\bfees?\b|\bprices?\b/i.test(String(t || "")); }
+  function ageText(t) { var m = Math.max(0, Math.round((Date.now() - t) / 60000)), en = state.lang === "en"; return m < 1 ? (en ? "just now" : "刚刚") : m < 60 ? m + (en ? " min" : " 分钟") : Math.round(m / 60) + (en ? " h" : " 小时"); }
+  var undoT = {};
+  function decideApproval(id, verdict, text, note) {
+    if (verdict === true) verdict = "approve"; if (verdict === false) verdict = "reject";
     var a = state.approvals.filter(function (x) { return x.id === id; })[0]; if (!a || a.status !== "pending") return;
-    if (text != null) a.body = text;
-    a.status = ok ? "approved" : "rejected";
-    activity(a.from, ok ? "Aliya approved " + BY_ID[a.from].name + "'s " + KIND_AP[a.kind].en.toLowerCase() + ": published" : "Aliya rejected " + BY_ID[a.from].name + "'s " + KIND_AP[a.kind].en.toLowerCase() + ": not published");
-    if (a.onDecide) a.onDecide(ok, a.body);
+    var b = BY_ID[a.from], what = KIND_AP[a.kind].en.toLowerCase(), en = state.lang === "en";
+    if (text != null) { if (text !== a.body) a.edited = true; a.body = text; }
+    a.note = note || ""; a.decidedAt = Date.now();
+    if (verdict === "revise") {
+      a.status = "revising"; addFeedback(a.from, a.kind, "revise", note);
+      activity(a.from, "Aliya sent " + b.name + "'s " + what + " back: " + (note || "please revise"));
+      reviseApproval(a);
+    } else if (verdict === "approve") {
+      // short undo window, then it goes straight back to the team and is published
+      a.status = "approved"; if (note) addFeedback(a.from, a.kind, "approve", note);
+      undoT[a.id] = setTimeout(function () { delete undoT[a.id]; commitApproval(a); }, 5000);
+      toastUndo(a);
+    } else {
+      a.status = "rejected"; addFeedback(a.from, a.kind, "reject", note);
+      activity(a.from, "Aliya rejected " + b.name + "'s " + what + (note ? " (" + note + ")" : "") + ": not published");
+      if (a.onDecide) a.onDecide(false, a.body, note);
+    }
     deskFilesChanged(); refreshInbox(); drawLive();
   }
+  function commitApproval(a) {
+    var b = BY_ID[a.from];
+    activity(a.from, "Aliya approved " + b.name + "'s " + KIND_AP[a.kind].en.toLowerCase() + (a.edited ? " with her edits" : "") + ": published");
+    flashDone(a.from); if (a.onDecide) a.onDecide(true, a.body, a.note); refreshInbox(); drawLive();
+  }
+  function undoApproval(id) {
+    var a = state.approvals.filter(function (x) { return x.id === id; })[0]; if (!a || !undoT[id]) return;
+    clearTimeout(undoT[id]); delete undoT[id]; a.status = "pending"; a.decidedAt = null; deskFilesChanged(); refreshInbox();
+  }
+  function toastUndo(a) {
+    var en = state.lang === "en", old = $("apToast"); if (old) old.remove();
+    var t = document.createElement("div"); t.id = "apToast"; t.className = "ap-toast";
+    t.innerHTML = "<span>✓ " + esc(en ? "Approved · publishing in 5 s" : "已批准 · 5 秒后发布") + '</span><button type="button">' + (en ? "Undo" : "撤销") + "</button>";
+    t.querySelector("button").onclick = function () { undoApproval(a.id); t.remove(); };
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 5200);
+  }
+  function demoRevise(body, note) {
+    var t = String(body);
+    if (/short|简短|精简/i.test(note)) { var parts = t.split(/(?<=[。！？.!?])\s*/); t = parts.slice(0, Math.max(1, Math.ceil(parts.length * .6))).join(" "); }
+    if (/price|fee|价格|费用/i.test(note)) t = t.split("\n").filter(function (l) { return !/[¥£]|\d+\s*万|price|fee|价格|收费/i.test(l); }).join("\n");
+    if (/warm|温暖|亲切/i.test(note)) t = (state.lang === "en" ? "Thank you so much for asking! " : "谢谢您的提问！") + t;
+    if (/consult|CTA|咨询/i.test(note)) t += state.lang === "en" ? "\n\nYour first consultation is free: add GlostudyUK on WeChat." : "\n\n第一次咨询免费，加微信 GlostudyUK。";
+    return t;
+  }
+  function reviseApproval(a) {
+    var b = BY_ID[a.from], en = state.lang === "en";
+    state.taskLabel[a.from] = en ? "revising per Aliya's note" : "按 Aliya 的意见修改"; setBusy(a.from, "task");
+    var p = state.engine === "demo" ? wait(2600).then(function () { return { text: demoRevise(a.body, a.note) }; })
+      : ask(b, [{ role: "user", content: (en ? "Aliya (CEO) sent your " + KIND_AP[a.kind].en.toLowerCase() + " back.\nHer note: " : "Aliya（CEO）把你的" + KIND_AP[a.kind].zh + "退回修改。\n她的意见：") + (a.note || "") + (a.context ? "\n" + (en ? "Context: " : "背景：") + a.context : "") + (en ? "\nYour draft:\n" : "\n你的稿子：\n") + a.body + (en ? "\n\nRewrite it following her note. Reply with the new text only." : "\n\n按她的意见重写，只回复新的正文。") }], {});
+    p.then(function (res) {
+      if (state.busy[a.from] === "task") setBusy(a.from, null); flashDone(a.from);
+      a.status = "revised";
+      activity(a.from, b.name + " revised the " + KIND_AP[a.kind].en.toLowerCase() + " and sent it back to Aliya's desk");
+      addApproval({ kind: a.kind, from: a.from, where: a.where, context: a.context, risk: a.risk, checked: a.checked, onDecide: a.onDecide, parent: a.id, version: (a.version || 1) + 1, prev: a.body, why: (en ? "Revised after your note: " : "已按您的意见修改：") + (a.note || ""), body: String(res.text || "").replace(/【[^】]*】/g, "").trim() || a.body });
+    }, function (e) {
+      if (state.busy[a.from] === "task") setBusy(a.from, null); a.status = "pending"; a.why = (en ? "Couldn't revise: " : "修改失败：") + errText(e); refreshInbox();
+    });
+  }
   function refreshInbox() { if ($("inbox").hidden) return; openInbox.refreshing = true; openInbox(); openInbox.refreshing = false; }
+  var NOTE_CHIPS = { revise: [{ en: "Make it shorter", zh: "再简短一些" }, { en: "Warmer, friendlier tone", zh: "语气更温暖亲切" }, { en: "Remove prices and fees", zh: "去掉价格和费用" }, { en: "Add the free consultation CTA", zh: "加上免费咨询引导" }],
+    reject: [{ en: "Risky claim", zh: "说法有风险" }, { en: "Not on brand", zh: "不符合品牌" }, { en: "Not needed", zh: "没有必要发" }, { en: "Wrong facts", zh: "信息不准确" }] };
+  function pendingSorted() {
+    var rank = { high: 0, care: 1, low: 2 };
+    return state.approvals.filter(function (a) { return a.status === "pending"; }).sort(function (x, y) { return (rank[riskOf(x)] - rank[riskOf(y)]) || (x.t - y.t); });
+  }
   function approvalsHtml() {
-    var en = state.lang === "en", pend = state.approvals.filter(function (a) { return a.status === "pending"; }), done = state.approvals.filter(function (a) { return a.status !== "pending"; }).slice(0, 4);
-    var mode = lsGet("glostudy-apprmode", "desk"), next = nextMeeting();
-    var h = '<div class="ib-sec">' + (en ? "Needs your approval before it's published" : "发布前需要您批准") + " · " + pend.length + '</div><p class="ib-empty">' + (en ? "Only new posts and replies about money, visas or guarantees come here. Everyday replies are checked by an AI expert and posted automatically." : "只有新帖子，以及涉及费用、签证或保证的回复会来这里；普通回复由 AI 专家审核后自动发布。") + '</p><div class="ap-mode">' + (en ? "Approve:" : "批准方式：") +
-      '<button type="button" data-apm="desk" aria-pressed="' + (mode === "desk") + '">' + (en ? "Right here, any time" : "随时在这里批") + '</button><button type="button" data-apm="meeting" aria-pressed="' + (mode === "meeting") + '">' + (en ? "At my review meeting" : "在审批会上统一批") + "</button></div>";
-    if (mode === "meeting" && pend.length) h += '<p class="ib-empty">' + (next ? (en ? "Saved for your review meeting at " : "留到您的审批会：") + fmtTime(next.t) : (en ? "No review meeting booked yet: book one below." : "还没有预约审批会，请在下方预约。")) + "</p>";
-    if (!pend.length) h += '<p class="ib-empty">' + (en ? "Nothing waiting. Emily's posts and public comment replies will appear here." : "暂时没有。Emily 的帖子和评论回复会出现在这里。") + "</p>";
+    var en = state.lang === "en", pend = pendingSorted(), mode = lsGet("glostudy-apprmode", "desk"), next = nextMeeting();
+    var easy = pend.filter(function (a) { return riskOf(a) === "low" && a.checked; });
+    var h = '<div class="ap-mode">' + (en ? "Decide:" : "批准方式：") + '<button type="button" data-apm="desk" aria-pressed="' + (mode === "desk") + '">' + (en ? "Here, any time" : "随时在这里批") + '</button><button type="button" data-apm="meeting" aria-pressed="' + (mode === "meeting") + '">' + (en ? "At my review meeting" : "在审批会上统一批") + "</button></div>";
+    if (mode === "meeting" && pend.length) h += '<p class="ib-empty">' + (next ? (en ? "Saved for your review meeting at " : "留到您的审批会：") + fmtTime(next.t) : (en ? "No review meeting booked yet: book one in the Clients & meetings tab." : "还没有预约审批会，请在“客户与会议”里预约。")) + "</p>";
+    if (!pend.length) h += '<div class="ap-zero">✓ ' + (en ? "All clear. Nothing waiting for you." : "全部处理完毕，没有待办。") + "<small>" + (en ? "Only new posts and replies about money, visas or guarantees come here. Everyday replies are checked by Sylvie and posted automatically." : "只有新帖子和涉及费用、签证、保证的回复会来这里；普通回复由 Sylvie 审核后自动发布。") + "</small></div>";
+    if (easy.length > 1) h += '<button type="button" class="ap-bulk" id="apBulk">✓ ' + (en ? "Approve all " + easy.length + " low-risk items Sylvie passed" : "批准 Sylvie 已审核的 " + easy.length + " 条低风险内容") + "</button>";
     pend.forEach(function (a) { h += approvalCard(a, true); });
-    if (done.length) h += '<details class="ap-done"><summary>' + (en ? "Recently decided" : "最近处理") + "</summary>" + done.map(function (a) { return approvalCard(a, false); }).join("") + "</details>";
     return h;
   }
+  function doneHtml() {
+    var en = state.lang === "en", done = state.approvals.filter(function (a) { return a.status !== "pending"; }).slice(0, 20);
+    if (!done.length) return '<p class="ib-empty">' + (en ? "Decisions you make will be listed here." : "您做过的决定会列在这里。") + "</p>";
+    return done.map(function (a) { return approvalCard(a, false); }).join("");
+  }
   function approvalCard(a, live) {
-    var b = BY_ID[a.from], en = state.lang === "en";
-    if (a.why && !a.context2) { a.context2 = 1; a.context = (a.context ? a.context + "\n" : "") + (en ? "Why it needs you: " : "需要您批准的原因：") + a.why; }
-    return '<div class="ap-card ' + a.status + '" data-ap="' + a.id + '"><div class="ap-head"><span class="ap-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(KIND_AP[a.kind][state.lang]) + "<small>" + esc(b.name + " · " + a.where) + "</small></b>" +
-      (live ? "" : '<span class="ap-st">' + (a.status === "approved" ? (en ? "✓ published" : "✓ 已发布") : (en ? "✗ not published" : "✗ 未发布")) + "</span>") + "</div>" +
-      (a.context ? '<div class="ap-ctx">' + esc(a.context) + "</div>" : "") +
-      '<div class="ap-body">' + renderRich(a.body) + "</div>" +
-      (live ? '<div class="ap-acts"><button type="button" class="ap-ok">' + (en ? "✓ Approve & publish" : "✓ 批准并发布") + '</button><button type="button" class="ap-edit">' + (en ? "✎ Edit" : "✎ 修改") + '</button><button type="button" class="ap-no">' + (en ? "✗ Reject" : "✗ 不发") + "</button></div>" : "") + "</div>";
+    var b = BY_ID[a.from], en = state.lang === "en", r = riskOf(a);
+    var ST = { approved: en ? (undoT[a.id] ? "✓ approved · publishing…" : "✓ published") : (undoT[a.id] ? "✓ 已批准 · 发布中…" : "✓ 已发布"), rejected: en ? "✗ not published" : "✗ 未发布", revising: en ? "↩ with " + b.name + ", revising" : "↩ " + b.name + " 修改中", revised: en ? "↩ revised, new version sent" : "↩ 已修改并重新提交" };
+    var RK = { high: en ? "Money · visa · promise" : "费用·签证·承诺", care: en ? "Upset customer" : "客户不满", low: a.checked ? (en ? "Checked by Sylvie" : "Sylvie 已审核") : (en ? "Low risk" : "低风险") };
+    var body = String(a.body || ""), long = body.length > 420;
+    return '<div class="ap-card ' + a.status + " r-" + r + '" data-ap="' + a.id + '"><div class="ap-head"><span class="ap-av" style="--c:' + COLORS[b.color] + ";background-image:url(" + imgURL(IMG[b.id]) + ')"></span><b>' + esc(KIND_AP[a.kind][state.lang]) + (a.version > 1 ? ' <em class="ap-v">v' + a.version + "</em>" : "") + "<small>" + esc(b.name + " · " + a.where) + "</small></b>" +
+      (live ? '<span class="ap-tags"><span class="ap-risk ' + r + '">' + esc(RK[r]) + '</span><span class="ap-age">⏱ ' + esc(ageText(a.t)) + "</span></span>" : '<span class="ap-st">' + esc(ST[a.status] || a.status) + "</span>") + "</div>" +
+      (a.why ? '<div class="ap-why">' + esc((en ? "Why you: " : "需要您：") + a.why) + "</div>" : "") +
+      (a.context ? '<div class="ap-ctx">💬 ' + esc(a.context) + "</div>" : "") +
+      '<div class="ap-body' + (live && long ? " clip" : "") + '">' + renderRich(body) + "</div>" + (live && long ? '<button type="button" class="ap-more">' + (en ? "Show all" : "展开全文") + "</button>" : "") +
+      (!live && a.note ? '<div class="ap-note">' + esc((en ? "Your note: " : "您的意见：") + a.note) + "</div>" : "") +
+      (!live && a.status === "approved" && undoT[a.id] ? '<div class="ap-acts"><button type="button" class="ap-undo">' + (en ? "↶ Undo" : "↶ 撤销") + "</button></div>" : "") +
+      (live ? '<div class="ap-acts"><button type="button" class="ap-ok">' + (en ? "✓ Approve & publish" : "✓ 批准并发布") + '</button><button type="button" class="ap-edit">' + (en ? "✎ Edit" : "✎ 修改") + '</button><button type="button" class="ap-back">' + (en ? "↩ Send back to " + b.name : "↩ 退回给 " + b.name) + '</button><button type="button" class="ap-no">' + (en ? "✗ Reject" : "✗ 不发") + "</button></div>" +
+        '<div class="ap-ask" hidden><div class="ap-chips"></div><div class="ap-row"><input type="text" class="ap-in"><button type="button" class="ap-send"></button><button type="button" class="ap-cancel">' + (en ? "Cancel" : "取消") + "</button></div></div>" : "") + "</div>";
   }
   function wireApprovals(root) {
+    var en = state.lang === "en";
     Array.prototype.forEach.call(root.querySelectorAll(".ap-card"), function (card) {
-      var id = card.dataset.ap, ok = card.querySelector(".ap-ok"), no = card.querySelector(".ap-no"), ed = card.querySelector(".ap-edit"); if (!ok) return;
-      ok.onclick = function () { var ta = card.querySelector("textarea"); decideApproval(id, true, ta ? ta.value : null); if (root !== $("inboxBody")) openReviewMeeting(true); };
-      no.onclick = function () { decideApproval(id, false); if (root !== $("inboxBody")) openReviewMeeting(true); };
-      ed.onclick = function () { var a = state.approvals.filter(function (x) { return x.id === id; })[0], body = card.querySelector(".ap-body"); body.innerHTML = '<textarea rows="8"></textarea>'; body.firstChild.value = a.body; body.firstChild.focus(); ed.disabled = true; };
+      var id = card.dataset.ap, a = state.approvals.filter(function (x) { return x.id === id; })[0], q = function (c) { return card.querySelector(c); };
+      var after = function () { if (root !== $("inboxBody")) openReviewMeeting(true); };
+      if (q(".ap-undo")) q(".ap-undo").onclick = function () { undoApproval(id); };
+      if (q(".ap-more")) q(".ap-more").onclick = function () { q(".ap-body").classList.remove("clip"); q(".ap-more").remove(); };
+      if (!q(".ap-ok")) return;
+      q(".ap-ok").onclick = function () { var ta = q("textarea"); decideApproval(id, "approve", ta ? ta.value : null); after(); };
+      q(".ap-edit").onclick = function () { var body = q(".ap-body"); body.classList.remove("clip"); if (q(".ap-more")) q(".ap-more").remove(); body.innerHTML = '<textarea rows="8"></textarea>'; body.firstChild.value = a.body; body.firstChild.focus(); q(".ap-edit").disabled = true; q(".ap-ok").textContent = en ? "✓ Save & publish" : "✓ 保存并发布"; };
+      var open = function (kind) {
+        var box = q(".ap-ask"), chips = q(".ap-chips"), inp = q(".ap-in"), send = q(".ap-send"); box.hidden = false; box.dataset.kind = kind; chips.textContent = "";
+        inp.placeholder = kind === "revise" ? (en ? "What should " + BY_ID[a.from].name + " change?" : "希望 " + BY_ID[a.from].name + " 怎么改？") : (en ? "Reason (helps the team learn)" : "原因（帮助团队改进）");
+        send.textContent = kind === "revise" ? (en ? "↩ Send to " + BY_ID[a.from].name : "↩ 退回给 " + BY_ID[a.from].name) : (en ? "✗ Reject" : "✗ 确认不发");
+        send.className = "ap-send " + kind;
+        NOTE_CHIPS[kind].forEach(function (c) { var bt = document.createElement("button"); bt.type = "button"; bt.textContent = c[state.lang]; bt.onclick = function () { inp.value = inp.value ? inp.value + "; " + c[state.lang] : c[state.lang]; inp.focus(); }; chips.appendChild(bt); });
+        inp.focus(); inp.onkeydown = function (e) { if (e.key === "Enter") send.click(); };
+        send.onclick = function () { if (kind === "revise" && !inp.value.trim()) { inp.focus(); return; } var ta = q("textarea"); decideApproval(id, kind, ta ? ta.value : null, inp.value.trim()); after(); };
+      };
+      q(".ap-back").onclick = function () { open("revise"); };
+      q(".ap-no").onclick = function () { open("reject"); };
+      q(".ap-cancel").onclick = function () { q(".ap-ask").hidden = true; };
     });
+    var bulk = root.querySelector("#apBulk"); if (bulk) bulk.onclick = function () { pendingSorted().filter(function (a) { return riskOf(a) === "low" && a.checked; }).forEach(function (a) { decideApproval(a.id, "approve"); }); };
     Array.prototype.forEach.call(root.querySelectorAll("[data-apm]"), function (b) { b.onclick = function () { lsSet("glostudy-apprmode", b.dataset.apm); refreshInbox(); }; });
   }
   // review meetings Aliya books herself
@@ -4716,11 +4868,17 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var WORK = [
     { id: "4", at: 70, every: 12, label: { en: "drafting today's post", zh: "写今天的帖子" }, ask: { en: "Daily task: draft one WeChat Moments post for parents about UK study this week, with the preview tags.", zh: "每日任务：写一条本周关于英国留学、写给家长的朋友圈，带预览标记。" }, post: true },
     { id: "5", at: 130, every: 30, label: { en: "preparing today's brief", zh: "准备今日简报" }, ask: { en: "Give me today's brief.", zh: "给我今天的简报。" }, report: { en: "Daily brief", zh: "今日简报" } },
-    { id: "6", at: 200, every: 30, label: { en: "checking the cost sheet", zh: "核对费用表" }, ask: { en: "Weekly task: check our cost sheet against the latest news and list anything to update.", zh: "每周任务：根据最新资讯核对费用表，列出需要更新的地方。" }, report: { en: "Cost sheet check", zh: "费用表核对" } },
+    { id: "6", at: 200, every: 30, weekly: true, label: { en: "checking the cost sheet", zh: "核对费用表" }, ask: { en: "Weekly task: check our cost sheet against the latest news and list anything to update.", zh: "每周任务：根据最新资讯核对费用表，列出需要更新的地方。" }, report: { en: "Cost sheet check", zh: "费用表核对" } },
     { id: "19", at: 100, every: 20, label: { en: "checking today's UK news", zh: "查看今日英国资讯" }, ask: { en: "What's today's news?", zh: "今天有什么新闻？" }, report: { en: "Today's news", zh: "今日资讯" } },
-    { id: "13", at: 165, every: 45, label: { en: "updating the deadline wall", zh: "更新截止日期墙" }, ask: { en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }, report: { en: "Deadlines for the next 3 months", zh: "未来 3 个月截止日期" } }
+    { id: "13", at: 165, every: 45, weekly: true, label: { en: "updating the deadline wall", zh: "更新截止日期墙" }, ask: { en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }, report: { en: "Deadlines for the next 3 months", zh: "未来 3 个月截止日期" } }
   ];
+  function workDue(w) {
+    if (state.engine === "demo") return true;
+    var k = "glostudy-work-" + w.id + "-" + (w.post ? "post" : "task"), last = +lsGet(k, 0), gap = w.weekly ? 7 * 864e5 : 20 * 36e5;
+    if (Date.now() - last < gap) return false; lsSet(k, String(Date.now())); return true;
+  }
   function runWork(w) {
+    if (!workDue(w)) return Promise.resolve();
     if (!live.on || state.busy[w.id] || inOneOnOne(w.id)) { if (inOneOnOne(w.id)) setTimeout(function () { runWork(w); }, 60000); return Promise.resolve(); }
     var b = BY_ID[w.id]; state.taskLabel[w.id] = w.label[state.lang]; setBusy(w.id, "task"); activity(w.id, b.name + " is " + w.label.en);
     return ask(b, [{ role: "user", content: w.ask[state.lang] }], {}).then(function (res) {
@@ -4741,8 +4899,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           pvCallEnd("4"); if (state.busy[GUARD] === "task") setBusy(GUARD, null); flashDone(GUARD);
           var ok = /【通过】/.test(chk.text);
           activity(GUARD, ok ? "Sylvie checked Emily's post: safe, sent to Aliya's desk" : "Sylvie flagged Emily's post for Aliya");
-          addApproval({ kind: "post", from: "4", where: en ? "WeChat Moments" : "朋友圈", why: ok ? (en ? "New posts always need you · Sylvie's check passed" : "新帖子都需要您批准 · Sylvie 审核通过") : chk.text.replace(/【需CEO】/g, "").trim(), body: res.text,
-            onDecide: function (yes) { if (yes) addReport("4", en ? "Published: today's Moments post" : "已发布：今日朋友圈", res.text); } });
+          addApproval({ kind: "post", checked: ok, from: "4", where: en ? "WeChat Moments" : "朋友圈", why: ok ? (en ? "New posts always need you · Sylvie's check passed" : "新帖子都需要您批准 · Sylvie 审核通过") : chk.text.replace(/【需CEO】/g, "").trim(), body: res.text,
+            onDecide: function (yes, text) { if (yes) addReport("4", en ? "Published: today's Moments post" : "已发布：今日朋友圈", text || res.text); } });
         });
     });
   }
