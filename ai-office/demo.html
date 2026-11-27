@@ -4200,7 +4200,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
     var L = LAYOUTS.f4, a = hsCenter(fromId), m = document.createElement("div"), ceo = fromId !== "1" && fromId !== "7"; m.className = "call-map" + (ceo ? " ceo" : "");
     var lines = ids.map(function (id) { var b = hsCenter(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
     var rings = [fromId].concat(ids).map(function (id) { var c = hsCenter(id); return c ? '<span class="cm-ring" style="left:' + c[0] + "%;top:" + c[1] + "%;--c:" + COLORS[BY_ID[id].color] + '"></span>' : ""; }).join("");
-    m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">' + (ceo ? "👑 CEO request · " : "📞 ") + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
+    m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">' + "📞 " + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
     host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
   }
 
