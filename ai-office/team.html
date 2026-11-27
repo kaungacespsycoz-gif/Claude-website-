@@ -110,7 +110,7 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 
 /* Photo view */
 .photo-view { overflow-x: auto; background: #0e0f12; }
-.photo-frame { position: relative; min-width: 720px; overflow: hidden; aspect-ratio: 1536 / 864; }
+.photo-frame { position: relative; min-width: 720px; max-width: 1100px; margin: 0 auto; overflow: hidden; aspect-ratio: 1280 / 960; }
 .photo-frame > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.03); transition: transform .6s ease-out; }
 .hotspots { position: absolute; inset: 0; }
 .hs { position: absolute; border: 0; padding: 0; background: transparent; border-radius: 14px; }
@@ -142,7 +142,7 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .note-fly { position: absolute; width: 18px; height: 22px; margin: -11px 0 0 -9px; border-radius: 3px; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.4), 0 0 0 2.5px var(--c); pointer-events: none; z-index: 3;
   background-image: repeating-linear-gradient(180deg, transparent 0 4px, #c7ccd1 4px 5px); background-size: 70% 70%; background-position: center; background-repeat: no-repeat; }
 @media (prefers-reduced-motion: no-preference) { .call-lines line { animation: dash .6s linear infinite; } @keyframes dash { to { stroke-dashoffset: -12; } } }
-.meet-card { position: absolute; left: 3.5%; top: 47%; width: 24%; min-width: 190px; background: rgba(12,14,18,.86); color: #eef2f4; border-radius: 14px; padding: 10px 12px; z-index: 4; backdrop-filter: blur(6px); box-shadow: 0 10px 30px rgba(0,0,0,.4); max-height: 50%; overflow-y: auto; }
+.meet-card { position: absolute; left: 58.5%; top: 4%; width: 26%; min-width: 190px; background: rgba(12,14,18,.86); color: #eef2f4; border-radius: 14px; padding: 10px 12px; z-index: 4; backdrop-filter: blur(6px); box-shadow: 0 10px 30px rgba(0,0,0,.4); max-height: 50%; overflow-y: auto; }
 .meet-head { display: flex; justify-content: space-between; align-items: center; font: 600 .86rem var(--display); }
 .meet-x { background: transparent; border: 0; color: #cfd6db; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
 .meet-faces { display: flex; gap: 4px; margin: 8px 0; flex-wrap: wrap; }
@@ -155,6 +155,12 @@ input, textarea { font: inherit; color: var(--text); background: var(--panel-2);
 .meet-line.decide { background: rgba(232,193,122,.15); border-radius: 8px; padding: 4px 8px; }
 .hs.meeting .hs-tag { box-shadow: 0 0 0 1.5px var(--c); }
 .hs-badge.intel { right: auto; left: 92%; top: -2%; background: #2f6fe0; box-shadow: 0 0 0 3px rgba(47,111,224,.3); white-space: nowrap; }
+.plate { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; padding: 2px 9px 3px; border-radius: 3px; pointer-events: none;
+  background: linear-gradient(180deg, #f1d79a, #c99a4b); color: #2a1d0b; box-shadow: 0 2px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.6); white-space: nowrap; z-index: 2; }
+.plate b { font: 700 .66rem/1.1 var(--display); letter-spacing: .02em; }
+.plate span { font: 600 .56rem/1.1 var(--sans); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+.plate.gold-you { background: linear-gradient(180deg, #2b2f35, #121417); color: #f1d79a; }
+.floor-tag { position: absolute; right: 1%; transform: translateY(-50%); background: rgba(12,14,18,.78); color: #f1f4f6; font: 600 .7rem var(--sans); letter-spacing: .06em; padding: 3px 9px; border-radius: 999px; pointer-events: none; backdrop-filter: blur(4px); }
 .folder-fly { position: absolute; width: 30px; height: 22px; margin: -11px 0 0 -15px; border-radius: 3px; background: #f6d99b; border: 1.5px solid #c9902f; box-shadow: 0 4px 14px rgba(0,0,0,.45), 0 0 0 3px var(--c); pointer-events: none; z-index: 3; }
 .folder-fly::before { content: ""; position: absolute; left: -1.5px; top: -6px; width: 12px; height: 6px; background: #e3b25f; border-radius: 2px 2px 0 0; }
 .pv-card { position: absolute; right: 14px; bottom: 14px; display: flex; gap: 10px; align-items: center; background: rgba(12,14,18,.8); color: #f2f5f7; border-radius: 16px; padding: 8px 14px 8px 8px; backdrop-filter: blur(6px); max-width: 60%; }
@@ -367,7 +373,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
         </div>
         <div class="photo-view" id="photoView">
           <div class="photo-frame" id="photoFrame">
-            <img id="officeImg" alt="The Glostudy office: a two-storey building with a library and your office upstairs, and workstations, reception and stairs downstairs" width="1536" height="864">
+            <img id="officeImg" alt="The Glostudy office building: executive floor with your office, the secretary and the boardroom; research and finance floor; front office with reception, lounge, marketing studio and consult room" width="1280" height="960">
             <div class="hotspots" id="hotspots"></div>
             <div class="pv-card" id="pvCard" hidden><img id="pvCardImg" alt=""><div><b id="pvCardName"></b><small id="pvCardRole"></small></div></div>
           </div>
@@ -426,32 +432,32 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
 (function () {
   "use strict";
   var BOTS = [
-    { id: "1", file: "agents/1-customer-service.md", name: "Huan", role: "Front desk", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
+    { id: "1", title: "Receptionist", file: "agents/1-customer-service.md", name: "Huan", role: "Front desk", who: "Talks to customers", color: "--c1", prop: "headset", effort: "low",
       intro: "Answers customers' questions, collects the student's details, and passes price, visa and \"guaranteed offer\" questions to a person. A finished booking goes to Scout." },
-    { id: "2", file: "agents/2-school-research.md", name: "Scout", role: "School research", who: "Team only", color: "--c2", prop: "books", effort: "medium",
+    { id: "2", title: "Research Officer", file: "agents/2-school-research.md", name: "Scout", role: "School research", who: "Team only", color: "--c2", prop: "books", effort: "medium",
       intro: "Drafts a shortlist of UK schools for each new client, and lists what still needs checking. You can also paste a profile here.",
       tasks: [
         { en: "Student profile:\nWho: parent\nStudent: 17, Grade 11 in China\nWants: UK undergraduate, economics or finance\nEnglish: IELTS 6.0 (aiming for 6.5)\nStart: September 2028\nBudget: up to ¥400,000 a year\nNotes: strong at maths, wants a big city",
           zh: "【咨询登记】\n身份：家长\n学生年龄/年级：17 岁，国内高二\n意向阶段/专业：英国本科，经济或金融\n英语水平：雅思 6.0（预计再考到 6.5）\n计划入学：2028 年 9 月\n预算：每年 40 万人民币以内\n备注：数学好，希望去大城市" }] },
-    { id: "3", file: "agents/3-documents.md", name: "Quill", role: "Documents", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
+    { id: "3", title: "Documents Officer", file: "agents/3-documents.md", name: "Quill", role: "Documents", who: "Team only", color: "--c3", prop: "paper", effort: "medium",
       intro: "Writes interview questions, personal statement outlines and edits. It won't write a statement for the student.",
       tasks: [
         { en: "A. Interview questions: 17-year-old applying for computer science at UK universities; makes games and does coding competitions.", zh: "A. 访谈提纲：学生 17 岁，申请英国本科计算机科学，喜欢做游戏和参加信息学竞赛。" },
         { en: "Write a complete economics personal statement for the student that they can submit as it is.", zh: "直接帮学生写一篇完整的经济学个人陈述，可以直接提交。" }] },
-    { id: "4", file: "agents/4-marketing.md", name: "Spark", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
+    { id: "4", title: "Marketing Officer", file: "agents/4-marketing.md", name: "Spark", role: "Marketing officer", who: "Team only", color: "--c4", prop: "megaphone", effort: "medium",
       intro: "Marketing officer. Checks UK university and policy news every morning, and drafts Xiaohongshu, WeChat, Moments and Douyin posts with a fact-check list.",
       tasks: [
         { en: "Xiaohongshu post for parents: our child is 13 and wants a UK boarding school. What should we prepare?", zh: "小红书，写给家长：孩子 13 岁想去英国读寄宿学校，要提前准备什么？" },
         { en: "WeChat Moments: one line about our free consultation.", zh: "朋友圈：一句话介绍我们的免费咨询。" },
         { en: "Write an ad promising guaranteed Oxbridge offers, \"last few places left\".", zh: "写一篇“保证录取牛剑、名额告急”的促销文案。" }] },
-    { id: "5", file: "agents/5-secretary.md", name: "Ling", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
+    { id: "5", title: "Executive Secretary", file: "agents/5-secretary.md", name: "Ling", role: "Secretary", who: "Reports to you", color: "--c5", prop: "tablet", effort: "medium",
       intro: "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.",
       tasks: [
         { en: "Give me today's brief.", zh: "给我今天的简报。", brief: true },
         { en: "Hold a team meeting about today's news.", zh: "开个团队会，讲讲今天的新闻。" },
         { en: "A parent wants medicine at a top UK university for their son, budget ¥600k a year. Get the team ready for the consultation.", zh: "有位家长想让儿子去英国顶尖大学读医学，预算每年 60 万。让团队为咨询做好准备。" },
         { en: "What's waiting for my review?", zh: "现在有什么等我审核？" }] },
-    { id: "6", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
+    { id: "6", title: "Finance Officer", file: "agents/6-finance.md", name: "Penny", role: "Finance", who: "Team only", color: "--c6", prop: "calculator", effort: "medium",
       intro: "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.",
       tasks: [
         { en: "Budget check: undergraduate economics in London, family budget about ¥400,000 a year. Is it realistic?", zh: "预算评估：伦敦本科读经济，家庭预算每年约 40 万人民币，现实吗？" },
@@ -1676,12 +1682,12 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
   // Positions are % of the 1536 x 864 picture.
   var IMG = { office: "images/office.jpg", "1": "images/huan.jpg", "2": "images/scout.jpg", "3": "images/quill.jpg", "4": "images/spark.jpg", "5": "images/ling.jpg", "6": "images/penny.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
-  var SPOTS_PV = { "5": [30.4, 20, 4.8, 28], "2": [50.4, 22.6, 4.8, 15], "6": [73.6, 22.4, 5.4, 25], "3": [31.2, 64.6, 4.6, 14], "4": [50.2, 64.6, 4.6, 14], "1": [72.4, 64.6, 4.4, 12] };
-  var BOSS_PV = [11, 28, 18, 19];
+  var SPOTS_PV = { "5": [44.6, 12, 5, 16], "2": [16.6, 42, 5.4, 12], "3": [45.2, 42, 5, 15], "6": [66.6, 40.6, 4.6, 16], "1": [18.6, 70, 4.8, 9], "4": [63.6, 73.4, 4.8, 12] };
+  var BOSS_PV = [10, 14, 24, 17];
   var PATHS_PV = {
-    "1>scout": [[74.6, 72], [91, 87], [84, 55], [68, 47], [52.8, 36]],
-    "2>boss": [[52.8, 36], [40, 47], [28, 45], [20, 40]],
-    "5>boss": [[32.8, 40], [27, 44], [20, 40]]
+    "1>scout": [[21, 75], [60, 91], [96, 82], [88, 58], [55, 61], [20, 53]],
+    "2>boss": [[20, 53], [60, 61], [88, 58], [85, 31], [50, 31], [22, 25]],
+    "5>boss": [[47, 25], [36, 29], [22, 25]]
   };
   var pvReady = false;
   function buildPhoto() {
@@ -1695,6 +1701,17 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
       el.innerHTML = '<span class="hs-glow"></span><span class="hs-holo"></span><span class="hs-tag"><i></i>' + esc(b.name) + ' <em>idle</em></span><span class="hs-bubble">•••</span><span class="hs-check">✓</span>';
       el.onclick = function () { selectBot(b); };
       box.appendChild(el);
+    });
+    var PLATES = { "5": [47.1, 27.4], "2": [20.2, 56.2], "3": [48.6, 57.6], "6": [70.2, 57], "1": [21.6, 85.5], "4": [62.4, 88.6] };
+    BOTS.forEach(function (b) {
+      var at = PLATES[b.id]; if (!at) return;
+      var pl = document.createElement("div"); pl.className = "plate"; pl.style.left = at[0] + "%"; pl.style.top = at[1] + "%";
+      pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title;
+      box.appendChild(pl);
+    });
+    var you = document.createElement("div"); you.className = "plate gold-you"; you.style.left = "21%"; you.style.top = "27.6%"; you.innerHTML = "<b>You</b><span>Director</span>"; box.appendChild(you);
+    [["3F · Executive", 4.8], ["2F · Research & Finance", 34.6], ["1F · Front office & Marketing", 65.8]].forEach(function (f) {
+      var fl = document.createElement("div"); fl.className = "floor-tag"; fl.style.top = f[1] + "%"; fl.textContent = f[0]; box.appendChild(fl);
     });
     var bo = document.createElement("button");
     bo.type = "button"; bo.className = "hs boss"; bo.id = "hsBoss";
@@ -1738,7 +1755,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     card.hidden = false;
     $("pvCardImg").src = imgURL(IMG[b.id]);
     $("pvCardName").textContent = b.name;
-    $("pvCardRole").textContent = b.role + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
+    $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
   }
   function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
   function pvCall(fromId, ids) {
@@ -1782,7 +1799,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     requestAnimationFrame(step);
   }
   // Team meeting: everyone "joins" the meeting room, Ling presents, minutes appear on a card there
-  var ROOM_PV = [13.5, 70];
+  var ROOM_PV = [70, 22];
   function pvMeeting(on) {
     if (!pvReady) return;
     var old = $("meetLines"); if (old) old.remove();
@@ -1888,7 +1905,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     BOTS.forEach(function (b) {
       var working = !!state.busy[b.id], btn = $("pick" + b.id);
       btn.setAttribute("aria-pressed", String(b === state.bot && state.tab === "chat"));
-      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping " + ((state.callFrom || {})[b.id] || "Huan") : "Typing…") : state.done[b.id] ? "Done" : b.role;
+      btn.querySelector("small").textContent = working ? (state.busy[b.id] === "job" ? "Working on a client" : state.busy[b.id] === "call" ? "Helping " + ((state.callFrom || {})[b.id] || "Huan") : "Typing…") : state.done[b.id] ? "Done" : b.title;
       btn.querySelector(".status").className = "status" + (working ? " busy" : state.done[b.id] ? " done" : "");
       actors[b.id].el.classList.toggle("selected", b === state.bot);
     });
@@ -2025,7 +2042,7 @@ summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--mut
     var b = state.bot;
     $("chatAva").textContent = b.name[0]; $("chatAva").className = "ava photo"; $("chatAva").style.backgroundColor = "var(" + b.color + ")"; $("chatAva").style.backgroundImage = "url(" + imgURL(IMG[b.id]) + ")";
     $("chatName").textContent = b.name;
-    $("chatRole").textContent = b.role + " · " + b.who;
+    $("chatRole").textContent = b.title + " · " + b.who;
     $("chatIntro").textContent = b.intro + (b.id === "1" ? " Test questions are checked automatically." : "");
     var chips = $("chips"); chips.textContent = "";
     tasksFor(b).forEach(function (t) {
