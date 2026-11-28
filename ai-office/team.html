@@ -1317,6 +1317,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 @keyframes idleBusy { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-.5%) rotate(.35deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-.35%) rotate(-.3deg); } }
 @media (prefers-reduced-motion: reduce) { .idle-fig { display: none; } }
 .dl-status.mini { position: sticky; top: 0; z-index: 2; background: rgba(12,18,26,.92); gap: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 6px; } .dl-status.mini .dls-log { max-height: 48px; }
+.photo-frame .hs.boss .hs-tag { display: none !important; }
 </style>
 
 <div class="app">
@@ -3165,7 +3166,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     });
     var PLATES = LAY.plates;
     BOTS.forEach(function (b) {
-      var sp = SPOTS_PV[b.id], at = sp && [sp[0] + sp[2] / 2, sp[1] + .4]; if (!at) return;
+      var sp = SPOTS_PV[b.id], at = sp && [sp[0] + sp[2] / 2, sp[1] - .7]; if (!at) return;
       var pl = document.createElement("div"); pl.className = "plate wall-plate"; pl.style.left = at[0] + "%"; pl.style.top = at[1] + "%";
       pl.innerHTML = "<b></b><span></span>"; pl.firstChild.textContent = b.name; pl.lastChild.textContent = b.title; pl.style.setProperty("--c", COLORS[b.color]); pl.id = "plate" + b.id;
       box.insertBefore(pl, box.firstChild);
@@ -3190,7 +3191,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     bo.setAttribute("aria-label", "Aliya's office: open the clients waiting for review");
     bo.innerHTML = '<span class="hs-tag"><i></i>CEO Suite · Aliya <em id="hsBossTxt">nothing to review</em></span><span class="hs-badge" id="hsBadge" hidden>0</span>';
     bo.onclick = openInbox;
-    var pf = document.createElement("button"); pf.type = "button"; pf.className = "files"; pf.id = "pvFiles"; pf.hidden = true; pf.style.left = (LAY.ceoPlate[0] - 6) + "%"; pf.style.top = (LAY.ceoPlate[1] - 4.5) + "%"; pf.onclick = openInbox; box.appendChild(pf);
+    var pf = document.createElement("button"); pf.type = "button"; pf.className = "files"; pf.id = "pvFiles"; pf.hidden = true; pf.style.left = LAY.ceoPlate[0] + "%"; pf.style.top = (LAY.ceoPlate[1] + 4.2) + "%"; pf.onclick = openInbox; box.appendChild(pf);
     if (LAY.room) { var rs = document.createElement("button"); rs.type = "button"; rs.className = "hs room-spot"; rs.style.cssText = "left:" + (LAY.room[0] - 9) + "%;top:" + (LAY.room[1] - 5) + "%;width:18%;height:10%;--c:#e8c17a"; rs.setAttribute("aria-label", "Boardroom: make an announcement to the whole team"); rs.innerHTML = '<span class="hs-tag"><i></i>Boardroom <em>announce</em></span>'; rs.onclick = openAnnounce; box.appendChild(rs); }
     box.appendChild(bo);
     // gentle parallax so the picture feels alive
