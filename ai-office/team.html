@@ -1914,7 +1914,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function saveLessons(l) { lsSet(LESSON_KEY, JSON.stringify(l.slice(-300))); state.prompts = {}; }
   function rbSection(rb, key) { var m = String(rb || "").split(/\n(?=## )/).filter(function (sec) { return sec.indexOf("## " + key + " ") === 0 || sec.trim() === "## " + key || sec.indexOf("## " + key + "\n") === 0; })[0]; return m ? m.split("\n").slice(1).filter(function (l) { return /^- /.test(l); }) : []; }
   function rulebookFor(id, rb) {
-    var b = BY_ID[id], talks = b && b.who === "Talks to customers" || ["4", "15", "16", "10"].indexOf(id) >= 0;
+    var b = BY_ID[id], talks = b && b.who === "Talks to customers" || ["4", "15", "16", "10", "27"].indexOf(id) >= 0;
     var alias = { "7": "1", "10": "1", "15": "4", "16": "4" }[id], lines = (talks ? rbSection(rb, "all") : []).concat(alias ? rbSection(rb, alias) : []).concat(rbSection(rb, id)).concat(lessons().filter(function (x) { return x.officer === id || (talks && x.officer === "all") || (x.officer === "4" && ["15", "16"].indexOf(id) >= 0); }).map(function (x) { return "- " + x.rule; }));
     return lines.length ? "\n\n# 岗位规则手册（训练得到的经验，必须遵守）\n" + lines.join("\n") : "";
   }
@@ -4278,10 +4278,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // what the customer actually receives: no internal tags, booking block shown as a plain summary
   function customerText(t, L) {
     t = String(t || "");
-    t = t.replace(/【咨询登记】([\s\S]*?)(【登记完成】|$)/, function (_, b) { return (L === "en" ? "Here's what we've noted:" : "已为您记录：") + "\n" + b.trim(); });
+    t = t.replace(/【咨询登记】([\s\S]*?)(【登记完成】|$)/, function (_, b) { return (/[\u4e00-\u9fff]/.test(b) ? "已为您记录：" : "Here's what we've noted:") + "\n" + b.trim(); });
     return t.replace(/【[^】]*】/g, "").replace(/\n{3,}/g, "\n\n").trim();
   }
-  var CUSTOMER_RULE = "\n\n# 对客户说话（最高优先级）\n你代表「寰学 Glostudy」回复真实客户。不要自称名字，不提任何同事的名字，不说自己是机器人；需要时说“我们”“我们的顾问”“我们的研究顾问”“我们的文书老师”。不用表情符号。语气专业、礼貌、简洁。客户中途换语言时，整条回复改用客户最新使用的语言（优先于上面的语言设定）。";
+  var CUSTOMER_RULE = "\n\n# 对客户说话（最高优先级）\n你代表「寰学 Glostudy」回复真实客户。不要自称名字，不提任何同事的名字，不主动说自己是机器人，被问时如实说是“寰学 Glostudy 的线上助理，可以为您转真人顾问”，绝不说自己是真人；需要时说“我们”“我们的顾问”“我们的研究顾问”“我们的文书老师”。不用表情符号。语气专业、礼貌、简洁。客户中途换语言时，整条回复改用客户最新使用的语言（优先于上面的语言设定）。";
   function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
   // Monica serves the reception queues: WeChat line first, then leads from Emily, then the website sofa
   var fails = [];
@@ -4328,7 +4328,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         reply.pending = false; reply.raw = res.text; reply.content = customerText(res.text, c.lang); flashDone(aid);
         if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); if (state.chatClient[aid]) c.clientId = state.chatClient[aid]; markBooked(c); }
-        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = customerText(res.text.slice(0, cut), c.lang); if (isSensitive(reply.content)) reply.content = c.lang === "en" ? "Thanks for your question. A consultant will check this with you directly, so you get an accurate answer." : "谢谢您的提问。这个问题请顾问直接和您确认，确保信息准确。"; c.turns.push({ kind: "note", text: (state.lang === "en" ? "Handed to a person" : "已转人工") + (c.handReason ? " · " + c.handReason : "") }); c.status = "human"; handover(c); }
+        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = customerText(res.text.slice(0, cut), c.lang); if (/£|¥|\$\s?\d|\d\s*(万|元|镑)|签证|visa/i.test(reply.content)) reply.content = c.lang === "en" ? "Thanks for your question. A consultant will check this with you directly, so you get an accurate answer." : "谢谢您的提问。这个问题请顾问直接和您确认，确保信息准确。"; c.turns.push({ kind: "note", text: (state.lang === "en" ? "Handed to a person" : "已转人工") + (c.handReason ? " · " + c.handReason : "") }); c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
       }
@@ -4349,8 +4349,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       await wait(1200);
       c.turns.push({ role: "user", content: c.text[L], who: liveName(c) + " · " + pl[L] }); drawLiveDetail();
       var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[L] +
-        (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or contract dispute about us, end with 【转人工】; for anything else you must not answer publicly, reply with one neutral line inviting a private message, with no tag."
-            : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是针对寰学的投诉、退款或合同纠纷，在末尾加【转人工】；其他不能公开回答的问题，回一句中立的话并请对方私信，不加标记。");
+        (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice for themselves or their child, invite them to message us and end with 【线索】; for questions about partnerships or other agencies, reply with one neutral line and no tag. If it is a complaint, refund or contract dispute about us, end with 【转人工】; for anything else you must not answer publicly, reply with one neutral line inviting a private message, with no tag."
+            : "\n用品牌语气公开回复，1–2 句。如果对方想为自己或孩子咨询，邀请他们私信我们，并在末尾加【线索】；问合作、同行或别家机构的，回一句中立的话，不加标记。如果是针对寰学的投诉、退款或合同纠纷，在末尾加【转人工】；其他不能公开回答的问题，回一句中立的话并请对方私信，不加标记。");
       if (state.busy[oid] === "task") setBusy(oid, null);
       setBusy(oid, "cust");
       var extra = "";
@@ -5191,7 +5191,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     addReport("5", (en ? "Training report · " : "训练报告 · ") + bot.name, (en ? "Score " : "得分 ") + rep.scores[id] + "/10\n\n" + rep.cases.map(function (c) { return "- " + c.persona + ": " + c.score + "/10 " + (c.issues || []).join("; "); }).join("\n"));
     drawTraining();
   }
-  getFile("agents/training-round2.json").catch(function () { return getFile("agents/training-round1.json"); }).then(function (t) { try { var j = JSON.parse(t); trState.report = { title: j.title || "Round 1", scores: j.scores || {}, cases: j.cases || [], lessons: j.lessons || [] }; } catch (e) {} }).catch(function () {});
+  getFile("agents/training-round3.json").catch(function () { return getFile("agents/training-round2.json"); }).catch(function () { return getFile("agents/training-round1.json"); }).then(function (t) { try { var j = JSON.parse(t); trState.report = { title: j.title || "Round 1", scores: j.scores || {}, cases: j.cases || [], lessons: j.lessons || [] }; } catch (e) {} }).catch(function () {});
   $("trOpen").onclick = openTraining; $("trX").onclick = function () { $("training").hidden = true; };
   window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, live: function () { return live.list; }, zh: function () { zhApply(); }, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
