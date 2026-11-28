@@ -3111,7 +3111,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "17": [2.8, 57.6, 6, 6.2], "4": [18.5, 56.6, 7.9, 7.2], "16": [50, 57.4, 6, 6.4], "15": [63, 56.6, 4.2, 6.6], "18": [73.1, 57.6, 6, 6.2], "19": [86.1, 57.8, 7.4, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
-    boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 4], meet: [80, 9], plates: {},
+    boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 8.5], meet: [56, 2.5], plates: {},
     floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52], ["1F · Reception · the Friends team", 75.8]],
     paths: { "1>scout": [[10, 82], [50, 97], [97, 96], [97, 70], [97, 45], [60, 42], [21, 36]], "2>boss": [[21, 36], [60, 45], [97, 45], [97, 20], [60, 17], [50, 12]], "5>boss": [[8, 10], [30, 16], [50, 12]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
@@ -4767,7 +4767,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (!$("inbox").hidden && !openInbox.refreshing) $("inboxX").focus({ preventScroll: true });
   }
   $("inboxX").onclick = function () { $("inbox").hidden = true; };
-  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state };
+  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
 
 
