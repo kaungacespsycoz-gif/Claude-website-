@@ -1661,7 +1661,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var ids = BOTS.map(function (b) { return b.id; }).filter(function (id) { return by[id]; });
     var sum = (en ? "Work log for " : "工作日志 · ") + fmtDay(day) + (en ? ": " + list.length + " tasks by " + ids.length + " officers." : "：" + ids.length + " 位同事共 " + list.length + " 项工作。");
     var rep = "| " + (en ? "Officer | Role | Tasks" : "同事 | 职位 | 工作数") + " |\n|---|---|---|\n" + ids.map(function (id) { return "| " + BY_ID[id].name + " | " + BY_ID[id].title + " | " + by[id].length + " |"; }).join("\n");
-    ids.forEach(function (id) { rep += "\n\n**" + BY_ID[id].name + "** · " + BY_ID[id].title + "\n" + by[id].map(function (e) { return "- " + e.t + " " + e.text; }).join("\n"); });
+    ids.forEach(function (id) { rep += "\n\n**" + BY_ID[id].name + "** · " + BY_ID[id].title + "\n" + by[id].map(function (e) { return "- " + e.t + " " + (en ? e.text : (zhLine(e.text) || e.text)); }).join("\n"); });
     if (by.ceo) rep += "\n\n**Aliya** · CEO\n" + by.ceo.map(function (e) { return "- " + e.t + " " + e.text; }).join("\n");
     return { sum: sum, rep: rep, n: list.length };
   }
@@ -3927,7 +3927,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- wiring ----------
   function drawAll() { drawFloor(); drawHud(); drawChat(); drawSettings(); setTab(state.tab); }
-  function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); if (typeof floorStatus === "function") floorStatus(); }
+  function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); if (typeof floorStatus === "function") floorStatus(); setTimeout(zhApply, 0); }
   $("langEn").onclick = function () { setLang("en"); };
   $("langZh").onclick = function () { setLang("zh"); };
   $("engClaude").onclick = function () { if (IN_CLAUDE) { state.engine = "claude"; state.settingsOpen = false; drawAll(); } else if (DEMO_DATA) { state.engine = "demo"; state.settingsOpen = false; drawAll(); } };
@@ -4841,7 +4841,178 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (!$("inbox").hidden && !openInbox.refreshing) $("inboxX").focus({ preventScroll: true });
   }
   $("inboxX").onclick = function () { $("inbox").hidden = true; };
-  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
+  // ---------- Chinese for the whole office: English UI text and activity lines are translated on screen when 中文 is chosen ----------
+  var ZH_TITLES = { "Chief of Staff": "行政主管", "Customer Insights": "客户洞察", "Head of Research": "研究主管", "Research Officer": "选校研究", "Documents Officer": "文书", "Admissions Timelines": "申请时间线",
+    "Client Records": "客户档案", "Finance Officer": "费用预算", "Compliance & Brand Check": "合规与品牌审核", "Xiaohongshu Lead": "小红书", "WeChat Official Account": "公众号", "Douyin, Video & Studio": "抖音与视频",
+    "Design & Covers": "设计与封面", "Daily News Check": "每日资讯", "WeChat Priority Line": "微信优先线", "Front Desk Host": "前台接待", "Comment Dispatcher": "评论分拣", "Bookings & Consult Rooms": "预约与咨询室",
+    "Customer Care": "客户关怀", "Consultation Prep": "咨询准备", "Chief Executive Officer": "首席执行官", "Marketing Director": "市场总监" };
+  var ZH_DICT = { "AI Office": "AI 办公室", "Glostudy AI Office": "寰学 AI 办公室", "Glostudy 寰学 · UK study": "寰学 Glostudy · 英国留学", "working": "工作中", "clients": "客户", "to review": "待处理", "Demo": "演示",
+    "Glostudy office": "寰学办公室", "Reset view": "重置视角", "Photo": "大楼", "Inside": "室内", "Floor plan": "平面图", "idle": "空闲", "available": "空闲", "Boardroom": "会议室", "announce": "发通知", "announce to all": "全员通知",
+    "CEO Suite · Aliya": "CEO 办公室 · Aliya", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "nothing to review": "没有待办", "Tap the glowing dots to move · tap an officer to talk": "点光点移动 · 点同事对话",
+    "↩ Step back": "↩ 后退", "📷 360° photo": "📷 360° 实景", "🧊 Model": "🧊 模型", "Overview": "总览", "Drag to look around · scroll or pinch to zoom · click a robot to talk": "拖动环顾 · 滚动或双指缩放 · 点机器人对话",
+    "4F · CEO Suite · Ado & Anya": "4 楼 · CEO 办公室 · Ado 和 Anya", "3F · Research & Finance · the Big Bang team": "3 楼 · 研究与财务 · 生活大爆炸团队", "2F · Social & Marketing · the Emily in Paris team": "2 楼 · 社媒与市场 · 艾米丽在巴黎团队",
+    "1F · Reception · the Friends team": "1 楼 · 前台 · 老友记团队", "4F · CEO Suite": "4 楼 · CEO 办公室", "3F · Research & Finance": "3 楼 · 研究与财务", "2F · Social & Marketing": "2 楼 · 社媒与市场", "1F · Reception": "1 楼 · 前台",
+    "Team": "团队", "CEO Suite": "CEO 办公室", "Leadership · Ado & Anya": "管理层 · Ado 和 Anya", "all idle": "全部空闲", "Research & Finance": "研究与财务", "The Big Bang team": "生活大爆炸团队", "✓ done": "✓ 完成",
+    "Social & Marketing": "社媒与市场", "The Emily in Paris team": "艾米丽在巴黎团队", "Reception": "前台", "The Friends team": "老友记团队", "Activity": "动态", "Customer records": "客户记录", "Chat": "聊天", "Clients": "客户",
+    "Copy": "复制", "New": "新对话", "Start ›": "开始 ›", "Specialties": "擅长", "Demo booking": "演示预约", "Quick chat: pick something above or type below.": "快速聊天：点上面的问题，或在下面输入。", "Message": "消息", "Send": "发送",
+    "All": "全部", "To review": "待审核", "👥 Test customers": "👥 测试客户", "📷 Post from a photo": "📷 用照片写帖子", "WeChat Moments": "朋友圈", "Xiaohongshu": "小红书", "Extra notes": "补充说明", "Write the post": "写帖子",
+    "📣 Announcement to all team": "📣 全员通知", "Everyone comes to the boardroom. Ado runs a short meeting and puts the minutes on your desk.": "大家到会议室集合，Ado 主持一个简短会议，并把会议纪要放到您桌上。",
+    "Announcement": "通知", "Gather the team": "召集团队", "← Office": "← 办公室", "🔊 Voice": "🔊 语音", "🔇 Muted": "🔇 静音", "Suggested prompts": "推荐问题", "Chat with:": "对话：", "Your question": "您的问题", "On screen": "屏幕",
+    "🖥 Monitor": "🖥 显示器", "📽 Projector": "📽 投影", "📺 Big screen": "📺 大屏", "Close": "关闭", "Kept in this browser on this computer.": "保存在这台电脑的浏览器里。", "Approved": "已批准", "Booking summary": "登记摘要",
+    "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
+    "Save edit": "保存修改", "Cancel": "取消", "Send back": "退回", "New client": "新客户", "Researching": "研究中", "Waiting for review": "待审核", "Rejected": "已退回", "Talk 1-on-1": "一对一", "1-on-1": "一对一",
+    "Urgent WeChat chats": "紧急微信咨询", "Booking consultations": "预约咨询", "FAQs in Chinese & English": "中英文常见问题", "Calling the right colleague": "找对同事",
+    "Monica is ready": "Monica 准备好了", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "Team meeting": "团队会议", "Live": "实时", "No clients yet. Chat with Monica and try the demo booking: the client appears here.": "还没有客户。和 Monica 聊天试试演示预约，客户会出现在这里。",
+    "Nothing waiting for review.": "没有待审核。", "Customers appear here as they arrive.": "客户到来后会显示在这里。", "Face to face at the desk. Tap, type or speak; get a short answer plus the full report.": "在办公桌前面对面：点、打字或说话，先给简短回答，再给完整报告。" };
+  var ZH_PH = { "Anything to add? (optional)": "还有要补充的吗？（可选）", "Type your announcement…": "输入通知内容…", "Ask…": "提问…", "Feedback, e.g. add more London options": "意见，例如：多加几个伦敦的选择" };
+  var ZH_KIND = { "WeChat chat": "微信咨询", "Website": "官网咨询", "Lead from a comment": "评论线索" }, ZH_PLAT = { "Xiaohongshu": "小红书", "Douyin": "抖音", "WeChat post": "公众号" };
+  var ZH_AP = { "public reply to a comment": "评论公开回复", "new post": "新帖子", "private chat reply": "私聊回复" };
+
+  var ZH_MORE = {
+    "Talks to customers": "直接对接客户", "Reports to you": "直接向您汇报", "Team only": "仅团队内部",
+    "Drafts a shortlist of UK schools for each new client, and lists what still needs checking. You can also paste a profile here.": "为每位新客户起草英国学校候选清单，并列出还需核实的地方。也可以把学生资料贴到这里。",
+    "Writes interview questions, personal statement outlines and edits. It won't write a statement for the student.": "写面试问题、个人陈述提纲并修改润色。不会替学生写陈述。",
+    "Marketing officer. Checks UK university and policy news every morning, and drafts Xiaohongshu, WeChat, Moments and Douyin posts with a fact-check list.": "市场官。写小红书、公众号、朋友圈和抖音文案初稿，并附核实清单。",
+    "Your secretary and coordinator. Tell her what you want in plain words: she decides who should do it, gets them working at the same time and reports back briefly. She also writes your daily brief and runs team meetings.": "您的秘书和协调人。直接告诉她要做什么：她安排合适的同事同时开工，再简短汇报。她还写每日简报、主持团队会议。",
+    "Team only. Works out tuition, living costs and budgets from a checked costs reference, and the money a student visa needs. Gives ranges, never Glostudy's own fees.": "仅团队内部。根据核实过的费用资料估算学费、生活费和预算。只给范围，从不报寰学自己的价格。",
+    "Hosts the lobby: answers website and phone enquiries on the sofa, and helps Monica when the WeChat line gets busy.": "大堂接待：在沙发区处理官网和电话咨询，微信排队多时帮 Monica 分担。",
+    "Collects every comment from Xiaohongshu, Douyin and WeChat, sorts it and walks it up to the right social officer; brings anyone who wants advice back down to the leads bench.": "收集小红书、抖音和公众号的每条评论，分类后交给楼上对应的同事；想咨询的人带到线索长椅。",
+    "Looks after the booked nook: books every confirmed customer into consult room A or B and sends reminders.": "负责预约区：把确认的客户安排进 A、B 咨询室，并发送提醒。",
+    "Runs the human desk: takes over complaints, fee and visa questions, calms people down and alerts a real consultant.": "负责人工台：接手投诉、费用和签证问题，安抚客户并通知真人顾问。",
+    "Prepares each consult room: puts the client's folder, Leonard's shortlist and Amy's checklist on the table before the meeting.": "准备咨询室：会前把客户档案、Leonard 的选校清单和 Amy 的材料清单放好。",
+    "Head of research and the strictest fact-checker in the building: everyone asks him before quoting a ranking or an entry rule.": "研究主管，全楼最严格的事实核查员：引用排名或入学要求前都要问他。",
+    "Keeps the deadline wall: UCAS dates, admissions tests and interview seasons for every client.": "管理截止日期墙：每位客户的 UCAS 日期、入学考试和面试季。",
+    "Keeps client records tidy and private: files every booking and checks nothing sensitive leaves the office.": "保管客户档案：归档每个登记，确保敏感信息不外传。",
+    "Runs Douyin: short-video scripts, live-stream outlines and replies to Douyin comments.": "负责抖音：短视频脚本、直播提纲和抖音评论回复。",
+    "Runs our WeChat Official Account and Moments, and answers comments on our WeChat posts.": "负责公众号和朋友圈，并回复公众号文章下的评论。",
+    "Marketing director: checks every public reply and post. Everyday replies she passes go out; money, visas or guarantees go to your desk.": "合规与品牌审核：检查每条公开回复和帖子。普通回复审核后发布；涉及费用、签证或保证的送到您桌上。",
+    "Designs the cover image for every post, in Glostudy's colours.": "用寰学品牌色为每篇帖子设计封面。",
+    "Reads UK university and policy news every morning and tells the team what changed.": "每天早上阅读英国大学和政策新闻，告诉团队有什么变化。",
+    "Reads every new customer and comment and tags what they really want (cost worries, dream school, upset), so the team knows who to help first.": "读懂每位新客户和每条评论真正想要什么（担心费用、名校梦、不满），让团队知道先帮谁。",
+    "Application calendars": "申请日历", "Application timelines": "申请时间线", "Board tidy-up": "整理客户名单", "Brand colours": "品牌配色", "Brand voice": "品牌语气", "Bringing leads down to the bench": "把线索带到长椅",
+    "Budget checks": "预算核对", "CVs": "简历", "Calming upset customers": "安抚不满客户", "Checks every reply before it posts": "发布前检查每条回复", "Client files": "客户档案", "Client folders": "客户资料夹",
+    "Complaints": "投诉处理", "Consult room schedule": "咨询室排期", "Consult room set-up": "布置咨询室", "Consultation bookings": "咨询预约", "Coordinating the team": "协调团队", "Cover images": "封面图",
+    "Daily brief": "每日简报", "Data privacy": "数据隐私", "Decides what needs the CEO": "判断哪些需要 CEO", "Douyin comment replies": "抖音评论回复", "Douyin scripts": "抖音脚本", "English editing": "英文润色",
+    "Entry routes: GCSE to Master's": "升学路径：GCSE 到硕士", "Entry rules": "入学要求", "Fact-check lists": "核实清单", "Fact-checking": "事实核查", "Following up tasks": "跟进任务", "Greeting visitors": "接待访客",
+    "Handing them to Emily, Mindy or Gabriel": "交给 Emily、Mindy 或 Gabriel", "Handovers to a real consultant": "转交真人顾问", "Interview and test dates": "面试和考试日期", "Live-stream outlines": "直播提纲",
+    "Meeting minutes": "会议纪要", "Mood of the day": "今日情绪", "News-to-post ideas": "新闻选题", "Official Account articles": "公众号文章", "Posters": "海报", "Priority tags": "优先级标记",
+    "RMB ↔ GBP conversions": "人民币 ↔ 英镑换算", "Rankings (QS, Guardian)": "排名（QS、卫报）", "Reads what customers really want": "读懂客户真正需求", "Red Note comment replies": "小红书评论回复",
+    "Reference letter outlines": "推荐信提纲", "Reminders": "提醒", "Sorting comments from every channel": "分拣各平台评论", "Talking points for consultants": "顾问谈话要点", "Tuition & living-cost estimates": "学费与生活费估算",
+    "UCAS deadlines": "UCAS 截止日期", "UCAS personal statement coaching": "UCAS 个人陈述辅导", "UK school & university shortlists": "英国中学和大学候选清单", "UK university & policy news": "英国大学与政策新闻",
+    "Visa money requirement": "签证资金要求", "Visa rule changes": "签证规则变化", "WeChat Moments drafts": "朋友圈草稿", "WeChat comment replies": "公众号评论回复", "Website & phone enquiries": "官网和电话咨询",
+    "Xiaohongshu notes & covers": "小红书笔记和封面",
+    "Pick a customer. They walk in to reception and talk to Monica; you tap their next message each time.": "选一位客户：他们走进前台和 Monica 对话，每次由您点下一句。",
+    "Demo: the robots give prepared answers to the suggested questions (演示版：机器人只回答预设问题). To ask anything, choose DeepSeek and add an API key. Everything the robots write is a draft: check it before it goes to a customer.": "演示版：机器人只回答预设问题。想问任何问题，请选择 DeepSeek 并填入 API 密钥。机器人写的内容都是草稿，发给客户前请先检查。"
+  };
+  Object.keys(ZH_MORE).forEach(function (k) { ZH_DICT[k] = ZH_MORE[k]; });
+  // working-status labels that were written in English
+  function zhLabel(t) {
+    var L = [[/^reading (.+)'s mind$/, "读懂$1的心思"], [/^sorting (.+)'s comment$/, "分拣$1的评论"], [/^bringing (.+) down to the bench$/, "带$1到线索长椅"], [/^handling (.+)'s case$/, "处理$1的问题"],
+      [/^booking a consult room for (.+)$/, "为$1安排咨询室"], [/^filing (.+)'s record$/, "归档$1的资料"], [/^checking (.+)'s deadlines$/, "核对$1的时间线"], [/^designing the cover$/, "设计封面"],
+      [/^document checklist for (.+)$/, "为$1准备材料清单"], [/^consult pack for (.+)$/, "为$1准备咨询资料"], [/^following up with (.+)$/, "跟进$1"], [/^checking (.+)'s shortlist$/, "核对$1的选校清单"],
+      [/^revising per Aliya's note$/, "按 Aliya 的意见修改"], [/^safety-checking the post$/, "发布前安全检查"], [/^chatting with (.+)$/, "和$1聊天"], [/^replying to (.+)$/, "回复$1"], [/^helping (.+)$/, "帮 $1"],
+      [/^on a client$/, "处理客户方案"], [/^working$/, "工作中"], [/^chatting with a customer$/, "和客户聊天"], [/^replying to a comment$/, "回复评论"]];
+    for (var i = 0; i < L.length; i++) if (L[i][0].test(t)) return zhNames(t.replace(L[i][0], L[i][1]));
+    var w = (typeof WORK !== "undefined" ? WORK : []).filter(function (x) { return x.label.en === t; })[0]; return w ? w.label.zh : null;
+  }
+  function zhDates(t) {
+    var WD = { Mon: "周一", Tue: "周二", Wed: "周三", Thu: "周四", Fri: "周五", Sat: "周六", Sun: "周日" }, MO = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+    return t.replace(/\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, function (_, w, d, m) { return MO[m] + "月" + d + "日" + WD[w]; }).replace(/ \((\d\d:\d\d) 伦敦\)/g, "（伦敦 $1）");
+  }
+  function zhNames(t) {
+    LIVE_TPL.forEach(function (c) { if (c.name.en !== c.name.zh) t = t.split(c.name.en).join(c.name.zh); });
+    return t.replace(/'s\b/g, " 的").replace(/\s+的/g, "的");
+  }
+  function zhLine(t) {
+    var m, P = [
+      [/^(\w+) is chatting with (.+?)( on WeChat| \(website\)| \(lead from (.+)\))?$/, function (m) { return m[1] + " 正在和" + m[2] + "聊天" + (m[3] === " on WeChat" ? "（微信）" : m[3] === " (website)" ? "（官网）" : m[4] ? "（来自" + (ZH_PLAT[m[4]] || m[4]) + "的线索）" : ""); }],
+      [/^(\w+) asked (.+) to work on your request$/, function (m) { return m[1] + " 请 " + m[2].replace(/ and /g, " 和 ") + " 处理您的要求"; }],
+      [/^(\w+) asked (.+) for help$/, function (m) { return m[1] + " 请 " + m[2].replace(/ and /g, " 和 ") + " 帮忙"; }],
+      [/^New (Xiaohongshu|Douyin|WeChat post) comment from (.+)$/, function (m) { return m[2] + " 在" + ZH_PLAT[m[1]] + "留言"; }],
+      [/^New (WeChat chat|Website|Lead from a comment) from (.+)$/, function (m) { return "新的" + ZH_KIND[m[1]] + "：" + m[2]; }],
+      [/^(\w+) held a reply to (.+) for Aliya \(money\/visa\/promise\)$/, function (m) { return m[1] + " 把给" + m[2] + "的回复留给 Aliya 审批（涉及费用/签证/承诺）"; }],
+      [/^(\w+) sent a (.+) to your desk for approval$/, function (m) { return m[1] + " 把一条" + (ZH_AP[m[2]] || m[2]) + "送到您桌上待批"; }],
+      [/^Anya: (.+) · (.+)$/, function (m) { var z = Object.keys(INSIGHTS).map(function (k) { return INSIGHTS[k]; }).filter(function (x) { return x.en === m[2]; })[0]; return "Anya：" + m[1] + " · " + (z ? z.zh : m[2]); }],
+      [/^Joey took (.+)'s (Xiaohongshu|Douyin|WeChat post) comment up to (\w+)$/, function (m) { return "Joey 把" + m[1] + "的" + ZH_PLAT[m[2]] + "评论交给 " + m[3]; }],
+      [/^Joey brought (.+) down to the leads bench for Monica$/, function (m) { return "Joey 把" + m[1] + "带到线索长椅，交给 Monica"; }],
+      [/^(\w+)'s reply to (.+) was checked by (\w+) and posted$/, function (m) { return m[1] + " 回复了" + m[2] + "，经 " + m[3] + " 审核后已发布"; }],
+      [/^Ross attached a consult pack to (.+)'s record$/, function (m) { return "Ross 把咨询资料附到" + m[1] + "的档案"; }],
+      [/^Amy attached a document checklist to (.+)'s record$/, function (m) { return "Amy 把材料清单附到" + m[1] + "的档案"; }],
+      [/^Sheldon checked Leonard's shortlist for (.+): approved$/, function (m) { return "Sheldon 审核了 Leonard 给" + m[1] + "的选校清单：通过"; }],
+      [/^Sheldon flagged Leonard's shortlist for (.+) for Aliya$/, function (m) { return "Sheldon 把 Leonard 给" + m[1] + "的选校清单标记给 Aliya"; }],
+      [/^Leonard finished a shortlist for (.+) and took it to Aliya's desk$/, function (m) { return "Leonard 完成了" + m[1] + "的选校清单，送到 Aliya 桌上"; }],
+      [/^Raj added (.+)'s deadlines to the wall$/, function (m) { return "Raj 把" + m[1] + "的截止日期贴到墙上"; }],
+      [/^Howard filed (.+)'s record$/, function (m) { return "Howard 归档了" + m[1] + "的资料"; }],
+      [/^Howard deleted (.+)'s record at Aliya's request$/, function (m) { return "Howard 按 Aliya 的要求删除了" + m[1] + "的资料"; }],
+      [/^Chandler offered (.+) two consult slots \(room (\w)\): (.+)$/, function (m) { return "Chandler 为" + m[1] + "提供两个咨询时间（" + m[2] + " 室）：" + m[3].replace(/ or /g, " 或 ").replace(/Beijing/g, "北京").replace(/London/g, "伦敦"); }],
+      [/^(\w+) booked (.+) and took the folder to Leonard$/, function (m) { return m[1] + " 为" + m[2] + "完成登记，并把资料交给 Leonard"; }],
+      [/^(\w+) updated (.+)'s booking$/, function (m) { return m[1] + " 更新了" + m[2] + "的登记"; }],
+      [/^Phoebe took over (.+)'s (chat|comment) and alerted a consultant$/, function (m) { return "Phoebe 接手了" + m[1] + "的" + (m[2] === "chat" ? "咨询" : "评论") + "，并通知了顾问"; }],
+      [/^Handover for (.+) closed: (\w+) \((.+)\)$/, function (m) { return m[1] + " 的转人工已结束：" + ({ resolved: "已解决", booked: "已约咨询", lost: "流失" }[m[2]] || m[2]) + "（" + m[3] + "）"; }],
+      [/^Emily's news check \((.+)\): (\d+) findings?$/, function (m) { return "Emily 的资讯检查（" + m[1] + "）：" + m[2] + " 条发现"; }],
+      [/^Emily's news check \((.+)\): nothing important$/, function (m) { return "Emily 的资讯检查（" + m[1] + "）：没有重要消息"; }],
+      [/^Aliya approved (\w+)'s (.+?)( with her edits)?: published$/, function (m) { return "Aliya 批准了 " + m[1] + " 的" + (ZH_AP[m[2]] || m[2]) + (m[3] ? "（有修改）" : "") + "：已发布"; }],
+      [/^Aliya rejected (\w+)'s (.+?)( \((.+)\))?: not published$/, function (m) { return "Aliya 退回了 " + m[1] + " 的" + (ZH_AP[m[2]] || m[2]) + (m[4] ? "（" + m[4] + "）" : "") + "：未发布"; }],
+      [/^Aliya sent (\w+)'s (.+?) back: (.+)$/, function (m) { return "Aliya 把 " + m[1] + " 的" + (ZH_AP[m[2]] || m[2]) + "退回修改：" + m[3]; }],
+      [/^(\w+) revised the (.+) and sent it back to Aliya's desk$/, function (m) { return m[1] + " 改好了" + (ZH_AP[m[2]] || m[2]) + "，重新送到 Aliya 桌上"; }],
+      [/^Monica followed up with (.+) \(no booking yet\)$/, function (m) { return "Monica 跟进了" + m[1] + "（尚未预约）"; }],
+      [/^Sylvie checked Emily's post: safe, sent to Aliya's desk$/, function () { return "Sylvie 审核了 Emily 的帖子：安全，已送到 Aliya 桌上"; }],
+      [/^Sylvie flagged Emily's post for Aliya$/, function () { return "Sylvie 把 Emily 的帖子标记给 Aliya"; }],
+      [/^Amy filed today's work log on Aliya's desk \((\d+) tasks\)$/, function (m) { return "Amy 把今天的工作日志放到 Aliya 桌上（" + m[1] + " 项）"; }],
+      [/^Rachel is helping Monica with the WeChat line$/, function () { return "Rachel 正在帮 Monica 处理微信咨询"; }],
+      [/^(\w+) hit an error with (.+), retrying in 30 s$/, function (m) { return m[1] + " 处理" + m[2] + "时出错，30 秒后重试"; }],
+      [/^Auto-reply paused after 3 errors: (.+)$/, function (m) { return "连续 3 次出错，自动回复已暂停：" + m[1]; }],
+      [/^You took over (.+)'s chat$/, function (m) { return "您接手了" + m[1] + "的咨询"; }],
+      [/^You (approved|rejected) (.+)'s shortlist$/, function (m) { return "您" + (m[1] === "approved" ? "批准" : "退回") + "了" + m[2] + "的选校清单"; }],
+      [/^Everyone gathered in the boardroom$/, function () { return "大家已在会议室集合"; }],
+      [/^Meeting over, everyone back at their desks$/, function () { return "会议结束，大家回到座位"; }],
+      [/^Ado called a team meeting in the boardroom$/, function () { return "Ado 在会议室召开团队会议"; }],
+      [/^Ado booked your review meeting for (.+)$/, function (m) { return "Ado 为您预约了审批会：" + m[1]; }],
+      [/^Ado opened your review meeting in the boardroom$/, function () { return "Ado 在会议室开始了您的审批会"; }],
+      [/^Review meeting finished$/, function () { return "审批会结束"; }],
+      [/^Team meeting finished: (.+)$/, function (m) { return "团队会议结束：" + m[1]; }],
+      [/^Julien is designing the cover for Emily's post$/, function () { return "Julien 正在为 Emily 的帖子设计封面"; }],
+      [/^· (\w+) replying$/, function (m) { return "· " + m[1] + " 回复中"; }],
+      [/^Answers customers' questions/, function () { return "回答客户问题、收集学生资料，把价格、签证和“保证录取”类问题转给真人。登记完成的客户交给 Leonard。测试问题会自动检查。"; }],
+      [/^(.+) · Talks to customers$/, function (m) { return (ZH_TITLES[m[1]] || m[1]) + " · 直接对接客户"; }],
+      [/^(.+) · (Team only|Reports to you)$/, function (m) { return (ZH_TITLES[m[1]] || m[1]) + " · " + (m[2] === "Team only" ? "仅团队内部" : "直接向您汇报"); }],
+      [/^(\w+) is (.+)$/, function (m) { var z = zhLabel(m[2]); return z ? m[1] + " 正在" + z : null; }],
+      [/^(sorting|reading|bringing|handling|booking|filing|checking|designing|document|consult pack|following|revising|safety|chatting|replying|helping|on a client|working)\b.*$/, function (m) { return zhLabel(m[0]); }],
+      [/^Live · auto-reply on(.*)$/, function (m) { return "直播中 · 自动回复" + m[1]; }],
+      [/^(\d+) busy$/, function (m) { return m[1] + " 人忙碌"; }],
+      [/^✍ (\d+) to approve$/, function (m) { return "✍ " + m[1] + " 条待批准"; }],
+      [/^(\d+) news$/, function (m) { return m[1] + " 条资讯"; }],
+      [/^Talk 1-on-1 with (\w+)$/, function (m) { return "和 " + m[1] + " 一对一"; }],
+      [/^(\w+) is ready$/, function (m) { return m[1] + " 准备好了"; }],
+      [/^(.+) · (idle|1-on-1)$/, function (m) { return (ZH_TITLES[m[1]] || m[1]) + " · " + (m[2] === "idle" ? "空闲" : "一对一"); }],
+      [/^✓ Consent to use details(.*)$/, function (m) { return "✓ 已同意使用资料" + m[1].replace("⚠ Under 14: guardian consent needed", "⚠ 未满 14 岁：需监护人同意"); }],
+      [/^⚠ No recorded consent: confirm before using these details(.*)$/, function (m) { return "⚠ 没有同意记录：使用前请先确认" + m[1].replace("⚠ Under 14: guardian consent needed", "⚠ 未满 14 岁：需监护人同意"); }]
+    ];
+    for (var i = 0; i < P.length; i++) if ((m = t.match(P[i][0]))) { var o = P[i][1](m); if (o) return zhDates(zhNames(o)); }
+    return null;
+  }
+  function zhText(t) { return ZH_DICT[t] || ZH_TITLES[t] || zhLine(t); }
+  var ZH_SKIP = "script,style,textarea,.say-txt,.bub,.lv-msg,.ib-text,.ap-body,#sheetBody,.draft,.pre,.dl-bot,.dl-you,.chat-log .msg,.post-preview";
+  function zhApply(root) {
+    var zh = state.lang !== "en", w = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT), n, list = [];
+    while ((n = w.nextNode())) list.push(n);
+    list.forEach(function (n) {
+      var p = n.parentElement; if (!p || p.closest(ZH_SKIP)) return;
+      if (!zh) { if (n.__en != null) { if (n.nodeValue !== n.__en) n.nodeValue = n.__en; n.__en = null; } return; }
+      var orig = n.__en != null && n.nodeValue === n.__zh ? n.__en : n.nodeValue, t = orig.trim(); if (!/[A-Za-z]{2,}/.test(t)) return;
+      var tr = zhText(t); if (!tr) return;
+      var out = orig.replace(t, tr); if (n.nodeValue !== out) { n.__en = orig; n.__zh = out; n.nodeValue = out; }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[placeholder]"), function (e) {
+      if (!zh) { if (e.__en != null) { e.placeholder = e.__en; e.__en = null; } return; }
+      var o = e.__en != null ? e.__en : e.placeholder, tr = ZH_PH[o] || (/^(Message|Ask) (\w+)…$/.test(o) ? (o.replace(/^(Message|Ask) (\w+)…$/, "问 $2…")) : null);
+      if (tr && e.placeholder !== tr) { e.__en = o; e.placeholder = tr; }
+    });
+  }
+  var zhPending = false;
+  new MutationObserver(function () { if (zhPending) return; zhPending = true; requestAnimationFrame(function () { zhPending = false; zhApply(); }); }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  setTimeout(zhApply, 0);
+  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, zh: function () { zhApply(); }, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
 
 
