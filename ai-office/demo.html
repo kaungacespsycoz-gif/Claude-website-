@@ -1307,6 +1307,17 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .st-floor i { flex: none; width: .75cqw; height: .75cqw; min-width: 4px; min-height: 4px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 6px #3ddc84; }
 .st-floor.idle { opacity: .55; border-color: rgba(255,255,255,.25); } .st-floor.idle i { background: #8a94a0; box-shadow: none; }
 @media (max-width: 640px) { .st-floor.idle { display: none; } .st-floor { max-width: 24cqw; } }
+
+/* idle life for the officers in the building photo: slow breathing and the tiniest sway */
+.photo-frame .plate.wall-plate { z-index: 1; }
+.idle-fig { position: absolute; z-index: 0; pointer-events: none; transform-origin: 50% 100%; filter: saturate(.62) brightness(.86) contrast(1.04);
+  -webkit-mask-image: radial-gradient(ellipse 50% 52% at 50% 52%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 52% at 50% 52%, #000 62%, transparent 100%);
+  animation: idleBreath 4.6s ease-in-out infinite; will-change: transform; }
+.hs.working ~ .idle-fig { }
+@keyframes idleBreath { 0%, 100% { transform: translateY(0) rotate(0) scale(1, 1); } 30% { transform: translateY(-.35%) rotate(.25deg) scale(1.004, 1.012); } 65% { transform: translateY(-.15%) rotate(-.2deg) scale(1.002, 1.006); } }
+.idle-fig.busy { animation-name: idleBusy; animation-duration: 1.9s !important; }
+@keyframes idleBusy { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-.5%) rotate(.35deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-.35%) rotate(-.3deg); } }
+@media (prefers-reduced-motion: reduce) { .idle-fig { display: none; } }
 </style>
 
 <div class="app">
@@ -3153,6 +3164,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       el.onclick = function () { pickOfficer(b); };
       box.appendChild(el);
     });
+    // gentle idle life: each officer is a soft-edged copy of their part of the photo that breathes and sways a little
+    BOTS.forEach(function (b, i) {
+      var sp = SPOTS_PV[b.id]; if (!sp || REDUCED) return;
+      var x = sp[0] - 1, y = sp[1] - 1.2, w = sp[2] + 2, h = sp[3] + 1.6, f = document.createElement("div");
+      f.className = "idle-fig"; f.id = "fig" + b.id;
+      f.style.cssText = "left:" + x + "%;top:" + y + "%;width:" + w + "%;height:" + h + "%;background-image:url(" + imgURL(LAY.img) + ");background-size:" + (10300 / w) + "% " + (10300 / h) + "%;background-position:" + ((x + 1.5) / (103 - w) * 100) + "% " + ((y + 1.5) / (103 - h) * 100) + "%;animation-delay:-" + (i * 0.73 % 5).toFixed(2) + "s;animation-duration:" + (4.2 + (i % 5) * .35).toFixed(2) + "s";
+      box.appendChild(f);
+    });
     var PLATES = LAY.plates;
     BOTS.forEach(function (b) {
       var sp = SPOTS_PV[b.id], at = sp && [sp[0] + sp[2] / 2, sp[1] + .4]; if (!at) return;
@@ -3185,7 +3204,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     box.appendChild(bo);
     // gentle parallax so the picture feels alive
     var frame = $("photoFrame"), img = $("officeImg");
-    if (!REDUCED) frame.addEventListener("pointermove", function (e) {
+    if (false) frame.addEventListener("pointermove", function (e) {
       var r = frame.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
       img.style.transform = "scale(1.04) translate(" + (-dx * 1.2).toFixed(2) + "%," + (-dy * 1.2).toFixed(2) + "%)";
     });
@@ -3658,7 +3677,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); floorStatus(); if (state.bot.id === id) { drawChat(); deskLive(); } }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); floorStatus(); var fg = $("fig" + id); if (fg) fg.classList.toggle("busy", !!kind); if (state.bot.id === id) { drawChat(); deskLive(); } }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
