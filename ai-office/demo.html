@@ -1320,6 +1320,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 @media (prefers-reduced-motion: reduce) { .idle-fig { display: none; } }
 .dl-status.mini { position: sticky; top: 0; z-index: 2; background: rgba(12,18,26,.92); gap: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 6px; } .dl-status.mini .dls-log { max-height: 48px; }
 .photo-frame .hs.boss .hs-tag { display: none !important; }
+.wall-logo { position: absolute; transform: translate(-50%, -50%); z-index: 0; pointer-events: none; text-align: center; line-height: 1; }
+.wall-logo b { display: block; font: 600 clamp(8px, 2.1cqw, 1.35rem) "Playfair Display", Georgia, serif; letter-spacing: .32em; padding-left: .32em;
+  background: linear-gradient(180deg, #fff3cf 0%, #e8c17a 45%, #a9782f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 6px rgba(232,193,122,.45)); }
+.wall-logo span { display: block; margin-top: .35cqw; font: 600 clamp(6px, 1.2cqw, .8rem) var(--sans); letter-spacing: .6em; padding-left: .6em; color: #e8c17a; opacity: .85; }
 </style>
 
 <div class="app">
@@ -3146,7 +3150,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "17": [3.2, 59, 6.5, 6.6], "4": [21.3, 59.2, 6.5, 6.4], "16": [52.3, 58.4, 6.5, 7.4], "15": [63.9, 57.4, 6.5, 8.2], "18": [75, 59, 5.6, 6.8], "19": [90.3, 59.2, 6, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
-    boss: [36.1, 9.2, 28.2, 5.2], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 11], meet: [30, 15.2], plates: {},
+    boss: [36.1, 9.2, 28.2, 5.2], ceoPlate: [50, 13.4], logo: [50, 3.3], glow: [50, 11, 30, 8], room: [79, 11], meet: [30, 15.2], plates: {},
     floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52.4], ["1F · Reception · the Friends team", 75.8]],
     floorY: { 4: 18.5, 3: 42.5, 2: 69, 1: 95.5 },
     paths: { "1>scout": [[10.4, 84], [10.4, 95.5], [97, 95.5], [97, 42.5], [21.2, 42.5], [21.2, 36]], "2>boss": [[21.2, 36], [21.2, 42.5], [97, 42.5], [97, 18.5], [50, 18.5], [50, 12]], "5>boss": [[10, 12], [10, 18.5], [50, 18.5], [50, 12]] } };
@@ -3188,7 +3192,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var byFloor = {}; BOTS.forEach(function (b) { var sp = SPOTS_PV[b.id], pl = $("plate" + b.id); if (sp && pl) (byFloor[Math.floor(sp[1] / 25)] = byFloor[Math.floor(sp[1] / 25)] || []).push(pl); });
         Object.keys(byFloor).forEach(function (k) { var a = byFloor[k]; a.forEach(function (pl, i) { pl.classList.toggle("show-title", i === tick % a.length); }); });
       }, 2600); }
-  var glowEl = document.createElement("div"); glowEl.className = "ceo-glow";
+  // company logo on the wood wall behind Aliya
+    if (LAY.logo) { var lg = document.createElement("div"); lg.className = "wall-logo"; lg.style.left = LAY.logo[0] + "%"; lg.style.top = LAY.logo[1] + "%"; lg.innerHTML = "<b>GLOSTUDY</b><span>寰 学</span>"; box.insertBefore(lg, box.firstChild); }
+    var glowEl = document.createElement("div"); glowEl.className = "ceo-glow";
     glowEl.style.cssText = "left:" + LAY.glow[0] + "%;top:" + LAY.glow[1] + "%;width:" + LAY.glow[2] + "%;height:" + LAY.glow[3] + "%"; box.insertBefore(glowEl, box.firstChild);
     var you = document.createElement("div"); you.className = "plate ceo-plate"; you.style.left = LAY.ceoPlate[0] + "%"; you.style.top = LAY.ceoPlate[1] + "%";
     you.innerHTML = "<i>✦</i><b>Aliya</b><span>Chief Executive Officer</span>"; box.appendChild(you);
