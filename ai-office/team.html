@@ -1620,7 +1620,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["UK university & policy news", "Visa rule changes", "News-to-post ideas"], intro: "Reads UK university and policy news every morning and tells the team what changed.",
       persona: "你负责每日资讯：看英国大学和政策新闻，告诉团队发生了什么、对谁有影响。",
       tasks: [{ en: "What's today's news?", zh: "今天有什么新闻？" }] },
-    { id: "21", demoAs: "5", name: "Anya", title: "Customer Insights", role: "CEO suite · Spy x Family", who: "Reports to you", file: "agents/5-secretary.md", color: "--c21", prop: "tablet", effort: "low",
+    { id: "21", demoAs: "5", name: "Anya", title: "Customer Insights", role: "Growth · Spy x Family", who: "Reports to you", file: "agents/5-secretary.md", color: "--c21", prop: "tablet", effort: "low",
       skills: ["Reads what customers really want", "Priority tags", "Mood of the day"], intro: "Reads every new customer and comment and tags what they really want (cost worries, dream school, upset), so the team knows who to help first.",
       persona: "你负责客户洞察：读懂每位客户和评论背后真正的需求和情绪，告诉团队谁该优先。",
       tasks: [{ en: "What are customers worried about this week?", zh: "这周客户最担心什么？" }] },
@@ -3163,15 +3163,15 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   };
   LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 3040", maxW: 1080,
     spots: {
-      "5": [1, 3.6, 12, 10.6], "21": [18, 7.4, 7, 4.6], "23": [62.5, 6.2, 9.5, 5.6],
-      "24": [11.5, 23.4, 8.5, 10.2], "25": [29, 26, 9, 6.4], "26": [54, 26.6, 12, 5.8], "27": [81.5, 24.6, 6, 8.4],
+      "5": [1.4, 4.6, 11.1, 9.4], "23": [61.5, 6.1, 8, 5.6],
+      "24": [5, 22.8, 7.5, 10], "25": [22, 25.8, 10, 6.4], "21": [43.5, 25.4, 6.5, 5.8], "26": [58, 26, 14, 6.2], "27": [79, 24, 7.5, 9.4],
       "12": [6.5, 44.64, 6.5, 7.44], "2": [18.0, 45.6, 7.4, 6.24], "22": [31.0, 45.92, 6.5, 6.24], "3": [41.7, 45.92, 8.3, 6.08], "13": [53.2, 45.6, 8.3, 6.56], "14": [69.0, 45.76, 9.3, 6.56], "6": [85.2, 46.56, 7.4, 5.92],
       "17": [3.2, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
       "1": [6.8, 82.56, 7.3, 4.8], "10": [19.7, 84.4, 7.3, 6.64], "7": [35.5, 84.4, 5.6, 6.4], "9": [53.8, 82.56, 7.5, 5.04], "11": [74.9, 84.96, 6.2, 6.4], "8": [87.3, 84.0, 9.6, 7.6]
     },
-    boss: [30, 5.6, 27, 6], ceoPlate: [44.5, 12.6], logo: [44.5, 4], aliya: [40.5, 5.6, 8, 2.6], glow: [44.5, 8.5, 28, 6], room: [90, 7.6], meet: [30, 11.6], plates: {},
-    floorTags: [["5F · CEO Suite · Aliya, Medina, Ado & Anya", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
-    floorY: { 5: 14.6, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
+    boss: [30.5, 5.8, 25, 6], ceoPlate: [44, 12.6], logo: [44, 3.8], aliya: [41, 5.6, 7, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [30, 11.6], plates: {},
+    floorTags: [["5F · CEO Suite · Aliya, Medina & Ado", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
+    floorY: { 5: 13.4, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
     paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
@@ -3497,8 +3497,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   var TEAM_FLOORS = [
-    { key: "5", n: "5F", name: "CEO Suite", dept: "Leadership · Medina, Ado & Anya", color: "#e8c17a", ids: ["23", "5", "21"], open: true },
-    { key: "4", n: "4F", name: "Growth & Partnerships", dept: "The Spy x Family team", color: "#2bb3a3", ids: ["24", "25", "26", "27"], open: false },
+    { key: "5", n: "5F", name: "CEO Suite", dept: "Leadership · Aliya, Medina & Ado", color: "#e8c17a", ids: ["23", "5"], open: true },
+    { key: "4", n: "4F", name: "Growth & Partnerships", dept: "The Spy x Family team", color: "#2bb3a3", ids: ["24", "25", "21", "26", "27"], open: false },
     { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "22", "3", "13", "14", "6"], open: false },
     { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "18", "19"], open: false },
     { key: "1", n: "1F", name: "Reception", dept: "The Friends team", color: "#3ee8a0", ids: ["1", "7", "8", "9", "10", "11"], open: true }
@@ -4699,8 +4699,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
-    5: { img: "images/plan-5f.jpg", name: "5F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9], "23": [50, 30, 6, 9] }, boss: [32, 10, 18, 22], room: [57, 14, 25, 32] },
-    4: { img: "images/plan-4f.jpg", name: "4F · Growth & Partnerships", bots: { "24": [14, 12, 7, 10], "25": [33, 14, 7, 10], "26": [53, 14, 7, 10], "27": [72, 14, 7, 10] } },
+    5: { img: "images/plan-5f.jpg", name: "5F · CEO Suite", bots: { "5": [5, 20, 6, 10], "23": [50, 30, 6, 9] }, boss: [32, 10, 18, 22], room: [57, 14, 25, 32] },
+    4: { img: "images/plan-4f.jpg", name: "4F · Growth & Partnerships", bots: { "24": [14, 12, 7, 10], "25": [33, 14, 7, 10], "21": [44, 22, 5, 8], "26": [56, 14, 7, 10], "27": [72, 14, 7, 10] } },
     3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10], "22": [29, 30, 6, 9] } },
     2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [7, 22, 7, 9], "4": [21, 20, 7, 9], "16": [50, 20, 7, 9], "15": [60, 16, 6, 14], "18": [69, 20, 7, 9], "19": [81, 20, 7, 10] } },
     1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [9, 14, 9, 8], "10": [26, 16, 7, 9], "7": [39, 13, 8, 12], "9": [55, 14, 8, 11], "11": [71, 10, 9, 14], "8": [87, 31, 7, 10] } }
@@ -4920,7 +4920,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "Glostudy office": "寰学办公室", "Reset view": "重置视角", "Photo": "大楼", "Inside": "室内", "Floor plan": "平面图", "idle": "空闲", "available": "空闲", "Boardroom": "会议室", "announce": "发通知", "announce to all": "全员通知",
     "CEO Suite · Aliya": "CEO 办公室 · Aliya", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "nothing to review": "没有待办", "Tap the glowing dots to move · tap an officer to talk": "点光点移动 · 点同事对话",
     "↩ Step back": "↩ 后退", "📷 360° photo": "📷 360° 实景", "🧊 Model": "🧊 模型", "Overview": "总览", "Drag to look around · scroll or pinch to zoom · click a robot to talk": "拖动环顾 · 滚动或双指缩放 · 点机器人对话",
-    "5F · CEO Suite · Aliya, Medina, Ado & Anya": "5 楼 · CEO 办公室 · Aliya、Medina、Ado 和 Anya", "4F · Growth & Partnerships · the Spy x Family team": "4 楼 · 增长与合作 · 间谍过家家团队", "5F · CEO Suite": "5 楼 · CEO 办公室", "4F · Growth & Partnerships": "4 楼 · 增长与合作", "Growth & Partnerships": "增长与合作", "The Spy x Family team": "间谍过家家团队", "Leadership · Medina, Ado & Anya": "管理层 · Medina、Ado 和 Anya", "3F · Research & Finance · the Big Bang team": "3 楼 · 研究与财务 · 生活大爆炸团队", "2F · Social & Marketing · the Emily in Paris team": "2 楼 · 社媒与市场 · 艾米丽在巴黎团队",
+    "5F · CEO Suite · Aliya, Medina & Ado": "5 楼 · CEO 办公室 · Aliya、Medina 和 Ado", "4F · Growth & Partnerships · the Spy x Family team": "4 楼 · 增长与合作 · 间谍过家家团队", "5F · CEO Suite": "5 楼 · CEO 办公室", "4F · Growth & Partnerships": "4 楼 · 增长与合作", "Growth & Partnerships": "增长与合作", "The Spy x Family team": "间谍过家家团队", "Leadership · Aliya, Medina & Ado": "管理层 · Aliya、Medina 和 Ado", "3F · Research & Finance · the Big Bang team": "3 楼 · 研究与财务 · 生活大爆炸团队", "2F · Social & Marketing · the Emily in Paris team": "2 楼 · 社媒与市场 · 艾米丽在巴黎团队",
     "1F · Reception · the Friends team": "1 楼 · 前台 · 老友记团队", "4F · CEO Suite": "4 楼 · CEO 办公室", "3F · Research & Finance": "3 楼 · 研究与财务", "2F · Social & Marketing": "2 楼 · 社媒与市场", "1F · Reception": "1 楼 · 前台",
     "Team": "团队", "CEO Suite": "CEO 办公室", "Leadership · Ado & Anya": "管理层 · Ado 和 Anya", "all idle": "全部空闲", "Research & Finance": "研究与财务", "The Big Bang team": "生活大爆炸团队", "✓ done": "✓ 完成",
     "Social & Marketing": "社媒与市场", "The Emily in Paris team": "艾米丽在巴黎团队", "Reception": "前台", "The Friends team": "老友记团队", "Activity": "动态", "Customer records": "客户记录", "Chat": "聊天", "Clients": "客户",
