@@ -1507,8 +1507,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       persona: "你在一楼大堂接待通过官网表单和电话来的客户；微信排队太多时帮莫妮卡分担。",
       tasks: [{ en: "A website visitor asks: what's the difference between a foundation year and A-levels?", zh: "官网访客问：预科和 A-Level 有什么区别？" }] },
     { id: "8", demoAs: "1", name: "Joey", title: "Comment Dispatcher", role: "Reception · Friends", who: "Team only", file: "agents/1-customer-service.md", color: "--c8", prop: "megaphone", effort: "low",
-      skills: ["Sorting comments from every channel", "Handing them to Emily, Mindy or Camille", "Bringing leads down to the bench"], intro: "Collects every comment from Xiaohongshu, Douyin and WeChat, sorts it and walks it up to the right social officer; brings anyone who wants advice back down to the leads bench.",
-      persona: "你不直接回复客户。你负责把各平台的评论分类，交给楼上负责该平台的同事（小红书 Emily、抖音 Mindy、公众号 Camille），并把想咨询的人带回一楼线索长椅。",
+      skills: ["Sorting comments from every channel", "Handing them to Emily, Mindy or Gabriel", "Bringing leads down to the bench"], intro: "Collects every comment from Xiaohongshu, Douyin and WeChat, sorts it and walks it up to the right social officer; brings anyone who wants advice back down to the leads bench.",
+      persona: "你不直接回复客户。你负责把各平台的评论分类，交给楼上负责该平台的同事（小红书 Emily、抖音 Mindy、公众号 Gabriel），并把想咨询的人带回一楼线索长椅。",
       tasks: [{ en: "How many comments came in today, and who did you hand them to?", zh: "今天来了多少条评论？都交给谁了？" }] },
     { id: "9", demoAs: "1", name: "Chandler", title: "Bookings & Consult Rooms", role: "Reception · Friends", who: "Team only", file: "agents/1-customer-service.md", color: "--c9", prop: "calculator", effort: "low",
       skills: ["Consultation bookings", "Consult room schedule", "Reminders"], intro: "Looks after the booked nook: books every confirmed customer into consult room A or B and sends reminders.",
@@ -1538,7 +1538,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["Douyin scripts", "Live-stream outlines", "Douyin comment replies"], intro: "Runs Douyin: short-video scripts, live-stream outlines and replies to Douyin comments.",
       persona: "你负责抖音和视频：写短视频口播脚本、直播大纲，回复抖音评论。",
       tasks: [{ en: "Write a 45-second Douyin script: 3 myths about studying in the UK.", zh: "写一条 45 秒抖音口播：关于英国留学的 3 个误区。" }] },
-    { id: "16", demoAs: "4", name: "Camille", title: "WeChat Official Account", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c16", prop: "paper", effort: "medium",
+    { id: "16", demoAs: "4", name: "Gabriel", title: "WeChat Official Account", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c16", prop: "paper", effort: "medium",
       skills: ["Official Account articles", "WeChat Moments", "WeChat comment replies"], intro: "Runs our WeChat Official Account and Moments, and answers comments on our WeChat posts.",
       persona: "你负责微信公众号和朋友圈：写文章、朋友圈，回复公众号评论。",
       tasks: [{ en: "Outline this week's Official Account article about choosing a UK city.", zh: "为本周公众号文章列提纲：怎么选英国城市。" }] },
@@ -1772,10 +1772,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
-  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", camille: "16", mindy: "15",
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", gabriel: "16", mindy: "15",
     rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", anya: "21", ado: "5" };
   var ROUTER_BOSS = "You are the coordinator for Ado, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; camille = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; ado = office status.\n" +
+    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; gabriel = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; ado = office status.\n" +
     "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ado can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
@@ -3078,7 +3078,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/camille.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg" };
+  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/gabriel.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
   var LAYOUTS = {
     "3f": { img: "previews/office-3f.jpg",
@@ -3098,11 +3098,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     spots: {
       "5": [3.7, 4.3, 13, 11.7], "21": [18, 9.4, 4.6, 4.9],
       "12": [3.4, 32.5, 8, 6.5], "2": [18, 32.5, 6.5, 6.5], "3": [32, 32.5, 6.8, 6.3], "13": [44.5, 29.5, 6.2, 9], "14": [64.7, 32.2, 5.6, 6.8], "6": [82.2, 33.5, 5.2, 5.5],
-      "17": [2.3, 59.2, 7.9, 6.8], "4": [19, 59, 7.3, 7], "16": [45.6, 59.2, 6.8, 6.8], "15": [60.2, 57.2, 5.6, 7.8], "18": [68.7, 59, 6.2, 7.2], "19": [84.5, 59, 6.8, 6.5],
+      "17": [2.8, 57.6, 6, 6.2], "4": [18.5, 56.6, 7.9, 7.2], "16": [50, 57.4, 6, 6.4], "15": [63, 56.6, 4.2, 6.6], "18": [73.1, 57.6, 6, 6.2], "19": [86.1, 57.8, 7.4, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
     boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 4], meet: [80, 9], plates: {},
-    floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 53.8], ["1F · Reception · the Friends team", 75.8]],
+    floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52], ["1F · Reception · the Friends team", 75.8]],
     paths: { "1>scout": [[10, 82], [50, 97], [97, 96], [97, 70], [97, 45], [60, 42], [21, 36]], "2>boss": [[21, 36], [60, 45], [97, 45], [97, 20], [60, 17], [50, 12]], "5>boss": [[8, 10], [30, 16], [50, 12]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
@@ -3925,7 +3925,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var live = { lane: {}, social: {}, on: lsGet("glostudy-auto", "on") === "on", list: [], seq: 0, serving: null, joey: null, t0: Date.now(), timers: [] };
   function liveName(c) { return c.name[state.lang]; }
   var LANE = { wechat: "1", lead: "1", web: "7" };     // Monica: WeChat line and leads · Rachel: website & phone
-  var SOCIAL = { xhs: "4", dy: "15", wc: "16" };       // Emily: Xiaohongshu · Mindy: Douyin · Camille: WeChat posts
+  var SOCIAL = { xhs: "4", dy: "15", wc: "16" };       // Emily: Xiaohongshu · Mindy: Douyin · Gabriel: WeChat posts
   var CHECKER = "17", GUARD = "17", DISPATCH = "8", INSIGHT = "21";
   // a short, visible step of the workflow (it follows a real event)
   function brief(id, label, ms) {
@@ -4225,8 +4225,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       booked: { pts: [[53, 90], [58, 90.5], [63, 90]] },
       lead: { pts: [[85, 91.2], [90, 91.8], [95, 91.2]] },
       joey: { pts: [[84, 88.6], [84, 90.2]] },
-      comments: { pts: [[28, 67.6], [32, 68.2], [36, 67.6], [40, 68.2], [44, 67.6]] },
-      a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[27, 66.4]] }, s15: { pts: [[63.5, 66.2]] }, s16: { pts: [[50, 66.6]] }
+      comments: { pts: [[30, 64.4], [34, 65], [38, 64.4], [42, 65], [46, 64.4]] },
+      a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[26, 64.2]] }, s15: { pts: [[67.5, 64]] }, s16: { pts: [[53.5, 64.6]] }
     },
     in1: {
       wechat: { pts: [[15, 57], [20, 59], [25, 57], [30, 59], [34, 55]] },
@@ -4244,7 +4244,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   };
   LIVE_POS.pano2 = LIVE_POS.in2;
   LIVE_POS.pano1 = LIVE_POS.in1;
-  var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Emily, Mindy, Camille", zh: "评论区 · 社媒团队" } };
+  var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Emily, Mindy, Gabriel", zh: "评论区 · 社媒团队" } };
   function liveTokens(view) {
     var P = LIVE_POS[view], out = [], groups = {};
     live.list.forEach(function (c) { var z = liveZone(c); if (z && P[z]) (groups[z] = groups[z] || []).push(c); });

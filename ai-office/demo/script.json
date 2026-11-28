@@ -111,8 +111,8 @@
   {
    "bot": "8",
    "match": "How many comments came in today|今天来了多少条评论",
-   "en": "Today so far: 5 comments. 3 from Xiaohongshu went up to Emily, 1 from Douyin to Mindy, 1 from WeChat to Camille. 2 people wanted advice, so I brought them down to the leads bench for Monica.",
-   "zh": "今天目前 5 条评论：小红书 3 条交给 Emily，抖音 1 条交给 Mindy，公众号 1 条交给 Camille。有 2 位想咨询，我已带到线索长椅交给莫妮卡。"
+   "en": "Today so far: 5 comments. 3 from Xiaohongshu went up to Emily, 1 from Douyin to Mindy, 1 from WeChat to Gabriel. 2 people wanted advice, so I brought them down to the leads bench for Monica.",
+   "zh": "今天目前 5 条评论：小红书 3 条交给 Emily，抖音 1 条交给 Mindy，公众号 1 条交给 Gabriel。有 2 位想咨询，我已带到线索长椅交给莫妮卡。"
   },
   {
    "bot": "9",
@@ -165,8 +165,8 @@
   {
    "bot": "17",
    "match": "social team post this week|社媒团队本周发了什么",
-   "en": "This week: Emily posted 2 Xiaohongshu notes, Camille 1 Moments post, Mindy 1 Douyin video. I passed 6 everyday comment replies; 2 replies about money and today's post are waiting on your desk.",
-   "zh": "本周：Emily 发了 2 篇小红书，Camille 1 条朋友圈，Mindy 1 条抖音。我审核通过了 6 条普通评论回复；2 条涉及费用的回复和今天的帖子在您桌上等待批准。"
+   "en": "This week: Emily posted 2 Xiaohongshu notes, Gabriel 1 Moments post, Mindy 1 Douyin video. I passed 6 everyday comment replies; 2 replies about money and today's post are waiting on your desk.",
+   "zh": "本周：Emily 发了 2 篇小红书，Gabriel 1 条朋友圈，Mindy 1 条抖音。我审核通过了 6 条普通评论回复；2 条涉及费用的回复和今天的帖子在您桌上等待批准。"
   },
   {
    "bot": "18",
@@ -471,7 +471,7 @@
      "task": "Douyin comments today"
     },
     {
-     "who": "camille",
+     "who": "gabriel",
      "task": "WeChat post comments today"
     }
    ]
@@ -758,7 +758,7 @@
    "en": "- 1 Douyin comment today, a question",
    "zh": "- 今天抖音 1 条评论，是提问"
   },
-  "camille": {
+  "gabriel": {
    "en": "- 1 WeChat comment today, about costs",
    "zh": "- 今天公众号 1 条评论，问费用"
   },
