@@ -3844,7 +3844,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       activity("12", passed ? "Sheldon checked Leonard's shortlist for " + (c.name || "a client") + ": approved" : "Sheldon flagged Leonard's shortlist for " + (c.name || "a client") + " for Aliya");
       if (passed) {
         var pn = BY_ID["22"]; state.taskLabel["22"] = en ? "plain-words version for " + (c.name || "a client") : "为" + (c.name || "客户") + "写通俗版"; setBusy("22", "task"); pvCall("12", ["22"]);
-        var pw = await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], {}).catch(function () { return null; });
+        var pw = await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], { extraRules: "\n\n# 语言\n这份是直接给中国家长看的：无论测试语言是什么，都用简体中文写。" }).catch(function () { return null; });
         pvCallEnd("12"); if (state.busy["22"] === "task") setBusy("22", null);
         if (pw && pw.text) { flashDone("22"); await store.update(c.id, { plain: pw.text }); activity("22", "Penny rewrote " + (c.name || "a client") + "'s shortlist in plain words for the parent"); }
       }
@@ -3890,7 +3890,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
             '<div class="acts"><button class="btn" type="button" data-act="saveEdit" data-id="' + c.id + '">Save edit</button><button class="ghost" type="button" data-act="cancelEdit" data-id="' + c.id + '">Cancel</button></div>';
         } else {
           h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Leonard\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
-          if (c.plain) h += '<details open><summary>Penny\'s plain-words version for the parent</summary><div class="draft">' + render(c.plain) + "</div></details>";
+          if (c.plain) h += '<details open><summary>Penny\'s plain-words version for the parent (中文)</summary><div class="draft">' + render(c.plain) + "</div></details>";
         }
       }
       var acts = "";
@@ -3900,6 +3900,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           '<button class="ghost danger" type="button" data-act="reject" data-id="' + c.id + '">Reject</button>';
       }
       if (c.status === "new") acts += '<button class="btn" type="button" data-act="scout" data-id="' + c.id + '"' + (state.busy["2"] ? " disabled" : "") + ">Send to Leonard</button>";
+      if (c.plain) acts += '<button class="btn" type="button" data-act="copyPlain" data-id="' + c.id + '">Copy for the parent</button>';
       if (c.status === "approved") acts += '<button class="ghost" type="button" data-act="copy" data-id="' + c.id + '">Copy draft</button><button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
       if (c.status === "rejected") acts += '<button class="ghost" type="button" data-act="reopen" data-id="' + c.id + '">Reopen</button>';
       acts += '<button class="ghost danger" type="button" data-act="delete" data-id="' + c.id + '">Delete client</button>';
@@ -3936,6 +3937,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       var note = (state.notes[id] || "").trim();
       if (!note) { var inp = $("nt" + id); if (inp) { inp.focus(); inp.placeholder = "Write what Leonard should change first"; } return; }
       delete state.notes[id]; queueJob(id, note); activity(null, "You sent " + name + "'s shortlist back to Leonard");
+    } else if (act === "copyPlain") {
+      try { navigator.clipboard.writeText(String(c.plain || "").replace(/【简要】|【完整报告】/g, "").trim()).then(function () { b.textContent = "Copied"; activity("22", "Aliya copied Penny's parent version for " + name); }, function () { b.textContent = "Couldn't copy"; }); } catch (e) { b.textContent = "Couldn't copy"; }
     } else if (act === "copy") {
       try { navigator.clipboard.writeText(c.draft || "").then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Couldn't copy"; }); } catch (e) { b.textContent = "Couldn't copy"; }
     }
@@ -4875,7 +4878,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "📣 Announcement to all team": "📣 全员通知", "Everyone comes to the boardroom. Ado runs a short meeting and puts the minutes on your desk.": "大家到会议室集合，Ado 主持一个简短会议，并把会议纪要放到您桌上。",
     "Announcement": "通知", "Gather the team": "召集团队", "← Office": "← 办公室", "🔊 Voice": "🔊 语音", "🔇 Muted": "🔇 静音", "Suggested prompts": "推荐问题", "Chat with:": "对话：", "Your question": "您的问题", "On screen": "屏幕",
     "🖥 Monitor": "🖥 显示器", "📽 Projector": "📽 投影", "📺 Big screen": "📺 大屏", "Close": "关闭", "Kept in this browser on this computer.": "保存在这台电脑的浏览器里。", "Approved": "已批准", "Booking summary": "登记摘要",
-    "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Penny's plain-words version for the parent": "Penny 写给家长的通俗版", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
+    "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Penny's plain-words version for the parent (中文)": "Penny 写给家长的通俗版（中文）", "Copy for the parent": "复制给家长", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
     "Save edit": "保存修改", "Cancel": "取消", "Send back": "退回", "New client": "新客户", "Researching": "研究中", "Waiting for review": "待审核", "Rejected": "已退回", "Talk 1-on-1": "一对一", "1-on-1": "一对一",
     "Urgent WeChat chats": "紧急微信咨询", "Booking consultations": "预约咨询", "FAQs in Chinese & English": "中英文常见问题", "Calling the right colleague": "找对同事",
     "Monica is ready": "Monica 准备好了", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "Team meeting": "团队会议", "Live": "实时", "No clients yet. Chat with Monica and try the demo booking: the client appears here.": "还没有客户。和 Monica 聊天试试演示预约，客户会出现在这里。",
@@ -4957,6 +4960,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       [/^Sheldon checked Leonard's shortlist for (.+): approved$/, function (m) { return "Sheldon 审核了 Leonard 给" + m[1] + "的选校清单：通过"; }],
       [/^Sheldon flagged Leonard's shortlist for (.+) for Aliya$/, function (m) { return "Sheldon 把 Leonard 给" + m[1] + "的选校清单标记给 Aliya"; }],
       [/^Leonard finished a shortlist for (.+) and took it to Aliya's desk$/, function (m) { return "Leonard 完成了" + m[1] + "的选校清单，送到 Aliya 桌上"; }],
+      [/^Aliya copied Penny's parent version for (.+)$/, function (m) { return "Aliya 复制了 Penny 给" + m[1] + "家长的版本"; }],
       [/^Penny rewrote (.+)'s shortlist in plain words for the parent$/, function (m) { return "Penny 把" + m[1] + "的选校清单改写成家长易懂的版本"; }],
       [/^Raj added (.+)'s deadlines to the wall$/, function (m) { return "Raj 把" + m[1] + "的截止日期贴到墙上"; }],
       [/^Howard filed (.+)'s record$/, function (m) { return "Howard 归档了" + m[1] + "的资料"; }],
