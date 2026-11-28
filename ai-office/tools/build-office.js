@@ -7,7 +7,7 @@ const base = path.join(__dirname, '..');
 const files = {};
 for (const dir of ['agents', 'knowledge', 'templates']) {
   for (const f of fs.readdirSync(path.join(base, dir)).sort()) {
-    if (f.endsWith('.md')) files[dir + '/' + f] = fs.readFileSync(path.join(base, dir, f), 'utf8');
+    if (f.endsWith('.md') || f.endsWith('.json')) files[dir + '/' + f] = fs.readFileSync(path.join(base, dir, f), 'utf8');
   }
 }
 files['tests/customer-service-tests.json'] = fs.readFileSync(path.join(base, 'tests', 'customer-service-tests.json'), 'utf8');
