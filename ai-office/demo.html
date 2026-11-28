@@ -1312,10 +1312,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .photo-frame .plate.wall-plate { z-index: 1; }
 .idle-fig { position: absolute; z-index: 0; pointer-events: none; transform-origin: 50% 100%; filter: saturate(.62) brightness(.86) contrast(1.04);
   -webkit-mask-image: radial-gradient(ellipse 50% 52% at 50% 52%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 52% at 50% 52%, #000 62%, transparent 100%);
-  animation: idleBreath 4.6s ease-in-out infinite; will-change: transform; }
+  animation: none; }
 .hs.working ~ .idle-fig { }
 @keyframes idleBreath { 0%, 100% { transform: translateY(0) rotate(0) scale(1, 1); } 30% { transform: translateY(-.35%) rotate(.25deg) scale(1.004, 1.012); } 65% { transform: translateY(-.15%) rotate(-.2deg) scale(1.002, 1.006); } }
-.idle-fig.busy { animation-name: idleBusy; animation-duration: 1.9s !important; }
+.idle-fig.busy { animation: idleBusy 1.9s ease-in-out infinite; will-change: transform; }
 @keyframes idleBusy { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-.5%) rotate(.35deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-.35%) rotate(-.3deg); } }
 @media (prefers-reduced-motion: reduce) { .idle-fig { display: none; } }
 </style>
@@ -3170,7 +3170,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       var x = sp[0] - 1, y = sp[1] - 1.2, w = sp[2] + 2, h = sp[3] + 1.6, f = document.createElement("div");
       f.className = "idle-fig"; f.id = "fig" + b.id;
       f.style.cssText = "left:" + x + "%;top:" + y + "%;width:" + w + "%;height:" + h + "%;background-image:url(" + imgURL(LAY.img) + ");background-size:" + (10300 / w) + "% " + (10300 / h) + "%;background-position:" + ((x + 1.5) / (103 - w) * 100) + "% " + ((y + 1.5) / (103 - h) * 100) + "%;animation-delay:-" + (i * 0.73 % 5).toFixed(2) + "s;animation-duration:" + (4.2 + (i % 5) * .35).toFixed(2) + "s";
-      box.appendChild(f);
+      if (state.busy[b.id]) f.classList.add("busy"); box.appendChild(f);
     });
     var PLATES = LAY.plates;
     BOTS.forEach(function (b) {
