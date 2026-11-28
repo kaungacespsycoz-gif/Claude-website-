@@ -1912,7 +1912,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function rbSection(rb, key) { var m = String(rb || "").split(/\n(?=## )/).filter(function (sec) { return sec.indexOf("## " + key + " ") === 0 || sec.trim() === "## " + key || sec.indexOf("## " + key + "\n") === 0; })[0]; return m ? m.split("\n").slice(1).filter(function (l) { return /^- /.test(l); }) : []; }
   function rulebookFor(id, rb) {
     var b = BY_ID[id], talks = b && b.who === "Talks to customers" || ["4", "15", "16", "10"].indexOf(id) >= 0;
-    var alias = { "7": "1", "15": "4", "16": "4" }[id], lines = (talks ? rbSection(rb, "all") : []).concat(alias ? rbSection(rb, alias) : []).concat(rbSection(rb, id)).concat(lessons().filter(function (x) { return x.officer === id || (talks && x.officer === "all") || (x.officer === "4" && ["15", "16"].indexOf(id) >= 0); }).map(function (x) { return "- " + x.rule; }));
+    var alias = { "7": "1", "10": "1", "15": "4", "16": "4" }[id], lines = (talks ? rbSection(rb, "all") : []).concat(alias ? rbSection(rb, alias) : []).concat(rbSection(rb, id)).concat(lessons().filter(function (x) { return x.officer === id || (talks && x.officer === "all") || (x.officer === "4" && ["15", "16"].indexOf(id) >= 0); }).map(function (x) { return "- " + x.rule; }));
     return lines.length ? "\n\n# 岗位规则手册（训练得到的经验，必须遵守）\n" + lines.join("\n") : "";
   }
   function rulebookText() {
@@ -4175,7 +4175,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     c.slots = consultSlots(); c.room = live.seq % 2 ? "A" : "B";
     activity("9", "Chandler offered " + c.name.en + " two consult slots (room " + c.room + "): " + c.slots.map(function (x) { return x.en; }).join(" or "));
     var cl = c.lang || state.lang;
-    c.turns.push({ role: "assistant", byId: "9", by: "Chandler", content: cl === "en" ? "Hello, your free consultation (about 30 minutes, WeChat voice call) can be at one of these times. Please reply 1 or 2:\n1) " + c.slots[0].en + "\n2) " + c.slots[1].en + "\nIf neither suits you, just tell us a better time.\n— Glostudy consultant team" : "您好，免费咨询（约 30 分钟，微信语音）可选以下时间，请回复 1 或 2：\n1）" + c.slots[0].zh + "\n2）" + c.slots[1].zh + "\n都不方便请告诉我们您方便的时间。\n— 寰学 Glostudy 顾问团队" });
+    c.turns.push({ role: "assistant", byId: "9", by: "Chandler", content: cl === "en" ? "Hello, your free consultation (about 30 minutes, by WeChat voice or phone) can be at one of these times. Please reply 1 or 2:\n1) " + c.slots[0].en + "\n2) " + c.slots[1].en + "\nIf neither suits you, just tell us a better time.\n— Glostudy consultant team" : "您好，免费咨询（约 30 分钟，微信语音或电话）可选以下时间，请回复 1 或 2：\n1）" + c.slots[0].zh + "\n2）" + c.slots[1].zh + "\n都不方便请告诉我们您方便的时间。\n— 寰学 Glostudy 顾问团队" });
     brief("9", en ? "booking a consult room for " + c.name.en : "为" + c.name.zh + "安排咨询室", 3500);
     setTimeout(function () { activity("14", "Howard filed " + c.name.en + "'s record"); brief("14", en ? "filing " + c.name.en + "'s record" : "归档" + c.name.zh + "的资料", 3000); }, 1500);
     setTimeout(function () { activity("13", "Raj added " + c.name.en + "'s deadlines to the wall"); brief("13", en ? "checking " + c.name.en + "'s deadlines" : "核对" + c.name.zh + "的时间线", 3000); }, 4000);
@@ -4275,7 +4275,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     t = t.replace(/【咨询登记】([\s\S]*?)(【登记完成】|$)/, function (_, b) { return (L === "en" ? "Here's what we've noted:" : "已为您记录：") + "\n" + b.trim(); });
     return t.replace(/【[^】]*】/g, "").replace(/\n{3,}/g, "\n\n").trim();
   }
-  var CUSTOMER_RULE = "\n\n# 对客户说话（最高优先级）\n你代表「寰学 Glostudy」回复真实客户。不要自称名字，不提任何同事的名字，不说自己是机器人；需要时说“我们”“我们的顾问”“我们的研究顾问”“我们的文书老师”。不用表情符号。语气专业、礼貌、简洁。";
+  var CUSTOMER_RULE = "\n\n# 对客户说话（最高优先级）\n你代表「寰学 Glostudy」回复真实客户。不要自称名字，不提任何同事的名字，不说自己是机器人；需要时说“我们”“我们的顾问”“我们的研究顾问”“我们的文书老师”。不用表情符号。语气专业、礼貌、简洁。客户中途换语言时，整条回复改用客户最新使用的语言（优先于上面的语言设定）。";
   function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
   // Monica serves the reception queues: WeChat line first, then leads from Emily, then the website sofa
   var fails = [];
@@ -4343,8 +4343,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       await wait(1200);
       c.turns.push({ role: "user", content: c.text[L], who: liveName(c) + " · " + pl[L] }); drawLiveDetail();
       var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[L] +
-        (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or something you must not answer, end with 【转人工】."
-            : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是投诉、退款或你不能回答的问题，在末尾加【转人工】。");
+        (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or contract dispute about us, end with 【转人工】; for anything else you must not answer publicly, reply with one neutral line inviting a private message, with no tag."
+            : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是针对寰学的投诉、退款或合同纠纷，在末尾加【转人工】；其他不能公开回答的问题，回一句中立的话并请对方私信，不加标记。");
       if (state.busy[oid] === "task") setBusy(oid, null);
       setBusy(oid, "cust");
       var extra = "";
@@ -5183,7 +5183,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     addReport("5", (en ? "Training report · " : "训练报告 · ") + bot.name, (en ? "Score " : "得分 ") + rep.scores[id] + "/10\n\n" + rep.cases.map(function (c) { return "- " + c.persona + ": " + c.score + "/10 " + (c.issues || []).join("; "); }).join("\n"));
     drawTraining();
   }
-  getFile("agents/training-round1.json").then(function (t) { try { var j = JSON.parse(t); trState.report = { title: j.title || "Round 1", scores: j.scores || {}, cases: j.cases || [], lessons: j.lessons || [] }; } catch (e) {} }).catch(function () {});
+  getFile("agents/training-round2.json").catch(function () { return getFile("agents/training-round1.json"); }).then(function (t) { try { var j = JSON.parse(t); trState.report = { title: j.title || "Round 1", scores: j.scores || {}, cases: j.cases || [], lessons: j.lessons || [] }; } catch (e) {} }).catch(function () {});
   $("trOpen").onclick = openTraining; $("trX").onclick = function () { $("training").hidden = true; };
   window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, live: function () { return live.list; }, zh: function () { zhApply(); }, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
