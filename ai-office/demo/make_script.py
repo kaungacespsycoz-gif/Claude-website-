@@ -893,6 +893,8 @@ desk("21", r"customers worried about this week|这周客户最担心什么", "Th
 desk("22", r"red lines for public posts|公开发帖的红线", "Our red lines: no guaranteed offers, no \"last places\" pressure, no Glostudy fee quotes, no client names or photos without written consent, no attacks on other agencies, rankings always with list and year.", "我们的红线：不保证录取、不制造名额紧张、不报寰学价格、未经书面同意不用客户姓名和照片、不攻击其他机构、排名必须注明榜单和年份。")
 cust("22", r"Quality check before publishing Emily's post|发布前质量检查：Emily 的帖子", "【通过】 No promises, no fee quotes, no private details.", "【通过】 无承诺、无报价、无隐私信息。")
 
+desk("22", r"plain words|通俗|家长一看就懂|Rewrite this", "【简要】Studying a one-year master's in London costs about £45,000–£60,000 in total.\n【完整报告】\n- This covers both the course fee and everyday living costs for the year.\n- Most courses ask for IELTS 6.5 (the English test UK universities use).\n- Outside London the total is usually lower.\n- Exact fees are on each university's website.\nNext step: tell us the course you like, and we'll check its exact cost and English requirement.", "【简要】在伦敦读一年硕士，总共大约需要 4.5 万到 6 万英镑。\n【完整报告】\n- 这包括一年的学费和日常生活费。\n- 大多数专业要求雅思 6.5（英国大学通用的英语考试）。\n- 伦敦以外的城市一般会便宜一些。\n- 具体学费以各大学官网为准。\n下一步：告诉我们您喜欢的专业，我们帮您核对准确的费用和英语要求。")
+
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
   {"bot": "8", "match": r"How many comments came in today|今天来了多少条评论", "calls": [{"who": "emily", "task": "Xiaohongshu comments today"}, {"who": "mindy", "task": "Douyin comments today"}, {"who": "gabriel", "task": "WeChat post comments today"}]},
@@ -904,18 +906,18 @@ ROUTES = [
   {"bot": "21", "match": r"customers worried|客户最担心", "calls": [{"who": "monica", "task": "Common WeChat questions"}, {"who": "joey", "task": "Comment themes"}]},
   {"bot": "12", "match": r"UCL is ranked|UCL 世界排名", "calls": [{"who": "leonard", "task": "Ranking source"}]},
   {"bot": "1", "match": r"孩子12岁，现在准备来得及吗|My child is 12, is it too late", "calls": [{"who": "scout", "task": "Is 12 too late for UK boarding?"}, {"who": "raj", "task": "13+ entry timeline"}]},
-  {"bot": "1", "match": r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", "calls": [{"who": "penny", "task": "One-year London master's cost range"}]},
-  {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "sheldon", "task": "Graduate visa and degree length facts"}, {"who": "penny", "task": "Cost vs other countries"}]},
+  {"bot": "1", "match": r"伦敦读硕士一年大概多少钱|How much is a one-year master's in London", "calls": [{"who": "bernadette", "task": "One-year London master's cost range"}]},
+  {"bot": "1", "match": r"英国留学值得吗|Is studying in the UK worth it", "calls": [{"who": "sheldon", "task": "Graduate visa and degree length facts"}, {"who": "bernadette", "task": "Cost vs other countries"}]},
   {"bot": "1", "match": r"lily_mama_12", "calls": [{"who": "scout", "task": "Boarding schools for 13+ entry"}]},
-  {"bot": "1", "match": r"London or Manchester|伦敦还是曼彻斯特", "calls": [{"who": "penny", "task": "London vs Manchester costs"}, {"who": "scout", "task": "Finance master's in both cities"}]},
+  {"bot": "1", "match": r"London or Manchester|伦敦还是曼彻斯特", "calls": [{"who": "bernadette", "task": "London vs Manchester costs"}, {"who": "scout", "task": "Finance master's in both cities"}]},
   {"bot": "1", "match": r"A-Level for my daughter|女儿去英国读A-Level", "calls": [{"who": "scout", "task": "A-level route and schools for a 16-year-old"}, {"who": "raj", "task": "A-level start dates"}]},
   {"bot": "1", "match": r"guarantee him a place at Oxford|保证他上牛津", "calls": [{"who": "sheldon", "task": "Oxford entry facts"}, {"who": "scout", "task": "Realistic alternatives"}]},
   {"bot": "1", "match": r"write my personal statement for me|帮我写个人陈述", "calls": [{"who": "quill", "task": "Can we coach a psychology statement?"}]},
   {"bot": "1", "match": r"improve my own draft|改我自己写的初稿", "calls": [{"who": "quill", "task": "Draft feedback process and timeline"}]},
-  {"bot": "1", "match": r"28 and work in finance|28岁，在深圳", "calls": [{"who": "penny", "task": "Total cost of a one-year UK master's"}, {"who": "scout", "task": "Finance master's options by city"}]},
-  {"bot": "1", "match": r"London much more expensive|伦敦是不是比其他城市贵", "calls": [{"who": "penny", "task": "London vs other cities living costs"}]},
-  {"bot": "1", "match": r"How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱", "calls": [{"who": "penny", "task": "Rough yearly costs for UK study"}, {"who": "scout", "task": "Typical tuition ranges by city"}]},
-  {"bot": "5", "match": r"medicine|医学", "calls": [{"who": "scout", "task": "Medical school shortlist and entry route"}, {"who": "penny", "task": "Cost check for ¥600k a year"}, {"who": "quill", "task": "Interview and statement prep points"}]},
+  {"bot": "1", "match": r"28 and work in finance|28岁，在深圳", "calls": [{"who": "bernadette", "task": "Total cost of a one-year UK master's"}, {"who": "scout", "task": "Finance master's options by city"}]},
+  {"bot": "1", "match": r"London much more expensive|伦敦是不是比其他城市贵", "calls": [{"who": "bernadette", "task": "London vs other cities living costs"}]},
+  {"bot": "1", "match": r"How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱", "calls": [{"who": "bernadette", "task": "Rough yearly costs for UK study"}, {"who": "scout", "task": "Typical tuition ranges by city"}]},
+  {"bot": "5", "match": r"medicine|医学", "calls": [{"who": "scout", "task": "Medical school shortlist and entry route"}, {"who": "bernadette", "task": "Cost check for ¥600k a year"}, {"who": "quill", "task": "Interview and statement prep points"}]},
 ]
 NOTES = {
   "bernadette": {"en": "- Tuition £20k–£40k a year by city\n- Living £12k–£22k\n- Visa funds up from 30 Nov", "zh": "- 学费每年 £2–4 万，看城市\n- 生活费 £1.2–2.2 万\n- 11 月 30 日起签证资金上调"},

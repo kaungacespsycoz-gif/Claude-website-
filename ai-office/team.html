@@ -1572,6 +1572,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["UCAS deadlines", "Application calendars", "Interview and test dates"], intro: "Keeps the deadline wall: UCAS dates, admissions tests and interview seasons for every client.",
       persona: "你负责申请时间线：UCAS 截止日期、入学考试和面试时间，为每位客户排日程。",
       tasks: [{ en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }] },
+    { id: "22", demoAs: "2", name: "Penny", title: "Plain-Words Editor", role: "Research · Big Bang", who: "Team only", file: "agents/8-plain-words.md", color: "--c22", prop: "paper", effort: "low",
+      skills: ["Plain-words summaries for parents", "Explaining jargon simply", "Clear next steps"], intro: "Turns the research team's reports into plain, friendly words a parent understands, with one clear next step.",
+      persona: "你是通俗编辑：把 Sheldon、Leonard、Bernadette 的专业内容改写成家长一看就懂的话，不改变任何事实，最后写一个“下一步”。",
+      tasks: [{ en: "Rewrite this in plain words for a parent: a one-year master's in London costs about £45,000–£60,000 in total including tuition and living costs; IELTS 6.5 is usually required.", zh: "把这段话改写成家长一看就懂的话：伦敦一年制硕士总费用约 £45,000–£60,000（含学费和生活费），通常要求雅思 6.5。" }] },
     { id: "14", demoAs: "2", name: "Howard", title: "Client Records", role: "Research · Big Bang", who: "Team only", file: "agents/2-school-research.md", color: "--c14", prop: "paper", effort: "low",
       skills: ["Client files", "Board tidy-up", "Data privacy"], intro: "Keeps client records tidy and private: files every booking and checks nothing sensitive leaves the office.",
       persona: "你负责客户档案：整理和归档每位客户的资料，注意隐私，不对外泄露。",
@@ -1814,7 +1818,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
-  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "6", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", gabriel: "16", mindy: "15",
+  var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "22", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", gabriel: "16", mindy: "15",
     rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", anya: "21", ado: "5" };
   var ROUTER_BOSS = "You are the coordinator for Ado, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
     "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; gabriel = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; ado = office status.\n" +
@@ -3121,7 +3125,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/gabriel.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg" };
+  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/gabriel.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg", "22": "images/team/penny.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
   var LAYOUTS = {
     "3f": { img: "previews/office-3f.jpg",
@@ -3140,7 +3144,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 2432", maxW: 1080,
     spots: {
       "5": [3.7, 4.3, 13.4, 14], "21": [20.4, 8.6, 5.6, 7],
-      "12": [4.2, 30.6, 8.8, 9.9], "2": [18.5, 32.6, 6.5, 7.8], "3": [32, 32.4, 6, 7.8], "13": [46.3, 32, 8.3, 8.4], "14": [62.5, 32.4, 9.7, 8], "6": [81.5, 33.2, 6, 7.4],
+      "12": [6.5, 30.8, 6.5, 9.3], "2": [18, 32, 7.4, 7.8], "22": [31, 32.4, 6.5, 7.8], "3": [41.7, 32.4, 8.3, 7.6], "13": [53.2, 32, 8.3, 8.2], "14": [69, 32.2, 9.3, 8.2], "6": [85.2, 33.2, 7.4, 7.4],
       "17": [3.2, 59, 6.5, 6.6], "4": [21.3, 59.2, 6.5, 6.4], "16": [52.3, 58.4, 6.5, 7.4], "15": [63.9, 57.4, 6.5, 8.2], "18": [75, 59, 5.6, 6.8], "19": [90.3, 59.2, 6, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
@@ -3473,7 +3477,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   var TEAM_FLOORS = [
     { key: "4", n: "4F", name: "CEO Suite", dept: "Leadership · Ado & Anya", color: "#e8c17a", ids: ["5", "21"], open: true },
-    { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "3", "13", "14", "6"], open: false },
+    { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "22", "3", "13", "14", "6"], open: false },
     { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "18", "19"], open: false },
     { key: "1", n: "1F", name: "Reception", dept: "The Friends team", color: "#3ee8a0", ids: ["1", "7", "8", "9", "10", "11"], open: true }
   ];
@@ -3838,6 +3842,12 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       var passed = /【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text);
       await store.update(c.id, { status: passed ? "approved" : "review", draft: res.text, checkedBy: "Sheldon", error: passed ? "" : (en ? "Sheldon flagged: " : "Sheldon 标记：") + chk.text.replace(/【需CEO】/g, "").trim(), updated: new Date().toISOString() });
       activity("12", passed ? "Sheldon checked Leonard's shortlist for " + (c.name || "a client") + ": approved" : "Sheldon flagged Leonard's shortlist for " + (c.name || "a client") + " for Aliya");
+      if (passed) {
+        var pn = BY_ID["22"]; state.taskLabel["22"] = en ? "plain-words version for " + (c.name || "a client") : "为" + (c.name || "客户") + "写通俗版"; setBusy("22", "task"); pvCall("12", ["22"]);
+        var pw = await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], {}).catch(function () { return null; });
+        pvCallEnd("12"); if (state.busy["22"] === "task") setBusy("22", null);
+        if (pw && pw.text) { flashDone("22"); await store.update(c.id, { plain: pw.text }); activity("22", "Penny rewrote " + (c.name || "a client") + "'s shortlist in plain words for the parent"); }
+      }
       if (!passed) setTimeout(function () { deliver("2", "boss"); }, 600);
     } catch (e) {
       try { await store.update(c.id, { status: "new", error: errText(e) }); } catch (e2) {}
@@ -3880,6 +3890,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
             '<div class="acts"><button class="btn" type="button" data-act="saveEdit" data-id="' + c.id + '">Save edit</button><button class="ghost" type="button" data-act="cancelEdit" data-id="' + c.id + '">Cancel</button></div>';
         } else {
           h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Leonard\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
+          if (c.plain) h += '<details open><summary>Penny\'s plain-words version for the parent</summary><div class="draft">' + render(c.plain) + "</div></details>";
         }
       }
       var acts = "";
@@ -4637,7 +4648,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
     4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9] }, boss: [32, 10, 20, 22], room: [57, 14, 25, 32] },
-    3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10] } },
+    3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10], "22": [29, 30, 6, 9] } },
     2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [7, 22, 7, 9], "4": [21, 20, 7, 9], "16": [50, 20, 7, 9], "15": [60, 16, 6, 14], "18": [69, 20, 7, 9], "19": [81, 20, 7, 10] } },
     1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [9, 14, 9, 8], "10": [26, 16, 7, 9], "7": [39, 13, 8, 12], "9": [55, 14, 8, 11], "11": [71, 10, 9, 14], "8": [87, 31, 7, 10] } }
   };
@@ -4850,7 +4861,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var ZH_TITLES = { "Chief of Staff": "行政主管", "Customer Insights": "客户洞察", "Head of Research": "研究主管", "Research Officer": "选校研究", "Documents Officer": "文书", "Admissions Timelines": "申请时间线",
     "Client Records": "客户档案", "Finance Officer": "费用预算", "Compliance & Brand Check": "合规与品牌审核", "Xiaohongshu Lead": "小红书", "WeChat Official Account": "公众号", "Douyin, Video & Studio": "抖音与视频",
     "Design & Covers": "设计与封面", "Daily News Check": "每日资讯", "WeChat Priority Line": "微信优先线", "Front Desk Host": "前台接待", "Comment Dispatcher": "评论分拣", "Bookings & Consult Rooms": "预约与咨询室",
-    "Customer Care": "客户关怀", "Consultation Prep": "咨询准备", "Chief Executive Officer": "首席执行官", "Marketing Director": "市场总监" };
+    "Customer Care": "客户关怀", "Plain-Words Editor": "通俗编辑", "Consultation Prep": "咨询准备", "Chief Executive Officer": "首席执行官", "Marketing Director": "市场总监" };
   var ZH_DICT = { "AI Office": "AI 办公室", "Glostudy AI Office": "寰学 AI 办公室", "Glostudy 寰学 · UK study": "寰学 Glostudy · 英国留学", "working": "工作中", "clients": "客户", "to review": "待处理", "Demo": "演示",
     "Glostudy office": "寰学办公室", "Reset view": "重置视角", "Photo": "大楼", "Inside": "室内", "Floor plan": "平面图", "idle": "空闲", "available": "空闲", "Boardroom": "会议室", "announce": "发通知", "announce to all": "全员通知",
     "CEO Suite · Aliya": "CEO 办公室 · Aliya", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "nothing to review": "没有待办", "Tap the glowing dots to move · tap an officer to talk": "点光点移动 · 点同事对话",
@@ -4864,7 +4875,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "📣 Announcement to all team": "📣 全员通知", "Everyone comes to the boardroom. Ado runs a short meeting and puts the minutes on your desk.": "大家到会议室集合，Ado 主持一个简短会议，并把会议纪要放到您桌上。",
     "Announcement": "通知", "Gather the team": "召集团队", "← Office": "← 办公室", "🔊 Voice": "🔊 语音", "🔇 Muted": "🔇 静音", "Suggested prompts": "推荐问题", "Chat with:": "对话：", "Your question": "您的问题", "On screen": "屏幕",
     "🖥 Monitor": "🖥 显示器", "📽 Projector": "📽 投影", "📺 Big screen": "📺 大屏", "Close": "关闭", "Kept in this browser on this computer.": "保存在这台电脑的浏览器里。", "Approved": "已批准", "Booking summary": "登记摘要",
-    "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
+    "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Penny's plain-words version for the parent": "Penny 写给家长的通俗版", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
     "Save edit": "保存修改", "Cancel": "取消", "Send back": "退回", "New client": "新客户", "Researching": "研究中", "Waiting for review": "待审核", "Rejected": "已退回", "Talk 1-on-1": "一对一", "1-on-1": "一对一",
     "Urgent WeChat chats": "紧急微信咨询", "Booking consultations": "预约咨询", "FAQs in Chinese & English": "中英文常见问题", "Calling the right colleague": "找对同事",
     "Monica is ready": "Monica 准备好了", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "Team meeting": "团队会议", "Live": "实时", "No clients yet. Chat with Monica and try the demo booking: the client appears here.": "还没有客户。和 Monica 聊天试试演示预约，客户会出现在这里。",
@@ -4905,7 +4916,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "Reference letter outlines": "推荐信提纲", "Reminders": "提醒", "Sorting comments from every channel": "分拣各平台评论", "Talking points for consultants": "顾问谈话要点", "Tuition & living-cost estimates": "学费与生活费估算",
     "UCAS deadlines": "UCAS 截止日期", "UCAS personal statement coaching": "UCAS 个人陈述辅导", "UK school & university shortlists": "英国中学和大学候选清单", "UK university & policy news": "英国大学与政策新闻",
     "Visa money requirement": "签证资金要求", "Visa rule changes": "签证规则变化", "WeChat Moments drafts": "朋友圈草稿", "WeChat comment replies": "公众号评论回复", "Website & phone enquiries": "官网和电话咨询",
-    "Xiaohongshu notes & covers": "小红书笔记和封面",
+    "Xiaohongshu notes & covers": "小红书笔记和封面", "Plain-words summaries for parents": "给家长的通俗摘要", "Explaining jargon simply": "把术语讲简单", "Clear next steps": "清楚的下一步", "Turns the research team's reports into plain, friendly words a parent understands, with one clear next step.": "把研究团队的报告改写成家长一看就懂的话，并写清楚下一步。",
     "Pick a customer. They walk in to reception and talk to Monica; you tap their next message each time.": "选一位客户：他们走进前台和 Monica 对话，每次由您点下一句。",
     "Demo: the robots give prepared answers to the suggested questions (演示版：机器人只回答预设问题). To ask anything, choose DeepSeek and add an API key. Everything the robots write is a draft: check it before it goes to a customer.": "演示版：机器人只回答预设问题。想问任何问题，请选择 DeepSeek 并填入 API 密钥。机器人写的内容都是草稿，发给客户前请先检查。"
   };
@@ -4914,7 +4925,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function zhLabel(t) {
     var L = [[/^reading (.+)'s mind$/, "读懂$1的心思"], [/^sorting (.+)'s comment$/, "分拣$1的评论"], [/^bringing (.+) down to the bench$/, "带$1到线索长椅"], [/^handling (.+)'s case$/, "处理$1的问题"],
       [/^booking a consult room for (.+)$/, "为$1安排咨询室"], [/^filing (.+)'s record$/, "归档$1的资料"], [/^checking (.+)'s deadlines$/, "核对$1的时间线"], [/^designing the cover$/, "设计封面"],
-      [/^document checklist for (.+)$/, "为$1准备材料清单"], [/^consult pack for (.+)$/, "为$1准备咨询资料"], [/^following up with (.+)$/, "跟进$1"], [/^checking (.+)'s shortlist$/, "核对$1的选校清单"],
+      [/^document checklist for (.+)$/, "为$1准备材料清单"], [/^consult pack for (.+)$/, "为$1准备咨询资料"], [/^plain-words version for (.+)$/, "为$1写通俗版"], [/^following up with (.+)$/, "跟进$1"], [/^checking (.+)'s shortlist$/, "核对$1的选校清单"],
       [/^revising per Aliya's note$/, "按 Aliya 的意见修改"], [/^safety-checking the post$/, "发布前安全检查"], [/^chatting with (.+)$/, "和$1聊天"], [/^replying to (.+)$/, "回复$1"], [/^helping (.+)$/, "帮 $1"],
       [/^on a client$/, "处理客户方案"], [/^working$/, "工作中"], [/^chatting with a customer$/, "和客户聊天"], [/^replying to a comment$/, "回复评论"]];
     for (var i = 0; i < L.length; i++) if (L[i][0].test(t)) return zhNames(t.replace(L[i][0], L[i][1]));
@@ -4946,6 +4957,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       [/^Sheldon checked Leonard's shortlist for (.+): approved$/, function (m) { return "Sheldon 审核了 Leonard 给" + m[1] + "的选校清单：通过"; }],
       [/^Sheldon flagged Leonard's shortlist for (.+) for Aliya$/, function (m) { return "Sheldon 把 Leonard 给" + m[1] + "的选校清单标记给 Aliya"; }],
       [/^Leonard finished a shortlist for (.+) and took it to Aliya's desk$/, function (m) { return "Leonard 完成了" + m[1] + "的选校清单，送到 Aliya 桌上"; }],
+      [/^Penny rewrote (.+)'s shortlist in plain words for the parent$/, function (m) { return "Penny 把" + m[1] + "的选校清单改写成家长易懂的版本"; }],
       [/^Raj added (.+)'s deadlines to the wall$/, function (m) { return "Raj 把" + m[1] + "的截止日期贴到墙上"; }],
       [/^Howard filed (.+)'s record$/, function (m) { return "Howard 归档了" + m[1] + "的资料"; }],
       [/^Howard deleted (.+)'s record at Aliya's request$/, function (m) { return "Howard 按 Aliya 的要求删除了" + m[1] + "的资料"; }],

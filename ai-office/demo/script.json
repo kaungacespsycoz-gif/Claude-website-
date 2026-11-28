@@ -199,6 +199,12 @@
    "zh": "【通过】 无承诺、无报价、无隐私信息。"
   },
   {
+   "bot": "22",
+   "match": "plain words|通俗|家长一看就懂|Rewrite this",
+   "en": "【简要】Studying a one-year master's in London costs about £45,000–£60,000 in total.\n【完整报告】\n- This covers both the course fee and everyday living costs for the year.\n- Most courses ask for IELTS 6.5 (the English test UK universities use).\n- Outside London the total is usually lower.\n- Exact fees are on each university's website.\nNext step: tell us the course you like, and we'll check its exact cost and English requirement.",
+   "zh": "【简要】在伦敦读一年硕士，总共大约需要 4.5 万到 6 万英镑。\n【完整报告】\n- 这包括一年的学费和日常生活费。\n- 大多数专业要求雅思 6.5（英国大学通用的英语考试）。\n- 伦敦以外的城市一般会便宜一些。\n- 具体学费以各大学官网为准。\n下一步：告诉我们您喜欢的专业，我们帮您核对准确的费用和英语要求。"
+  },
+  {
    "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
    "en": "Hello! Happy to help 😊 I just checked with Leonard, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",
@@ -589,7 +595,7 @@
    "match": "伦敦读硕士一年大概多少钱|How much is a one-year master's in London",
    "calls": [
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "One-year London master's cost range"
     }
    ]
@@ -603,7 +609,7 @@
      "task": "Graduate visa and degree length facts"
     },
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "Cost vs other countries"
     }
    ]
@@ -623,7 +629,7 @@
    "match": "London or Manchester|伦敦还是曼彻斯特",
    "calls": [
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "London vs Manchester costs"
     },
     {
@@ -685,7 +691,7 @@
    "match": "28 and work in finance|28岁，在深圳",
    "calls": [
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "Total cost of a one-year UK master's"
     },
     {
@@ -699,7 +705,7 @@
    "match": "London much more expensive|伦敦是不是比其他城市贵",
    "calls": [
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "London vs other cities living costs"
     }
    ]
@@ -709,7 +715,7 @@
    "match": "How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱",
    "calls": [
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "Rough yearly costs for UK study"
     },
     {
@@ -727,7 +733,7 @@
      "task": "Medical school shortlist and entry route"
     },
     {
-     "who": "penny",
+     "who": "bernadette",
      "task": "Cost check for ¥600k a year"
     },
     {
