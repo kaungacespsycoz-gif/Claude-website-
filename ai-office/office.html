@@ -3856,7 +3856,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var pn = BY_ID["22"]; state.taskLabel["22"] = en ? "plain-words version for " + (c.name || "a client") : "为" + (c.name || "客户") + "写通俗版"; setBusy("22", "task"); pvCall("12", ["22"]);
         var pw = await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], { extraRules: "\n\n# 语言\n这份是直接给中国家长看的：无论测试语言是什么，都用简体中文写。" }).catch(function () { return null; });
         pvCallEnd("12"); if (state.busy["22"] === "task") setBusy("22", null);
-        if (pw && pw.text) { flashDone("22"); await store.update(c.id, { plain: pw.text }); activity("22", "Penny rewrote " + (c.name || "a client") + "'s shortlist in plain words for the parent"); }
+        if (pw && pw.text) { flashDone("22"); await store.update(c.id, { plain: pw.text }); activity("22", "Penny rewrote " + (c.name || "a client") + "'s shortlist in plain words for the parent");
+          var lc = live.list.filter(function (x) { return x.clientId === c.id; })[0];
+          if (lc && !lc.plain) { lc.plain = pw.text; if (lc.packFull) { lc.packFull += packPlain(pw.text); store.update(c.id, { pack: lc.packFull }).catch(function () {}); activity("11", "Ross added Penny's parent version to " + lc.name.en + "'s consult pack"); } drawLiveDetail(); } }
       }
       if (!passed) setTimeout(function () { deliver("2", "boss"); }, 600);
     } catch (e) {
@@ -3901,6 +3903,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         } else {
           h += '<details' + (c.status === "review" ? " open" : "") + '><summary>Leonard\'s shortlist draft</summary><div class="draft">' + render(c.draft) + "</div></details>";
           if (c.plain) h += '<details open><summary>Penny\'s plain-words version for the parent (中文)</summary><div class="draft">' + render(c.plain) + "</div></details>";
+          if (c.pack) h += '<details><summary>Ross\'s consult pack' + (c.slots ? " · " + esc(c.slots) : "") + '</summary><div class="draft">' + render(c.pack + (c.checklist ? "\n\n**" + (state.lang === "en" ? "Amy's document checklist" : "Amy 的材料清单") + "**\n" + c.checklist : "")) + "</div></details>";
         }
       }
       var acts = "";
@@ -4152,9 +4155,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       pvCallEnd("11"); if (state.busy["11"] === "task") setBusy("11", null); flashDone("11");
       c.pack = res.text; activity("11", "Ross attached a consult pack to " + c.name.en + "'s record");
       c.packFull = ( (c.slots ? (en ? "Slots offered: " : "提供的时间：") + c.slots.map(function (x) { return x[state.lang]; }).join(" / ") + (en ? " · Room " : " · 咨询室 ") + c.room + "\n\n" : "") + res.text);
-      c.turns.push({ kind: "note", good: true, text: (en ? "📁 Consult pack ready (Ross) · Amy's checklist attached" : "📁 咨询资料已备好（Ross）· 附 Amy 的材料清单") });
+      var rec = c.clientId && store.get(c.clientId); if (rec && rec.plain && !c.plain) c.plain = rec.plain;
+      if (c.plain) c.packFull += packPlain(c.plain);
+      c.turns.push({ kind: "note", good: true, text: (en ? "📁 Consult pack ready (Ross) · Amy's checklist attached" : "📁 咨询资料已备好（Ross）· 附 Amy 的材料清单") + (c.plain ? (en ? " · Penny's parent version attached" : " · 附 Penny 的家长版") : "") });
+      if (c.clientId) store.update(c.clientId, { pack: c.packFull, checklist: c.checklist || "", slots: (c.slots || []).map(function (x) { return x[state.lang]; }).join(" / "), room: c.room || "" }).catch(function () {});
     }, function () { pvCallEnd("11"); if (state.busy["11"] === "task") setBusy("11", null); });
   }
+  function packPlain(t) { return "\n\n**" + (state.lang === "en" ? "Penny's version for the parent (中文)" : "Penny 写给家长的版本") + "**\n" + String(t).replace(/【简要】|【完整报告】/g, "").trim(); }
   // a chat that ended without a booking gets one gentle follow-up from Monica (generic, so it goes out after the usual check)
   function scheduleFollowUp(c) {
     if (c.booked || c.kind === "comment" || c.followed || c.status === "human") return;
@@ -4249,7 +4256,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var res = await ask(rachel, hist, { extraRules: extra });
         reply.pending = false; reply.content = res.text; flashDone(aid);
         if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
-        if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); markBooked(c); }
+        if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); if (state.chatClient[aid]) c.clientId = state.chatClient[aid]; markBooked(c); }
         if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = res.text.slice(0, cut).trim() + "\n【转人工】"; c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
@@ -4970,6 +4977,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       [/^Sheldon checked Leonard's shortlist for (.+): approved$/, function (m) { return "Sheldon 审核了 Leonard 给" + m[1] + "的选校清单：通过"; }],
       [/^Sheldon flagged Leonard's shortlist for (.+) for Aliya$/, function (m) { return "Sheldon 把 Leonard 给" + m[1] + "的选校清单标记给 Aliya"; }],
       [/^Leonard finished a shortlist for (.+) and took it to Aliya's desk$/, function (m) { return "Leonard 完成了" + m[1] + "的选校清单，送到 Aliya 桌上"; }],
+      [/^Ross added Penny's parent version to (.+)'s consult pack$/, function (m) { return "Ross 把 Penny 的家长版加进了" + m[1] + "的咨询资料"; }],
       [/^Aliya copied Penny's parent version for (.+)$/, function (m) { return "Aliya 复制了 Penny 给" + m[1] + "家长的版本"; }],
       [/^Penny rewrote (.+)'s shortlist in plain words for the parent$/, function (m) { return "Penny 把" + m[1] + "的选校清单改写成家长易懂的版本"; }],
       [/^Raj added (.+)'s deadlines to the wall$/, function (m) { return "Raj 把" + m[1] + "的截止日期贴到墙上"; }],
