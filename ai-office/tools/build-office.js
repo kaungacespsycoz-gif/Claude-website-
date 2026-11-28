@@ -39,6 +39,8 @@ console.log(`Built office.html (${Math.round(out.length / 1024)} KB, ${Object.ke
 // demo.html: the same office with prepared answers (ai-office/demo/script.json) for showing without an AI key
 const demoFiles = Object.assign({}, files, { 'demo/script.json': fs.readFileSync(path.join(base, 'demo', 'script.json'), 'utf8') });
 const demoBundle = '<script type="application/json" id="bundle">' + JSON.stringify(demoFiles).replace(/</g, '\\u003c') + '</script>\n';
-const demo = out.replace(bundle, () => demoBundle).replace('<html lang="en"><head>', '<html lang="zh-CN"><head><title>Glostudy AI Office · Demo</title>');
+const demo = out.replace(bundle, () => demoBundle).replace('<html lang="en"><head>', '<html lang="zh-CN"><head><title>Glostudy AI Office · Demo</title>')
+  // the demo runs fully offline, even when opened inside Claude: no shared storage, no AI calls
+  .replace('var IN_CLAUDE = !!window.claude;', 'var IN_CLAUDE = false;');
 fs.writeFileSync(path.join(base, 'demo.html'), demo);
 console.log(`Built demo.html (${Math.round(demo.length / 1024)} KB)`);

@@ -1608,7 +1608,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var BY_ID = {}; BOTS.forEach(function (b) { BY_ID[b.id] = b; });
 
   var $ = function (id) { return document.getElementById(id); };
-  var IN_CLAUDE = !!window.claude;
+  var IN_CLAUDE = false;
   var BUNDLE = null;
   try { var bEl = document.getElementById("bundle"); if (bEl) BUNDLE = JSON.parse(bEl.textContent); } catch (e) { BUNDLE = null; }
   var REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
