@@ -1375,7 +1375,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         <div class="view3d photo" id="view3d" hidden>
           <div class="v3canvas" id="v3canvas"></div>
           <div class="pano" id="panoView"><div class="pano-canvas" id="panoCanvas"></div><div class="pano-spots" id="panoSpots"></div><div class="pano-fade" id="panoFade"></div></div>
-          <div class="in-floors v3bar" id="v3bar" role="group" aria-label="3D camera"><button type="button" data-m="photo" aria-pressed="true">📷 360° photo</button><button type="button" data-m="model" aria-pressed="false">🧊 Model</button><span class="v3sep"></span><button type="button" data-lv="-1" aria-pressed="false">Overview</button><button type="button" data-lv="3">4F</button><button type="button" data-lv="2">3F</button><button type="button" data-lv="1">2F</button><button type="button" data-lv="0">1F</button></div>
+          <div class="in-floors v3bar" id="v3bar" role="group" aria-label="3D camera"><button type="button" data-m="photo" aria-pressed="true">📷 360° photo</button><button type="button" data-m="model" aria-pressed="false">🧊 Model</button><span class="v3sep"></span><button type="button" data-lv="-1" aria-pressed="false">Overview</button><button type="button" data-lv="4">5F</button><button type="button" data-lv="3">4F</button><button type="button" data-lv="2">3F</button><button type="button" data-lv="1">2F</button><button type="button" data-lv="0">1F</button></div>
           <div class="v3pad" id="v3pad" hidden><button type="button" data-k="f" aria-label="Forward">▲</button><button type="button" data-k="l" aria-label="Turn left">◀</button><button type="button" data-k="b" aria-label="Back">▼</button><button type="button" data-k="r" aria-label="Turn right">▶</button></div>
           <p class="v3hint" id="v3hint">Drag to look around · scroll or pinch to zoom · click a robot to talk</p>
           <p class="v3note" id="v3note" aria-live="polite"></p>
@@ -1552,7 +1552,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["Sorting comments from every channel", "Handing them to Emily, Mindy or Gabriel", "Bringing leads down to the bench"], intro: "Collects every comment from Xiaohongshu, Douyin and WeChat, sorts it and walks it up to the right social officer; brings anyone who wants advice back down to the leads bench.",
       persona: "你不直接回复客户。你负责把各平台的评论分类，交给楼上负责该平台的同事（小红书 Emily、抖音 Mindy、公众号 Gabriel），并把想咨询的人带回一楼线索长椅。",
       tasks: [{ en: "How many comments came in today, and who did you hand them to?", zh: "今天来了多少条评论？都交给谁了？" }] },
-    { id: "9", demoAs: "1", name: "Chandler", title: "Bookings & Consult Rooms", role: "Reception · Friends", who: "Team only", file: "agents/1-customer-service.md", color: "--c9", prop: "calculator", effort: "low",
+    { id: "9", demoAs: "1", name: "Chandler", title: "Bookings & Consult Rooms", role: "Reception · Friends", who: "Talks to customers", file: "agents/1-customer-service.md", color: "--c9", prop: "calculator", effort: "low",
       skills: ["Consultation bookings", "Consult room schedule", "Reminders"], intro: "Looks after the booked nook: books every confirmed customer into consult room A or B and sends reminders.",
       persona: "你负责咨询预约：把已登记的客户安排进 A、B 咨询室，并提醒客户和顾问。",
       tasks: [{ en: "What's the consult room schedule for tomorrow?", zh: "明天咨询室的安排是怎样的？" }] },
@@ -1572,6 +1572,26 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       skills: ["UCAS deadlines", "Application calendars", "Interview and test dates"], intro: "Keeps the deadline wall: UCAS dates, admissions tests and interview seasons for every client.",
       persona: "你负责申请时间线：UCAS 截止日期、入学考试和面试时间，为每位客户排日程。",
       tasks: [{ en: "Weekly task: list the key UCAS and application deadlines for the next 3 months.", zh: "每周任务：列出未来 3 个月重要的 UCAS 和申请截止日期。" }] },
+    { id: "23", demoAs: "5", name: "Medina", title: "Chief Financial Officer", role: "CEO suite · Family", who: "Reports to you", file: "agents/9-growth.md", color: "--c23", prop: "tablet", effort: "medium",
+      skills: ["Weekly finance summary", "Fees and commission owed", "Marketing budget checks", "Signed agreements check"], intro: "CFO: tracks bookings, signed agreements, service fees and school commission owed, and checks the marketing budget. Payments stay with you.",
+      persona: "你是 CFO Medina，Aliya 的女儿。负责每周财务小结、待收服务费和学校佣金、市场预算核对、书面协议是否签署。不做付款操作。",
+      tasks: [{ en: "Give me this week's finance summary.", zh: "给我本周的财务小结。" }, { en: "Which school commissions are still owed?", zh: "还有哪些学校佣金没收到？" }] },
+    { id: "24", demoAs: "5", name: "Loid", title: "Partnerships", role: "Growth · Spy x Family", who: "Team only", file: "agents/9-growth.md", color: "--c24", prop: "paper", effort: "medium",
+      skills: ["Partner schools list", "Intake and deadline dates", "Contract renewals", "Partnership emails"], intro: "Keeps our partner schools and universities: intake dates, commission terms and renewals, and drafts partnership emails. Contracts need you.",
+      persona: "你是合作院校负责人 Loid。维护合作院校清单、开学和截止时间、佣金条款，提前 60 天提醒续约，起草合作邮件。签约必须老板确认。",
+      tasks: [{ en: "Which partner contracts renew in the next 60 days?", zh: "未来 60 天哪些合作协议要续约？" }] },
+    { id: "25", demoAs: "5", name: "Yor", title: "Application Tracker", role: "Growth · Spy x Family", who: "Team only", file: "agents/9-growth.md", color: "--c25", prop: "paper", effort: "low",
+      skills: ["Application stages", "Missing documents", "Deadline warnings"], intro: "Tracks every student's application from documents to offer, visa and departure, chases missing items and warns before deadlines.",
+      persona: "你是申请进度负责人 Yor。跟踪每位学生的申请阶段，缺材料时列清单，截止前 14 天和 3 天预警。递交由真人完成。",
+      tasks: [{ en: "Show me every student's application status.", zh: "列出每位学生的申请进度。" }] },
+    { id: "26", demoAs: "5", name: "Franky", title: "Guardianship Coordinator", role: "Growth · Spy x Family", who: "Team only", file: "agents/9-growth.md", color: "--c26", prop: "paper", effort: "low",
+      skills: ["UK guardians for under-18s", "Guardian paperwork", "Renewal reminders"], intro: "Under-18 boarders need a UK guardian: he lines up guardian options, the paperwork and renewal dates. The final agreement is signed by the family.",
+      persona: "你是监护人协调 Franky。为 18 岁以下赴英寄宿的学生整理监护机构选项、所需文件和续期日期，提醒家长签协议。",
+      tasks: [{ en: "Which under-18 students still need a UK guardian?", zh: "哪些未满 18 岁的学生还没有英国监护人？" }] },
+    { id: "27", demoAs: "5", name: "Fiona", title: "Lead Nurturer", role: "Growth · Spy x Family", who: "Team only", file: "agents/9-growth.md", color: "--c27", prop: "paper", effort: "low",
+      skills: ["Hot, warm and cold leads", "Gentle follow-up plans", "Webinar invites"], intro: "Grades every lead hot, warm or cold and plans gentle follow-ups (days 1, 3, 7, 14). Every message goes through Sylvie first.",
+      persona: "你是线索培育负责人 Fiona。给线索分级，为未预约的线索安排第 1、3、7、14 天的温和跟进，每条消息都经过 Sylvie 审核。不报价、不承诺。",
+      tasks: [{ en: "Grade today's leads and plan their follow-ups.", zh: "给今天的线索分级，并安排跟进。" }] },
     { id: "22", demoAs: "2", name: "Penny", title: "Plain-Words Editor", role: "Research · Big Bang", who: "Team only", file: "agents/8-plain-words.md", color: "--c22", prop: "paper", effort: "low",
       skills: ["Plain-words summaries for parents", "Explaining jargon simply", "Clear next steps"], intro: "Turns the research team's reports into plain, friendly words a parent understands, with one clear next step.",
       persona: "你是通俗编辑：把 Sheldon、Leonard、Bernadette 的专业内容改写成家长一看就懂的话，不改变任何事实，最后写一个“下一步”。",
@@ -1589,7 +1609,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       persona: "你负责微信公众号和朋友圈：写文章、朋友圈，回复公众号评论。",
       tasks: [{ en: "Outline this week's Official Account article about choosing a UK city.", zh: "为本周公众号文章列提纲：怎么选英国城市。" }] },
     { id: "17", demoAs: "4", name: "Sylvie", title: "Compliance & Brand Check", role: "Social · Emily in Paris", who: "Team only", file: "agents/7-checker.md", color: "--c17", prop: "megaphone", effort: "medium",
-      skills: ["Checks every reply before it posts", "Brand voice", "Decides what needs the CEO"], intro: "Marketing director: checks every public reply and post. Everyday replies she passes go out; money, visas or guarantees go to your desk.",
+      skills: ["Checks every reply before it posts", "Brand voice", "Decides what needs the CEO"], intro: "Compliance & brand check: checks every public reply and post. Everyday replies she passes go out; money, visas or guarantees go to your desk.",
       persona: "你是市场总监：审核团队的每条公开回复和帖子，判断是否可以发布，涉及费用、签证或保证的交给 CEO。",
       tasks: [{ en: "What did the social team post this week, and what's waiting for approval?", zh: "社媒团队本周发了什么？有什么等待批准？" }] },
     { id: "18", demoAs: "4", name: "Julien", title: "Design & Covers", role: "Social · Emily in Paris", who: "Team only", file: "agents/4-marketing.md", color: "--c18", prop: "paper", effort: "low",
@@ -1781,7 +1801,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   function ask(bot, history, o) {
     return loadPrompt(bot).then(function (rules) {
-      rules += state.lang === "en" ? EN_RULE : ZH_RULE;
+      rules += (o.lang || state.lang) === "en" ? EN_RULE : ZH_RULE;
       o.effort = bot.effort; o.botId = bot.id;
       if (bot.id === "5") rules += "\n\n# 【办公室数据】（实时）\n" + officeData();
       if (bot.id === "4" || bot.id === "19") rules += "\n\n# 【今日资讯】\n" + intelText();
@@ -1819,9 +1839,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- teamwork: Monica calls colleagues, they work in parallel, Monica answers briefly ----------
   var TEAM_IDS = { huan: "1", scout: "2", quill: "3", spark: "4", penny: "22", monica: "1", leonard: "2", amy: "3", emily: "4", bernadette: "6", sheldon: "12", raj: "13", luc: "19", gabriel: "16", mindy: "15",
-    rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", anya: "21", ado: "5" };
+    rachel: "7", joey: "8", chandler: "9", phoebe: "10", ross: "11", howard: "14", sylvie: "17", julien: "18", anya: "21", ado: "5", medina: "23", loid: "24", yor: "25", franky: "26", fiona: "27" };
   var ROUTER_BOSS = "You are the coordinator for Ado, secretary at Glostudy, a UK study-abroad agency. The boss gives an instruction in plain words. Decide which colleagues should work on it, in parallel.\n" +
-    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; gabriel = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; ado = office status.\n" +
+    "Colleagues: monica = front desk, client messages and FAQ wording; leonard = UK schools, universities, courses, entry routes; sheldon = checking facts, rankings and entry rules; raj = application deadlines and timelines; amy = personal statements, CVs, application documents; emily = Xiaohongshu and Moments posts; gabriel = WeChat Official Account articles; mindy = Douyin scripts; luc = today's university and policy news; bernadette = tuition, living costs, budgets, visa money; sylvie = checks social replies and posts; julien = cover design; joey = comment sorting and counts; chandler = consultation bookings; ross = consultation prep; howard = client records; anya = what customers really want; penny = rewriting research in plain words for parents; medina = finance, fees, commission and budgets; loid = partner schools and contracts; yor = application progress and missing documents; franky = UK guardians for under-18s; fiona = lead grading and follow-ups; ado = office status.\n" +
     "Give each chosen colleague one clear task. Call nobody if the boss only asks about the office status, the brief, a meeting, or something Ado can answer from the office data.\n" +
     "Reply with JSON only: {\"calls\":[{\"who\":\"leonard\",\"task\":\"one short sentence\"}]} with at most 4 calls, or {\"calls\":[]}.";
   var ROUTER = "You are the dispatcher at Glostudy, a UK study-abroad agency. Decide which colleagues the front desk should quickly consult before answering the client's LATEST message.\n" +
@@ -1915,7 +1935,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var actors = {}, sceneReady = false, liftOwner = null;
   var COLORS = { "--c1": "#3ddc84", "--c2": "#4a90e2", "--c3": "#9b6bd6", "--c4": "#ff4f6d", "--c5": "#3a6dff", "--c6": "#2fae6b", "--c7": "#d9a441", "--c8": "#f08a3c",
     "--c9": "#2bb3a3", "--c10": "#8fd16a", "--c11": "#7fb2e8", "--c12": "#3c7be0", "--c13": "#f2c14e", "--c14": "#57c7d4", "--c15": "#d94fd1", "--c16": "#c9a27a",
-    "--c17": "#c0c4cc", "--c18": "#e0a33c", "--c19": "#8aa6c8", "--c20": "#3a6dff", "--c21": "#ff8fb8", "--c22": "#e0392f" };
+    "--c17": "#c0c4cc", "--c18": "#e0a33c", "--c19": "#8aa6c8", "--c20": "#3a6dff", "--c21": "#ff8fb8", "--c22": "#e0392f", "--c23": "#6fa8ff", "--c24": "#3fb68b", "--c25": "#d94848", "--c26": "#c98a3a", "--c27": "#9fb4c8" };
 
   // Obstacles per floor in local coordinates [x1, y1, x2, y2]
   var COMMON = [[862, 34, 880, 170], [862, 240, 880, 290], [880, 34, 958, 130], [884, 140, 950, 200], [880, 248, 958, 290]];
@@ -3125,7 +3145,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- photo view: the generated office picture with live overlays ----------
   // Positions are % of the 1536 x 864 picture.
-  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/gabriel.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg", "22": "images/team/penny.jpg" };
+  var IMG = { office: "", "1": "images/team/monica.jpg", "2": "images/team/leonard.jpg", "3": "images/team/amy.jpg", "4": "images/team/emily.jpg", "5": "images/team/ado.jpg", "6": "images/team/bernadette.jpg", "7": "images/team/rachel.jpg", "8": "images/team/joey.jpg", "9": "images/team/chandler.jpg", "10": "images/team/phoebe.jpg", "11": "images/team/ross.jpg", "12": "images/team/sheldon.jpg", "13": "images/team/raj.jpg", "14": "images/team/howard.jpg", "15": "images/team/mindy.jpg", "16": "images/team/gabriel.jpg", "17": "images/team/sylvie.jpg", "18": "images/team/julien.jpg", "19": "images/team/luc.jpg", "21": "images/team/anya.jpg", "22": "images/team/penny.jpg", "23": "images/team/medina.jpg", "24": "images/team/loid.jpg", "25": "images/team/yor.jpg", "26": "images/team/franky.jpg", "27": "images/team/fiona.jpg" };
   function imgURL(p) { return (BUNDLE && BUNDLE[p]) || p; }
   var LAYOUTS = {
     "3f": { img: "previews/office-3f.jpg",
@@ -3141,17 +3161,18 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       floors: [4.8, 38.6, 68.4],
       paths: { "1>scout": [[23.5, 76], [60, 93], [93, 87], [88, 61], [60, 64], [26, 56]], "2>boss": [[26, 56], [60, 64], [90, 62], [88, 33], [60, 33], [47, 28]], "5>boss": [[14, 26], [30, 31], [45, 28]] } }
   };
-  LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 2432", maxW: 1080,
+  LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 3040", maxW: 1080,
     spots: {
-      "5": [3.7, 4.3, 13.4, 14], "21": [20.4, 8.6, 5.6, 7],
-      "12": [6.5, 30.8, 6.5, 9.3], "2": [18, 32, 7.4, 7.8], "22": [31, 32.4, 6.5, 7.8], "3": [41.7, 32.4, 8.3, 7.6], "13": [53.2, 32, 8.3, 8.2], "14": [69, 32.2, 9.3, 8.2], "6": [85.2, 33.2, 7.4, 7.4],
-      "17": [3.2, 59, 6.5, 6.6], "4": [21.3, 59.2, 6.5, 6.4], "16": [52.3, 58.4, 6.5, 7.4], "15": [63.9, 57.4, 6.5, 8.2], "18": [75, 59, 5.6, 6.8], "19": [90.3, 59.2, 6, 6.6],
-      "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
+      "5": [1, 3.6, 12, 10.6], "21": [18, 7.4, 7, 4.6], "23": [62.5, 6.2, 9.5, 5.6],
+      "24": [11.5, 23.4, 8.5, 10.2], "25": [29, 26, 9, 6.4], "26": [54, 26.6, 12, 5.8], "27": [81.5, 24.6, 6, 8.4],
+      "12": [6.5, 44.64, 6.5, 7.44], "2": [18.0, 45.6, 7.4, 6.24], "22": [31.0, 45.92, 6.5, 6.24], "3": [41.7, 45.92, 8.3, 6.08], "13": [53.2, 45.6, 8.3, 6.56], "14": [69.0, 45.76, 9.3, 6.56], "6": [85.2, 46.56, 7.4, 5.92],
+      "17": [3.2, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
+      "1": [6.8, 82.56, 7.3, 4.8], "10": [19.7, 84.4, 7.3, 6.64], "7": [35.5, 84.4, 5.6, 6.4], "9": [53.8, 82.56, 7.5, 5.04], "11": [74.9, 84.96, 6.2, 6.4], "8": [87.3, 84.0, 9.6, 7.6]
     },
-    boss: [32, 8.6, 31.5, 6.4], ceoPlate: [50, 13.6], logo: [50, 4.9], aliya: [43.5, 6.8, 9.3, 3.9], glow: [50, 11, 30, 8], room: [82, 8], meet: [30, 11.2], plates: {},
-    floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52.4], ["1F · Reception · the Friends team", 75.8]],
-    floorY: { 4: 18.5, 3: 42.5, 2: 69, 1: 95.5 },
-    paths: { "1>scout": [[10.4, 84], [10.4, 95.5], [97, 95.5], [97, 42.5], [21.2, 42.5], [21.2, 36]], "2>boss": [[21.2, 36], [21.2, 42.5], [97, 42.5], [97, 18.5], [50, 18.5], [50, 12]], "5>boss": [[10, 12], [10, 18.5], [50, 18.5], [50, 12]] } };
+    boss: [30, 5.6, 27, 6], ceoPlate: [44.5, 12.6], logo: [44.5, 4], aliya: [40.5, 5.6, 8, 2.6], glow: [44.5, 8.5, 28, 6], room: [90, 7.6], meet: [30, 11.6], plates: {},
+    floorTags: [["5F · CEO Suite · Aliya, Medina, Ado & Anya", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
+    floorY: { 5: 14.6, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
+    paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
   var pvReady = false;
@@ -3190,7 +3211,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (!buildPhoto.cycling) { buildPhoto.cycling = true; var tick = 0;
       setInterval(function () {
         if (!window.matchMedia("(max-width: 640px)").matches) return; tick++;
-        var byFloor = {}; BOTS.forEach(function (b) { var sp = SPOTS_PV[b.id], pl = $("plate" + b.id); if (sp && pl) (byFloor[Math.floor(sp[1] / 25)] = byFloor[Math.floor(sp[1] / 25)] || []).push(pl); });
+        var byFloor = {}; BOTS.forEach(function (b) { var sp = SPOTS_PV[b.id], pl = $("plate" + b.id); if (sp && pl) (byFloor[Math.floor(sp[1] / 20)] = byFloor[Math.floor(sp[1] / 20)] || []).push(pl); });
         Object.keys(byFloor).forEach(function (k) { var a = byFloor[k]; a.forEach(function (pl, i) { pl.classList.toggle("show-title", i === tick % a.length); }); });
       }, 2600); }
   var GLO_LOGO = "<svg class=\"glo-logo\" viewBox=\"-4 -10 208 162\" aria-hidden=\"true\"><defs><clipPath id=\"owc-wall\"><path d=\"M-10 -20 H220 V112.8 H178 C142.8 116.8 115.2 116.8 86 112.8 C56.8 108.8 29.2 108.8 -6 112.8 H-10 Z\"/><path d=\"M-10 119.2 H-6 C29.2 115.2 56.8 115.2 86 119.2 C115.2 123.2 142.8 123.2 178 119.2 H220 V190 H-10 Z\"/></clipPath></defs><g fill=\"currentColor\" clip-path=\"url(#owc-wall)\"><path transform=\"translate(-2.29 70)\" d=\"M33.744 0.957Q27.066 0.957 21.334 -1.342Q15.603 -3.641 11.328 -7.791Q7.052 -11.941 4.67 -17.486Q2.288 -23.03 2.288 -29.521Q2.288 -36.074 4.764 -41.608Q7.24 -47.141 11.65 -51.261Q16.061 -55.38 21.917 -57.668Q27.773 -59.957 34.472 -59.957Q42.377 -59.957 48.754 -57.169Q55.13 -54.381 59.187 -49.534L49.139 -39.486Q46.184 -43.085 42.606 -44.884Q39.028 -46.684 34.285 -46.684Q29.479 -46.684 25.661 -44.562Q21.844 -42.44 19.628 -38.591Q17.413 -34.742 17.413 -29.583Q17.413 -24.424 19.514 -20.533Q21.615 -16.643 25.318 -14.479Q29.021 -12.316 33.889 -12.316Q38.716 -12.316 42.076 -14.157Q45.435 -15.998 47.214 -19.483Q48.993 -22.967 48.993 -27.815L59.041 -21.303L32.163 -21.927V-34.097H64.013V-31.892Q64.013 -21.303 60.185 -13.959Q56.357 -6.616 49.544 -2.829Q42.731 0.957 33.744 0.957ZM71.087 0V-59H85.961V0ZM82.903 0V-12.794H111.3V0ZM146.937 1.082Q140.134 1.082 134.382 -1.248Q128.63 -3.578 124.334 -7.729Q120.038 -11.879 117.656 -17.486Q115.274 -23.092 115.274 -29.583Q115.274 -36.136 117.625 -41.67Q119.975 -47.204 124.23 -51.354Q128.484 -55.504 134.226 -57.793Q139.968 -60.081 146.771 -60.081Q153.574 -60.081 159.315 -57.793Q165.057 -55.504 169.322 -51.354Q173.587 -47.204 175.938 -41.628Q178.288 -36.053 178.288 -29.5Q178.288 -23.009 175.938 -17.434Q173.587 -11.858 169.332 -7.687Q165.078 -3.516 159.367 -1.217Q153.657 1.082 146.937 1.082ZM146.771 -12.191Q151.743 -12.191 155.415 -14.355Q159.087 -16.518 161.094 -20.44Q163.102 -24.361 163.102 -29.583Q163.102 -33.473 161.957 -36.635Q160.813 -39.798 158.65 -42.086Q156.486 -44.374 153.49 -45.591Q150.495 -46.809 146.771 -46.809Q141.819 -46.809 138.148 -44.687Q134.476 -42.565 132.468 -38.685Q130.461 -34.805 130.461 -29.583Q130.461 -25.63 131.605 -22.416Q132.749 -19.202 134.902 -16.924Q137.055 -14.646 140.061 -13.418Q143.068 -12.191 146.771 -12.191Z\"/><path transform=\"translate(-1.65 137.3)\" d=\"M16.793 0.679Q11.54 0.679 7.696 -0.937Q3.852 -2.553 0.649 -5.977L7.334 -12.661Q9.489 -10.404 11.983 -9.194Q14.476 -7.983 17.561 -7.983Q20.232 -7.983 21.67 -8.891Q23.109 -9.799 23.109 -11.392Q23.109 -12.883 22.047 -13.849Q20.984 -14.816 19.243 -15.539Q17.502 -16.262 15.406 -16.963Q13.311 -17.664 11.237 -18.631Q9.164 -19.597 7.423 -21.006Q5.681 -22.416 4.619 -24.548Q3.556 -26.68 3.556 -29.824Q3.556 -33.793 5.467 -36.649Q7.378 -39.504 10.802 -41.017Q14.226 -42.529 18.756 -42.529Q23.316 -42.529 27.153 -41.002Q30.989 -39.475 33.483 -36.774L26.754 -30.089Q24.851 -32.008 22.91 -32.937Q20.97 -33.867 18.623 -33.867Q16.483 -33.867 15.229 -33.114Q13.975 -32.362 13.975 -30.916Q13.975 -29.514 15.037 -28.628Q16.1 -27.743 17.841 -27.057Q19.582 -26.371 21.678 -25.662Q23.773 -24.954 25.847 -24.002Q27.92 -23.05 29.661 -21.575Q31.403 -20.099 32.465 -17.871Q33.528 -15.642 33.528 -12.425Q33.528 -6.213 29.115 -2.767Q24.703 0.679 16.793 0.679ZM49.037 0V-41.555H59.588V0ZM36.243 -32.775V-41.851H72.427V-32.775ZM94.449 0.679Q89.111 0.679 85.084 -1.556Q81.056 -3.791 78.793 -7.726Q76.529 -11.66 76.529 -16.72V-41.851H87.08V-15.937Q87.08 -13.68 88.061 -12.062Q89.042 -10.444 90.718 -9.59Q92.394 -8.736 94.446 -8.736Q96.554 -8.736 98.17 -9.59Q99.785 -10.444 100.715 -12.039Q101.645 -13.634 101.645 -15.878V-41.851H112.241V-16.661Q112.241 -11.6 110.007 -7.696Q107.773 -3.792 103.779 -1.556Q99.786 0.679 94.449 0.679ZM126.112 0V-9.075H136.176Q139.718 -9.075 142.337 -10.44Q144.957 -11.806 146.381 -14.484Q147.805 -17.162 147.805 -20.984Q147.805 -24.792 146.351 -27.418Q144.898 -30.045 142.301 -31.41Q139.703 -32.775 136.176 -32.775H125.67V-41.851H136.221Q141.061 -41.851 145.141 -40.353Q149.222 -38.855 152.239 -36.073Q155.257 -33.292 156.917 -29.455Q158.577 -25.618 158.577 -20.925Q158.577 -16.247 156.917 -12.403Q155.257 -8.559 152.247 -5.777Q149.236 -2.996 145.178 -1.498Q141.12 0 136.339 0ZM119.014 0V-41.851H129.565V0ZM176.728 -14.978 160.702 -41.851H172.847L185.066 -20.04H176.537L188.755 -41.851H200.649L184.505 -14.978ZM175.474 0V-19.272H186.025V0Z\"/></g><defs><clipPath id=\"owb-intro\"><rect class=\"breeze-wipe\" x=\"-12\" y=\"-20\" width=\"240\" height=\"190\"/></clipPath></defs><g class=\"uncut\" fill=\"currentColor\" clip-path=\"url(#owb-intro)\"><path transform=\"translate(-2.29 70)\" d=\"M33.744 0.957Q27.066 0.957 21.334 -1.342Q15.603 -3.641 11.328 -7.791Q7.052 -11.941 4.67 -17.486Q2.288 -23.03 2.288 -29.521Q2.288 -36.074 4.764 -41.608Q7.24 -47.141 11.65 -51.261Q16.061 -55.38 21.917 -57.668Q27.773 -59.957 34.472 -59.957Q42.377 -59.957 48.754 -57.169Q55.13 -54.381 59.187 -49.534L49.139 -39.486Q46.184 -43.085 42.606 -44.884Q39.028 -46.684 34.285 -46.684Q29.479 -46.684 25.661 -44.562Q21.844 -42.44 19.628 -38.591Q17.413 -34.742 17.413 -29.583Q17.413 -24.424 19.514 -20.533Q21.615 -16.643 25.318 -14.479Q29.021 -12.316 33.889 -12.316Q38.716 -12.316 42.076 -14.157Q45.435 -15.998 47.214 -19.483Q48.993 -22.967 48.993 -27.815L59.041 -21.303L32.163 -21.927V-34.097H64.013V-31.892Q64.013 -21.303 60.185 -13.959Q56.357 -6.616 49.544 -2.829Q42.731 0.957 33.744 0.957ZM71.087 0V-59H85.961V0ZM82.903 0V-12.794H111.3V0ZM146.937 1.082Q140.134 1.082 134.382 -1.248Q128.63 -3.578 124.334 -7.729Q120.038 -11.879 117.656 -17.486Q115.274 -23.092 115.274 -29.583Q115.274 -36.136 117.625 -41.67Q119.975 -47.204 124.23 -51.354Q128.484 -55.504 134.226 -57.793Q139.968 -60.081 146.771 -60.081Q153.574 -60.081 159.315 -57.793Q165.057 -55.504 169.322 -51.354Q173.587 -47.204 175.938 -41.628Q178.288 -36.053 178.288 -29.5Q178.288 -23.009 175.938 -17.434Q173.587 -11.858 169.332 -7.687Q165.078 -3.516 159.367 -1.217Q153.657 1.082 146.937 1.082ZM146.771 -12.191Q151.743 -12.191 155.415 -14.355Q159.087 -16.518 161.094 -20.44Q163.102 -24.361 163.102 -29.583Q163.102 -33.473 161.957 -36.635Q160.813 -39.798 158.65 -42.086Q156.486 -44.374 153.49 -45.591Q150.495 -46.809 146.771 -46.809Q141.819 -46.809 138.148 -44.687Q134.476 -42.565 132.468 -38.685Q130.461 -34.805 130.461 -29.583Q130.461 -25.63 131.605 -22.416Q132.749 -19.202 134.902 -16.924Q137.055 -14.646 140.061 -13.418Q143.068 -12.191 146.771 -12.191Z\"/><path transform=\"translate(-1.65 137.3)\" d=\"M16.793 0.679Q11.54 0.679 7.696 -0.937Q3.852 -2.553 0.649 -5.977L7.334 -12.661Q9.489 -10.404 11.983 -9.194Q14.476 -7.983 17.561 -7.983Q20.232 -7.983 21.67 -8.891Q23.109 -9.799 23.109 -11.392Q23.109 -12.883 22.047 -13.849Q20.984 -14.816 19.243 -15.539Q17.502 -16.262 15.406 -16.963Q13.311 -17.664 11.237 -18.631Q9.164 -19.597 7.423 -21.006Q5.681 -22.416 4.619 -24.548Q3.556 -26.68 3.556 -29.824Q3.556 -33.793 5.467 -36.649Q7.378 -39.504 10.802 -41.017Q14.226 -42.529 18.756 -42.529Q23.316 -42.529 27.153 -41.002Q30.989 -39.475 33.483 -36.774L26.754 -30.089Q24.851 -32.008 22.91 -32.937Q20.97 -33.867 18.623 -33.867Q16.483 -33.867 15.229 -33.114Q13.975 -32.362 13.975 -30.916Q13.975 -29.514 15.037 -28.628Q16.1 -27.743 17.841 -27.057Q19.582 -26.371 21.678 -25.662Q23.773 -24.954 25.847 -24.002Q27.92 -23.05 29.661 -21.575Q31.403 -20.099 32.465 -17.871Q33.528 -15.642 33.528 -12.425Q33.528 -6.213 29.115 -2.767Q24.703 0.679 16.793 0.679ZM49.037 0V-41.555H59.588V0ZM36.243 -32.775V-41.851H72.427V-32.775ZM94.449 0.679Q89.111 0.679 85.084 -1.556Q81.056 -3.791 78.793 -7.726Q76.529 -11.66 76.529 -16.72V-41.851H87.08V-15.937Q87.08 -13.68 88.061 -12.062Q89.042 -10.444 90.718 -9.59Q92.394 -8.736 94.446 -8.736Q96.554 -8.736 98.17 -9.59Q99.785 -10.444 100.715 -12.039Q101.645 -13.634 101.645 -15.878V-41.851H112.241V-16.661Q112.241 -11.6 110.007 -7.696Q107.773 -3.792 103.779 -1.556Q99.786 0.679 94.449 0.679ZM126.112 0V-9.075H136.176Q139.718 -9.075 142.337 -10.44Q144.957 -11.806 146.381 -14.484Q147.805 -17.162 147.805 -20.984Q147.805 -24.792 146.351 -27.418Q144.898 -30.045 142.301 -31.41Q139.703 -32.775 136.176 -32.775H125.67V-41.851H136.221Q141.061 -41.851 145.141 -40.353Q149.222 -38.855 152.239 -36.073Q155.257 -33.292 156.917 -29.455Q158.577 -25.618 158.577 -20.925Q158.577 -16.247 156.917 -12.403Q155.257 -8.559 152.247 -5.777Q149.236 -2.996 145.178 -1.498Q141.12 0 136.339 0ZM119.014 0V-41.851H129.565V0ZM176.728 -14.978 160.702 -41.851H172.847L185.066 -20.04H176.537L188.755 -41.851H200.649L184.505 -14.978ZM175.474 0V-19.272H186.025V0Z\"/></g><path class=\"breeze\" pathLength=\"100\" d=\"M-30 116 C-12 113.5 0 112 12 112.5 C29.2 112 56.8 112 86 116 C115.2 120 142.8 120 178 116 C192 114 204 112.5 222 113\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"3.2\" stroke-linecap=\"round\"/><circle class=\"ow-sun\" cx=\"186\" cy=\"14\" r=\"11\" fill=\"#c99a4a\"/></svg>\n";
@@ -3250,7 +3271,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("pvCardName").textContent = b.name;
     $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
   }
-  function floorOf(id) { var s = SPOTS_PV[id]; return s ? 4 - Math.min(3, Math.floor(s[1] / 25)) : 0; }
+  function floorOf(id) { var s = SPOTS_PV[id]; return s ? 5 - Math.min(4, Math.floor(s[1] / 20)) : 0; }
   function floorPad(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, ((LAY.floorY || {})[floorOf(id)] || s[1] + s[3]) + 1.6] : null; }
   // live working status on the floor in front of each officer (building view)
   function floorStatus() {
@@ -3476,7 +3497,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
 
   var TEAM_FLOORS = [
-    { key: "4", n: "4F", name: "CEO Suite", dept: "Leadership · Ado & Anya", color: "#e8c17a", ids: ["5", "21"], open: true },
+    { key: "5", n: "5F", name: "CEO Suite", dept: "Leadership · Medina, Ado & Anya", color: "#e8c17a", ids: ["23", "5", "21"], open: true },
+    { key: "4", n: "4F", name: "Growth & Partnerships", dept: "The Spy x Family team", color: "#2bb3a3", ids: ["24", "25", "26", "27"], open: false },
     { key: "3", n: "3F", name: "Research & Finance", dept: "The Big Bang team", color: "#4a90e2", ids: ["12", "2", "22", "3", "13", "14", "6"], open: false },
     { key: "2", n: "2F", name: "Social & Marketing", dept: "The Emily in Paris team", color: "#ff4f9a", ids: ["17", "4", "15", "16", "18", "19"], open: false },
     { key: "1", n: "1F", name: "Reception", dept: "The Friends team", color: "#3ee8a0", ids: ["1", "7", "8", "9", "10", "11"], open: true }
@@ -3803,7 +3825,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var agreed = /同意|可以用|consent|use my details|happy for you to use|you can use/i.test(said + " " + summary), age = (summary.match(/(\d{1,2})\s*(岁|-year|years? old)/) || [])[1];
         var id = await store.add({ consent: { given: agreed, at: new Date().toISOString(), via: me.name, guardianNeeded: !!(age && +age < 14) }, name: name, summary: summary, status: "new", lang: state.lang, created: new Date().toISOString(), draft: "", error: "" });
         state.chatClient[agentId] = id;
-        turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. Monica is taking the folder to Leonard." });
+        turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. " + me.name + " is taking the folder to Leonard." });
         activity(agentId, me.name + " booked " + name + " and took the folder to Leonard");
         custBooked(agentId);
         deliver("1", "scout");
@@ -3819,6 +3841,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     state.jobs = state.jobs.filter(function (j) { return j.id !== id; });
     state.jobs.push({ id: id, note: note || "" });
     runJobs();
+  }
+  function demoPlain(draft, name) {
+    var lines = String(draft || "").split("\n").map(function (l) { return l.replace(/^[#*\-\s|]+|[*|]+$/g, "").trim(); }).filter(function (l) { return l && !/^-+$/.test(l) && !/^(学校|大学|类型|University|Type|School)\b/.test(l); });
+    var first = (lines[0] || "").replace(/^(零、)?一句话总结[:：]?|^One-line summary:?/, "").trim();
+    return "【简要】" + first + "\n【完整报告】\n" + lines.slice(1, 6).map(function (l) { return "- " + l.replace(/\s*\|\s*/g, "：").replace(/：$/, ""); }).join("\n") + "\n下一步：在免费咨询里，顾问会和您一起确认这些学校是否适合孩子。";
   }
   function redactContacts(t) { return String(t || "").split("\n").map(function (l) { return /微信|wechat|电话|phone|手机|mobile|邮箱|email|@/i.test(l) ? l.replace(/[:：].*$/, "：[hidden]") : l; }).join("\n"); }
   async function runJobs() {
@@ -3844,7 +3871,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       activity("12", passed ? "Sheldon checked Leonard's shortlist for " + (c.name || "a client") + ": approved" : "Sheldon flagged Leonard's shortlist for " + (c.name || "a client") + " for Aliya");
       if (passed) {
         var pn = BY_ID["22"]; state.taskLabel["22"] = en ? "plain-words version for " + (c.name || "a client") : "为" + (c.name || "客户") + "写通俗版"; setBusy("22", "task"); pvCall("12", ["22"]);
-        var pw = await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], { extraRules: "\n\n# 语言\n这份是直接给中国家长看的：无论测试语言是什么，都用简体中文写。" }).catch(function () { return null; });
+        var pw = state.engine === "demo" ? await wait(2600).then(function () { return { text: demoPlain(res.text, c.name) }; }) : await ask(pn, [{ role: "user", content: (en ? "Rewrite this shortlist in plain words for the parent. Keep every fact.\n" : "把这份选校清单改写成家长一看就懂的话，事实一律不改。\n") + res.text }], { extraRules: "\n\n# 语言\n这份是直接给中国家长看的：无论测试语言是什么，都用简体中文写。" }).catch(function () { return null; });
         pvCallEnd("12"); if (state.busy["22"] === "task") setBusy("22", null);
         if (pw && pw.text) { flashDone("22"); await store.update(c.id, { plain: pw.text }); activity("22", "Penny rewrote " + (c.name || "a client") + "'s shortlist in plain words for the parent");
           var lc = live.list.filter(function (x) { return x.clientId === c.id; })[0];
@@ -4114,7 +4141,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var en = state.lang === "en";
     c.slots = consultSlots(); c.room = live.seq % 2 ? "A" : "B";
     activity("9", "Chandler offered " + c.name.en + " two consult slots (room " + c.room + "): " + c.slots.map(function (x) { return x.en; }).join(" or "));
-    c.turns.push({ role: "assistant", byId: "9", by: "Chandler", content: (en ? "📅 Your free consultation: which time suits you? " : "📅 您的免费咨询，哪个时间方便？") + c.slots.map(function (x, i) { return (i ? (en ? " or " : " 或 ") : "") + x[state.lang]; }).join("") });
+    var cl = c.lang || state.lang;
+    c.turns.push({ role: "assistant", byId: "9", by: "Chandler", content: cl === "en" ? "Hello, your free consultation (about 30 minutes, WeChat voice call) can be at one of these times. Please reply 1 or 2:\n1) " + c.slots[0].en + "\n2) " + c.slots[1].en + "\nIf neither suits you, just tell us a better time.\n— Glostudy consultant team" : "您好，免费咨询（约 30 分钟，微信语音）可选以下时间，请回复 1 或 2：\n1）" + c.slots[0].zh + "\n2）" + c.slots[1].zh + "\n都不方便请告诉我们您方便的时间。\n— 寰学 Glostudy 顾问团队" });
     brief("9", en ? "booking a consult room for " + c.name.en : "为" + c.name.zh + "安排咨询室", 3500);
     setTimeout(function () { activity("14", "Howard filed " + c.name.en + "'s record"); brief("14", en ? "filing " + c.name.en + "'s record" : "归档" + c.name.zh + "的资料", 3000); }, 1500);
     setTimeout(function () { activity("13", "Raj added " + c.name.en + "'s deadlines to the wall"); brief("13", en ? "checking " + c.name.en + "'s deadlines" : "核对" + c.name.zh + "的时间线", 3000); }, 4000);
@@ -4125,13 +4153,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var out = [], d = new Date(), hours = [16, 17], taken = (lsGet("glostudy-slots", "") || "").split(",");
     for (var i = 1; out.length < 2 && i < 8; i++) {
       var day = new Date(d.getTime() + i * 864e5), wd = Number(day.toLocaleString("en-GB", { timeZone: "Asia/Shanghai", weekday: "narrow" }) && new Date(day.toLocaleString("en-US", { timeZone: "Asia/Shanghai" })).getDay());
-      if (wd === 0 || wd === 6) continue;
+      var md = day.toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" }).slice(5); if (wd === 0 || wd === 6 || ["01-01", "05-01", "10-01", "10-02", "10-03", "12-25", "12-26"].indexOf(md) >= 0) continue;
       var h = hours[out.length % 2], key = day.toISOString().slice(0, 10) + "@" + h; if (taken.indexOf(key) >= 0) { if (out.length === 0) hours = [17, 18]; continue; } taken.push(key);
       var bj = new Date(day.toLocaleString("en-US", { timeZone: "Asia/Shanghai" })); bj.setHours(h, 0, 0, 0);
       var utc = new Date(Date.UTC(bj.getFullYear(), bj.getMonth(), bj.getDate(), h - 8, 0));
       var ld = utc.toLocaleTimeString("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" }), dl = utc.toLocaleDateString("en-GB", { timeZone: "Asia/Shanghai", weekday: "short", day: "numeric", month: "short" }), dz = utc.toLocaleDateString("zh-CN", { timeZone: "Asia/Shanghai", weekday: "short", month: "numeric", day: "numeric" });
       lsSet("glostudy-slots", taken.slice(-60).join(","));
-      out.push({ en: dl + " " + h + ":00 Beijing (" + ld + " London)", zh: dz + " 北京时间 " + h + ":00（伦敦 " + ld + "）" });
+      var mz = utc.toLocaleDateString("zh-CN", { timeZone: "Asia/Shanghai", month: "numeric", day: "numeric" }).replace(/\//, "月") + "日", wz = utc.toLocaleDateString("zh-CN", { timeZone: "Asia/Shanghai", weekday: "short" });
+      out.push({ en: dl + ", " + h + ":00 Beijing time (" + ld + " London time)", zh: mz + "（" + wz + "）北京时间 " + h + ":00（伦敦时间 " + ld + "）" });
     }
     return out;
   }
@@ -4141,7 +4170,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (state.busy["11"] && state.busy["11"] !== "task") return;
     state.taskLabel["11"] = en ? "consult pack for " + c.name.en : "为" + c.name.zh + "准备咨询资料"; setBusy("11", "task"); pvCall("11", ["3"]);
     var chat = c.turns.filter(function (t) { return t.role === "user" || t.role === "assistant"; }).slice(-8).map(function (t) { return (t.role === "user" ? "Client: " : "Us: ") + t.content; }).join("\n");
-    ask(ross, [{ role: "user", content: (en ? "Prepare talking points for tomorrow's consultation with " + c.name.en + ". Give 3 talking points for the consultant and 2 questions to ask. Chat:\n" : "为明天和" + c.name.zh + "的咨询准备谈话要点：给顾问 3 条要点和 2 个要问的问题。聊天记录：\n") + chat + (en ? "\nAmy's checklist:\n" : "\nAmy 的材料清单：\n") + (checklist || "-") }], {}).then(function (res) {
+    var firstQ = (c.turns.filter(function (t) { return t.role === "user"; })[0] || {}).content || "";
+    (state.engine === "demo" ? wait(2600).then(function () { return { text: (en ? "Talking points for " + c.name.en + ":\n1. Start from what they asked first: “" + firstQ.slice(0, 60) + "”.\n2. Confirm age or level, English score, budget and start date.\n3. Walk through Leonard's options and Penny's parent version.\nQuestions to ask:\n- Which matters most: location, ranking or cost?\n- Who else in the family is deciding?" : c.name.zh + " 谈话要点：\n1. 从客户最先问的开始：“" + firstQ.slice(0, 40) + "”。\n2. 确认年龄或年级、英语成绩、预算和入学时间。\n3. 讲解 Leonard 的选项和 Penny 的家长版。\n要问的问题：\n- 最看重什么：城市、排名还是费用？\n- 家里还有谁一起做决定？") }; }) : ask(ross, [{ role: "user", content: (en ? "Prepare talking points for the consultation with " + c.name.en + ". Give 3 talking points for the consultant and 2 questions to ask. Chat:\n" : "为和" + c.name.zh + "的咨询准备谈话要点：给顾问 3 条要点和 2 个要问的问题。聊天记录：\n") + chat + (en ? "\nAmy's checklist:\n" : "\nAmy 的材料清单：\n") + (checklist || "-") }], {})).then(function (res) {
       pvCallEnd("11"); if (state.busy["11"] === "task") setBusy("11", null); flashDone("11");
       c.pack = res.text; activity("11", "Ross attached a consult pack to " + c.name.en + "'s record");
       c.packFull = ( (c.slots ? (en ? "Slots offered: " : "提供的时间：") + c.slots.map(function (x) { return x[state.lang]; }).join(" / ") + (en ? " · Room " : " · 咨询室 ") + c.room + "\n\n" : "") + res.text);
@@ -4158,15 +4188,18 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     c.followed = "planned";
     live.timers.push(setTimeout(function () {
       if (c.booked || c.status === "human") return;
-      var mon = BY_ID["1"], en = state.lang === "en";
+      if (c.holdOpen) { c.followed = null; return; }
+      var mon = BY_ID["1"], en = state.lang === "en", cl = c.lang || state.lang;
       if (!freeFor("1")) { c.followed = null; return scheduleFollowUp(c); }
       state.taskLabel["1"] = en ? "following up with " + c.name.en : "跟进" + c.name.zh; setBusy("1", "task");
       var hist = c.turns.filter(function (t) { return t.role === "user" || t.role === "assistant"; }).slice(-8).map(function (t) { return { role: t.role, content: t.content }; });
-      hist.push({ role: "user", content: en ? "(Internal: the client went quiet without booking. Write ONE short, friendly follow-up message: no prices, no promises, offer the free consultation.)" : "（内部：客户没有预约就没回复了。写一条简短友好的跟进消息：不报价、不承诺，邀请免费咨询。）" });
-      ask(mon, hist, {}).then(function (res) {
+      hist.push({ role: "user", content: cl === "en" ? "(Internal: the client went quiet without booking. Write ONE short, friendly follow-up message: no prices, no promises, offer the free consultation.)" : "（内部：客户没有预约就没回复了。写一条简短友好的跟进消息：不报价、不承诺，邀请免费咨询。）" });
+      ask(mon, hist, { extraRules: CUSTOMER_RULE, lang: cl }).then(async function (res) {
         if (state.busy["1"] === "task") setBusy("1", null); flashDone("1"); c.followed = "sent";
-        var t = res.text.replace(/【[^】]*】/g, "").trim();
-        if (isSensitive(t)) { var rep = { role: "assistant", content: t, by: mon.name }; c.turns.push(rep); holdChatReply(c, "1", rep, en ? "(follow-up)" : "（跟进）"); }
+        var t = customerText(res.text, cl), sign = cl === "en" ? "\n— Glostudy consultant team" : "\n— 寰学 Glostudy 顾问团队";
+        if (t.indexOf("—") < 0) t += sign;
+        var g = BY_ID[CHECKER], chk = await ask(g, [{ role: "user", content: (en ? "Quality check before sending a follow-up message to a customer.\nMessage: " : "发送前质量检查：给客户的跟进消息。\n消息：") + t + (en ? "\nAnswer 【通过】 if it is polite, accurate, makes no promises and quotes no fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果礼貌、准确、不承诺、不报价，回答【通过】；否则回答【需CEO】和一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
+        if (!/【通过】/.test(chk.text) || isSensitive(t)) { var rep = { role: "assistant", content: t, raw: t, by: mon.name }; c.turns.push(rep); holdChatReply(c, "1", rep, en ? "(follow-up)" : "（跟进）"); }
         else c.turns.push({ role: "assistant", content: t, by: mon.name + (en ? " · follow-up" : " · 跟进") });
         activity("1", "Monica followed up with " + c.name.en + " (no booking yet)"); drawLiveDetail();
       }, function () { if (state.busy["1"] === "task") setBusy("1", null); c.followed = null; });
@@ -4182,7 +4215,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function liveColor(c) { return c.kind === "comment" ? PLAT[c.plat].c : KIND[c.kind].c; }
   function liveArrive(key) {
     var t = LIVE_TPL.filter(function (x) { return x.key === key; })[0]; if (!t) return;
-    var c = Object.assign({}, t, { id: "c" + (++live.seq), step: 0, status: "waiting", turns: [], met: {}, t: Date.now(), msgs: (t.msgs || []).slice() });
+    var c = Object.assign({}, t, { id: "c" + (++live.seq), lang: state.lang, step: 0, status: "waiting", turns: [], met: {}, t: Date.now(), msgs: (t.msgs || []).slice() });
     live.list.push(c);
     activity(c.kind === "comment" ? DISPATCH : LANE[c.kind], (c.kind === "comment" ? "New " + PLAT[c.plat].en + " comment from " : "New " + KIND[c.kind].en + " from ") + c.name.en);
     readMood(c);
@@ -4200,9 +4233,16 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   function liveStartArrivals() {
     LIVE_FIRST.forEach(function (p) { live.timers.push(setTimeout(function () { liveArrive(p[0]); }, p[1] * 1000)); });
-    (function more() { live.timers.push(setTimeout(function () { var open = live.list.filter(function (c) { return c.status !== "done"; }).map(function (c) { return c.key; }), pool = LIVE_TPL.filter(function (x) { return open.indexOf(x.key) < 0; }), t = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null; if (!t) { more(); return; } if (live.list.filter(function (c) { return c.status === "waiting"; }).length < 9) liveArrive(t.key); more(); }, 95000 + Math.random() * 40000)); })();
+    (function more() { live.timers.push(setTimeout(function () { var open = live.list.filter(function (c) { return c.status !== "done" || c.kind === "comment"; }).map(function (c) { return c.key; }), pool = LIVE_TPL.filter(function (x) { return open.indexOf(x.key) < 0; }), t = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null; if (!t) { more(); return; } if (live.list.filter(function (c) { return c.status === "waiting"; }).length < 9) liveArrive(t.key); more(); }, 95000 + Math.random() * 40000)); })();
   }
-  function liveText(m) { return m === "DEMO" ? DEMO[state.lang] : m[state.lang]; }
+  function liveText(m, L) { L = L || state.lang; return m === "DEMO" ? DEMO[L] : m[L]; }
+  // what the customer actually receives: no internal tags, booking block shown as a plain summary
+  function customerText(t, L) {
+    t = String(t || "");
+    t = t.replace(/【咨询登记】([\s\S]*?)(【登记完成】|$)/, function (_, b) { return (L === "en" ? "Here's what we've noted:" : "已为您记录：") + "\n" + b.trim(); });
+    return t.replace(/【[^】]*】/g, "").replace(/\n{3,}/g, "\n\n").trim();
+  }
+  var CUSTOMER_RULE = "\n\n# 对客户说话（最高优先级）\n你代表「寰学 Glostudy」回复真实客户。不要自称名字，不提任何同事的名字，不说自己是机器人；需要时说“我们”“我们的顾问”“我们的研究顾问”“我们的文书老师”。不用表情符号。语气专业、礼貌、简洁。";
   function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? 0 : ms); }); }
   // Monica serves the reception queues: WeChat line first, then leads from Emily, then the website sofa
   var fails = [];
@@ -4214,13 +4254,15 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   // money, visa or promise in a private chat: the draft waits for Aliya, the customer gets a polite holding line
   function holdChatReply(c, aid, reply, question) {
-    var en = state.lang === "en", draft = reply.content;
-    reply.content = en ? "Good question. Let me confirm the exact figures with our consultant, and I'll come back to you here shortly." : "好问题！具体数字我先和顾问确认一下，稍后在这里回复您。";
-    reply.held = true; c.held = (c.held || 0) + 1;
+    var en = state.lang === "en", cen = (c.lang || state.lang) === "en", draft = reply.raw || reply.content;
+    if (c.holdOpen) { var ix = c.turns.indexOf(reply); if (ix >= 0) c.turns.splice(ix, 1); }
+    else reply.content = cen ? "Thanks. A consultant will check this and reply here shortly, so you get an accurate answer." : "收到。这个问题请顾问确认后再答复您，确保信息准确，我们会尽快在这里回复。";
+    reply.held = true; c.held = (c.held || 0) + 1; c.holdOpen = (c.holdOpen || 0) + 1;
     addApproval({ kind: "chat", from: aid, where: (c.kind === "web" ? (en ? "Website chat" : "官网咨询") : (en ? "WeChat chat" : "微信私聊")) + " · " + liveName(c), context: liveName(c) + ": " + question,
       why: en ? "Private reply mentions money, visas or promises" : "私聊回复涉及费用、签证或承诺", risk: "high", body: draft.replace(/【[^】]*】/g, "").trim(), custId: c.id,
       onDecide: function (ok, text, note) {
-        c.turns.push(ok ? { role: "assistant", content: text, by: BY_ID[aid].name } : { kind: "note", text: (en ? "✗ Aliya held this reply back" : "✗ Aliya 没有发送这条回复") + (note ? " (" + note + ")" : "") + (en ? ". A consultant will follow up." : "。顾问会跟进。") });
+        c.holdOpen = Math.max(0, (c.holdOpen || 1) - 1);
+        c.turns.push(ok ? { role: "assistant", content: customerText(text, c.lang), by: BY_ID[aid].name } : { kind: "note", text: (en ? "✗ Aliya held this reply back" : "✗ Aliya 没有发送这条回复") + (note ? " (" + note + ")" : "") + (en ? ". A consultant will follow up." : "。顾问会跟进。") });
         drawLiveDetail();
       } });
     activity(aid, BY_ID[aid].name + " held a reply to " + c.name.en + " for Aliya (money/visa/promise)");
@@ -4234,7 +4276,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       for (; c.step < c.msgs.length; c.step++) {
         if (!live.on || c.status !== "talking") break;
         await wait(1400);
-        var text = liveText(c.msgs[c.step]);
+        var text = liveText(c.msgs[c.step], c.lang);
         c.turns.push({ role: "user", content: text, who: liveName(c) }); drawLiveDetail();
         var hist = c.turns.filter(function (t) { return (t.role === "user" || t.role === "assistant") && !t.pending; }).slice(-16).map(function (t) { return { role: t.role, content: t.content }; });
         var extra = "";
@@ -4243,11 +4285,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
           if (calls.length) { var nt = { kind: "team", from: rachel.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, text, nt, aid); }
         }
         var reply = { role: "assistant", content: "", pending: true, by: rachel.name }; c.turns.push(reply); drawLiveDetail();
-        var res = await ask(rachel, hist, { extraRules: extra });
-        reply.pending = false; reply.content = res.text; flashDone(aid);
+        var res = await ask(rachel, hist, { extraRules: extra + CUSTOMER_RULE, lang: c.lang });
+        reply.pending = false; reply.raw = res.text; reply.content = customerText(res.text, c.lang); flashDone(aid);
         if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); if (state.chatClient[aid]) c.clientId = state.chatClient[aid]; markBooked(c); }
-        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = res.text.slice(0, cut).trim() + "\n【转人工】"; c.status = "human"; handover(c); }
+        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = customerText(res.text.slice(0, cut), c.lang); c.turns.push({ kind: "note", text: (state.lang === "en" ? "Handed to a person" : "已转人工") + (c.handReason ? " · " + c.handReason : "") }); c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
       }
@@ -4261,34 +4303,34 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   // Emily answers comments on our posts: questions before praise; people who want advice go to the leads bench
   async function serveComment(c, oid) {
-    var joey = BY_ID[oid], en = state.lang === "en", pl = PLAT[c.plat];
+    var joey = BY_ID[oid], L = c.lang || state.lang, en = L === "en", pl = PLAT[c.plat];
     if (state.busy[oid] === "task") setBusy(oid, null);
     live.social[oid] = c; c.agent = oid; c.status = "talking"; setBusy(oid, "cust"); drawLive();
     try {
       await wait(1200);
-      c.turns.push({ role: "user", content: c.text[state.lang], who: liveName(c) + " · " + pl[state.lang] }); drawLiveDetail();
-      var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[state.lang] +
+      c.turns.push({ role: "user", content: c.text[L], who: liveName(c) + " · " + pl[L] }); drawLiveDetail();
+      var msg = (en ? "【评论回复】Comment on our " + pl.en + " post “" + c.post.en + "” from " + c.name.en + ": " : "【评论回复】" + pl.zh + "帖子《" + c.post.zh + "》下，" + c.name.zh + " 的评论：") + c.text[L] +
         (en ? "\nReply publicly in 1–2 short sentences in our brand voice. If they want advice or ask how to contact us, invite them to message us on WeChat and end with 【线索】. If it is a complaint, refund or something you must not answer, end with 【转人工】."
             : "\n用品牌语气公开回复，1–2 句。如果对方想咨询或问怎么联系，邀请他们微信私信我们，并在末尾加【线索】。如果是投诉、退款或你不能回答的问题，在末尾加【转人工】。");
       if (state.busy[oid] === "task") setBusy(oid, null);
       setBusy(oid, "cust");
       var extra = "";
       if (c.q === 0) {
-        var calls = await routeQuestion(c.text[state.lang], [], false);
-        if (calls.length) { var nt = { kind: "team", from: joey.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, c.text[state.lang], nt, oid); }
+        var calls = await routeQuestion(c.text[L], [], false);
+        if (calls.length) { var nt = { kind: "team", from: joey.name, items: calls.map(function (k) { return { id: TEAM_IDS[k.who], task: k.task, note: null }; }) }; c.turns.push(nt); drawLiveDetail(); extra = await consultTeam(calls, c.text[L], nt, oid); }
       }
       var reply = { role: "assistant", content: "", pending: true, by: joey.name }; c.turns.push(reply); drawLiveDetail();
-      var res = await ask(joey, [{ role: "user", content: msg }], { extraRules: extra, onText: function (tx) { reply.pending = false; reply.content = tx; drawLiveDetail(); } });
-      reply.pending = false; reply.content = res.text; setBusy(oid, null); flashDone(oid);
+      var res = await ask(joey, [{ role: "user", content: msg }], { extraRules: extra + CUSTOMER_RULE, lang: L, onText: function (tx) { reply.pending = false; reply.content = customerText(tx, L); drawLiveDetail(); } });
+      reply.pending = false; reply.raw = res.text; reply.content = customerText(res.text, L); setBusy(oid, null); flashDone(oid);
       if (/【转人工】/.test(res.text)) {
-        var hold = state.lang === "en" ? "Thank you for telling us. We're sorry about this and have sent you a private message to sort it out." : "谢谢您告诉我们，非常抱歉。我们已私信您，会尽快处理。";
-        reply.content = hold; c.turns.push({ kind: "note", good: true, text: (state.lang === "en" ? "✓ Holding reply posted (no details, no promises) · handed to Phoebe" : "✓ 已发布安抚回复（不含细节和承诺）· 转给 Phoebe") });
+        var hold = en ? "We're sorry for the experience. Please message us or add GlostudyUK on WeChat, and a consultant will contact you as soon as possible." : "非常抱歉给您带来不好的体验。请私信我们或添加微信 GlostudyUK，顾问会尽快联系您处理。";
+        reply.content = hold; c.turns.push({ kind: "note", good: true, text: (en ? "✓ Holding reply posted (no details, no promises) · handed to Phoebe" : "✓ 已发布安抚回复（不含细节和承诺）· 转给 Phoebe") });
         c.status = "human"; handover(c);
       }
       else {
-        var isLead = /【线索】/.test(res.text) && c.lead, clean = res.text.replace(/\s*【线索】\s*/g, "");
+        var isLead = /【线索】/.test(res.text) && c.lead, clean = customerText(res.text, L);
         var publish = function (who) {
-          c.turns.push({ kind: "note", good: true, text: (state.lang === "en" ? "✓ Checked by " + who + " · posted automatically:\n" : "✓ " + who + " 已审核 · 自动发布：\n") + clean });
+          c.turns.push({ kind: "note", good: true, text: (en ? "✓ Checked by " + who + " · posted automatically:\n" : "✓ " + who + " 已审核 · 自动发布：\n") + clean });
           activity(oid, joey.name + "'s reply to " + c.name.en + " was checked by " + who + " and posted");
           if (isLead) toLead(c); else c.status = "done";
           drawLive(); drawLiveDetail();
@@ -4298,17 +4340,17 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         if (!sensitive) {
           var exId = CHECKER, ex = BY_ID[exId];
           c.status = "checking"; drawLive(); setBusy(oid, null);
-          var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = state.lang === "en" ? "checking " + joey.name + "'s reply" : "审核 " + joey.name + " 的回复"; setBusy(exId, "task"); }
+          var mine = !state.busy[exId] || state.busy[exId] === "task"; if (mine) { state.taskLabel[exId] = en ? "checking " + joey.name + "'s reply" : "审核 " + joey.name + " 的回复"; setBusy(exId, "task"); }
           pvCall(oid, [exId]);
-          var chk = await ask(ex, [{ role: "user", content: (state.lang === "en" ? "Quality check before publishing " + joey.name + "'s public reply.\nComment: " : "发布前质量检查：" + joey.name + " 的公开回复。\n评论：") + c.text[state.lang] + (state.lang === "en" ? "\nReply: " : "\n回复：") + clean +
-            (state.lang === "en" ? "\nAnswer 【通过】 if it is accurate, polite, makes no promises and quotes no Glostudy fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果准确、礼貌、不承诺、不报寰学价格，回答【通过】；否则回答【需CEO】并写一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
+          var chk = await ask(ex, [{ role: "user", content: (en ? "Quality check before publishing " + joey.name + "'s public reply.\nComment: " : "发布前质量检查：" + joey.name + " 的公开回复。\n评论：") + c.text[L] + (en ? "\nReply: " : "\n回复：") + clean +
+            (en ? "\nAnswer 【通过】 if it is accurate, polite, makes no promises and quotes no Glostudy fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果准确、礼貌、不承诺、不报寰学价格，回答【通过】；否则回答【需CEO】并写一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
           pvCallEnd(oid); if (state.busy[exId] === "task") setBusy(exId, null); flashDone(exId);
           if (/【通过】/.test(chk.text) && !/【需CEO】/.test(chk.text)) { publish(ex.name); live.social[oid] = null; drawLive(); drawLiveDetail(); return; }
           why = chk.text.replace(/【需CEO】/g, "").trim();
-        } else why = state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
+        } else why = en ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证";
         c.status = "approval";
-        addApproval({ why: why, checked: !!exId && why !== (state.lang === "en" ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证"), kind: "reply", from: oid, where: pl[state.lang] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[state.lang], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
-          c.turns.push({ kind: "note", good: ok, text: ok ? (state.lang === "en" ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (state.lang === "en" ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") + (arguments[2] ? " (" + arguments[2] + ")" : "") });
+        addApproval({ why: why, checked: !!exId && why !== (en ? "Mentions money, visas or guarantees" : "涉及费用、签证或保证"), kind: "reply", from: oid, where: pl[L] + " · " + c.post[state.lang], context: liveName(c) + ": " + c.text[L], body: res.text.replace(/\s*【线索】\s*/g, ""), onDecide: function (ok, text) {
+          c.turns.push({ kind: "note", good: ok, text: ok ? (en ? "✓ Aliya approved. Reply posted:\n" : "✓ Aliya 已批准，回复已发布：\n") + text : (en ? "✗ Aliya rejected it. Not posted." : "✗ Aliya 不同意，未发布。") + (arguments[2] ? " (" + arguments[2] + ")" : "") });
           if (ok && isLead) toLead(c);
           else c.status = "done";
           drawLive(); drawLiveDetail();
@@ -4341,18 +4383,18 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // ----- where pins sit, per view (percent of each picture) -----
   var LIVE_POS = {
     photo: {
-      wechat: { pts: [[5, 90.8], [9, 91.6], [13, 90.8], [17, 91.6], [21, 92.4]] },
-      human: { pts: [[24, 90.5], [28, 91]] },
-      web: { pts: [[33, 90.4], [37, 91], [44, 91], [48, 90.4]] },
-      booked: { pts: [[53, 90], [58, 90.5], [63, 90]] },
-      lead: { pts: [[85, 91.2], [90, 91.8], [95, 91.2]] },
-      joey: { pts: [[84, 88.6], [84, 90.2]] },
-      comments: { pts: [[32, 65.6], [35.5, 66.2], [39, 65.6], [42.5, 66.2], [46, 65.6]] },
-      a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[26, 66]] }, s15: { pts: [[69, 66.8]] }, s16: { pts: [[55, 67.4]] }
+      wechat: { pts: [[5, 92.64], [9, 93.28], [13, 92.64], [17, 93.28], [21, 93.92]] },
+      human: { pts: [[24, 92.4], [28, 92.8]] },
+      web: { pts: [[33, 92.32], [37, 92.8], [44, 92.8], [48, 92.32]] },
+      booked: { pts: [[53, 92.0], [58, 92.4], [63, 92.0]] },
+      lead: { pts: [[85, 92.96], [90, 93.44], [95, 92.96]] },
+      joey: { pts: [[84, 90.88], [84, 92.16]] },
+      comments: { pts: [[32, 72.48], [35.5, 72.96], [39, 72.48], [42.5, 72.96], [46, 72.48]] },
+      a1: { pts: [[16, 91.04]] }, a7: { pts: [[41.5, 92.0]] }, s4: { pts: [[26, 72.8]] }, s15: { pts: [[69, 73.44]] }, s16: { pts: [[55, 73.92]] }
     },
     in1: {}, in2: {}
   };
-  (function () { var P = LIVE_POS.photo; Object.keys(P).forEach(function (z) { var y0 = P[z].pts[0][1], n = y0 >= 75 ? 1 : 2; LIVE_POS["in" + n][z] = { pts: P[z].pts.map(function (q) { return [q[0], (q[1] - (4 - n) * 25) * 4]; }) }; }); })();
+  (function () { var P = LIVE_POS.photo; Object.keys(P).forEach(function (z) { var y0 = P[z].pts[0][1], n = y0 >= 80 ? 1 : 2; LIVE_POS["in" + n][z] = { pts: P[z].pts.map(function (q) { return [q[0], (q[1] - (5 - n) * 20) * 5]; }) }; }); })();
   LIVE_POS.pano2 = LIVE_POS.in2;
   LIVE_POS.pano1 = LIVE_POS.in1;
   var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Emily, Mindy, Gabriel", zh: "评论区 · 社媒团队" } };
@@ -4537,7 +4579,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // ---------- 360° photo: look around each floor like Street View ----------
   // the 360° view uses the same photo of each floor (floor index 0–3)
   var PANO = {};
-  function fillPano() { [1, 2, 3, 4].forEach(function (n) { var F = INSIDE[n]; PANO[n - 1] = { img: "images/inside-" + n + "f.jpg", bots: F.bots, boss: F.boss, room: F.room, dots: F.dots.map(function (d) { return d[3] ? [d[0], d[1], d[2], d[3] - 1, d[4]] : d; }) }; }); }
+  function fillPano() { [1, 2, 3, 4, 5].forEach(function (n) { var F = INSIDE[n]; PANO[n - 1] = { img: "images/inside-" + n + "f.jpg", bots: F.bots, boss: F.boss, room: F.room, dots: F.dots.map(function (d) { return d[3] ? [d[0], d[1], d[2], d[3] - 1, d[4]] : d; }) }; }); }
   var pano = null, v3mode = "photo";
   function createPano(host, spotsBox) {
     var T = window.THREE, renderer = new T.WebGLRenderer({ antialias: true });
@@ -4657,14 +4699,15 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
-    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9] }, boss: [32, 10, 20, 22], room: [57, 14, 25, 32] },
+    5: { img: "images/plan-5f.jpg", name: "5F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9], "23": [50, 30, 6, 9] }, boss: [32, 10, 18, 22], room: [57, 14, 25, 32] },
+    4: { img: "images/plan-4f.jpg", name: "4F · Growth & Partnerships", bots: { "24": [14, 12, 7, 10], "25": [33, 14, 7, 10], "26": [53, 14, 7, 10], "27": [72, 14, 7, 10] } },
     3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10], "22": [29, 30, 6, 9] } },
     2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [7, 22, 7, 9], "4": [21, 20, 7, 9], "16": [50, 20, 7, 9], "15": [60, 16, 6, 14], "18": [69, 20, 7, 9], "19": [81, 20, 7, 10] } },
     1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [9, 14, 9, 8], "10": [26, 16, 7, 9], "7": [39, 13, 8, 12], "9": [55, 14, 8, 11], "11": [71, 10, 9, 14], "8": [87, 31, 7, 10] } }
   };
   function buildPlan() {
     var w = $("sceneWrap"); w.innerHTML = ""; w.classList.add("plan2");
-    [4, 3, 2, 1].forEach(function (f) {
+    [5, 4, 3, 2, 1].forEach(function (f) {
       var P = PLAN[f], fl = document.createElement("div"); fl.className = "pl-floor";
       fl.innerHTML = '<img alt="Floor plan, ' + esc(P.name) + '" src="' + imgURL(P.img) + '"><span class="pl-tag">' + esc(P.name) + "</span>";
       if (P.boss) { var bs = document.createElement("button"); bs.type = "button"; bs.className = "in-spot"; bs.style.cssText = "left:" + P.boss[0] + "%;top:" + P.boss[1] + "%;width:" + P.boss[2] + "%;height:" + P.boss[3] + "%"; bs.innerHTML = '<span class="hs-tag"><i style="background:#2a1d08"></i>CEO desk · Aliya</span>'; bs.onclick = openInbox; fl.appendChild(bs); }
@@ -4685,13 +4728,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   // Inside floors use the same pictures as the building, so positions come straight from the building layout
-  function inBox(v, n) { var off = (4 - n) * 25; return [v[0], (v[1] - off) * 4, v[2], v[3] * 4]; }
-  var INSIDE = { 4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: {}, boss: inBox(LAY.boss, 4), room: [65, 12, 28, 43], files: [50, 47],
-      dots: [[24, 62, "Lounge"], [50, 66, "CEO desk"], [79, 58, "Boardroom"], [95, 70, "↓ 3F", 3]], seatBox: [70, 30, 20, 12] },
+  function inBox(v, n) { var off = (5 - n) * 20; return [v[0], (v[1] - off) * 5, v[2], v[3] * 5]; }
+  var INSIDE = { 5: { img: "images/inside-5f.jpg", ar: 1536 / 864, name: "5F · CEO Suite", bots: {}, boss: inBox(LAY.boss, 5), room: [78, 8, 22, 42], files: [44, 60],
+      dots: [[24, 70, "Lounge"], [44, 72, "CEO desk"], [68, 70, "CFO desk"], [95, 72, "↓ 4F", 4]], seatBox: [80, 30, 18, 12] },
+    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · Growth & Partnerships", bots: {}, dots: [[45, 78, "Growth floor"], [96, 22, "↑ 5F", 5], [96, 66, "↓ 3F", 3]] },
     3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: {}, dots: [[50, 76, "Aisle"], [93, 30, "↑ 4F", 4], [96, 62, "↓ 2F", 2]] },
     2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: {}, dots: [[38, 60, "Comments lounge"], [97, 12, "↑ 3F", 3], [97, 82, "↓ 1F", 1]] },
     1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: {}, dots: [[12, 76, "Live chats", 0, "cust"], [72, 52, "Consult rooms"], [97, 10, "↑ 2F", 2]] } };
-  Object.keys(LAY.spots).forEach(function (id) { var v = LAY.spots[id], n = 4 - Math.min(3, Math.floor(v[1] / 25)); INSIDE[n].bots[id] = inBox(v, n); });
+  Object.keys(LAY.spots).forEach(function (id) { var v = LAY.spots[id], n = 5 - Math.min(4, Math.floor(v[1] / 20)); INSIDE[n].bots[id] = inBox(v, n); });
   fillPano();
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
   function inLayout() {
@@ -4710,7 +4754,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var st = $("inStage"), Wv = st.clientWidth, Hv = st.clientHeight;
     inS.s = s; inS.tx = (screenX == null ? Wv / 2 : screenX) - px / 100 * inS.W * s; inS.ty = Hv * .55 - py / 100 * inS.H * s; inApply();
   }
-  var IN_FOCUS = { 4: 45, 3: 45, 2: 45, 1: 48 };
+  var IN_FOCUS = { 5: 45, 4: 45, 3: 45, 2: 45, 1: 48 };
   function inHomeX() { var Wv = $("inStage").clientWidth; return Wv / 2 - IN_FOCUS[inS.floor] / 100 * inS.W; }
   function inZoomHome() { inS.s = 1; inS.tx = inHomeX(); inS.ty = 0; inApply(); }
   function inBuild(floor) {
@@ -4746,7 +4790,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       box.appendChild(el);
     });
     setTimeout(drawQueues, 0);
-    $("inFloors").innerHTML = [4, 3, 2, 1].map(function (n) { return '<button type="button" data-f="' + n + '" aria-pressed="' + (n === floor) + '">' + n + "F</button>"; }).join("");
+    $("inFloors").innerHTML = [5, 4, 3, 2, 1].map(function (n) { return '<button type="button" data-f="' + n + '" aria-pressed="' + (n === floor) + '">' + n + "F</button>"; }).join("");
     inRefresh();
   }
   function inGoFloor(n) {
@@ -4871,12 +4915,12 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var ZH_TITLES = { "Chief of Staff": "行政主管", "Customer Insights": "客户洞察", "Head of Research": "研究主管", "Research Officer": "选校研究", "Documents Officer": "文书", "Admissions Timelines": "申请时间线",
     "Client Records": "客户档案", "Finance Officer": "费用预算", "Compliance & Brand Check": "合规与品牌审核", "Xiaohongshu Lead": "小红书", "WeChat Official Account": "公众号", "Douyin, Video & Studio": "抖音与视频",
     "Design & Covers": "设计与封面", "Daily News Check": "每日资讯", "WeChat Priority Line": "微信优先线", "Front Desk Host": "前台接待", "Comment Dispatcher": "评论分拣", "Bookings & Consult Rooms": "预约与咨询室",
-    "Customer Care": "客户关怀", "Plain-Words Editor": "通俗编辑", "Consultation Prep": "咨询准备", "Chief Executive Officer": "首席执行官", "Marketing Director": "市场总监" };
+    "Customer Care": "客户关怀", "Plain-Words Editor": "通俗编辑", "Chief Financial Officer": "首席财务官", "Partnerships": "合作院校", "Application Tracker": "申请进度", "Guardianship Coordinator": "监护人协调", "Lead Nurturer": "线索培育", "Consultation Prep": "咨询准备", "Chief Executive Officer": "首席执行官", "Marketing Director": "市场总监" };
   var ZH_DICT = { "AI Office": "AI 办公室", "Glostudy AI Office": "寰学 AI 办公室", "Glostudy 寰学 · UK study": "寰学 Glostudy · 英国留学", "working": "工作中", "clients": "客户", "to review": "待处理", "Demo": "演示",
     "Glostudy office": "寰学办公室", "Reset view": "重置视角", "Photo": "大楼", "Inside": "室内", "Floor plan": "平面图", "idle": "空闲", "available": "空闲", "Boardroom": "会议室", "announce": "发通知", "announce to all": "全员通知",
     "CEO Suite · Aliya": "CEO 办公室 · Aliya", "CEO desk · Aliya": "CEO 办公桌 · Aliya", "nothing to review": "没有待办", "Tap the glowing dots to move · tap an officer to talk": "点光点移动 · 点同事对话",
     "↩ Step back": "↩ 后退", "📷 360° photo": "📷 360° 实景", "🧊 Model": "🧊 模型", "Overview": "总览", "Drag to look around · scroll or pinch to zoom · click a robot to talk": "拖动环顾 · 滚动或双指缩放 · 点机器人对话",
-    "4F · CEO Suite · Ado & Anya": "4 楼 · CEO 办公室 · Ado 和 Anya", "3F · Research & Finance · the Big Bang team": "3 楼 · 研究与财务 · 生活大爆炸团队", "2F · Social & Marketing · the Emily in Paris team": "2 楼 · 社媒与市场 · 艾米丽在巴黎团队",
+    "5F · CEO Suite · Aliya, Medina, Ado & Anya": "5 楼 · CEO 办公室 · Aliya、Medina、Ado 和 Anya", "4F · Growth & Partnerships · the Spy x Family team": "4 楼 · 增长与合作 · 间谍过家家团队", "5F · CEO Suite": "5 楼 · CEO 办公室", "4F · Growth & Partnerships": "4 楼 · 增长与合作", "Growth & Partnerships": "增长与合作", "The Spy x Family team": "间谍过家家团队", "Leadership · Medina, Ado & Anya": "管理层 · Medina、Ado 和 Anya", "3F · Research & Finance · the Big Bang team": "3 楼 · 研究与财务 · 生活大爆炸团队", "2F · Social & Marketing · the Emily in Paris team": "2 楼 · 社媒与市场 · 艾米丽在巴黎团队",
     "1F · Reception · the Friends team": "1 楼 · 前台 · 老友记团队", "4F · CEO Suite": "4 楼 · CEO 办公室", "3F · Research & Finance": "3 楼 · 研究与财务", "2F · Social & Marketing": "2 楼 · 社媒与市场", "1F · Reception": "1 楼 · 前台",
     "Team": "团队", "CEO Suite": "CEO 办公室", "Leadership · Ado & Anya": "管理层 · Ado 和 Anya", "all idle": "全部空闲", "Research & Finance": "研究与财务", "The Big Bang team": "生活大爆炸团队", "✓ done": "✓ 完成",
     "Social & Marketing": "社媒与市场", "The Emily in Paris team": "艾米丽在巴黎团队", "Reception": "前台", "The Friends team": "老友记团队", "Activity": "动态", "Customer records": "客户记录", "Chat": "聊天", "Clients": "客户",
@@ -4884,7 +4928,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     "All": "全部", "To review": "待审核", "👥 Test customers": "👥 测试客户", "📷 Post from a photo": "📷 用照片写帖子", "WeChat Moments": "朋友圈", "Xiaohongshu": "小红书", "Extra notes": "补充说明", "Write the post": "写帖子",
     "📣 Announcement to all team": "📣 全员通知", "Everyone comes to the boardroom. Ado runs a short meeting and puts the minutes on your desk.": "大家到会议室集合，Ado 主持一个简短会议，并把会议纪要放到您桌上。",
     "Announcement": "通知", "Gather the team": "召集团队", "← Office": "← 办公室", "🔊 Voice": "🔊 语音", "🔇 Muted": "🔇 静音", "Suggested prompts": "推荐问题", "Chat with:": "对话：", "Your question": "您的问题", "On screen": "屏幕",
-    "🖥 Monitor": "🖥 显示器", "📽 Projector": "📽 投影", "📺 Big screen": "📺 大屏", "Close": "关闭", "Kept in this browser on this computer.": "保存在这台电脑的浏览器里。", "Approved": "已批准", "Booking summary": "登记摘要",
+    "🖥 Monitor": "🖥 显示器", "📽 Projector": "📽 投影", "📺 Big screen": "📺 大屏", "Close": "关闭", "Kept in this browser on this computer.": "保存在这台电脑的浏览器里。", "Approved": "已批准", "Booking summary": "登记摘要", "Handed to a person": "已转人工", "📞 Asking": "📞 正在询问", "✓ Checked with": "✓ 已询问",
     "Leonard's shortlist draft": "Leonard 的选校清单草稿", "Penny's plain-words version for the parent (中文)": "Penny 写给家长的通俗版（中文）", "Copy for the parent": "复制给家长", "Copy draft": "复制草稿", "Reopen": "重新打开", "Delete client": "删除客户", "Approve": "批准", "Edit": "修改", "Reject": "退回", "Send to Leonard": "交给 Leonard",
     "Save edit": "保存修改", "Cancel": "取消", "Send back": "退回", "New client": "新客户", "Researching": "研究中", "Waiting for review": "待审核", "Rejected": "已退回", "Talk 1-on-1": "一对一", "1-on-1": "一对一",
     "Urgent WeChat chats": "紧急微信咨询", "Booking consultations": "预约咨询", "FAQs in Chinese & English": "中英文常见问题", "Calling the right colleague": "找对同事",
@@ -5041,7 +5085,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var zhPending = false;
   new MutationObserver(function () { if (zhPending) return; zhPending = true; requestAnimationFrame(function () { zhPending = false; zhApply(); }); }).observe(document.body, { childList: true, subtree: true, characterData: true });
   setTimeout(zhApply, 0);
-  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, zh: function () { zhApply(); }, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
+  window.__office = { addApproval: function (x) { return addApproval(x); }, openInbox: function () { return openInbox(); }, state: state, live: function () { return live.list; }, zh: function () { zhApply(); }, fx: { gather: function (on) { gatherAll(on); pvMeeting(on); }, call: function (a, ids) { pvCall(a, ids); }, end: function (a) { pvCallEnd(a); }, deliver: function (a, b) { return deliver(a, b); }, live: function (k) { liveArrive(k); } } };
   $("inbox").onclick = function (e) { if (e.target === $("inbox")) $("inbox").hidden = true; };
 
 
@@ -5333,7 +5377,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (b.dataset.m) { setV3Mode(b.dataset.m); return; }
     var lv = +b.dataset.lv;
     if (v3mode === "photo") { if (pano && lv >= 0) pano.go(lv); return; }
-    start3D(); var go = function () { if (!v3) return; v3.walk(lv); };
+    if (lv > 3) lv = 3; start3D(); var go = function () { if (!v3) return; v3.walk(lv); };
     if (v3) go(); else if (v3loading) v3loading.then(go);
   };
   function v3Mode(mode, level) {

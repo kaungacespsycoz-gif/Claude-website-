@@ -15,14 +15,14 @@
   {
    "bot": "4",
    "match": "伦敦读硕士一年大概多少钱|How much is a one-year master's in London",
-   "en": "Roughly £45,000–£60,000 all in for a year in London, depending on the course 💷 Message us on WeChat (GlostudyUK) and we'll work it out for your plan. 【线索】",
-   "zh": "伦敦读一年硕士，总共大约 £45,000–£60,000，主要看专业 💷 欢迎微信私信 GlostudyUK，我们按你的情况帮你算。【线索】"
+   "en": "Roughly £45,000–£60,000 all in for a year in London, depending on the course Message us on WeChat (GlostudyUK) and we'll work it out for your plan. 【线索】",
+   "zh": "伦敦读一年硕士，总共大约 £45,000–£60,000，主要看专业 欢迎微信私信 GlostudyUK，我们按你的情况帮你算。【线索】"
   },
   {
    "bot": "4",
    "match": "英国留学值得吗|Is studying in the UK worth it",
    "en": "For many students yes: shorter degrees, world-class universities and a Graduate visa afterwards. It depends on your goals, happy to talk it through anytime 🇬🇧",
-   "zh": "对很多同学来说值得：学制短、名校多、毕业后还有工作签证。具体看你的目标，随时欢迎来聊 🇬🇧"
+   "zh": "对很多同学来说值得：学制短、名校多、毕业后可申请 Graduate route（以 GOV.UK 为准）。具体看你的目标，随时欢迎来聊 🇬🇧"
   },
   {
    "bot": "4",
@@ -33,14 +33,14 @@
   {
    "bot": "1",
    "match": "lily_mama_12",
-   "en": "Thank you, Ms Chen! 12 is a great age to plan for 13+ entry. I've noted everything and a consultant will add you on WeChat.\n\n【咨询登记】\nWho: parent (Ms Chen)\nStudent: 12, from Xiaohongshu comment\nWants: UK boarding school, from next September\nBudget: about ¥400,000 a year\nName / contact: Ms Chen / WeChat lily_mama_12\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
-   "zh": "谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，顾问会加您微信。\n\n【咨询登记】\n身份：家长（陈女士）\n学生年龄/年级：12 岁（来自小红书评论）\n意向阶段/专业：英国寄宿学校，明年 9 月入学\n预算：每年约 40 万人民币\n称呼/联系方式：陈女士 / 微信 lily_mama_12\n备注：同意使用以上信息安排咨询\n【登记完成】"
+   "en": "Thank you, Ms Chen! 12 is a great age to plan for 13+ entry. I've noted everything and we'll send you times for the free consultation shortly.\n\n【咨询登记】\nWho: parent (Ms Chen)\nStudent: 12, from Xiaohongshu comment\nWants: UK boarding school, from next September\nBudget: about ¥400,000 a year\nName / contact: Ms Chen / WeChat lily_mama_12\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
+   "zh": "谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，我们马上把免费咨询的可选时间发给您。\n\n【咨询登记】\n身份：家长（陈女士）\n学生年龄/年级：12 岁（来自小红书评论）\n意向阶段/专业：英国寄宿学校，明年 9 月入学\n预算：每年约 40 万人民币\n称呼/联系方式：陈女士 / 微信 lily_mama_12\n备注：同意使用以上信息安排咨询\n【登记完成】"
   },
   {
    "bot": "1",
    "match": "London or Manchester|伦敦还是曼彻斯特",
-   "en": "Good question! I checked with Bernadette and Leonard: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.",
-   "zh": "好问题！我问了 Bernadette 和 Leonard：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。"
+   "en": "Good question! Our research team compared the two: London has more finance jobs nearby but costs about a third more to live in; Manchester's finance master's are excellent and better value. If you'd like, we can compare two or three courses for you in a free consultation.",
+   "zh": "好问题！我们的研究顾问帮您比较了一下：伦敦金融实习机会多，但生活费大约贵三分之一；曼彻斯特的金融硕士也很好，性价比更高。需要的话，可以在免费咨询里帮你对比两三个项目。"
   },
   {
    "bot": "2",
@@ -57,14 +57,14 @@
   {
    "bot": "6",
    "match": "Weekly task: check our cost sheet|每周任务：根据最新资讯核对费用表",
-   "en": "Cost sheet check:\n- Visa money to show: update to £1,570/month London and £1,203 elsewhere for applications from 30 Nov 2026.\n- Visa fee £558 and health surcharge £776/year: unchanged.\n- Tuition ranges: still current for 2027 entry.\n- Needs your decision: update the sheet now, or wait for GOV.UK's final page?",
-   "zh": "费用表核对：\n- 签证资金：2026 年 11 月 30 日起，伦敦改为每月 £1,570，其他地区 £1,203。\n- 签证费 £558、医疗附加费每年 £776：不变。\n- 学费区间：2027 年入学仍然适用。\n- 需要您决定：现在更新，还是等 GOV.UK 正式页面？"
+   "en": "Cost sheet check:\n- Visa money to show: update to £1,570/month London and £1,203 elsewhere for applications from 30 Nov 2026.\n- Visa fee see GOV.UK and health surcharge see GOV.UK/year: unchanged.\n- Tuition ranges: still current for 2027 entry.\n- Needs your decision: update the sheet now, or wait for GOV.UK's final page?",
+   "zh": "费用表核对：\n- 签证资金：2026 年 11 月 30 日起，伦敦改为每月 £1,570，其他地区 £1,203。\n- 签证费 以 GOV.UK 为准、医疗附加费以 GOV.UK 为准：不变。\n- 学费区间：2027 年入学仍然适用。\n- 需要您决定：现在更新，还是等 GOV.UK 正式页面？"
   },
   {
    "bot": "3",
    "match": "Prepare a short document checklist|准备一份简短的材料清单",
    "en": "Document checklist for the consultation:\n1. Passport copy (student)\n2. Latest school transcripts, translated\n3. English test result (or test date)\n4. Short list of interests and activities\n5. Budget the family is comfortable with\nAmy will send it to the client before the call.",
-   "zh": "咨询材料清单：\n1. 学生护照复印件\n2. 最近的成绩单（附翻译）\n3. 英语成绩（或考试日期）\n4. 兴趣和活动简要列表\n5. 家庭能接受的预算\nAmy 会在咨询前发给客户。"
+   "zh": "咨询材料清单：\n1. 学生护照复印件\n2. 最近的成绩单（附翻译）\n3. 英语成绩（或考试日期）\n4. 兴趣和活动简要列表\n5. 家庭能接受的预算\n我们的文书老师会在咨询前发给客户。"
   },
   {
    "bot": "2",
@@ -105,8 +105,8 @@
   {
    "bot": "7",
    "match": "foundation year and A-levels|预科和 A-Level",
-   "en": "【简要】A foundation year is one year and leads to one university; A-levels take two years and open every UK university. For a strong student with time, A-levels give more choice.",
-   "zh": "【简要】预科一年，通常只对应一所大学；A-Level 两年，可以申请所有英国大学。成绩好、时间够的学生选 A-Level 更灵活。"
+   "en": "【简要】A foundation year is one year and leads to one university; A-levels take two years and give a wider choice of universities. For a strong student with time, A-levels give more choice.",
+   "zh": "【简要】预科一年，通常只对应一所大学；A-Level 两年，可选择的大学和专业范围更广。成绩好、时间够的学生选 A-Level 更灵活。"
   },
   {
    "bot": "8",
@@ -123,8 +123,8 @@
   {
    "bot": "10",
    "match": "upset that nobody replied|不满昨天没人回复",
-   "en": "I'm really sorry we kept you waiting yesterday, that's not the service we want to give. I've asked a consultant to call you today, and I'll stay with your case until it's sorted. 【转人工】",
-   "zh": "非常抱歉昨天让您久等了，这不是我们想提供的服务。我已请顾问今天给您回电，我会一直跟进直到解决。【转人工】"
+   "en": "I'm really sorry we kept you waiting yesterday, that's not the service we want to give. A consultant will contact you as soon as possible, and we'll stay with your case until it's sorted. 【转人工】",
+   "zh": "非常抱歉昨天让您久等了，这不是我们想提供的服务。顾问会尽快联系您，我们会一直跟进直到解决。【转人工】"
   },
   {
    "bot": "11",
@@ -154,7 +154,7 @@
    "bot": "15",
    "match": "Douyin script: 3 myths|抖音口播：关于英国留学的 3 个误区",
    "en": "【简要】Here's a 45-second Douyin script busting 3 UK study myths.\n【完整报告】\n| Sec | Scene | Voice |\n|---|---|---|\n| 0–3 | Close-up | \"3 things people get wrong about studying in the UK!\" |\n| 3–15 | London street | \"Myth 1: only rich families can go. Many cities cost much less than London.\" |\n| 15–30 | Campus | \"Myth 2: a 1-year master's is 'less'. It's full-time and intense.\" |\n| 30–42 | Library | \"Myth 3: you need perfect English. Many students start at IELTS 6.0.\" |\n| 42–45 | Logo card | \"First consultation free, add GlostudyUK on WeChat.\" |",
-   "zh": "【简要】一条 45 秒抖音口播：英国留学的 3 个误区。\n【完整报告】\n| 秒 | 画面 | 口播 |\n|---|---|---|\n| 0–3 | 特写 | “关于英国留学，90% 的人都想错了这 3 点！” |\n| 3–15 | 伦敦街头 | “误区一：只有有钱人才能去。其实很多城市比伦敦便宜得多。” |\n| 15–30 | 校园 | “误区二：一年制硕士含金量低。其实是全日制、强度很高。” |\n| 30–42 | 图书馆 | “误区三：英语要很好。很多同学雅思 6.0 起步。” |\n| 42–45 | 品牌卡 | “第一次咨询免费，加微信 GlostudyUK。” |"
+   "zh": "【简要】一条 45 秒抖音口播：英国留学的 3 个误区。\n【完整报告】\n| 秒 | 画面 | 口播 |\n|---|---|---|\n| 0–3 | 特写 | “关于英国留学，这 3 个误区很常见！” |\n| 3–15 | 伦敦街头 | “误区一：只有有钱人才能去。其实很多城市比伦敦便宜得多。” |\n| 15–30 | 校园 | “误区二：一年制硕士含金量低。其实是全日制、强度很高。” |\n| 30–42 | 图书馆 | “误区三：英语要很好。很多同学雅思 6.0 起步。” |\n| 42–45 | 品牌卡 | “第一次咨询免费，加微信 GlostudyUK。” |"
   },
   {
    "bot": "16",
@@ -206,33 +206,87 @@
   },
   {
    "bot": "1",
+   "match": "went quiet|没有预约就没回复",
+   "en": "Hello, just checking in from Glostudy. If you'd still like to talk through UK study options, the first consultation is free (about 30 minutes): reply here and we'll send you a few times. — Glostudy consultant team",
+   "zh": "您好，这里是寰学 Glostudy。如果您还想了解英国留学的选择，第一次咨询免费（约 30 分钟），在这里回复我们就会把可选时间发给您。— 寰学 Glostudy 顾问团队"
+  },
+  {
+   "bot": "2",
+   "match": "寄宿|boarding|12 岁|age 12",
+   "en": "One-line summary: a 12-year-old aiming for UK boarding from next September; budget about ¥400,000 a year fits many mid-priced boarding schools.\n\n**Options to consider (check each school's website)**\n| Type | Why |\n|---|---|\n| Co-ed boarding prep/senior schools with 13+ entry | Standard UK entry age |\n| Schools with strong EAL support | Helps with English |\n\n**Still to check:** current English level, preferred region, guardian arrangement.",
+   "zh": "一句话总结：12 岁，计划明年 9 月去英国寄宿；每年约 40 万预算适合很多中等价位的寄宿学校。\n\n**可以考虑的方向（以各校官网为准）**\n| 类型 | 理由 |\n|---|---|\n| 13+ 入学的男女同校寄宿学校 | 英国常规入学年龄 |\n| 英语辅导（EAL）较强的学校 | 帮助适应英语 |\n\n**还需确认：**目前英语水平、偏好的地区、监护人安排。"
+  },
+  {
+   "bot": "2",
+   "match": "金融硕士|finance master|陈浩|Chen Hao",
+   "en": "One-line summary: a finance master's for September 2027 with IELTS 6.5 and about ¥450,000; Manchester, Leeds and Bristol fit the budget, London is a stretch.\n\n**Options to consider (check each university's website)**\n| University | Note |\n|---|---|\n| University of Manchester | Check if IELTS 7.0 is needed |\n| University of Leeds | Good value |\n| University of Bristol | Strong finance department |\n| King's College London | Stretch on budget |\n\n**Still to check:** degree grades, work experience.",
+   "zh": "一句话总结：2027 年 9 月读金融硕士，雅思 6.5，预算约 45 万；曼彻斯特、利兹、布里斯托符合预算，伦敦为冲刺。\n\n**可以考虑的大学（以各校官网为准）**\n| 大学 | 备注 |\n|---|---|\n| 曼彻斯特大学 | 确认是否要求雅思 7.0 |\n| 利兹大学 | 性价比高 |\n| 布里斯托大学 | 金融专业强 |\n| 伦敦国王学院 | 预算上属冲刺 |\n\n**还需确认：**本科成绩、工作经历。"
+  },
+  {
+   "bot": "23",
+   "match": "finance summary|财务小结",
+   "en": "【简要】This week: 3 consultations booked, 2 service agreements still unsigned, no payments overdue.\n【完整报告】\n| Item | Status |\n|---|---|\n| Consultations booked | 3 |\n| Agreements signed | 1 of 3 |\n| Service fees owed | none overdue |\n| School commission owed | 2 invoices pending |\n| Marketing spend | within budget |\nNext step: get the 2 agreements signed before any work starts.",
+   "zh": "【简要】本周：3 个咨询预约，2 份服务协议还没签，没有逾期款项。\n【完整报告】\n| 项目 | 状态 |\n|---|---|\n| 咨询预约 | 3 个 |\n| 已签协议 | 3 份中 1 份 |\n| 待收服务费 | 无逾期 |\n| 待收学校佣金 | 2 张发票待付 |\n| 市场投放 | 在预算内 |\n下一步：开始服务前先把 2 份协议签好。"
+  },
+  {
+   "bot": "23",
+   "match": "commissions are still owed|佣金没收到",
+   "en": "【简要】2 school commission invoices are still pending; none are overdue yet.\n【完整报告】\n- Partner school A: invoice sent, due in 30 days\n- Partner school B: waiting for enrolment confirmation\nNext step: Loid confirms enrolment with school B this week.",
+   "zh": "【简要】还有 2 张学校佣金发票待付，暂无逾期。\n【完整报告】\n- 合作学校 A：发票已发，30 天内到期\n- 合作学校 B：等待入学确认\n下一步：Loid 本周和 B 校确认入学。"
+  },
+  {
+   "bot": "24",
+   "match": "partner contracts renew|合作协议要续约",
+   "en": "【简要】2 partner contracts renew in the next 60 days.\n【完整报告】\n| Partner | Renews | Action |\n|---|---|---|\n| Partner school A | in 35 days | send renewal email |\n| Partner college B | in 52 days | review commission terms |\nNeeds your decision: renew both on current terms?",
+   "zh": "【简要】未来 60 天有 2 份合作协议到期。\n【完整报告】\n| 合作方 | 到期 | 行动 |\n|---|---|---|\n| 合作学校 A | 35 天后 | 发续约邮件 |\n| 合作学院 B | 52 天后 | 复核佣金条款 |\n需要您决定：两份都按现有条款续约吗？"
+  },
+  {
+   "bot": "25",
+   "match": "application status|申请进度",
+   "en": "【简要】3 students in progress; 1 is missing documents.\n【完整报告】\n| Student | Stage | Next |\n|---|---|---|\n| Lily | Preparing documents | personal statement draft |\n| Mr Chen | Ready to submit | consultant submits |\n| Ms Chen's child | Choosing schools | visit days |\nNext step: remind Lily's family about the statement draft (due in 14 days).",
+   "zh": "【简要】3 位学生在申请中，1 位缺材料。\n【完整报告】\n| 学生 | 阶段 | 下一步 |\n|---|---|---|\n| Lily | 准备材料 | 个人陈述初稿 |\n| 陈先生 | 可以递交 | 顾问递交 |\n| 陈女士的孩子 | 选校 | 参观日 |\n下一步：提醒 Lily 家长 14 天内交陈述初稿。"
+  },
+  {
+   "bot": "26",
+   "match": "need a UK guardian|英国监护人",
+   "en": "【简要】1 under-18 student still needs a UK guardian before arrival.\n【完整报告】\n- Ms Chen's child (12, boarding from next September): guardian needed\n- Options: 2 accredited guardianship agencies near the school\n- Paperwork: guardian agreement, emergency contacts, school form\nNext step: send the family the two options; the family signs with the agency.",
+   "zh": "【简要】1 位未满 18 岁的学生入学前还需要英国监护人。\n【完整报告】\n- 陈女士的孩子（12 岁，明年 9 月寄宿）：需要监护人\n- 选项：学校附近 2 家有认证的监护机构\n- 文件：监护协议、紧急联系人、学校表格\n下一步：把两个选项发给家长，由家长与机构签约。"
+  },
+  {
+   "bot": "27",
+   "match": "Grade today's leads|线索分级",
+   "en": "【简要】Today: 1 hot lead, 2 warm, 1 cold.\n【完整报告】\n| Lead | Grade | Next |\n|---|---|---|\n| Lily's mum | Hot | consultation booked |\n| Kevin | Warm | day-3 follow-up with a London vs Manchester guide |\n| Xiaomei | Warm | day-1 follow-up offering statement coaching |\n| Travel Cat | Cold | add to monthly newsletter |\nEvery message goes to Sylvie before sending.",
+   "zh": "【简要】今天：1 位热线索，2 位温，1 位冷。\n【完整报告】\n| 线索 | 等级 | 下一步 |\n|---|---|---|\n| Lily妈妈 | 热 | 已约咨询 |\n| Kevin | 温 | 第 3 天发伦敦与曼城对比资料 |\n| 小美 | 温 | 第 1 天跟进，介绍文书辅导 |\n| 旅行的猫 | 冷 | 加入每月资讯 |\n每条消息发送前都经过 Sylvie 审核。"
+  },
+  {
+   "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
-   "en": "Hello! Happy to help 😊 I just checked with Leonard, our research officer: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",
-   "zh": "您好！很高兴为您服务 😊 我刚和研究官 Leonard 确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？"
+   "en": "Hello, happy to help. Our research team confirms: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",
+   "zh": "您好，很高兴为您服务。我们的研究顾问确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？"
   },
   {
    "bot": "1",
    "match": "28 and work in finance|28岁，在深圳",
-   "en": "Great plan! For a one-year master's, most people budget roughly £35,000 to £60,000 in total, depending a lot on the city and the course. Tuition is the biggest part, and London sits at the top of that range. Do you already have a subject or a few universities in mind?",
+   "en": "Great plan! For a one-year master's, most people budget roughly ¥350,000–¥550,000 (about £38,000–£60,000) in total, depending a lot on the city and the course. Tuition is the biggest part, and London sits at the top of that range. Do you already have a subject or a few universities in mind?",
    "zh": "很好的计划！读一年硕士，总费用大多在 3.5 万到 6 万英镑之间，主要看城市和专业。学费是大头，伦敦在区间的上限。您已经有想读的专业或学校了吗？"
   },
   {
    "bot": "1",
    "match": "London much more expensive|伦敦是不是比其他城市贵",
-   "en": "London is usually about a third more for living costs, mainly rent: around £1,500–£1,900 a month versus £1,000–£1,300 in cities like Manchester or Leeds. Tuition can be higher too. Many finance master's outside London are excellent, so it's worth comparing. Shall I book a free consultation to go through options?",
-   "zh": "伦敦生活费一般贵三分之一左右，主要是房租：每月约 £1,500–£1,900，曼彻斯特、利兹等城市大约 £1,000–£1,300。学费也可能更高。伦敦以外也有很多很好的金融硕士，值得比较一下。要不要帮您约个免费咨询，一起看看选择？"
+   "en": "London is usually about a third more for living costs, mainly rent: around £1,500–£2,200 a month versus £1,100–£1,600 in cities like Manchester or Leeds. Tuition can be higher too. Many finance master's outside London are excellent, so it's worth comparing. Shall I book a free consultation to go through options?",
+   "zh": "伦敦生活费一般贵三分之一左右，主要是房租：每月约 £1,500–£2,200，曼彻斯特、利兹等城市大约 £1,100–£1,600。学费也可能更高。伦敦以外也有很多很好的金融硕士，值得比较一下。要不要帮您约个免费咨询，一起看看选择？"
   },
   {
    "bot": "1",
    "match": "Chen Hao|chenhao_sz|陈浩",
-   "en": "Thank you, Mr Chen! I've noted everything, and a consultant will add you on WeChat to set a time.\n\n【咨询登记】\nWho: working adult (Mr Chen)\nStudent: 28, works in finance in Shenzhen\nWants: one-year UK master's, finance\nEnglish: IELTS 6.5\nStart: September 2027\nBudget: about ¥450,000\nName / contact: Chen Hao / WeChat chenhao_sz\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
-   "zh": "谢谢陈先生！信息都记下了，顾问会加您微信约时间。\n\n【咨询登记】\n身份：在职人士（陈先生）\n学生年龄/年级：28 岁，深圳金融行业\n意向阶段/专业：英国一年制硕士，金融\n英语水平：雅思 6.5\n计划入学：2027 年 9 月\n预算：约 45 万人民币\n称呼/联系方式：陈浩 / 微信 chenhao_sz\n备注：同意使用以上信息安排咨询\n【登记完成】"
+   "en": "Thank you, Mr Chen! I've noted everything, and we'll send you times for the free consultation shortly.\n\n【咨询登记】\nWho: working adult (Mr Chen)\nStudent: 28, works in finance in Shenzhen\nWants: one-year UK master's, finance\nEnglish: IELTS 6.5\nStart: September 2027\nBudget: about ¥450,000\nName / contact: Chen Hao / WeChat chenhao_sz\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
+   "zh": "谢谢陈先生！信息都记下了，我们马上把免费咨询的可选时间发给您。\n\n【咨询登记】\n身份：在职人士（陈先生）\n学生年龄/年级：28 岁，深圳金融行业\n意向阶段/专业：英国一年制硕士，金融\n英语水平：雅思 6.5\n计划入学：2027 年 9 月\n预算：约 45 万人民币\n称呼/联系方式：陈浩 / 微信 chenhao_sz\n备注：同意使用以上信息安排咨询\n【登记完成】"
   },
   {
    "bot": "1",
    "match": "guarantee him a place at Oxford|保证他上牛津",
-   "en": "I understand you want the best for your son. I asked Leonard to look at Oxford's entry route: it needs top grades, an admissions test and an interview. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?",
-   "zh": "理解您想给孩子最好的。我请 Leonard 查了牛津的录取路径：需要顶尖成绩、入学笔试和面试。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？"
+   "en": "I understand you want the best for your son. Our research team looked at Oxford's entry route: it needs top grades, an admissions test and an interview. Honestly, no one can guarantee Oxford: offers depend only on the university, and money can't change that. What we can do is look at his grades and build a plan with good universities where he has a real chance. Would a free consultation help?",
+   "zh": "理解您想给孩子最好的。我们的研究顾问查了牛津的录取路径：需要顶尖成绩、入学笔试和面试。说实话，没有人能保证牛津录取，录取只由学校决定，钱也改变不了。我们能做的是根据孩子的成绩，规划真正有机会的好学校。要不要先约个免费咨询？"
   },
   {
    "bot": "1",
@@ -243,14 +297,14 @@
   {
    "bot": "1",
    "match": "write my personal statement for me|帮我写个人陈述",
-   "en": "Psychology is a great choice! 😊 I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But I checked with Amy, our documents officer: she can coach you, help you plan it and give feedback on your drafts. Would you like that?",
-   "zh": "心理学是很好的选择！😊 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我问了文书官 Amy：她可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？"
+   "en": "Psychology is a great choice! I can't write the statement for you: UCAS checks that it's your own work, and a ghost-written one could hurt your application. But our documents tutor can coach you, help you plan it and give feedback on your drafts. Would you like that?",
+   "zh": "心理学是很好的选择！ 个人陈述我们不能代写：UCAS 会检查是不是本人写的，代写反而可能影响申请。但我们的文书老师可以辅导你：帮你列提纲、对每一稿给修改意见。需要吗？"
   },
   {
    "bot": "1",
    "match": "improve my own draft|改我自己写的初稿",
-   "en": "Yes, absolutely! Send your draft when you're ready, and Amy will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?",
-   "zh": "当然可以！准备好了就把初稿发过来，Amy 会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？"
+   "en": "Yes, absolutely! Send your draft when you're ready, and our documents tutor will give you feedback on structure, examples and English, while keeping it in your own words. Shall I book a free consultation first so we know your timeline?",
+   "zh": "当然可以！准备好了就把初稿发过来，我们的文书老师会在结构、例子和英语表达上给你修改意见，同时保持是你自己的话。要不要先约个免费咨询，了解一下你的时间安排？"
   },
   {
    "bot": "2",
@@ -280,7 +334,7 @@
    "bot": "4",
    "match": "Xiaohongshu.*photo:graduation|小红书.*照片:graduation",
    "en": "【简要】A Xiaohongshu post for the graduation photo: a timeline from planning to graduation that parents can save.\n【完整报告】\n【小红书预览】\n标题：从准备到毕业，英国本科时间线一张看懂 🎓\n图片：graduation\n封面：英国本科时间线｜收藏备用\n正文：英国本科一般 3 年（苏格兰 4 年），国内高中生常见路径：\n1️⃣ 高二：确定方向，准备雅思\n2️⃣ 高三上：9–10 月准备文书，1 月前递交 UCAS\n3️⃣ 高三下：收到 offer，满足条件\n4️⃣ 9 月：入学（部分同学先读一年预科）\n\n具体要求以各校官网为准。\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国本科 #UCAS #留学时间线\n【/小红书预览】",
-   "zh": "【简要】给毕业照写了一篇小红书：从准备到毕业的时间线，适合家长收藏。\n【完整报告】\n【小红书预览】\n标题：从准备到毕业，英国本科时间线一张看懂 🎓\n图片：graduation\n封面：英国本科时间线｜收藏备用\n正文：英国本科一般 3 年（苏格兰 4 年），国内高中生常见路径：\n1️⃣ 高二：确定方向，准备雅思\n2️⃣ 高三上：9–10 月准备文书，1 月前递交 UCAS\n3️⃣ 高三下：收到 offer，满足条件\n4️⃣ 9 月：入学（部分同学先读一年预科）\n\n具体要求以各校官网为准。\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国本科 #UCAS #留学时间线\n【/小红书预览】"
+   "zh": "【简要】给毕业照写了一篇小红书：从准备到毕业的时间线，适合家长收藏。\n【完整报告】\n【小红书预览】\n标题：从准备到毕业，英国本科时间线一张看懂 🎓\n图片：graduation\n封面：英国本科时间线｜收藏备用\n正文：英国本科一般 3 年（苏格兰 4 年），国内高中生常见路径：\n1️⃣ 高二：确定方向，准备雅思\n2️⃣ 高三上：9–10 月准备文书，UCAS 一般 1 月中旬截止（牛剑、医学 10 月 15 日），以 UCAS 为准\n3️⃣ 高三下：收到 offer，满足条件\n4️⃣ 9 月：入学（部分同学先读一年预科）\n\n具体要求以各校官网为准。\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国本科 #UCAS #留学时间线\n【/小红书预览】"
   },
   {
    "bot": "4",
@@ -291,20 +345,20 @@
   {
    "bot": "4",
    "match": "Xiaohongshu.*photo:london|小红书.*照片:london",
-   "en": "【简要】A Xiaohongshu post for the London photo: \"London or another city?\" comparison that helps parents decide.\n【完整报告】\n【小红书预览】\n标题：去英国读书，选伦敦还是其他城市？🇬🇧\n图片：london\n封面：伦敦 vs 其他城市｜怎么选\n正文：伦敦 ✅ 名校多、实习机会多、交通方便\n伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£1,900\n曼城/利兹/伯明翰 ✅ 生活费约 £1,000–£1,300，学校同样优秀\n建议：先看专业和预算，再选城市。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #伦敦留学 #留学费用 #选校\n【/小红书预览】",
-   "zh": "【简要】给伦敦街景写了一篇小红书：“伦敦还是其他城市”的对比，帮家长做决定。\n【完整报告】\n【小红书预览】\n标题：去英国读书，选伦敦还是其他城市？🇬🇧\n图片：london\n封面：伦敦 vs 其他城市｜怎么选\n正文：伦敦 ✅ 名校多、实习机会多、交通方便\n伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£1,900\n曼城/利兹/伯明翰 ✅ 生活费约 £1,000–£1,300，学校同样优秀\n建议：先看专业和预算，再选城市。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #伦敦留学 #留学费用 #选校\n【/小红书预览】"
+   "en": "【简要】A Xiaohongshu post for the London photo: \"London or another city?\" comparison that helps parents decide.\n【完整报告】\n【小红书预览】\n标题：去英国读书，选伦敦还是其他城市？🇬🇧\n图片：london\n封面：伦敦 vs 其他城市｜怎么选\n正文：伦敦 ✅ 名校多、实习机会多、交通方便\n伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£2,200\n曼城/利兹/伯明翰 ✅ 生活费约 £1,100–£1,600，学校同样优秀\n建议：先看专业和预算，再选城市。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #伦敦留学 #留学费用 #选校\n【/小红书预览】",
+   "zh": "【简要】给伦敦街景写了一篇小红书：“伦敦还是其他城市”的对比，帮家长做决定。\n【完整报告】\n【小红书预览】\n标题：去英国读书，选伦敦还是其他城市？🇬🇧\n图片：london\n封面：伦敦 vs 其他城市｜怎么选\n正文：伦敦 ✅ 名校多、实习机会多、交通方便\n伦敦 ⚠️ 房租贵，生活费每月约 £1,500–£2,200\n曼城/利兹/伯明翰 ✅ 生活费约 £1,100–£1,600，学校同样优秀\n建议：先看专业和预算，再选城市。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #伦敦留学 #留学费用 #选校\n【/小红书预览】"
   },
   {
    "bot": "1",
    "match": "Lily|王女士",
-   "en": "Thank you, Mrs Wang! Lily sounds like a great fit for A-levels in the UK, and September 2027 gives us good time to prepare. Here is what I've noted, and a consultant will add you on WeChat to set a time for the free 30-minute call.\n\n【咨询登记】\nWho: parent (Mrs Wang)\nStudent: Lily, 16, Grade 10 in Shanghai\nWants: UK A-levels, then economics at university\nEnglish: IELTS 5.5\nStart: September 2027\nBudget: about ¥500,000 a year\nName / contact: Mrs Wang / WeChat lily_mum_sh\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
-   "zh": "谢谢王女士！Lily 的情况很适合去英国读 A-Level，2027 年 9 月入学时间也比较充裕。我把信息记下了，顾问会加您微信，约 30 分钟的免费咨询时间。\n\n【咨询登记】\n身份：家长（王女士）\n学生年龄/年级：Lily，16 岁，上海高一\n意向阶段/专业：英国 A-Level，之后读经济学\n英语水平：雅思 5.5\n计划入学：2027 年 9 月\n预算：每年约 50 万人民币\n称呼/联系方式：王女士 / 微信 lily_mum_sh\n备注：同意使用以上信息安排咨询\n【登记完成】"
+   "en": "Thank you, Mrs Wang! UK A-levels are one good route for Lily to consider, and September 2027 gives us good time to prepare. Here is what I've noted, and we'll send you times for the free consultation shortly.\n\n【咨询登记】\nWho: parent (Mrs Wang)\nStudent: Lily, 16, Grade 10 in Shanghai\nWants: UK A-levels, then economics at university\nEnglish: IELTS 5.5\nStart: September 2027\nBudget: about ¥500,000 a year\nName / contact: Mrs Wang / WeChat lily_mum_sh\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
+   "zh": "谢谢王女士！英国 A-Level 是 Lily 可以考虑的路径之一，2027 年 9 月入学时间也比较充裕。我把信息记下了，我们马上把免费咨询的可选时间发给您。\n\n【咨询登记】\n身份：家长（王女士）\n学生年龄/年级：Lily，16 岁，上海高一\n意向阶段/专业：英国 A-Level，之后读经济学\n英语水平：雅思 5.5\n计划入学：2027 年 9 月\n预算：每年约 50 万人民币\n称呼/联系方式：王女士 / 微信 lily_mum_sh\n备注：同意使用以上信息安排咨询\n【登记完成】"
   },
   {
    "bot": "1",
    "match": "^\\s*(hello|hi|你好)\\b",
-   "en": "Hello! I'm Monica from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?",
-   "zh": "你好，我是寰学的莫妮卡 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？"
+   "en": "Hello, this is Glostudy. We specialise in UK study, and the first consultation is free (about 30 minutes). Are you a parent, a student, or a working adult?",
+   "zh": "您好，这里是寰学 Glostudy，我们专注英国留学，第一次咨询免费（约 30 分钟）。请问您是家长、学生，还是在职人士？"
   },
   {
    "bot": "1",
@@ -327,8 +381,8 @@
   {
    "bot": "1",
    "match": "How much does it cost to study|cost of studying|去英国留学一年大概要多少钱|留学.*多少钱",
-   "en": "【简要】For one year in the UK, most families plan for roughly £35,000 to £60,000. Tuition is the biggest part, and London costs more than other cities. Shall I book a free consultation so we can work it out for your child's exact plan?\n【完整报告】\n**Rough yearly costs (check each school's website and GOV.UK)**\n| Item | Outside London | London |\n|---|---|---|\n| Undergraduate tuition | £20,000–£30,000 | £24,000–£40,000 |\n| Living costs | £12,000–£15,000 | £16,000–£22,000 |\n| Visa fee (once) | £558 | £558 |\n| Health surcharge | £776 a year | £776 a year |\n\nVisa money to show (applications from 30 Nov 2026): £1,203 a month outside London, £1,570 in London, for up to 9 months.\n\nOur own service fee is agreed separately in writing.",
-   "zh": "【简要】在英国读一年，大多数家庭按大约 35 万到 55 万人民币准备。学费是大头，伦敦比其他城市贵一些。要不要约个免费咨询，按孩子的具体计划帮您算一算？\n【完整报告】\n**每年大致费用（以学校官网和 GOV.UK 为准）**\n| 项目 | 伦敦以外 | 伦敦 |\n|---|---|---|\n| 本科学费 | £20,000–£30,000 | £24,000–£40,000 |\n| 生活费 | £12,000–£15,000 | £16,000–£22,000 |\n| 签证费（一次） | £558 | £558 |\n| 医疗附加费 | 每年 £776 | 每年 £776 |\n\n签证资金要求（2026 年 11 月 30 日起递交）：伦敦以外每月 £1,203，伦敦每月 £1,570，最多 9 个月。\n\n我们自己的服务费另行书面约定。"
+   "en": "【简要】For one year in the UK, most families plan for roughly ¥350,000–¥550,000 (about £38,000–£60,000). Tuition is the biggest part, and London costs more than other cities. Shall I book a free consultation so we can work it out for your child's exact plan?\n【完整报告】\n**Rough yearly costs (check each school's website and GOV.UK)**\n| Item | Outside London | London |\n|---|---|---|\n| Undergraduate tuition | £20,000–£30,000 | £24,000–£40,000 |\n| Living costs | £12,000–£15,000 | £16,000–£22,000 |\n| Visa fee (once) | see GOV.UK | see GOV.UK |\n| Health surcharge | see GOV.UK | see GOV.UK |\n\nVisa money to show (applications from 30 Nov 2026): £1,203 a month outside London, £1,570 in London, for up to 9 months.\n\nOur own service fee is agreed separately in writing.",
+   "zh": "【简要】在英国读一年，大多数家庭按大约 35 万到 55 万人民币（约 £38,000–£60,000）准备。学费是大头，伦敦比其他城市贵一些。要不要约个免费咨询，按孩子的具体计划帮您算一算？\n【完整报告】\n**每年大致费用（以学校官网和 GOV.UK 为准）**\n| 项目 | 伦敦以外 | 伦敦 |\n|---|---|---|\n| 本科学费 | £20,000–£30,000 | £24,000–£40,000 |\n| 生活费 | £12,000–£15,000 | £16,000–£22,000 |\n| 签证费（一次） | 以 GOV.UK 为准 | 以 GOV.UK 为准 |\n| 医疗附加费 | 以 GOV.UK 为准 | 以 GOV.UK 为准 |\n\n\n我们自己的服务费另行书面约定。"
   },
   {
    "bot": "1",
@@ -388,7 +442,7 @@
    "bot": "4",
    "match": "boarding|寄宿",
    "en": "【简要】Here are two Xiaohongshu versions for parents of a 13-year-old: one practical checklist and one \"common mistakes\" angle. Both end with the free consultation line, and the fact-check list is at the bottom.\n【完整报告】\n**Version 1 · checklist**\n【小红书预览】\n标题：孩子13岁去英国寄宿，家长要提前准备的5件事 📝\n封面：13岁去英国寄宿｜家长提前准备清单\n正文：很多家长问：孩子 13 岁，现在准备英国寄宿学校来得及吗？\n答案是来得及，但要早一点规划。\n\n1️⃣ 入学时间：英国中学常见 13+ 入学，一般提前 1–2 年准备\n2️⃣ 英语：多数学校会有自己的英语和数学测试\n3️⃣ 面试：孩子要能用英语聊自己的兴趣\n4️⃣ 监护人：未满 18 岁需要在英国有监护人\n5️⃣ 生活：寄宿生活独立性很重要，可以先参加夏校体验\n\n常见误区：只看排名。适合孩子性格的学校更重要。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #13岁留学 #家长必看\n【/小红书预览】\n\n**Version 2 · common mistakes**\n【小红书预览】\n标题：低龄去英国读书，3个家长最常见的误区\n封面：低龄留英｜3个常见误区\n正文：带过不少 13 岁左右的孩子申请英国学校，发现家长最容易在这 3 件事上走弯路：\n❌ 只看排名，不看孩子性格\n❌ 英语测试临时抱佛脚\n❌ 忽视监护人和寄宿生活准备\n✅ 提前一年规划，比临时冲刺更稳\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #留学规划\n【/小红书预览】\n\n**Fact-check list**\n- 13+ entry is common at UK independent schools (knowledge base: uk-routes)\n- Under-18 students need a UK guardian (needs checking per school)",
-   "zh": "【简要】给 13 岁孩子家长写了两个小红书版本：一个是实用清单，一个是“常见误区”角度。结尾都用免费咨询的行动号召，最后附事实核对清单。\n【完整报告】\n**版本一 · 清单**\n【小红书预览】\n标题：孩子13岁去英国寄宿，家长要提前准备的5件事 📝\n封面：13岁去英国寄宿｜家长提前准备清单\n正文：很多家长问：孩子 13 岁，现在准备英国寄宿学校来得及吗？\n答案是来得及，但要早一点规划。\n\n1️⃣ 入学时间：英国中学常见 13+ 入学，一般提前 1–2 年准备\n2️⃣ 英语：多数学校会有自己的英语和数学测试\n3️⃣ 面试：孩子要能用英语聊自己的兴趣\n4️⃣ 监护人：未满 18 岁需要在英国有监护人\n5️⃣ 生活：寄宿生活独立性很重要，可以先参加夏校体验\n\n常见误区：只看排名。适合孩子性格的学校更重要。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #13岁留学 #家长必看\n【/小红书预览】\n\n**版本二 · 常见误区**\n【小红书预览】\n标题：低龄去英国读书，3个家长最常见的误区\n封面：低龄留英｜3个常见误区\n正文：带过不少 13 岁左右的孩子申请英国学校，发现家长最容易在这 3 件事上走弯路：\n❌ 只看排名，不看孩子性格\n❌ 英语测试临时抱佛脚\n❌ 忽视监护人和寄宿生活准备\n✅ 提前一年规划，比临时冲刺更稳\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #留学规划\n【/小红书预览】\n\n**事实核对清单**\n- 英国私立中学常见 13+ 入学（资料库：uk-routes）\n- 未满 18 岁需要英国监护人（需按学校核实）"
+   "zh": "【简要】给 13 岁孩子家长写了两个小红书版本：一个是实用清单，一个是“常见误区”角度。结尾都用免费咨询的行动号召，最后附事实核对清单。\n【完整报告】\n**版本一 · 清单**\n【小红书预览】\n标题：孩子13岁去英国寄宿，家长要提前准备的5件事 📝\n封面：13岁去英国寄宿｜家长提前准备清单\n正文：很多家长问：孩子 13 岁，现在准备英国寄宿学校来得及吗？\n答案是来得及，但要早一点规划。\n\n1️⃣ 入学时间：英国中学常见 13+ 入学，一般提前 1–2 年准备\n2️⃣ 英语：多数学校会有自己的英语和数学测试\n3️⃣ 面试：孩子要能用英语聊自己的兴趣\n4️⃣ 监护人：未满 18 岁需要在英国有监护人\n5️⃣ 生活：寄宿生活独立性很重要，可以先参加夏校体验\n\n常见误区：只看排名。适合孩子性格的学校更重要。\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #13岁留学 #家长必看\n【/小红书预览】\n\n**版本二 · 常见误区**\n【小红书预览】\n标题：低龄去英国读书，3个家长最常见的误区\n封面：低龄留英｜3个常见误区\n正文：家长准备低龄留英时，最容易在这 3 件事上走弯路：\n❌ 只看排名，不看孩子性格\n❌ 英语测试临时抱佛脚\n❌ 忽视监护人和寄宿生活准备\n✅ 提前一年规划，比临时冲刺更稳\n\n第一次咨询免费，加微信 GlostudyUK 聊一聊。\n标签：#英国留学 #英国寄宿学校 #低龄留学 #留学规划\n【/小红书预览】\n\n**事实核对清单**\n- 英国私立中学常见 13+ 入学（资料库：uk-routes）\n- 未满 18 岁需要英国监护人（需按学校核实）"
   },
   {
    "bot": "4",
@@ -453,8 +507,8 @@
   {
    "bot": "6",
    "match": "master's in London|伦敦读一年硕士",
-   "en": "【简要】For a one-year master's in London, plan on roughly £45,000 to £60,000 all in. Tuition is the biggest part, about £28,000 to £40,000, and living costs add around £20,000.\n【完整报告】\n| Item | Low | High |\n|---|---|---|\n| Tuition (international) | £28,000 | £40,000 |\n| Living costs, 12 months | £18,000 | £22,000 |\n| Visa application fee | £558 | £558 |\n| Immigration Health Surcharge | £776 | £776 |\n| **Total** | **≈ £47,000** | **≈ £63,000** |\n**Visa funds to show:** £1,570 a month for up to 9 months (£14,130), for applications from 30 Nov 2026.\nGlostudy's own service fee is agreed separately in writing.",
-   "zh": "【简要】在伦敦读一年硕士，总共大约准备 £45,000 到 £60,000。学费是大头，约 £28,000 到 £40,000，生活费再加 £20,000 左右。\n【完整报告】\n| 项目 | 低 | 高 |\n|---|---|---|\n| 学费（国际生） | £28,000 | £40,000 |\n| 生活费（12 个月） | £18,000 | £22,000 |\n| 签证申请费 | £558 | £558 |\n| 医疗附加费 | £776 | £776 |\n| **合计** | **≈ £47,000** | **≈ £63,000** |\n**签证资金：** 伦敦每月 £1,570，最多 9 个月（£14,130），2026 年 11 月 30 日起递交适用。\n寰学自己的服务费另行书面约定。"
+   "en": "【简要】For a one-year master's in London, plan on roughly £45,000 to £60,000 all in. Tuition is the biggest part, about £28,000 to £40,000, and living costs add around £20,000.\n【完整报告】\n| Item | Low | High |\n|---|---|---|\n| Tuition (international) | £28,000 | £40,000 |\n| Living costs, 12 months | £18,000 | £22,000 |\n| Visa application fee | see GOV.UK | see GOV.UK |\n| Immigration Health Surcharge | see GOV.UK | see GOV.UK |\n| **Total** | **≈ £47,000** | **≈ £63,000** |\n**Visa funds to show:** £1,570 a month for up to 9 months (£14,130), for applications from 30 Nov 2026.\nGlostudy's own service fee is agreed separately in writing.",
+   "zh": "【简要】在伦敦读一年硕士，总共大约准备 £45,000 到 £60,000。学费是大头，约 £28,000 到 £40,000，生活费再加 £20,000 左右。\n【完整报告】\n| 项目 | 低 | 高 |\n|---|---|---|\n| 学费（国际生） | £28,000 | £40,000 |\n| 生活费（12 个月） | £18,000 | £22,000 |\n| 签证申请费 | 以 GOV.UK 为准 | 以 GOV.UK 为准 |\n| 医疗附加费 | 以 GOV.UK 为准 | 以 GOV.UK 为准 |\n| **合计** | **≈ £47,000** | **≈ £63,000** |\n**签证资金：** 伦敦每月 £1,570，最多 9 个月（£14,130），2026 年 11 月 30 日起递交适用。\n寰学自己的服务费另行书面约定。"
   },
   {
    "bot": "6",
@@ -519,7 +573,7 @@
      "task": "Posts this week"
     },
     {
-     "who": "kuuga",
+     "who": "joey",
      "task": "What's waiting for approval"
     }
    ]
@@ -768,9 +822,33 @@
    "en": "- 1 WeChat comment today, about costs",
    "zh": "- 今天公众号 1 条评论，问费用"
   },
-  "kuuga": {
+  "sylvie": {
    "en": "- 1 post and 2 replies waiting for the CEO",
    "zh": "- 1 篇帖子和 2 条回复等待 CEO 批准"
+  },
+  "penny": {
+   "en": "- Parent version ready in plain words",
+   "zh": "- 家长版已改写好"
+  },
+  "medina": {
+   "en": "- 3 bookings this week, 2 agreements unsigned",
+   "zh": "- 本周 3 个预约，2 份协议未签"
+  },
+  "loid": {
+   "en": "- 2 partner contracts renew within 60 days",
+   "zh": "- 2 份合作协议 60 天内到期"
+  },
+  "yor": {
+   "en": "- 3 students in progress, 1 missing documents",
+   "zh": "- 3 位学生在申请中，1 位缺材料"
+  },
+  "franky": {
+   "en": "- 1 under-18 student still needs a UK guardian",
+   "zh": "- 1 位未满 18 岁学生还没有英国监护人"
+  },
+  "fiona": {
+   "en": "- 2 warm leads to follow up this week",
+   "zh": "- 本周 2 位温线索需要跟进"
   },
   "julien": {
    "en": "- Cover: campus photo, bold title",

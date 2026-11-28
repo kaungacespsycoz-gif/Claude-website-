@@ -895,12 +895,22 @@ cust("22", r"Quality check before publishing Emily's post|发布前质量检查�
 
 desk("22", r"plain words|通俗|家长一看就懂|Rewrite this", "【简要】Studying a one-year master's in London costs about £45,000–£60,000 in total.\n【完整报告】\n- This covers both the course fee and everyday living costs for the year.\n- Most courses ask for IELTS 6.5 (the English test UK universities use).\n- Outside London the total is usually lower.\n- Exact fees are on each university's website.\nNext step: tell us the course you like, and we'll check its exact cost and English requirement.", "【简要】在伦敦读一年硕士，总共大约需要 4.5 万到 6 万英镑。\n【完整报告】\n- 这包括一年的学费和日常生活费。\n- 大多数专业要求雅思 6.5（英国大学通用的英语考试）。\n- 伦敦以外的城市一般会便宜一些。\n- 具体学费以各大学官网为准。\n下一步：告诉我们您喜欢的专业，我们帮您核对准确的费用和英语要求。")
 
+desk("1", r"went quiet|没有预约就没回复", "Hello, just checking in from Glostudy. If you'd still like to talk through UK study options, the first consultation is free (about 30 minutes): reply here and we'll send you a few times. — Glostudy consultant team", "您好，这里是寰学 Glostudy。如果您还想了解英国留学的选择，第一次咨询免费（约 30 分钟），在这里回复我们就会把可选时间发给您。— 寰学 Glostudy 顾问团队")
+desk("2", r"寄宿|boarding|12 岁|age 12", "One-line summary: a 12-year-old aiming for UK boarding from next September; budget about ¥400,000 a year fits many mid-priced boarding schools.\n\n**Options to consider (check each school's website)**\n| Type | Why |\n|---|---|\n| Co-ed boarding prep/senior schools with 13+ entry | Standard UK entry age |\n| Schools with strong EAL support | Helps with English |\n\n**Still to check:** current English level, preferred region, guardian arrangement.", "一句话总结：12 岁，计划明年 9 月去英国寄宿；每年约 40 万预算适合很多中等价位的寄宿学校。\n\n**可以考虑的方向（以各校官网为准）**\n| 类型 | 理由 |\n|---|---|\n| 13+ 入学的男女同校寄宿学校 | 英国常规入学年龄 |\n| 英语辅导（EAL）较强的学校 | 帮助适应英语 |\n\n**还需确认：**目前英语水平、偏好的地区、监护人安排。")
+desk("2", r"金融硕士|finance master|陈浩|Chen Hao", "One-line summary: a finance master's for September 2027 with IELTS 6.5 and about ¥450,000; Manchester, Leeds and Bristol fit the budget, London is a stretch.\n\n**Options to consider (check each university's website)**\n| University | Note |\n|---|---|\n| University of Manchester | Check if IELTS 7.0 is needed |\n| University of Leeds | Good value |\n| University of Bristol | Strong finance department |\n| King's College London | Stretch on budget |\n\n**Still to check:** degree grades, work experience.", "一句话总结：2027 年 9 月读金融硕士，雅思 6.5，预算约 45 万；曼彻斯特、利兹、布里斯托符合预算，伦敦为冲刺。\n\n**可以考虑的大学（以各校官网为准）**\n| 大学 | 备注 |\n|---|---|\n| 曼彻斯特大学 | 确认是否要求雅思 7.0 |\n| 利兹大学 | 性价比高 |\n| 布里斯托大学 | 金融专业强 |\n| 伦敦国王学院 | 预算上属冲刺 |\n\n**还需确认：**本科成绩、工作经历。")
+desk("23", r"finance summary|财务小结", "【简要】This week: 3 consultations booked, 2 service agreements still unsigned, no payments overdue.\n【完整报告】\n| Item | Status |\n|---|---|\n| Consultations booked | 3 |\n| Agreements signed | 1 of 3 |\n| Service fees owed | none overdue |\n| School commission owed | 2 invoices pending |\n| Marketing spend | within budget |\nNext step: get the 2 agreements signed before any work starts.", "【简要】本周：3 个咨询预约，2 份服务协议还没签，没有逾期款项。\n【完整报告】\n| 项目 | 状态 |\n|---|---|\n| 咨询预约 | 3 个 |\n| 已签协议 | 3 份中 1 份 |\n| 待收服务费 | 无逾期 |\n| 待收学校佣金 | 2 张发票待付 |\n| 市场投放 | 在预算内 |\n下一步：开始服务前先把 2 份协议签好。")
+desk("23", r"commissions are still owed|佣金没收到", "【简要】2 school commission invoices are still pending; none are overdue yet.\n【完整报告】\n- Partner school A: invoice sent, due in 30 days\n- Partner school B: waiting for enrolment confirmation\nNext step: Loid confirms enrolment with school B this week.", "【简要】还有 2 张学校佣金发票待付，暂无逾期。\n【完整报告】\n- 合作学校 A：发票已发，30 天内到期\n- 合作学校 B：等待入学确认\n下一步：Loid 本周和 B 校确认入学。")
+desk("24", r"partner contracts renew|合作协议要续约", "【简要】2 partner contracts renew in the next 60 days.\n【完整报告】\n| Partner | Renews | Action |\n|---|---|---|\n| Partner school A | in 35 days | send renewal email |\n| Partner college B | in 52 days | review commission terms |\nNeeds your decision: renew both on current terms?", "【简要】未来 60 天有 2 份合作协议到期。\n【完整报告】\n| 合作方 | 到期 | 行动 |\n|---|---|---|\n| 合作学校 A | 35 天后 | 发续约邮件 |\n| 合作学院 B | 52 天后 | 复核佣金条款 |\n需要您决定：两份都按现有条款续约吗？")
+desk("25", r"application status|申请进度", "【简要】3 students in progress; 1 is missing documents.\n【完整报告】\n| Student | Stage | Next |\n|---|---|---|\n| Lily | Preparing documents | personal statement draft |\n| Mr Chen | Ready to submit | consultant submits |\n| Ms Chen's child | Choosing schools | visit days |\nNext step: remind Lily's family about the statement draft (due in 14 days).", "【简要】3 位学生在申请中，1 位缺材料。\n【完整报告】\n| 学生 | 阶段 | 下一步 |\n|---|---|---|\n| Lily | 准备材料 | 个人陈述初稿 |\n| 陈先生 | 可以递交 | 顾问递交 |\n| 陈女士的孩子 | 选校 | 参观日 |\n下一步：提醒 Lily 家长 14 天内交陈述初稿。")
+desk("26", r"need a UK guardian|英国监护人", "【简要】1 under-18 student still needs a UK guardian before arrival.\n【完整报告】\n- Ms Chen's child (12, boarding from next September): guardian needed\n- Options: 2 accredited guardianship agencies near the school\n- Paperwork: guardian agreement, emergency contacts, school form\nNext step: send the family the two options; the family signs with the agency.", "【简要】1 位未满 18 岁的学生入学前还需要英国监护人。\n【完整报告】\n- 陈女士的孩子（12 岁，明年 9 月寄宿）：需要监护人\n- 选项：学校附近 2 家有认证的监护机构\n- 文件：监护协议、紧急联系人、学校表格\n下一步：把两个选项发给家长，由家长与机构签约。")
+desk("27", r"Grade today's leads|线索分级", "【简要】Today: 1 hot lead, 2 warm, 1 cold.\n【完整报告】\n| Lead | Grade | Next |\n|---|---|---|\n| Lily's mum | Hot | consultation booked |\n| Kevin | Warm | day-3 follow-up with a London vs Manchester guide |\n| Xiaomei | Warm | day-1 follow-up offering statement coaching |\n| Travel Cat | Cold | add to monthly newsletter |\nEvery message goes to Sylvie before sending.", "【简要】今天：1 位热线索，2 位温，1 位冷。\n【完整报告】\n| 线索 | 等级 | 下一步 |\n|---|---|---|\n| Lily妈妈 | 热 | 已约咨询 |\n| Kevin | 温 | 第 3 天发伦敦与曼城对比资料 |\n| 小美 | 温 | 第 1 天跟进，介绍文书辅导 |\n| 旅行的猫 | 冷 | 加入每月资讯 |\n每条消息发送前都经过 Sylvie 审核。")
+
 A[:0] = [x for x in C if x not in A]
 ROUTES = [
   {"bot": "8", "match": r"How many comments came in today|今天来了多少条评论", "calls": [{"who": "emily", "task": "Xiaohongshu comments today"}, {"who": "mindy", "task": "Douyin comments today"}, {"who": "gabriel", "task": "WeChat post comments today"}]},
   {"bot": "9", "match": r"consult room schedule|咨询室的安排", "calls": [{"who": "raj", "task": "Clients' deadlines this week"}, {"who": "howard", "task": "Booked client records"}]},
   {"bot": "11", "match": r"talking points for tomorrow|准备谈话要点", "calls": [{"who": "leonard", "task": "Mr Chen's shortlist"}, {"who": "bernadette", "task": "Mr Chen's budget check"}]},
-  {"bot": "17", "match": r"social team post this week|社媒团队本周发了什么", "calls": [{"who": "emily", "task": "Posts this week"}, {"who": "kuuga", "task": "What's waiting for approval"}]},
+  {"bot": "17", "match": r"social team post this week|社媒团队本周发了什么", "calls": [{"who": "emily", "task": "Posts this week"}, {"who": "joey", "task": "What's waiting for approval"}]},
   {"bot": "6", "match": r"master's in London|伦敦读一年硕士", "calls": [{"who": "leonard", "task": "Typical London master's courses"}, {"who": "sheldon", "task": "Check the visa money figures"}]},
   {"bot": "4", "match": r"boarding|寄宿", "calls": [{"who": "sheldon", "task": "Check 13+ entry facts"}, {"who": "julien", "task": "Cover idea"}]},
   {"bot": "21", "match": r"customers worried|客户最担心", "calls": [{"who": "monica", "task": "Common WeChat questions"}, {"who": "joey", "task": "Comment themes"}]},
@@ -926,7 +936,13 @@ NOTES = {
   "raj": {"en": "- Key deadline: 14 Jan (UCAS main), 15 Oct (Oxbridge/medicine)\n- Start preparing 12 months ahead", "zh": "- 关键日期：1 月 14 日（UCAS 主截止）、10 月 15 日（牛剑/医学）\n- 建议提前 12 个月准备"},
   "mindy": {"en": "- 1 Douyin comment today, a question", "zh": "- 今天抖音 1 条评论，是提问"},
   "gabriel": {"en": "- 1 WeChat comment today, about costs", "zh": "- 今天公众号 1 条评论，问费用"},
-  "kuuga": {"en": "- 1 post and 2 replies waiting for the CEO", "zh": "- 1 篇帖子和 2 条回复等待 CEO 批准"},
+  "sylvie": {"en": "- 1 post and 2 replies waiting for the CEO", "zh": "- 1 篇帖子和 2 条回复等待 CEO 批准"},
+  "penny": {"en": "- Parent version ready in plain words", "zh": "- 家长版已改写好"},
+  "medina": {"en": "- 3 bookings this week, 2 agreements unsigned", "zh": "- 本周 3 个预约，2 份协议未签"},
+  "loid": {"en": "- 2 partner contracts renew within 60 days", "zh": "- 2 份合作协议 60 天内到期"},
+  "yor": {"en": "- 3 students in progress, 1 missing documents", "zh": "- 3 位学生在申请中，1 位缺材料"},
+  "franky": {"en": "- 1 under-18 student still needs a UK guardian", "zh": "- 1 位未满 18 岁学生还没有英国监护人"},
+  "fiona": {"en": "- 2 warm leads to follow up this week", "zh": "- 本周 2 位温线索需要跟进"},
   "julien": {"en": "- Cover: campus photo, bold title", "zh": "- 封面：校园照片 + 大标题"},
   "howard": {"en": "- 3 booked clients on file", "zh": "- 3 位已登记客户已归档"},
   "joey": {"en": "- Most comments ask about cost", "zh": "- 大部分评论问费用"},
@@ -938,6 +954,37 @@ FALLBACK = {
   "en": "This is a demo with prepared answers, so I can only answer the suggested questions. Tap one of them, or connect DeepSeek in Settings to ask me anything.",
   "zh": "这是演示版，只能回答预设的问题。请点选建议的问题，或在设置里接入 DeepSeek，就可以随便问了。"
 }
+
+# ---------- professional customer-facing wording (audit) ----------
+import re as _re
+_EMOJI = _re.compile("[\U0001F300-\U0001FAFF☀-➿️]")
+def _sub(t, pairs):
+    for a, b in pairs: t = t.replace(a, b)
+    return t
+ZH_FIX = [("好问题！我问了 Bernadette 和 Leonard：", "好问题！我们的研究顾问帮您比较了一下："), ("您好！很高兴为您服务 😊 我刚和研究官 Leonard 确认过：", "您好，很高兴为您服务。我们的研究顾问确认过："),
+  ("我请 Leonard 查了牛津的录取路径：", "我们的研究顾问查了牛津的录取路径："), ("但我问了文书官 Amy：她可以辅导你：", "但我们的文书老师可以辅导你："), ("Amy 会", "我们的文书老师会"),
+  ("Lily 的情况很适合去英国读 A-Level", "英国 A-Level 是 Lily 可以考虑的路径之一"), ("毕业后还有工作签证", "毕业后可申请 Graduate route（以 GOV.UK 为准）"),
+  ("关于英国留学，90% 的人都想错了这 3 点！", "关于英国留学，这 3 个误区很常见！"), ("带过不少 13 岁左右的孩子申请英国学校，发现家长最容易在这 3 件事上走弯路", "家长准备低龄留英时，最容易在这 3 件事上走弯路"),
+  ("1 月前递交 UCAS", "UCAS 一般 1 月中旬截止（牛剑、医学 10 月 15 日），以 UCAS 为准"), ("可以申请所有英国大学", "可选择的大学和专业范围更广"),
+  ("我已请顾问今天给您回电，我会一直跟进直到解决。", "顾问会尽快联系您，我们会一直跟进直到解决。"), ("35 万到 55 万人民币", "35 万到 55 万人民币（约 £38,000–£60,000）"),
+  ("£1,500–£1,900", "£1,500–£2,200"), ("£1,000–£1,300", "£1,100–£1,600"), ("每年 £776", "以 GOV.UK 为准"), ("£776", "以 GOV.UK 为准"), ("£558", "以 GOV.UK 为准"), (" 💷", "")]
+EN_FIX = [("Good question! I checked with Bernadette and Leonard:", "Good question! Our research team compared the two:"), ("Hello! Happy to help 😊 I just checked with Leonard, our research officer:", "Hello, happy to help. Our research team confirms:"),
+  ("I asked Leonard to look at Oxford's entry route:", "Our research team looked at Oxford's entry route:"), ("But I checked with Amy, our documents officer: she can coach you,", "But our documents tutor can coach you,"), ("and Amy will give you", "and our documents tutor will give you"),
+  ("Lily sounds like a great fit for A-levels in the UK", "UK A-levels are one good route for Lily to consider"), ("open every UK university", "give a wider choice of universities"),
+  ("I've asked a consultant to call you today, and I'll stay with your case until it's sorted.", "A consultant will contact you as soon as possible, and we'll stay with your case until it's sorted."),
+  ("roughly £35,000 to £60,000", "roughly ¥350,000–¥550,000 (about £38,000–£60,000)"), ("£1,500–£1,900", "£1,500–£2,200"), ("£1,000–£1,300", "£1,100–£1,600"), ("£776 a year", "see GOV.UK"), ("£776", "see GOV.UK"), ("£558", "see GOV.UK"), (" 💷", "")]
+GREET = {"zh": "您好，这里是寰学 Glostudy，我们专注英国留学，第一次咨询免费（约 30 分钟）。请问您是家长、学生，还是在职人士？", "en": "Hello, this is Glostudy. We specialise in UK study, and the first consultation is free (about 30 minutes). Are you a parent, a student, or a working adult?"}
+for a in A:
+    a["zh"] = _sub(a["zh"], ZH_FIX); a["en"] = _sub(a["en"], EN_FIX)
+    a["zh"] = _re.sub(r"顾问会加(您|你)微信[^。]*。", "我们马上把免费咨询的可选时间发给您。", a["zh"])
+    a["en"] = _re.sub(r"a consultant will add you on WeChat[^.]*\.", "we'll send you times for the free consultation shortly.", a["en"])
+    if a["bot"] in ("1", "7", "10"):
+        a["zh"] = _EMOJI.sub("", a["zh"]).replace("  ", " "); a["en"] = _EMOJI.sub("", a["en"]).replace("  ", " ")
+    if a["bot"] == "1" and a["match"].startswith("^\\s*(hello"):
+        a["zh"], a["en"] = GREET["zh"], GREET["en"]
+    if a["bot"] == "1":
+        for L in ("zh", "en"):
+            a[L] = "\n".join(l for l in a[L].split("\n") if not _re.search(r"签证资金要求|Visa funds|visa money", l))
 out = {"answers": A, "routes": ROUTES, "notes": NOTES, "fallback": FALLBACK}
 json.dump(out, open(os.path.join(os.path.dirname(__file__), "script.json"), "w"), ensure_ascii=False, indent=1)
 print(len(A), "answers")
