@@ -1573,7 +1573,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       tasks: [{ en: "What's the consult room schedule for tomorrow?", zh: "明天咨询室的安排是怎样的？" }] },
     { id: "10", demoAs: "1", name: "Phoebe", title: "Customer Care", role: "Reception · Friends", who: "Talks to customers", file: "agents/1-customer-service.md", color: "--c10", prop: "headset", effort: "low",
       skills: ["Complaints", "Handovers to a real consultant", "Calming upset customers"], intro: "Runs the human desk: takes over complaints, fee and visa questions, calms people down and alerts a real consultant.",
-      persona: "你负责客户关怀：处理投诉、退款、费用和签证类需要真人处理的问题，安抚客户并通知真人顾问。",
+      persona: "你负责客户关怀：安抚投诉和不满的客户，先致歉共情，问一个方便联系的时间，再转交真人顾问。你不承诺退款、赔偿或时限，不给老板的名字或电话。",
       tasks: [{ en: "A parent is upset that nobody replied yesterday. How do you answer?", zh: "一位家长不满昨天没人回复，你怎么回？" }] },
     { id: "11", demoAs: "2", name: "Ross", title: "Consultation Prep", role: "Reception · Friends", who: "Team only", file: "agents/2-school-research.md", color: "--c11", prop: "books", effort: "medium",
       skills: ["Client folders", "Consult room set-up", "Talking points for consultants"], intro: "Prepares each consult room: puts the client's folder, Leonard's shortlist and Amy's checklist on the table before the meeting.",
@@ -1912,7 +1912,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function rbSection(rb, key) { var m = String(rb || "").split(/\n(?=## )/).filter(function (sec) { return sec.indexOf("## " + key + " ") === 0 || sec.trim() === "## " + key || sec.indexOf("## " + key + "\n") === 0; })[0]; return m ? m.split("\n").slice(1).filter(function (l) { return /^- /.test(l); }) : []; }
   function rulebookFor(id, rb) {
     var b = BY_ID[id], talks = b && b.who === "Talks to customers" || ["4", "15", "16", "10"].indexOf(id) >= 0;
-    var lines = (talks ? rbSection(rb, "all") : []).concat(rbSection(rb, id)).concat(lessons().filter(function (x) { return x.officer === id || (talks && x.officer === "all") || (x.officer === "4" && ["15", "16"].indexOf(id) >= 0); }).map(function (x) { return "- " + x.rule; }));
+    var alias = { "7": "1", "15": "4", "16": "4" }[id], lines = (talks ? rbSection(rb, "all") : []).concat(alias ? rbSection(rb, alias) : []).concat(rbSection(rb, id)).concat(lessons().filter(function (x) { return x.officer === id || (talks && x.officer === "all") || (x.officer === "4" && ["15", "16"].indexOf(id) >= 0); }).map(function (x) { return "- " + x.rule; }));
     return lines.length ? "\n\n# 岗位规则手册（训练得到的经验，必须遵守）\n" + lines.join("\n") : "";
   }
   function rulebookText() {
@@ -4322,7 +4322,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         reply.pending = false; reply.raw = res.text; reply.content = customerText(res.text, c.lang); flashDone(aid);
         if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); if (state.chatClient[aid]) c.clientId = state.chatClient[aid]; markBooked(c); }
-        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = customerText(res.text.slice(0, cut), c.lang); c.turns.push({ kind: "note", text: (state.lang === "en" ? "Handed to a person" : "已转人工") + (c.handReason ? " · " + c.handReason : "") }); c.status = "human"; handover(c); }
+        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = customerText(res.text.slice(0, cut), c.lang); if (isSensitive(reply.content)) reply.content = c.lang === "en" ? "Thanks for your question. A consultant will check this with you directly, so you get an accurate answer." : "谢谢您的提问。这个问题请顾问直接和您确认，确保信息准确。"; c.turns.push({ kind: "note", text: (state.lang === "en" ? "Handed to a person" : "已转人工") + (c.handReason ? " · " + c.handReason : "") }); c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
       }
@@ -5147,7 +5147,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (rep) {
       h += '<div class="ib-sec">' + esc(rep.title) + '</div><div class="tr-score">' + Object.keys(rep.scores).map(function (id) { var b = BY_ID[id]; return "<div><small>" + esc(b ? b.name : id) + "</small><b>" + rep.scores[id] + "</b><small>/ 10</small></div>"; }).join("") + "</div>";
       var L = lessons().map(function (x) { return x.rule; });
-      if (rep.lessons.length) h += '<div class="ib-sec">' + (en ? "Suggested lessons · approve to add to the rulebook" : "建议的经验 · 批准后写入规则手册") + "</div>" + rep.lessons.map(function (x, i) { var done = L.indexOf(x.rule) >= 0 || x.rejected; return '<div class="tr-lesson' + (done ? " done" : "") + '"><span><b>' + esc(BY_ID[x.officer] ? BY_ID[x.officer].name : x.officer) + "</b> · " + esc(x.rule) + "</span>" + (done ? "<em>" + (x.rejected ? (en ? "skipped" : "已跳过") : (en ? "✓ in rulebook" : "✓ 已写入")) + "</em>" : '<button type="button" data-ok="' + i + '">' + (en ? "Approve" : "批准") + '</button><button type="button" class="no" data-no="' + i + '">' + (en ? "Skip" : "跳过") + "</button>") + "</div>"; }).join("");
+      if (rep.lessons.length) h += '<div class="ib-sec">' + (en ? "Suggested lessons · approve to add to the rulebook" : "建议的经验 · 批准后写入规则手册") + "</div>" + rep.lessons.map(function (x, i) { var done = L.indexOf(x.rule) >= 0 || x.rejected || x.applied; return '<div class="tr-lesson' + (done ? " done" : "") + '"><span><b>' + esc(BY_ID[x.officer] ? BY_ID[x.officer].name : x.officer) + "</b> · " + esc(x.rule) + "</span>" + (done ? "<em>" + (x.rejected ? (en ? "skipped" : "已跳过") : (en ? "✓ in rulebook" : "✓ 已写入")) + "</em>" : '<button type="button" data-ok="' + i + '">' + (en ? "Approve" : "批准") + '</button><button type="button" class="no" data-no="' + i + '">' + (en ? "Skip" : "跳过") + "</button>") + "</div>"; }).join("");
       h += '<div class="ib-sec">' + (en ? "Cases" : "考核记录") + "</div>" + rep.cases.map(function (c) { return '<div class="tr-case"><span class="sc ' + (c.score >= 8 ? "ok" : "bad") + '">' + c.score + "/10</span><b>" + esc((BY_ID[c.officer] ? BY_ID[c.officer].name : c.officer) + " · " + c.persona) + "</b>" + (c.issues && c.issues.length ? "<div>" + esc(c.issues.join("；")) + "</div>" : "") + (c.transcript ? "<pre>" + esc(c.transcript) + "</pre>" : "") + "</div>"; }).join("");
     }
     var mine = lessons(); if (mine.length) h += '<div class="ib-sec">' + (en ? "Rulebook · approved lessons" : "规则手册 · 已批准") + " · " + mine.length + "</div>" + mine.map(function (x) { return '<div class="tr-lesson done"><span><b>' + esc(BY_ID[x.officer] ? BY_ID[x.officer].name : x.officer) + "</b> · " + esc(x.rule) + "</span></div>"; }).join("");
