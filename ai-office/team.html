@@ -1290,7 +1290,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   background: radial-gradient(ellipse at center, color-mix(in srgb, var(--c) 55%, transparent) 0, color-mix(in srgb, var(--c) 18%, transparent) 55%, transparent 72%);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 70%, transparent), 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); animation: padIn .35s ease-out, padPulse 1.6s ease-in-out .35s infinite; }
 .tether { position: absolute; width: 2px; margin-left: -1px; pointer-events: none; z-index: 2; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--c) 80%, transparent)); opacity: .55; animation: padIn .35s ease-out; }
-.call-chip { position: absolute; transform: translate(-50%, 1.6cqw); z-index: 6; pointer-events: none; white-space: nowrap; max-width: 22cqw; overflow: hidden; text-overflow: ellipsis;
+.call-chip { position: absolute; transform: translate(-50%, -2.4cqw); z-index: 6; pointer-events: none; white-space: nowrap; max-width: 22cqw; overflow: hidden; text-overflow: ellipsis;
   font: 600 clamp(7px, 1.15cqw, .72rem) var(--sans); color: #fff; background: rgba(10,14,20,.78); border: 1px solid var(--c); border-radius: 999px; padding: .15cqw .9cqw; animation: padIn .4s ease-out; }
 .photo-frame .ring-badge { scale: clamp(.7, calc(100cqw / 900px), 1); }
 @keyframes padIn { from { opacity: 0; transform: scale(.6); } to { opacity: 1; } }
@@ -1334,6 +1334,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .tr-case { border: 1px solid rgba(var(--holo), .25); border-radius: 10px; padding: 8px 10px; background: rgba(8,20,32,.45); font-size: .82rem; } .tr-case .sc { float: right; font-weight: 700; } .tr-case .sc.bad { color: #ff9a8c; } .tr-case .sc.ok { color: #8ff0b8; }
 .tr-case pre { white-space: pre-wrap; font: .78rem var(--sans); color: #cfe3f2; margin: 6px 0 0; max-height: 220px; overflow: auto; }
 .tr-lesson { display: flex; gap: 8px; align-items: flex-start; border-left: 3px solid #e8c17a; padding: 6px 8px; background: rgba(40,28,12,.35); border-radius: 8px; font-size: .82rem; } .tr-lesson span { flex: 1; } .tr-lesson button { border: 0; border-radius: 99px; padding: 4px 10px; font: 600 .74rem var(--sans); cursor: pointer; background: #8ff0b8; color: #08180f; } .tr-lesson button.no { background: rgba(255,255,255,.12); color: #dbe9f3; } .tr-lesson.done { opacity: .55; }
+.photo-frame .meet-card { max-height: 19cqw; overflow: auto; width: 32%; }
+@media (max-width: 640px) { .photo-frame .room-spot { margin-top: 2.2%; } .photo-frame .meet-card { left: 2% !important; right: 2%; width: auto; max-height: 34cqw; } }
+.photo-frame .hs-badge.intel { top: -14% !important; }
 </style>
 
 <div class="app">
@@ -3199,13 +3202,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "5": [1.4, 4.6, 11.1, 9.4], "23": [61.5, 6.1, 8, 5.6],
       "24": [5, 22.8, 7.5, 10], "25": [22, 25.8, 10, 6.4], "21": [43.5, 25.4, 6.5, 5.8], "26": [58, 26, 14, 6.2], "27": [79, 24, 7.5, 9.4],
       "12": [6.5, 44.64, 6.5, 7.44], "2": [18.0, 45.6, 7.4, 6.24], "22": [31.0, 45.92, 6.5, 6.24], "3": [41.7, 45.92, 8.3, 6.08], "13": [53.2, 45.6, 8.3, 6.56], "14": [69.0, 45.76, 9.3, 6.56], "6": [85.2, 46.56, 7.4, 5.92],
-      "17": [3.2, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
+      "17": [4.6, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
       "1": [6.8, 82.56, 7.3, 4.8], "10": [19.7, 84.4, 7.3, 6.64], "7": [35.5, 84.4, 5.6, 6.4], "9": [53.8, 82.56, 7.5, 5.04], "11": [74.9, 84.96, 6.2, 6.4], "8": [87.3, 84.0, 9.6, 7.6]
     },
-    boss: [30.5, 5.8, 25, 6], ceoPlate: [44, 12.6], logo: [44, 3.8], aliya: [41, 5.6, 7, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [30, 11.6], plates: {},
+    boss: [30.5, 5.8, 25, 6], ceoPlate: [44, 12.6], logo: [44, 3.8], aliya: [41, 5.6, 7, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [52, 0.6], plates: {},
     floorTags: [["5F · CEO Suite · Aliya, Medina & Ado", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
     floorY: { 5: 13.4, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
-    paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
+    paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "7>scout": [[38.3, 89.6], [38.3, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 48.5]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
   var pvReady = false;
@@ -3861,7 +3864,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         turns.push({ kind: "note", good: true, text: "Saved " + name + " as a new client. " + me.name + " is taking the folder to Leonard." });
         activity(agentId, me.name + " booked " + name + " and took the folder to Leonard");
         custBooked(agentId);
-        deliver("1", "scout");
+        deliver(agentId, "scout");
         setTimeout(function () { queueJob(id); }, REDUCED ? 0 : 1800);
       }
     } catch (e) {
@@ -3876,8 +3879,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     runJobs();
   }
   function demoPlain(draft, name) {
-    var lines = String(draft || "").split("\n").map(function (l) { return l.replace(/^[#*\-\s|]+|[*|]+$/g, "").trim(); }).filter(function (l) { return l && !/^-+$/.test(l) && !/^(学校|大学|类型|University|Type|School)\b/.test(l); });
-    var first = (lines[0] || "").replace(/^(零、)?一句话总结[:：]?|^One-line summary:?/, "").trim();
+    var d = String(draft || "");
+    if (DEMO_DATA) { var hit = (DEMO_DATA.answers || []).filter(function (x) { return x.bot === "2" && x.en === d; })[0]; if (hit) d = hit.zh; }
+    var lines = d.replace(/\*\*/g, "").split("\n").map(function (l) { return l.replace(/^[#\-\s|]+|[|\s]+$/g, "").trim(); })
+      .filter(function (l) { return l && !/^[-|:\s]+$/.test(l) && !/^(学校|大学|类型|University|Type|School|项目)(?=\s|\||：|$)/.test(l); });
+    var first = (lines[0] || "").replace(/^\/?\s*(零、)?一句话总结[:：]?\s*|^One-line summary:?\s*/i, "").trim();
     return "【简要】" + first + "\n【完整报告】\n" + lines.slice(1, 6).map(function (l) { return "- " + l.replace(/\s*\|\s*/g, "：").replace(/：$/, ""); }).join("\n") + "\n下一步：在免费咨询里，顾问会和您一起确认这些学校是否适合孩子。";
   }
   function redactContacts(t) { return String(t || "").split("\n").map(function (l) { return /微信|wechat|电话|phone|手机|mobile|邮箱|email|@/i.test(l) ? l.replace(/[:：].*$/, "：[hidden]") : l; }).join("\n"); }
@@ -4232,7 +4238,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         var t = customerText(res.text, cl), sign = cl === "en" ? "\n— Glostudy consultant team" : "\n— 寰学 Glostudy 顾问团队";
         if (t.indexOf("—") < 0) t += sign;
         var g = BY_ID[CHECKER], chk = await ask(g, [{ role: "user", content: (en ? "Quality check before sending a follow-up message to a customer.\nMessage: " : "发送前质量检查：给客户的跟进消息。\n消息：") + t + (en ? "\nAnswer 【通过】 if it is polite, accurate, makes no promises and quotes no fees. Otherwise answer 【需CEO】 and one short reason." : "\n如果礼貌、准确、不承诺、不报价，回答【通过】；否则回答【需CEO】和一句原因。") }], {}).catch(function () { return { text: "【需CEO】" }; });
-        if (!/【通过】/.test(chk.text) || isSensitive(t)) { var rep = { role: "assistant", content: t, raw: t, by: mon.name }; c.turns.push(rep); holdChatReply(c, "1", rep, en ? "(follow-up)" : "（跟进）"); }
+        if (!/【通过】/.test(chk.text) || isSensitive(t)) addApproval({ kind: "chat", from: "1", where: (en ? "Follow-up · " : "跟进 · ") + liveName(c), context: liveName(c) + (en ? ": no booking yet" : "：尚未预约"), why: (chk.text.replace(/【需CEO】/g, "").trim() || (en ? "Follow-up needs your check" : "跟进消息需要您审核")), risk: "low", body: t, custId: c.id, onDecide: function (ok, text) { if (ok) { c.turns.push({ role: "assistant", content: customerText(text, cl), by: mon.name + (en ? " · follow-up" : " · 跟进") }); drawLiveDetail(); } } });
         else c.turns.push({ role: "assistant", content: t, by: mon.name + (en ? " · follow-up" : " · 跟进") });
         activity("1", "Monica followed up with " + c.name.en + " (no booking yet)"); drawLiveDetail();
       }, function () { if (state.busy["1"] === "task") setBusy("1", null); c.followed = null; });
@@ -4295,7 +4301,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       why: en ? "Private reply mentions money, visas or promises" : "私聊回复涉及费用、签证或承诺", risk: "high", body: draft.replace(/【[^】]*】/g, "").trim(), custId: c.id,
       onDecide: function (ok, text, note) {
         c.holdOpen = Math.max(0, (c.holdOpen || 1) - 1);
-        c.turns.push(ok ? { role: "assistant", content: customerText(text, c.lang), by: BY_ID[aid].name } : { kind: "note", text: (en ? "✗ Aliya held this reply back" : "✗ Aliya 没有发送这条回复") + (note ? " (" + note + ")" : "") + (en ? ". A consultant will follow up." : "。顾问会跟进。") });
+        c.turns.push(ok ? { role: "assistant", content: ((c.lang || state.lang) === "en" ? "About your earlier question: " : "关于您之前的问题：") + customerText(text, c.lang), by: BY_ID[aid].name } : { kind: "note", text: (en ? "✗ Aliya held this reply back" : "✗ Aliya 没有发送这条回复") + (note ? " (" + note + ")" : "") + (en ? ". A consultant will follow up." : "。顾问会跟进。") });
         drawLiveDetail();
       } });
     activity(aid, BY_ID[aid].name + " held a reply to " + c.name.en + " for Aliya (money/visa/promise)");
@@ -5046,6 +5052,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       [/^Leonard finished a shortlist for (.+) and took it to Aliya's desk$/, function (m) { return "Leonard 完成了" + m[1] + "的选校清单，送到 Aliya 桌上"; }],
       [/^Ross added Penny's parent version to (.+)'s consult pack$/, function (m) { return "Ross 把 Penny 的家长版加进了" + m[1] + "的咨询资料"; }],
       [/^Aliya copied Penny's parent version for (.+)$/, function (m) { return "Aliya 复制了 Penny 给" + m[1] + "家长的版本"; }],
+      [/^🖥 Show on screen · (\d+) lines$/, function (m) { return "🖥 投屏显示 · " + m[1] + " 行"; }],
+      [/^Saved (.+) as a new client\. (\w+) is taking the folder to Leonard\.$/, function (m) { return "已把" + m[1] + "存为新客户，" + m[2] + " 正在把资料交给 Leonard。"; }],
       [/^Penny rewrote (.+)'s shortlist in plain words for the parent$/, function (m) { return "Penny 把" + m[1] + "的选校清单改写成家长易懂的版本"; }],
       [/^Raj added (.+)'s deadlines to the wall$/, function (m) { return "Raj 把" + m[1] + "的截止日期贴到墙上"; }],
       [/^Howard filed (.+)'s record$/, function (m) { return "Howard 归档了" + m[1] + "的资料"; }],
@@ -5806,7 +5814,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "2": [["Which UK universities are strong for economics?", "哪些英国大学的经济专业比较强？"], ["Compare London and Manchester for a student", "伦敦和曼彻斯特，对留学生来说怎么比较？"]],
       "3": [["How should a personal statement start?", "个人陈述应该怎么开头？"], ["What makes a good reference letter?", "一封好的推荐信要写什么？"]],
       "4": [["Give me 3 post ideas for this week", "这周给我 3 个发帖选题"], ["What's today's news?", "今天有什么新闻？"]],
-      "5": [["What's waiting for me today?", "今天有什么等我处理？"], ["Hold a team meeting about today's news", "就今天的新闻开个团队会"]],
+      "5": [["What's waiting for me today?", "今天有什么等我处理？"]],
       "6": [["How much will a UK master's in London cost for one year?", "在伦敦读一年硕士大概要多少钱？"], ["What money must a student show for the visa?", "学生签证需要证明多少资金？"]]
     }[b.id] || [];
     var have = tasksFor(b).map(function (t) { return t.ask; });

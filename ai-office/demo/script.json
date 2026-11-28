@@ -34,7 +34,7 @@
    "bot": "1",
    "match": "lily_mama_12",
    "en": "Thank you, Ms Chen! 12 is a great age to plan for 13+ entry. I've noted everything and we'll send you times for the free consultation shortly.\n\n【咨询登记】\nWho: parent (Ms Chen)\nStudent: 12, from Xiaohongshu comment\nWants: UK boarding school, from next September\nBudget: about ¥400,000 a year\nName / contact: Ms Chen / WeChat lily_mama_12\nNotes: agreed to use these details to arrange a consultation\n【登记完成】",
-   "zh": "谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，我们马上把免费咨询的可选时间发给您。\n\n【咨询登记】\n身份：家长（陈女士）\n学生年龄/年级：12 岁（来自小红书评论）\n意向阶段/专业：英国寄宿学校，明年 9 月入学\n预算：每年约 40 万人民币\n称呼/联系方式：陈女士 / 微信 lily_mama_12\n备注：同意使用以上信息安排咨询\n【登记完成】"
+   "zh": "谢谢陈女士！12 岁正好可以规划 13+ 入学。信息都记下了，我们马上把免费咨询的可选时间发给您。\n\n【咨询登记】\n身份：家长（陈女士）\n学生年龄/年级：12 岁\n意向阶段/专业：英国寄宿学校，明年 9 月入学\n预算：每年约 40 万人民币\n称呼/联系方式：陈女士 / 微信 lily_mama_12\n备注：同意使用以上信息安排咨询\n【登记完成】"
   },
   {
    "bot": "1",
@@ -218,7 +218,7 @@
   },
   {
    "bot": "2",
-   "match": "金融硕士|finance master|陈浩|Chen Hao",
+   "match": "金融硕士|finance master|陈浩|Chen Hao|working adult|在职人士|一年制硕士|one-year UK master|\\b28\\b|28 岁",
    "en": "One-line summary: a finance master's for September 2027 with IELTS 6.5 and about ¥450,000; Manchester, Leeds and Bristol fit the budget, London is a stretch.\n\n**Options to consider (check each university's website)**\n| University | Note |\n|---|---|\n| University of Manchester | Check if IELTS 7.0 is needed |\n| University of Leeds | Good value |\n| University of Bristol | Strong finance department |\n| King's College London | Stretch on budget |\n\n**Still to check:** degree grades, work experience.",
    "zh": "一句话总结：2027 年 9 月读金融硕士，雅思 6.5，预算约 45 万；曼彻斯特、利兹、布里斯托符合预算，伦敦为冲刺。\n\n**可以考虑的大学（以各校官网为准）**\n| 大学 | 备注 |\n|---|---|\n| 曼彻斯特大学 | 确认是否要求雅思 7.0 |\n| 利兹大学 | 性价比高 |\n| 布里斯托大学 | 金融专业强 |\n| 伦敦国王学院 | 预算上属冲刺 |\n\n**还需确认：**本科成绩、工作经历。"
   },
@@ -257,6 +257,12 @@
    "match": "Grade today's leads|线索分级",
    "en": "【简要】Today: 1 hot lead, 2 warm, 1 cold.\n【完整报告】\n| Lead | Grade | Next |\n|---|---|---|\n| Lily's mum | Hot | consultation booked |\n| Kevin | Warm | day-3 follow-up with a London vs Manchester guide |\n| Xiaomei | Warm | day-1 follow-up offering statement coaching |\n| Travel Cat | Cold | add to monthly newsletter |\nEvery message goes to Sylvie before sending.",
    "zh": "【简要】今天：1 位热线索，2 位温，1 位冷。\n【完整报告】\n| 线索 | 等级 | 下一步 |\n|---|---|---|\n| Lily妈妈 | 热 | 已约咨询 |\n| Kevin | 温 | 第 3 天发伦敦与曼城对比资料 |\n| 小美 | 温 | 第 1 天跟进，介绍文书辅导 |\n| 旅行的猫 | 冷 | 加入每月资讯 |\n每条消息发送前都经过 Sylvie 审核。"
+  },
+  {
+   "bot": "17",
+   "match": "Quality check before sending|发送前质量检查",
+   "en": "【通过】 Polite, no promises, no fees.",
+   "zh": "【通过】 礼貌、不承诺、不报价。"
   },
   {
    "bot": "1",
