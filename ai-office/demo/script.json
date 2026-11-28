@@ -266,6 +266,18 @@
   },
   {
    "bot": "1",
+   "match": "What happens after I book a free consultation|预约免费咨询之后会怎样",
+   "en": "After you book, we send you two times to choose from. The consultation is about 30 minutes by WeChat voice or phone: a consultant goes through the student's background, goals and budget, explains realistic options and the timeline, and answers your questions. There's no obligation, and any paid service is agreed in writing first.",
+   "zh": "预约后，我们会发给您两个可选时间。免费咨询约 30 分钟，用微信语音或电话：顾问会了解学生的背景、目标和预算，讲清现实可行的选择和时间安排，并回答您的问题。不需要任何承诺，如有收费服务，会先书面约定。"
+  },
+  {
+   "bot": "5",
+   "match": "team meeting about today's news|开个团队会",
+   "en": "Meeting summary: the visa-funds change from 30 November is the main news.\n- Luc: keep watching GOV.UK for the official page.\n- Bernadette: update the cost sheet once it's confirmed.\n- Emily: draft a calm Moments post for parents (to your desk for approval).\n- Monica: use the new figures only after you approve.\n- Needs your decision: update the cost sheet now or wait for GOV.UK?",
+   "zh": "会议小结：最重要的是 11 月 30 日起的签证资金调整。\n- Luc：继续关注 GOV.UK 的正式页面。\n- Bernadette：确认后更新费用表。\n- Emily：给家长写一条平和的朋友圈（送您审批）。\n- Monica：您批准后才使用新数字。\n- 需要您决定：现在更新费用表，还是等 GOV.UK 正式公布？"
+  },
+  {
+   "bot": "1",
    "match": "A-Level for my daughter|女儿去英国读A-Level",
    "en": "Hello, happy to help. Our research team confirms: A-levels are a great route, and many good UK schools take students at 16 for a two-year course. To find the right schools, could you tell me a little about your daughter: her age, current grade, English level and when she'd like to start? The details are only used to arrange your free consultation, is that OK?",
    "zh": "您好，很高兴为您服务。我们的研究顾问确认过：A-Level 是很好的路径，很多英国好学校 16 岁可以入读两年制课程。想先了解一下女儿的情况：年龄、现在几年级、英语水平、打算什么时候入学？这些信息只用于为您安排免费咨询，可以吗？"
@@ -362,7 +374,7 @@
   },
   {
    "bot": "1",
-   "match": "^\\s*(hello|hi|你好)\\b",
+   "match": "^\\s*(hello|hi|你好|您好)(?![a-z])",
    "en": "Hello, this is Glostudy. We specialise in UK study, and the first consultation is free (about 30 minutes). Are you a parent, a student, or a working adult?",
    "zh": "您好，这里是寰学 Glostudy，我们专注英国留学，第一次咨询免费（约 30 分钟）。请问您是家长、学生，还是在职人士？"
   },

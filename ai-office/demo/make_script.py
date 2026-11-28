@@ -31,7 +31,7 @@ Notes: agreed to use these details to arrange a consultation
 备注：同意使用以上信息安排咨询
 【登记完成】
 """)
-ans("1", r"^\s*(hello|hi|你好)\b", """
+ans("1", r"^\s*(hello|hi|你好|您好)(?![a-z])", """
 Hello! I'm Monica from Glostudy 👋 We only do UK study, and the first consultation is free. Are you a parent, a student, or a working adult thinking about studying?
 """, """
 你好，我是寰学的莫妮卡 👋 我们只做英国留学，第一次咨询免费。想先了解一下：你是家长、学生，还是在职想去读书呢？
@@ -906,6 +906,9 @@ desk("26", r"need a UK guardian|英国监护人", "【简要】1 under-18 studen
 desk("27", r"Grade today's leads|线索分级", "【简要】Today: 1 hot lead, 2 warm, 1 cold.\n【完整报告】\n| Lead | Grade | Next |\n|---|---|---|\n| Lily's mum | Hot | consultation booked |\n| Kevin | Warm | day-3 follow-up with a London vs Manchester guide |\n| Xiaomei | Warm | day-1 follow-up offering statement coaching |\n| Travel Cat | Cold | add to monthly newsletter |\nEvery message goes to Sylvie before sending.", "【简要】今天：1 位热线索，2 位温，1 位冷。\n【完整报告】\n| 线索 | 等级 | 下一步 |\n|---|---|---|\n| Lily妈妈 | 热 | 已约咨询 |\n| Kevin | 温 | 第 3 天发伦敦与曼城对比资料 |\n| 小美 | 温 | 第 1 天跟进，介绍文书辅导 |\n| 旅行的猫 | 冷 | 加入每月资讯 |\n每条消息发送前都经过 Sylvie 审核。")
 
 desk("17", r"Quality check before sending|发送前质量检查", "【通过】 Polite, no promises, no fees.", "【通过】 礼貌、不承诺、不报价。")
+
+desk("1", r"What happens after I book a free consultation|预约免费咨询之后会怎样", "After you book, we send you two times to choose from. The consultation is about 30 minutes by WeChat voice or phone: a consultant goes through the student's background, goals and budget, explains realistic options and the timeline, and answers your questions. There's no obligation, and any paid service is agreed in writing first.", "预约后，我们会发给您两个可选时间。免费咨询约 30 分钟，用微信语音或电话：顾问会了解学生的背景、目标和预算，讲清现实可行的选择和时间安排，并回答您的问题。不需要任何承诺，如有收费服务，会先书面约定。")
+desk("5", r"team meeting about today's news|开个团队会", "Meeting summary: the visa-funds change from 30 November is the main news.\n- Luc: keep watching GOV.UK for the official page.\n- Bernadette: update the cost sheet once it's confirmed.\n- Emily: draft a calm Moments post for parents (to your desk for approval).\n- Monica: use the new figures only after you approve.\n- Needs your decision: update the cost sheet now or wait for GOV.UK?", "会议小结：最重要的是 11 月 30 日起的签证资金调整。\n- Luc：继续关注 GOV.UK 的正式页面。\n- Bernadette：确认后更新费用表。\n- Emily：给家长写一条平和的朋友圈（送您审批）。\n- Monica：您批准后才使用新数字。\n- 需要您决定：现在更新费用表，还是等 GOV.UK 正式公布？")
 
 A[:0] = [x for x in C if x not in A]
 ROUTES = [

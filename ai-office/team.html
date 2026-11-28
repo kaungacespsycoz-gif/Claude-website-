@@ -3205,7 +3205,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "17": [4.6, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
       "1": [6.8, 82.56, 7.3, 4.8], "10": [19.7, 84.4, 7.3, 6.64], "7": [35.5, 84.4, 5.6, 6.4], "9": [53.8, 82.56, 7.5, 5.04], "11": [74.9, 84.96, 6.2, 6.4], "8": [87.3, 84.0, 9.6, 7.6]
     },
-    boss: [32, 5.2, 25, 5.6], ceoPlate: [44.5, 12.6], logo: [45.5, 3.4], aliya: [42, 5.2, 6.5, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [52, 0.6], plates: {},
+    boss: [32, 5.2, 25, 5.6], ceoPlate: [44.5, 11.2], logo: [45.5, 2.9], aliya: [42, 5.2, 6.5, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [52, 0.6], plates: {},
     floorTags: [["5F · CEO Suite · Aliya, Medina & Ado", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
     floorY: { 5: 13.4, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
     paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "7>scout": [[38.3, 89.6], [38.3, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 48.5]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
@@ -3654,8 +3654,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     flush();
     return out.join("\n")
       .replace(/【简要】\s*/g, "").replace(/【线索】/g, "").replace(/【评论回复】/g, "").replace(/\n*【完整报告】\n*/g, "\n\n<strong>Full report</strong>\n")
-      .replace(/\n?【转人工】/g, '\n<span class="flag">Handed to a person</span>')
-      .replace(/【咨询登记】/g, '<span class="flag book">Booking summary</span>')
+      .replace(/\n?【转人工】/g, '\n<span class="flag">' + (state.lang === "en" ? "Handed to a person" : "已转人工") + '</span>')
+      .replace(/【咨询登记】/g, '<span class="flag book">' + (state.lang === "en" ? "Booking summary" : "登记摘要") + '</span>')
       .replace(/\n?【登记完成】/g, "");
   }
   // Emily's morning news check is filed into the shared "intel" list by the daily task (claude.ai version)
@@ -5777,7 +5777,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (b.id === "4") { var pb = document.createElement("button"); pb.type = "button"; pb.className = "next"; pb.innerHTML = "<span>" + (state.lang === "en" ? "📷 Post from a photo" : "📷 用照片写一条帖子") + "</span>"; pb.onclick = openPhotoPost; chips.appendChild(pb); }
     tasksFor(b).concat(deskQuestions(b)).forEach(function (q, k) {
       var btn = document.createElement("button"); btn.type = "button";
-      var first = q.ask.split("\n")[0]; btn.innerHTML = DESK_ICONS[k % DESK_ICONS.length] + "<span>[" + esc(q.demo ? "Demo booking" : first) + "]</span>"; btn.title = q.ask;
+      var en = state.lang === "en", first = q.ask.split("\n")[0].replace(/^【咨询登记】\s*$/, en ? "New client profile → draft a shortlist" : "新客户资料 → 出选校清单").replace(/^【[^】]*】\s*/, "");
+      if (first.length > 60) first = first.slice(0, 58) + "…";
+      btn.innerHTML = DESK_ICONS[k % DESK_ICONS.length] + "<span>" + esc(q.demo ? (en ? "Demo booking" : "演示预约") : first) + "</span>"; btn.title = q.ask;
       btn.onclick = function () { send(q.ask, q.expect ? q : null); };
       chips.appendChild(btn);
     });
