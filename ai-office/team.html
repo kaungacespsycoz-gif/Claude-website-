@@ -1297,6 +1297,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 @keyframes padPulse { 50% { box-shadow: 0 0 0 1px var(--c), 0 0 22px var(--c); } }
 .call-chip { animation-name: chipIn; } @keyframes chipIn { from { opacity: 0; } to { opacity: 1; } }
 @media (max-width: 640px) { .call-chip { display: none; } }
+
+/* live status pills on the open floor */
+.st-floor { position: absolute; transform: translate(-50%, -50%); z-index: 3; display: flex; gap: .55cqw; align-items: center; max-width: 18cqw; pointer-events: none;
+  font: 600 clamp(6.5px, 1.05cqw, .7rem) var(--sans); color: #fff; background: rgba(10,14,20,.74); border: 1px solid var(--c); border-radius: 999px; padding: .2cqw .95cqw; white-space: nowrap; transition: opacity .3s; }
+.st-floor span { overflow: hidden; text-overflow: ellipsis; }
+.st-floor i { flex: none; width: .75cqw; height: .75cqw; min-width: 4px; min-height: 4px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 6px #3ddc84; }
+.st-floor.idle { opacity: .55; border-color: rgba(255,255,255,.25); } .st-floor.idle i { background: #8a94a0; box-shadow: none; }
+@media (max-width: 640px) { .st-floor.idle { display: none; } .st-floor { max-width: 24cqw; } }
 </style>
 
 <div class="app">
@@ -3111,8 +3119,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 2432", maxW: 1080,
     spots: {
       "5": [3.7, 4.3, 13, 11.7], "21": [18, 9.4, 4.6, 4.9],
-      "12": [3.4, 32.5, 8, 6.5], "2": [18, 32.5, 6.5, 6.5], "3": [32, 32.5, 6.8, 6.3], "13": [44.5, 29.5, 6.2, 9], "14": [64.7, 32.2, 5.6, 6.8], "6": [82.2, 33.5, 5.2, 5.5],
-      "17": [2.8, 57.6, 6, 6.2], "4": [18.5, 56.6, 7.9, 7.2], "16": [50, 57.4, 6, 6.4], "15": [63, 56.6, 4.2, 6.6], "18": [73.1, 57.6, 6, 6.2], "19": [86.1, 57.8, 7.4, 6.6],
+      "12": [5.1, 32.4, 7, 7.2], "2": [18, 32.4, 7.4, 7.4], "3": [30.6, 32.4, 6.5, 7.4], "13": [43.5, 30.8, 8.3, 8.6], "14": [63, 32.6, 7.4, 7.2], "6": [77.8, 33, 6.5, 7],
+      "17": [2.8, 59, 9.3, 6.6], "4": [20.4, 58.6, 7.4, 6.8], "16": [49.5, 57.6, 7.4, 7.6], "15": [62.5, 57.2, 5.1, 7.2], "18": [73.1, 58.4, 7.4, 7.2], "19": [85.2, 59.2, 8.3, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
     boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 8.5], meet: [56, 2.5], plates: {},
@@ -3172,7 +3180,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       img.style.transform = "scale(1.04) translate(" + (-dx * 1.2).toFixed(2) + "%," + (-dy * 1.2).toFixed(2) + "%)";
     });
     frame.addEventListener("pointerleave", function () { img.style.transform = ""; });
-    pvReady = true; setTimeout(drawQueues, 0);
+    pvReady = true; setTimeout(drawQueues, 0); setTimeout(floorStatus, 0);
     pvSelect(state.bot.id);
     Object.keys(state.busy).forEach(function (id) { pvWorking(id, true); });
     pvInbox(pendingReview());
@@ -3204,7 +3212,18 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
   }
   function floorOf(id) { var s = SPOTS_PV[id]; return s ? 4 - Math.min(3, Math.floor(s[1] / 25)) : 0; }
-  function floorPad(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, (LAY.floorY || {})[floorOf(id)] || s[1] + s[3]] : null; }
+  function floorPad(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, ((LAY.floorY || {})[floorOf(id)] || s[1] + s[3]) + 1.6] : null; }
+  // live working status on the floor in front of each officer (building view)
+  function floorStatus() {
+    var box = $("hotspots"); if (!box || !pvReady) return; var en = state.lang === "en";
+    BOTS.forEach(function (b) {
+      var s = SPOTS_PV[b.id]; if (!s) return; var el = $("st" + b.id);
+      if (!el) { el = document.createElement("span"); el.className = "st-floor"; el.id = "st" + b.id; el.style.cssText = "left:" + (s[0] + s[2] / 2) + "%;top:" + ((LAY.floorY || {})[floorOf(b.id)] - 1.4) + "%;--c:" + COLORS[b.color]; box.appendChild(el); }
+      var busy = state.busy[b.id], txt = busy ? busyText(b.id) : (en ? "available" : "空闲");
+      el.classList.toggle("idle", !busy); el.title = b.name + " · " + txt;
+      if (el.dataset.t !== txt) { el.dataset.t = txt; el.innerHTML = "<i></i><span>" + esc(txt) + "</span>"; }
+    });
+  }
   function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
 
   // communication lines: a smooth glowing beam with a bright pulse travelling from the asker to the helper
@@ -3629,7 +3648,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (state.desk) drawDesk();
   }
 
-  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); if (state.bot.id === id) { drawChat(); deskLive(); } }
+  function setBusy(id, kind) { if (kind) state.busy[id] = kind; else delete state.busy[id]; sceneWorking(id, !!kind); if (state.reports) inRefresh(); if (pano) pano.refresh(); planRefresh(); drawFloor(); drawHud(); floorStatus(); if (state.bot.id === id) { drawChat(); deskLive(); } }
   function flashDone(id) { state.done[id] = true; sceneDone(id); drawFloor(); setTimeout(function () { delete state.done[id]; drawFloor(); }, 4000); }
   function needsKey() { return state.engine === "deepseek" && !deep.key; }
 
@@ -3903,7 +3922,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (k === "task") return state.taskLabel[id] || "working";
     if (k === "call") return "helping " + ((state.callFrom || {})[id] || "a colleague");
     if (k === "job") return "on a client";
-    if (k === "cust") return ["4", "15", "16"].indexOf(id) >= 0 ? "replying to a comment" : "chatting with a customer";
+    if (k === "cust") { var lc = (live.lane || {})[id] || (live.social || {})[id], nm = lc ? liveName(lc) : ""; return ["4", "15", "16"].indexOf(id) >= 0 ? (nm ? "replying to " + nm : "replying to a comment") : (nm ? "chatting with " + nm : "chatting with a customer"); }
     return "working";
   }
   function actsFor(b) { return logFor(b.id).slice().reverse(); }
@@ -4248,8 +4267,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       booked: { pts: [[53, 90], [58, 90.5], [63, 90]] },
       lead: { pts: [[85, 91.2], [90, 91.8], [95, 91.2]] },
       joey: { pts: [[84, 88.6], [84, 90.2]] },
-      comments: { pts: [[30, 64.4], [34, 65], [38, 64.4], [42, 65], [46, 64.4]] },
-      a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[26, 64.2]] }, s15: { pts: [[67.5, 64]] }, s16: { pts: [[53.5, 64.6]] }
+      comments: { pts: [[31, 65.4], [34.5, 66], [38, 65.4], [41.5, 66], [45, 65.4]] },
+      a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[25, 65.8]] }, s15: { pts: [[66.5, 65.6]] }, s16: { pts: [[53.5, 66.4]] }
     },
     in1: {}, in2: {}
   };
