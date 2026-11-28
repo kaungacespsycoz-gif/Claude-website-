@@ -1284,6 +1284,19 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .hand-row b { flex: 1; font-size: .86rem; } .hand-row small { display: block; color: #a9c6dc; font-weight: 400; font-size: .72rem; } .hand-row em { font-style: normal; font-size: .7rem; color: #ffd29a; } .hand-row.late { border-left-color: #ff6b5c; } .hand-row.late em { color: #ffb1a8; }
 .consent { font-size: .72rem; padding: 3px 8px; border-radius: 6px; align-self: flex-start; } .consent.ok { color: #1f7a45; background: rgba(61,220,132,.14); } .consent.no { color: #9a5a00; background: rgba(255,180,92,.18); }
 .ho-out { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: .78rem; } .ho-out button { border: 1px solid rgba(var(--holo), .4); background: rgba(8,20,32,.6); color: #eaf6ff; border-radius: 99px; padding: 5px 10px; font: 600 .76rem var(--sans); cursor: pointer; }
+
+/* ---------- interactions land on the open floor ---------- */
+.floor-pad { position: absolute; width: 7cqw; height: 1.6cqw; margin: -.8cqw 0 0 -3.5cqw; border-radius: 50%; pointer-events: none; z-index: 3;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--c) 55%, transparent) 0, color-mix(in srgb, var(--c) 18%, transparent) 55%, transparent 72%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 70%, transparent), 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); animation: padIn .35s ease-out, padPulse 1.6s ease-in-out .35s infinite; }
+.tether { position: absolute; width: 2px; margin-left: -1px; pointer-events: none; z-index: 2; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--c) 80%, transparent)); opacity: .55; animation: padIn .35s ease-out; }
+.call-chip { position: absolute; transform: translate(-50%, 1.6cqw); z-index: 6; pointer-events: none; white-space: nowrap; max-width: 22cqw; overflow: hidden; text-overflow: ellipsis;
+  font: 600 clamp(7px, 1.15cqw, .72rem) var(--sans); color: #fff; background: rgba(10,14,20,.78); border: 1px solid var(--c); border-radius: 999px; padding: .15cqw .9cqw; animation: padIn .4s ease-out; }
+.photo-frame .ring-badge { scale: clamp(.7, calc(100cqw / 900px), 1); }
+@keyframes padIn { from { opacity: 0; transform: scale(.6); } to { opacity: 1; } }
+@keyframes padPulse { 50% { box-shadow: 0 0 0 1px var(--c), 0 0 22px var(--c); } }
+.call-chip { animation-name: chipIn; } @keyframes chipIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 640px) { .call-chip { display: none; } }
 </style>
 
 <div class="app">
@@ -1799,6 +1812,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     var from = BY_ID[fromId], ids = calls.map(function (c) { return TEAM_IDS[c.who]; });
     custMet(fromId, ids);
     var mine = state.asking === fromId;
+    state.callTasks = {}; calls.forEach(function (c, i) { state.callTasks[ids[i]] = c.task || ""; });
     pvCall(fromId, ids); if (mine) { callMap(fromId, ids, true); if (v3) v3.call(fromId, ids); }
     activity(fromId, from.name + " asked " + ids.map(function (id) { return BY_ID[id].name; }).join(" and ") + (fromId === "5" ? " to work on your request" : " for help"));
     var results = await Promise.all(calls.map(function (c, i) {
@@ -3103,7 +3117,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     },
     boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 8.5], meet: [56, 2.5], plates: {},
     floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52], ["1F · Reception · the Friends team", 75.8]],
-    paths: { "1>scout": [[10, 82], [50, 97], [97, 96], [97, 70], [97, 45], [60, 42], [21, 36]], "2>boss": [[21, 36], [60, 45], [97, 45], [97, 20], [60, 17], [50, 12]], "5>boss": [[8, 10], [30, 16], [50, 12]] } };
+    floorY: { 4: 18.5, 3: 42.5, 2: 69, 1: 95.5 },
+    paths: { "1>scout": [[10.4, 84], [10.4, 95.5], [97, 95.5], [97, 42.5], [21.2, 42.5], [21.2, 36]], "2>boss": [[21.2, 36], [21.2, 42.5], [97, 42.5], [97, 18.5], [50, 18.5], [50, 12]], "5>boss": [[10, 12], [10, 18.5], [50, 18.5], [50, 12]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
   var SPOTS_PV = LAY.spots, BOSS_PV = LAY.boss, PATHS_PV = LAY.paths;
   var pvReady = false;
@@ -3188,6 +3203,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("pvCardName").textContent = b.name;
     $("pvCardRole").textContent = b.title + " · " + (state.busy[b.id] ? (state.busy[b.id] === "job" ? "working on a client" : "working") : "idle");
   }
+  function floorOf(id) { var s = SPOTS_PV[id]; return s ? 4 - Math.min(3, Math.floor(s[1] / 25)) : 0; }
+  function floorPad(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, (LAY.floorY || {})[floorOf(id)] || s[1] + s[3]] : null; }
   function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
 
   // communication lines: a smooth glowing beam with a bright pulse travelling from the asker to the helper
@@ -3225,13 +3242,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function pvCall(fromId, ids) {
     if (!pvReady) return;
     pvCallEnd(fromId);
-    var a = hsCenter(fromId); if (!a) return;
+    var a = floorPad(fromId); if (!a) return;
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("class", "call-lines"); svg.id = "callLines"; svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
     ids.forEach(function (id) {
-      var b = hsCenter(id); if (!b) return;
-      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      l.setAttribute("x1", a[0]); l.setAttribute("y1", a[1]); l.setAttribute("x2", b[0]); l.setAttribute("y2", b[1]);
+      var b = floorPad(id); if (!b) return;
+      // the call travels across the open floor: a low arc on the same floor, a straight run between floors
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      l.setAttribute("d", Math.abs(a[1] - b[1]) < .5 ? "M" + a[0] + " " + a[1] + " Q" + (a[0] + b[0]) / 2 + " " + (a[1] + 3.2) + " " + b[0] + " " + b[1] : "M" + a[0] + " " + a[1] + " L" + b[0] + " " + b[1]);
       l.setAttribute("stroke", state.asking === fromId ? "#ffd36a" : COLORS[BY_ID[id].color]); l.setAttribute("vector-effect", "non-scaling-stroke");
       if (state.asking === fromId) svg.classList.add("ceo");
       svg.appendChild(l);
@@ -3244,14 +3262,19 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function ringBadges(fromId, ids) {
     ringOff(); var box = $("hotspots"); if (!box || !pvReady) return;
     [fromId].concat(ids).forEach(function (id, k) {
-      var c = hsCenter(id); if (!c) return;
+      var c = floorPad(id), sp = SPOTS_PV[id]; if (!c) return;
+      var col = k === 0 && state.asking === fromId ? "#ffd36a" : COLORS[BY_ID[id].color];
+      var pad = document.createElement("span"); pad.className = "ring-fx floor-pad"; pad.style.cssText = "left:" + c[0] + "%;top:" + c[1] + "%;--c:" + col; box.appendChild(pad);
+      var tet = document.createElement("span"); tet.className = "ring-fx tether"; tet.style.cssText = "left:" + c[0] + "%;top:" + (sp[1] + sp[3]) + "%;height:" + Math.max(0, c[1] - sp[1] - sp[3]) + "%;--c:" + col; box.appendChild(tet);
       var el = document.createElement("span"); el.className = "ring-badge " + (k === 0 ? "caller" : "callee"); el.id = "rb" + id;
-      el.style.left = c[0] + "%"; el.style.top = (SPOTS_PV[id] ? SPOTS_PV[id][1] - .8 : c[1]) + "%";
-      el.style.setProperty("--c", k === 0 && state.asking === fromId ? "#ffd36a" : COLORS[BY_ID[id].color]);
+      el.style.left = c[0] + "%"; el.style.top = c[1] + "%";
+      el.style.setProperty("--c", col);
       el.innerHTML = "<i></i><i></i><b>" + PHONE_SVG + "</b>"; box.appendChild(el);
+      var task = k > 0 && (state.callTasks || {})[id];
+      if (task) { var ch = document.createElement("span"); ch.className = "ring-fx call-chip"; ch.style.cssText = "left:" + c[0] + "%;top:" + c[1] + "%;--c:" + col; ch.textContent = BY_ID[id].name + " · " + (task.length > 34 ? task.slice(0, 33) + "…" : task); box.appendChild(ch); }
     });
   }
-  function ringOff() { Array.prototype.forEach.call(document.querySelectorAll(".ring-badge"), function (e) { e.remove(); }); }
+  function ringOff() { Array.prototype.forEach.call(document.querySelectorAll(".ring-badge, .ring-fx"), function (e) { e.remove(); }); }
   function ringAnswered(id) {
     [$("rb" + id), $("cmr" + id)].forEach(function (el) { if (el) { el.classList.add("answered"); el.querySelector("b").innerHTML = "✓"; } });
   }
@@ -4228,20 +4251,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       comments: { pts: [[30, 64.4], [34, 65], [38, 64.4], [42, 65], [46, 64.4]] },
       a1: { pts: [[16, 88.8]] }, a7: { pts: [[41.5, 90]] }, s4: { pts: [[26, 64.2]] }, s15: { pts: [[67.5, 64]] }, s16: { pts: [[53.5, 64.6]] }
     },
-    in1: {
-      wechat: { pts: [[15, 57], [20, 59], [25, 57], [30, 59], [34, 55]] },
-      human: { pts: [[24, 85], [30, 83]] },
-      web: { pts: [[43, 62], [48, 67], [67, 67], [72, 62]] },
-      booked: { pts: [[35, 40], [39, 41], [43, 40]] },
-      lead: { pts: [[75, 78], [74, 88], [97, 91]] },
-      joey: { pts: [[82, 62], [82, 68]] },
-      a1: { pts: [[20, 40]] }, a7: { pts: [[61, 58]] }
-    },
-    in2: {
-      comments: { pts: [[33, 83], [40, 88], [50, 86], [60, 88], [67, 83]] },
-      s4: { pts: [[30, 62]] }, s15: { pts: [[74, 63]] }, s16: { pts: [[57, 62]] }
-    }
+    in1: {}, in2: {}
   };
+  (function () { var P = LIVE_POS.photo; Object.keys(P).forEach(function (z) { var y0 = P[z].pts[0][1], n = y0 >= 75 ? 1 : 2; LIVE_POS["in" + n][z] = { pts: P[z].pts.map(function (q) { return [q[0], (q[1] - (4 - n) * 25) * 4]; }) }; }); })();
   LIVE_POS.pano2 = LIVE_POS.in2;
   LIVE_POS.pano1 = LIVE_POS.in1;
   var ZONE_NAME = { wechat: { en: "WeChat line", zh: "微信排队" }, lead: { en: "Leads bench", zh: "线索长椅" }, web: { en: "Website sofa", zh: "官网沙发" }, booked: { en: "Booked", zh: "已登记" }, human: { en: "Human desk", zh: "人工台" }, comments: { en: "Comments · Emily, Mindy, Gabriel", zh: "评论区 · 社媒团队" } };
@@ -4545,10 +4557,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
-    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [12, 29, 6, 9], "21": [27, 64, 6, 9] }, boss: [33, 22, 28, 36], room: [70, 15, 24, 40] },
-    3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [16, 20, 6, 9], "2": [15.5, 53, 6, 8], "3": [42, 17, 5, 9], "13": [60, 12, 5, 12], "14": [47.5, 49, 6, 9], "6": [75.5, 29, 5.5, 9] } },
-    2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [16, 10, 6, 9], "4": [36, 12, 5, 9], "16": [48.5, 12, 5, 9], "15": [12, 74, 6, 12], "18": [47.5, 77, 5, 10], "19": [77, 19, 5, 9] } },
-    1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [20, 13, 6, 9], "10": [41, 14, 6, 9], "7": [39.5, 43, 5.5, 11], "9": [49.5, 63, 5, 8], "11": [69, 10, 6, 9], "8": [79.5, 72, 5.5, 9] } }
+    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9] }, boss: [32, 10, 20, 22], room: [57, 7, 25, 39] },
+    3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10] } },
+    2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [7, 22, 7, 9], "4": [21, 20, 7, 9], "16": [50, 20, 7, 9], "15": [60, 16, 6, 14], "18": [69, 20, 7, 9], "19": [81, 20, 7, 10] } },
+    1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [9, 14, 9, 8], "10": [26, 16, 7, 9], "7": [39, 13, 8, 12], "9": [55, 14, 8, 11], "11": [71, 10, 9, 14], "8": [87, 31, 7, 10] } }
   };
   function buildPlan() {
     var w = $("sceneWrap"); w.innerHTML = ""; w.classList.add("plan2");
@@ -4572,16 +4584,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     BOTS.forEach(function (b) { var el = $("plBot" + b.id); if (!el) return; var busy = state.busy[b.id]; el.classList.toggle("working", !!busy); el.classList.toggle("selected", state.bot.id === b.id); el.querySelector("em").textContent = busy ? busyText(b.id) : "idle"; });
   }
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
-  var INSIDE = {
-    4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: { "5": [8, 17, 14, 80], "21": [26, 40, 9, 26] }, boss: [38, 30, 24, 28], room: [75, 10, 25, 45], files: [50, 40],
-      dots: [[30, 72, "Lounge"], [55, 70, "CEO desk"], [82, 50, "Boardroom"], [88, 88, "↓ 3F", 3]], seatBox: [78, 36, 18, 10] },
-    3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: { "12": [4, 31, 10, 19], "2": [20, 35, 14, 22], "3": [38, 30, 7, 25], "13": [51, 21, 9, 31], "14": [63, 31, 8, 29], "6": [78, 45, 14, 50] },
-      dots: [[55, 78, "Aisle"], [90, 30, "↑ 4F", 4], [96, 52, "↓ 2F", 2]] },
-    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: { "17": [0, 22, 12, 66], "4": [27, 36, 7, 26], "16": [55, 38, 7, 26], "15": [70, 29, 9, 32], "18": [80, 45, 12, 50], "19": [90, 25, 8, 40] },
-      dots: [[50, 93, "Comments lounge"], [85, 22, "↑ 3F", 3], [97, 60, "↓ 1F", 1]] },
-    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: { "10": [2, 44, 12, 48], "1": [11, 17, 7, 14], "7": [50, 20, 9, 40], "9": [37, 22, 5, 9], "11": [72, 17, 7, 26], "8": [84, 29, 10, 50] },
-      dots: [[4, 30, "Live chats", 0, "cust"], [70, 40, "Consult rooms"], [92, 15, "↑ 2F", 2]] }
-  };
+  // Inside floors use the same pictures as the building, so positions come straight from the building layout
+  function inBox(v, n) { var off = (4 - n) * 25; return [v[0], (v[1] - off) * 4, v[2], v[3] * 4]; }
+  var INSIDE = { 4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: {}, boss: inBox(LAY.boss, 4), room: [65, 5, 28, 50], files: [50, 47],
+      dots: [[24, 62, "Lounge"], [50, 66, "CEO desk"], [79, 58, "Boardroom"], [95, 70, "↓ 3F", 3]], seatBox: [70, 30, 20, 12] },
+    3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: {}, dots: [[50, 76, "Aisle"], [93, 30, "↑ 4F", 4], [96, 62, "↓ 2F", 2]] },
+    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: {}, dots: [[38, 60, "Comments lounge"], [94, 22, "↑ 3F", 3], [97, 62, "↓ 1F", 1]] },
+    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: {}, dots: [[12, 76, "Live chats", 0, "cust"], [72, 52, "Consult rooms"], [93, 24, "↑ 2F", 2]] } };
+  Object.keys(LAY.spots).forEach(function (id) { var v = LAY.spots[id], n = 4 - Math.min(3, Math.floor(v[1] / 25)); INSIDE[n].bots[id] = inBox(v, n); });
   fillPano();
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
   function inLayout() {
@@ -4677,9 +4687,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     if (!on) { if (old) { old.classList.remove("on"); setTimeout(function () { old.remove(); }, 600); } return; }
     if (old) old.remove();
     if (!host) return;
-    var L = LAYOUTS.f4, a = hsCenter(fromId), m = document.createElement("div"), ceo = fromId !== "1" && fromId !== "7"; m.className = "call-map" + (ceo ? " ceo" : "");
-    var lines = ids.map(function (id) { var b = hsCenter(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
-    var rings = [fromId].concat(ids).map(function (id, k) { var c = hsCenter(id); if (!c) return ""; var col = k === 0 && ceo ? "#ffd36a" : COLORS[BY_ID[id].color];
+    var L = LAYOUTS.f4, a = floorPad(fromId), m = document.createElement("div"), ceo = fromId !== "1" && fromId !== "7"; m.className = "call-map" + (ceo ? " ceo" : "");
+    var lines = ids.map(function (id) { var b = floorPad(id); return b ? '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="' + COLORS[BY_ID[id].color] + '" vector-effect="non-scaling-stroke"/>' : ""; }).join("");
+    var rings = [fromId].concat(ids).map(function (id, k) { var c = floorPad(id); if (!c) return ""; var col = k === 0 && ceo ? "#ffd36a" : COLORS[BY_ID[id].color];
       return '<span class="cm-ring ' + (k === 0 ? "caller" : "callee") + '" id="cmr' + id + '" style="left:' + c[0] + "%;top:" + c[1] + "%;--c:" + col + '"><i></i><i></i><i></i><b>' + PHONE_SVG + "</b></span>"; }).join("");
     m.innerHTML = '<div class="cm-frame" style="transform-origin:' + a[0] + "% " + a[1] + '%"><img alt="" src="' + imgURL(L.img) + '"><svg viewBox="0 0 100 100" preserveAspectRatio="none">' + lines + "</svg>" + rings + '<span class="cm-cap">' + "📞 " + esc(BY_ID[fromId].name) + " is asking " + esc(ids.map(function (id) { return BY_ID[id].name; }).join(" & ")) + "…</span></div>";
     beamify(m.querySelector("svg")); host.appendChild(m); requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("on"); }); });
