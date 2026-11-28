@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>body{margin:0}[hidden]{display:none!important}</style></head><body>
 <title>Glostudy AI Office</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wghtEmily00;500;600;700&family=Space+Grotesk:wghtAdo00;600;700&family=Playfair+Display:ital,wghtMonica,500;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap">
 <style>
 /* Layout: app bar; the office scene (stage) on the left with staff + activity under it; a sticky side panel on the right with Chat / Clients tabs. */
 :root {
@@ -1135,7 +1135,7 @@ body.picked .photo-frame .hs.selected .hs-tag { opacity: 1 !important; transform
   .photo-frame .files { font-size: 8px; padding: 2px 5px; }
 }
 
-.photo-frame .hs-badge.intel { left: auto; right: auto; top: -10px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.photo-frame .hs-badge.intel { left: auto; right: auto; top: 108%; left: 50%; transform: translateX(-50%); white-space: nowrap; }
 @media (max-width: 640px) {
   .photo-frame .hs-badge, .photo-frame .hs-badge.intel { font-size: 7px !important; padding: 1px 4px !important; line-height: 1.3 !important; height: auto !important; border-radius: 6px !important; }
   .photo-frame .floor-tag { font-size: 7px; padding: 1px 6px; }
@@ -1315,9 +1315,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   animation: none; }
 .hs.working ~ .idle-fig { }
 @keyframes idleBreath { 0%, 100% { transform: translateY(0) rotate(0) scale(1, 1); } 30% { transform: translateY(-.35%) rotate(.25deg) scale(1.004, 1.012); } 65% { transform: translateY(-.15%) rotate(-.2deg) scale(1.002, 1.006); } }
-.idle-fig.busy { animation: idleBusy 1.9s ease-in-out infinite; will-change: transform; }
+.idle-fig { opacity: 0; } .idle-fig.busy { opacity: 1; animation: idleBusy 1.9s ease-in-out infinite; will-change: transform; }
 @keyframes idleBusy { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-.5%) rotate(.35deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-.35%) rotate(-.3deg); } }
 @media (prefers-reduced-motion: reduce) { .idle-fig { display: none; } }
+.dl-status.mini { position: sticky; top: 0; z-index: 2; background: rgba(12,18,26,.92); gap: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 6px; } .dl-status.mini .dls-log { max-height: 48px; }
 </style>
 
 <div class="app">
@@ -3139,13 +3140,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   };
   LAYOUTS.f4 = { img: "images/office-team.jpg", aspect: "1080 / 2432", maxW: 1080,
     spots: {
-      "5": [3.7, 4.3, 13, 11.7], "21": [18, 9.4, 4.6, 4.9],
+      "5": [3.7, 3.7, 13, 12.3], "21": [18, 8.8, 4.6, 5.5],
       "12": [5.1, 32.4, 7, 7.2], "2": [18, 32.4, 7.4, 7.4], "3": [30.6, 32.4, 6.5, 7.4], "13": [43.5, 30.8, 8.3, 8.6], "14": [63, 32.6, 7.4, 7.2], "6": [77.8, 33, 6.5, 7],
       "17": [3.2, 59, 6.5, 6.6], "4": [21.3, 59.2, 6.5, 6.4], "16": [52.3, 58.4, 6.5, 7.4], "15": [63.9, 57.4, 6.5, 8.2], "18": [75, 59, 5.6, 6.8], "19": [90.3, 59.2, 6, 6.6],
       "1": [6.8, 78.2, 7.3, 6], "10": [19.7, 80.5, 7.3, 8.3], "7": [35.5, 80.5, 5.6, 8], "9": [53.8, 78.2, 7.5, 6.3], "11": [74.9, 81.2, 6.2, 8], "8": [87.3, 80, 9.6, 9.5]
     },
-    boss: [36.1, 6.4, 28.2, 8], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 8.5], meet: [56, 2.5], plates: {},
-    floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52], ["1F · Reception · the Friends team", 75.8]],
+    boss: [36.1, 9.2, 28.2, 5.2], ceoPlate: [50, 13.4], glow: [50, 11, 30, 8], room: [79, 11], meet: [30, 15.2], plates: {},
+    floorTags: [["4F · CEO Suite · Ado & Anya", 1.2], ["3F · Research & Finance · the Big Bang team", 26.8], ["2F · Social & Marketing · the Emily in Paris team", 52.4], ["1F · Reception · the Friends team", 75.8]],
     floorY: { 4: 18.5, 3: 42.5, 2: 69, 1: 95.5 },
     paths: { "1>scout": [[10.4, 84], [10.4, 95.5], [97, 95.5], [97, 42.5], [21.2, 42.5], [21.2, 36]], "2>boss": [[21.2, 36], [21.2, 42.5], [97, 42.5], [97, 18.5], [50, 18.5], [50, 12]], "5>boss": [[10, 12], [10, 18.5], [50, 18.5], [50, 12]] } };
   var PIC = "f4", LAY = LAYOUTS[PIC];
@@ -3218,7 +3219,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function pvWorking(id, on) {
     if (!pvReady) return; var el = $("hs" + id); if (!el) return;
     el.classList.toggle("working", on);
-    el.querySelector("em").textContent = on ? busyText(id) : "idle";
+    el.querySelector("em").textContent = on ? busyText(id) : (state.lang === "en" ? "idle" : "空闲");
     pvCardUpdate();
   }
   function pvDone(id) { if (!pvReady) return; var el = $("hs" + id); if (!el) return; el.classList.add("just-done"); setTimeout(function () { el.classList.remove("just-done"); }, 2500); }
@@ -3252,7 +3253,24 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       el.classList.toggle("idle", !busy); el.title = b.name + " · " + txt;
       if (el.dataset.t !== txt) { el.dataset.t = txt; el.innerHTML = "<i></i><span>" + esc(txt) + "</span>"; }
     });
+    requestAnimationFrame(layoutPills);
   }
+  function layoutPills() {
+    var box = $("hotspots"); if (!box) return; var W = box.clientWidth, H = box.clientHeight; if (!W) return;
+    var byF = {};
+    BOTS.forEach(function (b) { var el = $("st" + b.id); if (!el || getComputedStyle(el).display === "none") return; el.style.marginTop = "0px"; el.style.marginLeft = "0px"; (byF[floorOf(b.id)] = byF[floorOf(b.id)] || []).push(el); });
+    Object.keys(byF).forEach(function (f) {
+      var list = byF[f].sort(function (a, b) { return parseFloat(a.style.left) - parseFloat(b.style.left); }), rowEnd = [-1e9, -1e9];
+      list.forEach(function (el) {
+        var w = el.offsetWidth, cx = parseFloat(el.style.left) / 100 * W, left = cx - w / 2, shift = 0;
+        if (left < 4) shift = 4 - left; if (left + w > W - 4) shift = W - 4 - left - w; left += shift;
+        el.style.marginLeft = shift + "px";
+        var row = left >= rowEnd[0] + 6 ? 0 : left >= rowEnd[1] + 6 ? 1 : 0;
+        el.style.marginTop = row ? (el.offsetHeight + 4) + "px" : "0px"; rowEnd[row] = left + w;
+      });
+    });
+  }
+  window.addEventListener("resize", function () { requestAnimationFrame(layoutPills); });
   function hsCenter(id) { var s = SPOTS_PV[id]; return s ? [s[0] + s[2] / 2, s[1] + s[3] * .35] : null; }
 
   // communication lines: a smooth glowing beam with a bright pulse travelling from the asker to the helper
@@ -3289,10 +3307,10 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   }
   function pvCall(fromId, ids) {
     if (!pvReady) return;
-    pvCallEnd(fromId);
+    pvCall.t = pvCall.t || {}; clearTimeout(pvCall.t[fromId]); var oldL = $("callLines" + fromId); if (oldL) oldL.remove();
     var a = floorPad(fromId); if (!a) return;
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("class", "call-lines"); svg.id = "callLines"; svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("class", "call-lines"); svg.id = "callLines" + fromId; svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
     ids.forEach(function (id) {
       var b = floorPad(id); if (!b) return;
       // the call travels across the open floor: a low arc on the same floor, a straight run between floors
@@ -3308,27 +3326,27 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   var PHONE_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>';
   // building photo: a ringing phone badge over each colleague being called, in their colour
   function ringBadges(fromId, ids) {
-    ringOff(); var box = $("hotspots"); if (!box || !pvReady) return;
+    ringOff(fromId); var box = $("hotspots"); if (!box || !pvReady) return;
     [fromId].concat(ids).forEach(function (id, k) {
       var c = floorPad(id), sp = SPOTS_PV[id]; if (!c) return;
       var col = k === 0 && state.asking === fromId ? "#ffd36a" : COLORS[BY_ID[id].color];
-      var pad = document.createElement("span"); pad.className = "ring-fx floor-pad"; pad.style.cssText = "left:" + c[0] + "%;top:" + c[1] + "%;--c:" + col; box.appendChild(pad);
-      var tet = document.createElement("span"); tet.className = "ring-fx tether"; tet.style.cssText = "left:" + c[0] + "%;top:" + (sp[1] + sp[3]) + "%;height:" + Math.max(0, c[1] - sp[1] - sp[3]) + "%;--c:" + col; box.appendChild(tet);
+      var pad = document.createElement("span"); pad.className = "ring-fx floor-pad"; pad.style.cssText = "left:" + c[0] + "%;top:" + c[1] + "%;--c:" + col; pad.dataset.call = fromId; box.appendChild(pad);
+      var tet = document.createElement("span"); tet.className = "ring-fx tether"; tet.style.cssText = "left:" + c[0] + "%;top:" + (sp[1] + sp[3]) + "%;height:" + Math.max(0, c[1] - sp[1] - sp[3]) + "%;--c:" + col; tet.dataset.call = fromId; box.appendChild(tet);
       var el = document.createElement("span"); el.className = "ring-badge " + (k === 0 ? "caller" : "callee"); el.id = "rb" + id;
       el.style.left = c[0] + "%"; el.style.top = c[1] + "%";
       el.style.setProperty("--c", col);
-      el.innerHTML = "<i></i><i></i><b>" + PHONE_SVG + "</b>"; box.appendChild(el);
+      el.innerHTML = "<i></i><i></i><b>" + PHONE_SVG + "</b>"; el.dataset.call = fromId; box.appendChild(el);
       var task = k > 0 && (state.callTasks || {})[id];
-      if (task) { var ch = document.createElement("span"); ch.className = "ring-fx call-chip"; ch.style.cssText = "left:" + c[0] + "%;top:" + c[1] + "%;--c:" + col; ch.textContent = BY_ID[id].name + " · " + (task.length > 34 ? task.slice(0, 33) + "…" : task); box.appendChild(ch); }
+      if (task) { var ch = document.createElement("span"); ch.className = "ring-fx call-chip"; ch.style.cssText = "left:" + Math.min(90, Math.max(10, c[0])) + "%;top:" + c[1] + "%;--c:" + col; ch.dataset.call = fromId; ch.textContent = BY_ID[id].name + " · " + (task.length > 34 ? task.slice(0, 33) + "…" : task); box.appendChild(ch); }
     });
   }
-  function ringOff() { Array.prototype.forEach.call(document.querySelectorAll(".ring-badge, .ring-fx"), function (e) { e.remove(); }); }
+  function ringOff(fromId) { Array.prototype.forEach.call(document.querySelectorAll(fromId ? '[data-call="' + fromId + '"]' : ".ring-badge, .ring-fx"), function (e) { e.remove(); }); }
   function ringAnswered(id) {
     [$("rb" + id), $("cmr" + id)].forEach(function (el) { if (el) { el.classList.add("answered"); el.querySelector("b").innerHTML = "✓"; } });
   }
   function pvCallEnd(fromId) {
-    setTimeout(ringOff, 900);
-    var svg = $("callLines"); if (svg) svg.remove();
+    pvCall.t = pvCall.t || {}; clearTimeout(pvCall.t[fromId]); pvCall.t[fromId] = setTimeout(function () { ringOff(fromId); }, 900);
+    var svg = $("callLines" + fromId); if (svg) svg.remove();
     var el = $("hs" + fromId); if (el) { el.classList.remove("calling"); el.querySelector("em").textContent = state.busy[fromId] ? busyText(fromId) : "idle"; }
   }
   function pvReturn(fromId, toId) {
@@ -3495,8 +3513,9 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("statWorking").textContent = String(working);
     $("cWorking").classList.toggle("live", working > 0);
     $("statClients").textContent = String(items.filter(function (c) { return c.status !== "rejected"; }).length);
-    $("statReview").textContent = String(review);
-    $("cReview").classList.toggle("hot", review > 0);
+    var waitAll = review + ((state.approvals || []).filter(function (a) { return a.status === "pending"; }).length);
+    $("statReview").textContent = String(waitAll);
+    $("cReview").classList.toggle("hot", waitAll > 0);
     $("tabNum").hidden = !review; $("tabNum").textContent = String(review);
     if (sceneReady && !(actors["2"] && actors["2"].el.classList.contains("carrying"))) drawTray(review);
     $("engClaude").setAttribute("aria-pressed", String(state.engine === "claude" || state.engine === "demo"));
@@ -3908,7 +3927,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- wiring ----------
   function drawAll() { drawFloor(); drawHud(); drawChat(); drawSettings(); setTab(state.tab); }
-  function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); }
+  function setLang(l) { if (state.lang === l) return; state.lang = l; lsSet("glostudy-lang", l); drawAll(); if (typeof floorStatus === "function") floorStatus(); }
   $("langEn").onclick = function () { setLang("en"); };
   $("langZh").onclick = function () { setLang("zh"); };
   $("engClaude").onclick = function () { if (IN_CLAUDE) { state.engine = "claude"; state.settingsOpen = false; drawAll(); } else if (DEMO_DATA) { state.engine = "demo"; state.settingsOpen = false; drawAll(); } };
@@ -3948,6 +3967,13 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   state.taskLabel = {};
   function busyText(id) {
     var k = state.busy[id];
+    if (state.lang !== "en") {
+      if (k === "task") return state.taskLabel[id] || "工作中";
+      if (k === "call") return "帮 " + ((state.callFrom || {})[id] || "同事");
+      if (k === "job") return "处理客户方案";
+      if (k === "cust") { var lz = (live.lane || {})[id] || (live.social || {})[id], nz = lz ? liveName(lz) : ""; return ["4", "15", "16"].indexOf(id) >= 0 ? "回复" + (nz || "评论") : "和" + (nz || "客户") + "聊天"; }
+      return "工作中";
+    }
     if (k === "task") return state.taskLabel[id] || "working";
     if (k === "call") return "helping " + ((state.callFrom || {})[id] || "a colleague");
     if (k === "job") return "on a client";
@@ -4010,7 +4036,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function readMood(c) {
     var m = INSIGHTS[c.icon] || INSIGHTS["?"]; c.insight = m;
     brief(INSIGHT, state.lang === "en" ? "reading " + c.name.en + "'s mind" : "读懂" + c.name.zh + "的心思", 2400);
-    activity(INSIGHT, "Anya: " + c.name.en + " is " + m.en);
+    activity(INSIGHT, "Anya: " + c.name.en + " · " + m.en);
   }
   function toLead(c) {
     c.status = "moving"; drawLive();
@@ -4195,7 +4221,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
         reply.pending = false; reply.content = res.text; flashDone(aid);
         if (isSensitive(res.text.replace(/【[^】]*】[\s\S]*$/, "")) && !/【转人工】/.test(res.text)) holdChatReply(c, aid, reply, text);
         if (extractBooking(res.text)) { await maybeSaveBooking(res.text, c.turns, aid); markBooked(c); }
-        if (/【转人工】/.test(res.text)) { c.status = "human"; handover(c); }
+        if (/【转人工】/.test(res.text)) { var cut = res.text.indexOf("【转人工】"); c.handReason = res.text.slice(cut + 5).trim(); reply.content = res.text.slice(0, cut).trim() + "\n【转人工】"; c.status = "human"; handover(c); }
         drawLive(); drawLiveDetail();
         await wait(1800);
       }
@@ -4204,7 +4230,6 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     } catch (e) {
       setBusy(aid, null); laneFail(c, aid, e);
     }
-    if (c.status === "booked") live.timers.push(setTimeout(function () { c.status = "done"; drawLive(); }, 45000));
     if (state.busy[aid] === "cust") setBusy(aid, null);
     live.lane[aid] = null; drawLive(); drawLiveDetail();
   }
@@ -4405,13 +4430,14 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function openLive(zone, id, refresh) {
     var en = state.lang === "en", L = state.lang; liveSel.zone = zone || "all"; if (id) liveSel.id = id;
     var rows = live.list.filter(function (c) { var z = liveZone(c); return liveSel.zone === "all" || z === liveSel.zone || (liveSel.zone === "comments" && (z === "joey" || /^s\d/.test(z))) || ((liveSel.zone === "wechat" || liveSel.zone === "web" || liveSel.zone === "lead") && /^a\d/.test(z) && c.kind === liveSel.zone); }).slice().reverse();
-    if (!rows.length) rows = live.list.slice().reverse();
+    var emptyTab = !rows.length;
     var sel = live.list.filter(function (c) { return c.id === liveSel.id; })[0] || rows[0];
     $("custTitle").textContent = (en ? "📥 Live chats & comments" : "📥 实时咨询与评论") + " · " + live.list.filter(function (c) { return c.status === "waiting" || c.status === "talking"; }).length + (en ? " open" : " 进行中");
     $("custSub").innerHTML = '<span class="lv-tabs">' + ["all", "wechat", "lead", "web", "comments", "booked", "human"].map(function (z) { return '<button type="button" data-z="' + z + '" aria-pressed="' + (liveSel.zone === z) + '">' + (z === "all" ? (en ? "All" : "全部") : esc(ZONE_NAME[z][L])) + "</button>"; }).join("") + '</span><button type="button" class="lv-auto" id="lvAuto">' + (live.on ? (en ? "⏸ Pause auto-reply" : "⏸ 暂停自动回复") : (en ? "▶ Turn on auto-reply" : "▶ 开启自动回复")) + "</button>";
     var list = $("custList");
     list.innerHTML = '<div class="ib-list"></div><div class="ib-detail" id="ibDetail"></div>';
     if (!live.list.length) list.firstChild.innerHTML = '<p class="ib-empty">' + (en ? "No chats yet. New customers arrive by themselves every minute or so." : "还没有咨询，新客户会陆续自动到来。") + "</p>";
+    if (live.list.length && emptyTab) list.firstChild.innerHTML = '<p class="ib-empty">' + (en ? "Nobody here right now." : "这里暂时没有客户。") + "</p>";
     rows.forEach(function (c) {
       var it = document.createElement("button"); it.type = "button"; it.className = "ib-tk " + c.status + (sel && c.id === sel.id ? " sel" : "");
       var last = c.turns.filter(function (t) { return t.role; }).slice(-1)[0], snip = last ? (last.role === "assistant" ? ((BY_ID[last.byId || c.agent] || BY_ID["1"]).name + ": ") : "") + String(last.content).replace(/【[^】]*】/g, "").replace(/\s+/g, " ").slice(0, 60) : (c.kind === "comment" ? c.text[L] : liveText(c.msgs[0]));
@@ -4605,7 +4631,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 
   // ---------- floor plan: a realistic top-down picture of every floor ----------
   var PLAN = {
-    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9] }, boss: [32, 10, 20, 22], room: [57, 7, 25, 39] },
+    4: { img: "images/plan-4f.jpg", name: "4F · CEO Suite", bots: { "5": [5, 20, 6, 10], "21": [18, 14, 6, 9] }, boss: [32, 10, 20, 22], room: [57, 14, 25, 32] },
     3: { img: "images/plan-3f.jpg", name: "3F · Research & Finance", bots: { "12": [8, 22, 7, 9], "2": [24, 19, 7, 9], "3": [35, 20, 7, 9], "13": [48, 15, 7, 10], "14": [63, 16, 7, 10], "6": [77, 16, 7, 10] } },
     2: { img: "images/plan-2f.jpg", name: "2F · Social & Marketing", bots: { "17": [7, 22, 7, 9], "4": [21, 20, 7, 9], "16": [50, 20, 7, 9], "15": [60, 16, 6, 14], "18": [69, 20, 7, 9], "19": [81, 20, 7, 10] } },
     1: { img: "images/plan-1f.jpg", name: "1F · Reception", bots: { "1": [9, 14, 9, 8], "10": [26, 16, 7, 9], "7": [39, 13, 8, 12], "9": [55, 14, 8, 11], "11": [71, 10, 9, 14], "8": [87, 31, 7, 10] } }
@@ -4634,11 +4660,11 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   // ---------- Inside view: photo of each floor, glowing dots to move, officers to talk to ----------
   // Inside floors use the same pictures as the building, so positions come straight from the building layout
   function inBox(v, n) { var off = (4 - n) * 25; return [v[0], (v[1] - off) * 4, v[2], v[3] * 4]; }
-  var INSIDE = { 4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: {}, boss: inBox(LAY.boss, 4), room: [65, 5, 28, 50], files: [50, 47],
+  var INSIDE = { 4: { img: "images/inside-4f.jpg", ar: 1536 / 864, name: "4F · CEO Suite", bots: {}, boss: inBox(LAY.boss, 4), room: [65, 12, 28, 43], files: [50, 47],
       dots: [[24, 62, "Lounge"], [50, 66, "CEO desk"], [79, 58, "Boardroom"], [95, 70, "↓ 3F", 3]], seatBox: [70, 30, 20, 12] },
     3: { img: "images/inside-3f.jpg", ar: 1536 / 864, name: "3F · Research & Finance", bots: {}, dots: [[50, 76, "Aisle"], [93, 30, "↑ 4F", 4], [96, 62, "↓ 2F", 2]] },
-    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: {}, dots: [[38, 60, "Comments lounge"], [94, 22, "↑ 3F", 3], [97, 62, "↓ 1F", 1]] },
-    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: {}, dots: [[12, 76, "Live chats", 0, "cust"], [72, 52, "Consult rooms"], [93, 24, "↑ 2F", 2]] } };
+    2: { img: "images/inside-2f.jpg", ar: 1536 / 864, name: "2F · Social & Marketing", bots: {}, dots: [[38, 60, "Comments lounge"], [97, 12, "↑ 3F", 3], [97, 82, "↓ 1F", 1]] },
+    1: { img: "images/inside-1f.jpg", ar: 1536 / 864, name: "1F · Reception", bots: {}, dots: [[12, 76, "Live chats", 0, "cust"], [72, 52, "Consult rooms"], [97, 10, "↑ 2F", 2]] } };
   Object.keys(LAY.spots).forEach(function (id) { var v = LAY.spots[id], n = 4 - Math.min(3, Math.floor(v[1] / 25)); INSIDE[n].bots[id] = inBox(v, n); });
   fillPano();
   var inS = { floor: +lsGet("glostudy-floor", "1") || 1, s: 1, tx: 0, ty: 0, W: 0, H: 0, built: false };
@@ -4826,7 +4852,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function saveApprovals() { lsSet(AP_KEY, JSON.stringify(state.approvals.slice(0, 80).map(function (a) { var o = {}; Object.keys(a).forEach(function (k) { if (k !== "onDecide") o[k] = a[k]; }); return o; }))); }
   // after a reload the original customer is gone, so a decision just records the outcome (posts are filed as published)
   function restoredDecide(a) { return function (ok, text) { if (ok && a.kind === "post") addReport(a.from, state.lang === "en" ? "Published: " + a.where + " post" : "已发布：" + a.where, text); }; }
-  (function () { try { var saved = JSON.parse(lsGet(AP_KEY, "[]")) || []; saved.forEach(function (a) { if (a.status === "revising") a.status = "pending"; a.onDecide = restoredDecide(a); apSeq = Math.max(apSeq, +String(a.id).slice(1) || 0); }); state.approvals = saved; } catch (e) {} })();
+  (function () { try { var saved = JSON.parse(lsGet(AP_KEY, "[]")) || []; saved.forEach(function (a) { if (a.status === "revising") a.status = "pending"; a.onDecide = restoredDecide(a); if (a.status === "approved" && !a.committed) setTimeout(function () { commitApproval(a); }, 1500); apSeq = Math.max(apSeq, +String(a.id).slice(1) || 0); }); state.approvals = saved; } catch (e) {} })();
   function addApproval(item) {
     item.id = "a" + (++apSeq); item.status = "pending"; item.t = Date.now(); state.approvals.unshift(item);
     var b = BY_ID[item.from]; activity(item.from, b.name + " sent a " + KIND_AP[item.kind].en.toLowerCase() + " to your desk for approval");
@@ -4874,17 +4900,18 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function commitApproval(a) {
     var b = BY_ID[a.from];
     activity(a.from, "Aliya approved " + b.name + "'s " + KIND_AP[a.kind].en.toLowerCase() + (a.edited ? " with her edits" : "") + ": published");
-    flashDone(a.from); if (a.onDecide) a.onDecide(true, a.body, a.note); saveApprovals(); refreshInbox(); drawLive();
+    flashDone(a.from); a.committed = true; if (a.onDecide) a.onDecide(true, a.body, a.note); saveApprovals(); refreshInbox(); drawLive();
   }
   function undoApproval(id) {
     var a = state.approvals.filter(function (x) { return x.id === id; })[0]; if (!a || !undoT[id]) return;
     clearTimeout(undoT[id]); delete undoT[id]; a.status = "pending"; a.decidedAt = null; saveApprovals(); deskFilesChanged(); refreshInbox();
   }
   function toastUndo(a) {
+    if (toastUndo.batch) { toastUndo.batch.push(a); a = { id: null, list: toastUndo.batch }; }
     var en = state.lang === "en", old = $("apToast"); if (old) old.remove();
     var t = document.createElement("div"); t.id = "apToast"; t.className = "ap-toast";
     t.innerHTML = "<span>✓ " + esc(en ? "Approved · publishing in 5 s" : "已批准 · 5 秒后发布") + '</span><button type="button">' + (en ? "Undo" : "撤销") + "</button>";
-    t.querySelector("button").onclick = function () { undoApproval(a.id); t.remove(); };
+    t.querySelector("button").onclick = function () { (a.list || [a]).forEach(function (x) { undoApproval(x.id); }); t.remove(); };
     document.body.appendChild(t); setTimeout(function () { t.remove(); }, 5200);
   }
   function demoRevise(body, note) {
@@ -4969,7 +4996,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       q(".ap-no").onclick = function () { open("reject"); };
       q(".ap-cancel").onclick = function () { q(".ap-ask").hidden = true; };
     });
-    var bulk = root.querySelector("#apBulk"); if (bulk) bulk.onclick = function () { pendingSorted().filter(function (a) { return riskOf(a) === "low" && a.checked; }).forEach(function (a) { decideApproval(a.id, "approve"); }); };
+    var bulk = root.querySelector("#apBulk"); if (bulk) bulk.onclick = function () { pendingSorted().filter(function (a) { return riskOf(a) === "low" && a.checked; }).forEach(function (a) { toastUndo.batch = toastUndo.batch || []; decideApproval(a.id, "approve"); }); toastUndo.batch = null; };
     Array.prototype.forEach.call(root.querySelectorAll("[data-apm]"), function (b) { b.onclick = function () { lsSet("glostudy-apprmode", b.dataset.apm); refreshInbox(); }; });
   }
   // review meetings Aliya books herself
@@ -5353,6 +5380,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
     $("deskStatus").innerHTML = '<span class="typing"><i></i><i></i><i></i></span>' + (waiting && waiting.length && busy ? esc(b.name) + " is asking " + esc(waiting.map(function (it) { return BY_ID[it.id].name; }).join(" & ")) + "…" : esc(b.name) + (b.id === "6" ? " is working out the numbers…" : " is thinking…"));
     // dialogue
     var log = $("deskLog"); log.textContent = "";
+    if (turns.length) log.innerHTML = '<div class="dl-status mini"><div class="dls-row" id="dlsRow">' + dlsRowHtml(b) + '</div><div class="dls-live" id="dlsLive">' + dlsLiveHtml(actsFor(b)) + "</div></div>";
     if (!turns.length) {
       var acts2 = actsFor(b);
       log.innerHTML = '<div class="dl-status"><div class="dls-row" id="dlsRow">' + dlsRowHtml(b) + "</div>" +
