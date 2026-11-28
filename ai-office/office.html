@@ -1321,7 +1321,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .dl-status.mini { position: sticky; top: 0; z-index: 2; background: rgba(12,18,26,.92); gap: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 6px; } .dl-status.mini .dls-log { max-height: 48px; }
 .photo-frame .hs.boss .hs-tag { display: none !important; }
 .wall-logo { position: absolute; transform: translate(-50%, -50%); z-index: 0; pointer-events: none; text-align: center; line-height: 1; }
-.wall-logo .glo-logo { display: block; width: 5cqw; min-width: 26px; height: auto; color: #f1e9dc; filter: drop-shadow(0 2px 10px rgba(0,0,0,.55)); overflow: visible; }
+.wall-logo .glo-logo { display: block; width: 4.2cqw; min-width: 0; height: auto; color: #f1e9dc; filter: drop-shadow(0 2px 10px rgba(0,0,0,.55)); overflow: visible; }
 .wall-logo .glo-logo .ow-sun { fill: #e3b061; } .wall-logo .glo-logo .uncut, .wall-logo .glo-logo .breeze { display: none; }
 .wall-logo b { display: block; font: 600 clamp(8px, 2.1cqw, 1.35rem) "Playfair Display", Georgia, serif; letter-spacing: .32em; padding-left: .32em;
   background: linear-gradient(180deg, #fff3cf 0%, #e8c17a 45%, #a9782f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 6px rgba(232,193,122,.45)); }
@@ -1337,7 +1337,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
 .tr-case pre { white-space: pre-wrap; font: .78rem var(--sans); color: #cfe3f2; margin: 6px 0 0; max-height: 220px; overflow: auto; }
 .tr-lesson { display: flex; gap: 8px; align-items: flex-start; border-left: 3px solid #e8c17a; padding: 6px 8px; background: rgba(40,28,12,.35); border-radius: 8px; font-size: .82rem; } .tr-lesson span { flex: 1; } .tr-lesson button { border: 0; border-radius: 99px; padding: 4px 10px; font: 600 .74rem var(--sans); cursor: pointer; background: #8ff0b8; color: #08180f; } .tr-lesson button.no { background: rgba(255,255,255,.12); color: #dbe9f3; } .tr-lesson.done { opacity: .55; }
 .photo-frame .meet-card { max-height: 19cqw; overflow: auto; width: 32%; }
-@media (max-width: 640px) { .photo-frame .room-spot { margin-top: 2.2%; } .photo-frame .meet-card { left: 2% !important; right: 2%; width: auto; max-height: 34cqw; } }
+@media (max-width: 640px) { .photo-frame .room-spot { margin-top: 3.2%; } .photo-frame .meet-card { left: 2% !important; right: 2%; width: auto; max-height: 34cqw; } }
 .photo-frame .hs-badge.intel { top: -14% !important; }
 </style>
 
@@ -3215,7 +3215,7 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
       "17": [4.6, 67.2, 6.5, 5.28], "4": [21.3, 67.36, 6.5, 5.12], "16": [52.3, 66.72, 6.5, 5.92], "15": [63.9, 65.92, 6.5, 6.56], "18": [75.0, 67.2, 5.6, 5.44], "19": [90.3, 67.36, 6.0, 5.28],
       "1": [6.8, 82.56, 7.3, 4.8], "10": [19.7, 84.4, 7.3, 6.64], "7": [35.5, 84.4, 5.6, 6.4], "9": [53.8, 82.56, 7.5, 5.04], "11": [74.9, 84.96, 6.2, 6.4], "8": [87.3, 84.0, 9.6, 7.6]
     },
-    boss: [32, 5.2, 25, 5.6], ceoPlate: [44.5, 12.6], logo: [45.5, 4], aliya: [42, 5.2, 6.5, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [52, 0.6], plates: {},
+    boss: [32, 5.2, 25, 5.6], ceoPlate: [44.5, 12.6], logo: [45.5, 3.4], aliya: [42, 5.2, 6.5, 2.6], glow: [44, 8.5, 28, 6], room: [87, 7.6], meet: [52, 0.6], plates: {},
     floorTags: [["5F · CEO Suite · Aliya, Medina & Ado", 1], ["4F · Growth & Partnerships · the Spy x Family team", 21], ["3F · Research & Finance · the Big Bang team", 41.4], ["2F · Social & Marketing · the Emily in Paris team", 61.6], ["1F · Reception · the Friends team", 81.4]],
     floorY: { 5: 13.4, 4: 35, 3: 54, 2: 75.2, 1: 96.4 },
     paths: { "1>scout": [[10.4, 87.2], [10.4, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 49.34]], "2>boss": [[21.7, 49.34], [21.7, 54], [97, 54], [97, 16], [44.5, 16], [44.5, 11]], "7>scout": [[38.3, 89.6], [38.3, 96.4], [97, 96.4], [97, 54], [21.7, 54], [21.7, 48.5]], "5>boss": [[7, 11], [7, 16], [44.5, 16], [44.5, 11]] } };
@@ -4919,7 +4919,8 @@ body:not(.picked) .tf-grid button[aria-pressed="true"] { background: transparent
   function pendingApprovals() { return (state.approvals || []).filter(function (a) { return a.status === "pending"; }).length; }
   function filesLabel(el) {
     var n = unreadReports(), rv = pendingReview(), ap = pendingApprovals(), parts = [];
-    if (ap) parts.push("✍ " + ap + " to approve"); if (n) parts.push(n + " report" + (n > 1 ? "s" : "")); if (rv) parts.push(rv + " to review");
+    var zh = state.lang !== "en";
+    if (ap) parts.push("✍ " + ap + (zh ? " 条待批准" : " to approve")); if (n) parts.push(n + (zh ? " 份报告" : " report" + (n > 1 ? "s" : ""))); if (rv) parts.push(rv + (zh ? " 份待审核" : " to review"));
     el.hidden = !parts.length; el.classList.toggle("urgent", !!ap); el.innerHTML = "<i>📁</i>" + parts.join(" · ");
   }
   function deskFilesChanged(isNew) {
